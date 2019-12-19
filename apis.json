@@ -1,0 +1,272 @@
+{
+    "name": "Docker",
+    "description": "Docker is an open platform for developers and system administrators to build, ship and run distributed applications. With Docker, IT organizations shrink application delivery from months to minutes, frictionlessly move workloads between data centers an...",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+    "tags": [
+        "api provider",
+        "api service provider",
+        "command line interface",
+        "containers",
+        "have api",
+        "webhook implementations"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Docker Remote Authentication API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-authentication-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker Remote Build API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-build-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker Remote Commit API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-commit-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker Remote Containers API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-containers-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker Remote Events API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-events-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker Remote Exec API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-exec-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker Remote Images API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-images-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker Remote Info API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-info-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker Remote Ping API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-ping-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker Remote Version API",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-version-api-openapi.json"
+                }
+            ]
+        },
+        {
+            "name": "Docker",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/11306-docker.jpg",
+            "humanURL": "http:\/\/Docker.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Website",
+            "url": "http:\/\/Docker.com"
+        },
+        {
+            "type": "Blog",
+            "url": "http:\/\/blog.docker.com\/"
+        },
+        {
+            "type": "Blog RSS",
+            "url": "http:\/\/blog.docker.com\/feed\/"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/docker"
+        },
+        {
+            "type": "Developers",
+            "url": "https:\/\/docs.docker.com\/engine\/reference\/api\/docker_remote_api\/"
+        },
+        {
+            "type": "Email",
+            "url": "dockercon@docker.com"
+        },
+        {
+            "type": "Email",
+            "url": "support@docker.com"
+        },
+        {
+            "type": "Email",
+            "url": "dmca@docker.com"
+        },
+        {
+            "type": "Email",
+            "url": "feedback@docker.com"
+        },
+        {
+            "type": "Email",
+            "url": "training@docker.com"
+        },
+        {
+            "type": "Email",
+            "url": "partners@docker.com"
+        },
+        {
+            "type": "Email",
+            "url": "press@docker.com"
+        },
+        {
+            "type": "Email",
+            "url": "marketing@docker.com"
+        },
+        {
+            "type": "Email",
+            "url": "events@docker.com"
+        },
+        {
+            "type": "Email",
+            "url": "meetups@docker.com"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/docker"
+        },
+        {
+            "type": "Privacy",
+            "url": "https:\/\/www.docker.com\/docker-privacy-policy"
+        },
+        {
+            "type": "Security",
+            "url": "https:\/\/www.docker.com\/docker-security"
+        },
+        {
+            "type": "Support",
+            "url": "https:\/\/goto.docker.com\/contact-us.html"
+        },
+        {
+            "type": "Terms Of Service",
+            "url": "https:\/\/www.docker.com\/docker-terms-service"
+        },
+        {
+            "type": "Trademarks",
+            "url": "https:\/\/www.docker.com\/trademark-guidelines"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/docker"
+        },
+        {
+            "type": "Webhooks",
+            "url": "https:\/\/docs.docker.com\/docker-hub\/webhooks\/"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/www.docker.com\/"
+        }
+    ]
+}
