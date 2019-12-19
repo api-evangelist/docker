@@ -1,0 +1,16 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "",
+        "title": "Docker Remote Version API",
+        "description": "The API for managing Docker Remote Version",
+        "termsOfService": "https:\/\/www.docker.com\/docker-terms-service"
+    },
+    "servers": [
+        "httpsapi.example.com\/"
+    ],
+    "paths": [],
+    "components": {
+        "schemas": []
+    }
+}
