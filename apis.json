@@ -10,8 +10,8 @@
         "have api",
         "webhook implementations"
     ],
-    "created": "2019-12-19",
-    "modified": "2019-12-19",
+    "created": "2019-12-21",
+    "modified": "2019-12-21",
     "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/apis.json",
     "specificationVersion": "0.14",
     "apis": [
@@ -25,7 +25,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-authentication-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-authentication-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-authentication-api-postman-collection.json"
                 }
             ]
         },
@@ -39,7 +43,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-build-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-build-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-build-api-postman-collection.json"
                 }
             ]
         },
@@ -53,7 +61,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-commit-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-commit-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-commit-api-postman-collection.json"
                 }
             ]
         },
@@ -67,7 +79,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-containers-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-containers-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-containers-api-postman-collection.json"
                 }
             ]
         },
@@ -81,7 +97,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-events-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-events-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-events-api-postman-collection.json"
                 }
             ]
         },
@@ -95,7 +115,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-exec-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-exec-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-exec-api-postman-collection.json"
                 }
             ]
         },
@@ -109,7 +133,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-images-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-images-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-images-api-postman-collection.json"
                 }
             ]
         },
@@ -123,7 +151,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-info-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-info-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-info-api-postman-collection.json"
                 }
             ]
         },
@@ -137,7 +169,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-ping-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-ping-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-ping-api-postman-collection.json"
                 }
             ]
         },
@@ -151,7 +187,11 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-remote-version-api-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-version-api-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-remote-version-api-postman-collection.json"
                 }
             ]
         },
@@ -165,13 +205,21 @@
             "properties": [
                 {
                     "type": "x-openapi",
-                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/docker-openapi.json"
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/docker\/master\/docker-postman-collection.json"
                 }
             ]
         }
     ],
     "include": [],
     "x-common": [
+        {
+            "type": "APIs.json",
+            "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/apis.json"
+        },
         {
             "type": "Website",
             "url": "http:\/\/Docker.com"
