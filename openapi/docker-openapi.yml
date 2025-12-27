@@ -272,7 +272,8 @@ paths:
   /containers/{id}/json:
     get:
       tags:
-        - Container
+        - Containers
+        - Inspect
       summary: Container Inspect
       description: >-
         The Container Inspect operation retrieves detailed low-level information
@@ -334,6 +335,7 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/top:
     get:
