@@ -28,17 +28,17 @@ paths:
         - Lists
       summary: Container List
       description: >-
-        This operation retrieves a list of containers from the Docker daemon,
-        returning an array of container objects with their details including ID,
-        names, image, command, creation time, state, status, ports, and labels.
-        By default it only shows running containers, but query parameters can be
-        used to show all containers including stopped ones, limit the number of
-        results, apply filters based on various criteria like status, labels, or
-        names, and control the size information included in the response. The
-        endpoint requires appropriate permissions to access the Docker daemon
-        and returns the data in JSON format, making it useful for monitoring,
-        management tools, and automation scripts that need to interact with
-        Docker containers programmatically.
+        This API operation retrieves a list of all Docker containers on the host
+        system, returning their details in JSON format. When invoked via a GET
+        request to the /containers/json endpoint, it provides comprehensive
+        information about each container including their ID, names, image,
+        command, creation time, status, ports, and labels. The operation
+        supports various query parameters to filter results, such as showing
+        only running containers, limiting the number of results, or filtering by
+        specific attributes like status, label, or ancestor image. This is one
+        of the most commonly used Docker API endpoints for monitoring and
+        managing containerized applications, equivalent to the 'docker ps'
+        command-line operation.
       operationId: ContainerList
       parameters:
         - name: all
