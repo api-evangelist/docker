@@ -25,7 +25,7 @@ paths:
     get:
       tags:
         - Container
-      summary: ContainerList
+      summary: Containerlist
       description: |
         Returns a list of containers. For details on the format, see the
         [inspect endpoint](#operation/ContainerInspect).
@@ -138,12 +138,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/create:
     post:
       tags:
         - Container
-      summary: ContainerCreate
+      summary: Containercreate
       description: Create a container
       operationId: ContainerCreate
       parameters:
@@ -243,12 +245,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/json:
     get:
       tags:
         - Container
-      summary: ContainerInspect
+      summary: Containerinspect
       description: Return low-level information about a container.
       operationId: ContainerInspect
       parameters:
@@ -295,12 +299,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/top:
     get:
       tags:
         - Container
-      summary: ContainerTop
+      summary: Containertop
       description: |
         On Unix systems, this is done by running the `ps` command. This endpoint
         is not supported on Windows.
@@ -358,12 +364,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/logs:
     get:
       tags:
         - Container
-      summary: ContainerLogs
+      summary: Containerlogs
       description: |
         Get `stdout` and `stderr` logs from a container.
 
@@ -477,12 +485,14 @@ paths:
               schema:
                 contentMediaType: application/vnd.docker.multiplexed-stream
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/changes:
     get:
       tags:
         - Container
-      summary: ContainerChanges
+      summary: Containerchanges
       description: >
         Returns which files in a container's filesystem have been added,
         deleted,
@@ -550,12 +560,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/export:
     get:
       tags:
         - Container
-      summary: ContainerExport
+      summary: Containerexport
       description: Export the contents of a container as a tarball.
       operationId: ContainerExport
       parameters:
@@ -589,12 +601,14 @@ paths:
                 contentEncoding: base64
                 contentMediaType: application/octet-stream
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/stats:
     get:
       tags:
         - Container
-      summary: ContainerStats
+      summary: Containerstats
       description: >
         This endpoint returns a live stream of a container’s resource usage
 
@@ -704,12 +718,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/resize:
     post:
       tags:
         - Container
-      summary: ContainerResize
+      summary: Containerresize
       description: Resize the TTY for a container.
       operationId: ContainerResize
       parameters:
@@ -764,12 +780,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/start:
     post:
       tags:
         - Container
-      summary: ContainerStart
+      summary: Containerstart
       description: Start a container
       operationId: ContainerStart
       parameters:
@@ -825,12 +843,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/stop:
     post:
       tags:
         - Container
-      summary: ContainerStop
+      summary: Containerstop
       description: Stop a container
       operationId: ContainerStop
       parameters:
@@ -893,12 +913,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/restart:
     post:
       tags:
         - Container
-      summary: ContainerRestart
+      summary: Containerrestart
       description: Restart a container
       operationId: ContainerRestart
       parameters:
@@ -957,12 +979,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/kill:
     post:
       tags:
         - Container
-      summary: ContainerKill
+      summary: Containerkill
       description: |
         Send a POSIX signal to a container, defaulting to killing to the
         container.
@@ -1038,12 +1062,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/update:
     post:
       tags:
         - Container
-      summary: ContainerUpdate
+      summary: Containerupdate
       description: |
         Change various configuration options of a container without having to
         recreate it.
@@ -1123,12 +1149,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/rename:
     post:
       tags:
         - Container
-      summary: ContainerRename
+      summary: Containerrename
       description: Rename a container
       operationId: ContainerRename
       parameters:
@@ -1188,12 +1216,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/pause:
     post:
       tags:
         - Container
-      summary: ContainerPause
+      summary: Containerpause
       description: |
         Use the freezer cgroup to suspend all processes in a container.
 
@@ -1241,12 +1271,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/unpause:
     post:
       tags:
         - Container
-      summary: ContainerUnpause
+      summary: Containerunpause
       description: Resume a container which has been paused.
       operationId: ContainerUnpause
       parameters:
@@ -1288,12 +1320,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/attach:
     post:
       tags:
         - Container
-      summary: ContainerAttach
+      summary: Containerattach
       description: >
         Attach to a container to read its output or send it input. You can
         attach
@@ -1572,12 +1606,14 @@ paths:
               schema:
                 contentMediaType: application/vnd.docker.multiplexed-stream
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/attach/ws:
     get:
       tags:
         - Container
-      summary: ContainerAttachWebsocket
+      summary: Containerattachwebsocket
       description: Attach to a container via a websocket
       operationId: ContainerAttachWebsocket
       parameters:
@@ -1687,12 +1723,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/wait:
     post:
       tags:
         - Container
-      summary: ContainerWait
+      summary: Containerwait
       description: Block until a container stops, then returns the exit code.
       operationId: ContainerWait
       parameters:
@@ -1753,12 +1791,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}:
     delete:
       tags:
         - Container
-      summary: ContainerDelete
+      summary: Containerdelete
       description: Remove a container
       operationId: ContainerDelete
       parameters:
@@ -1856,12 +1896,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/archive:
     get:
       tags:
         - Container
-      summary: ContainerArchive
+      summary: Containerarchive
       description: Get a tar archive of a resource in the filesystem of container id.
       operationId: ContainerArchive
       parameters:
@@ -1906,10 +1948,12 @@ paths:
               schema:
                 contentMediaType: application/x-tar
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     put:
       tags:
         - Container
-      summary: PutContainerArchive
+      summary: Putcontainerarchive
       description: >
         Upload a tar archive to be extracted to a path in the filesystem of
         container id.
@@ -2044,12 +2088,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/prune:
     post:
       tags:
         - Container
-      summary: ContainerPrune
+      summary: Containerprune
       description: Delete stopped containers
       operationId: ContainerPrune
       parameters:
@@ -2090,12 +2136,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/json:
     get:
       tags:
         - Image
-      summary: ImageList
+      summary: Imagelist
       description: >-
         Returns a list of images on the server. Note that it uses a different,
         smaller representation of an image than inspecting a single image.
@@ -2183,12 +2231,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /build:
     post:
       tags:
         - Image
-      summary: ImageBuild
+      summary: Imagebuild
       description: >
         Build an image from a tar archive with a `Dockerfile` in it.
 
@@ -2552,12 +2602,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /build/prune:
     post:
       tags:
         - Image
-      summary: BuildPrune
+      summary: Buildprune
       description: Delete builder cache
       operationId: BuildPrune
       parameters:
@@ -2641,12 +2693,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/create:
     post:
       tags:
         - Image
-      summary: ImageCreate
+      summary: Imagecreate
       description: Pull or import an image.
       operationId: ImageCreate
       parameters:
@@ -2809,12 +2863,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/{name}/json:
     get:
       tags:
         - Image
-      summary: ImageInspect
+      summary: Imageinspect
       description: Return low-level information about an image.
       operationId: ImageInspect
       parameters:
@@ -2861,12 +2917,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/{name}/history:
     get:
       tags:
         - Image
-      summary: ImageHistory
+      summary: Imagehistory
       description: Return parent layers of an image.
       operationId: ImageHistory
       parameters:
@@ -2986,12 +3044,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/{name}/push:
     post:
       tags:
         - Image
-      summary: ImagePush
+      summary: Imagepush
       description: |
         Push an image to a registry.
 
@@ -3096,12 +3156,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/{name}/tag:
     post:
       tags:
         - Image
-      summary: ImageTag
+      summary: Imagetag
       description: Tag an image so that it becomes part of a repository.
       operationId: ImageTag
       parameters:
@@ -3171,12 +3233,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/{name}:
     delete:
       tags:
         - Image
-      summary: ImageDelete
+      summary: Imagedelete
       description: |
         Remove an image, along with any untagged parent images that were
         referenced by that image.
@@ -3263,12 +3327,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/search:
     get:
       tags:
         - Image
-      summary: ImageSearch
+      summary: Imagesearch
       description: Search for an image on Docker Hub.
       operationId: ImageSearch
       parameters:
@@ -3362,12 +3428,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/prune:
     post:
       tags:
         - Image
-      summary: ImagePrune
+      summary: Imageprune
       description: Delete unused images
       operationId: ImagePrune
       parameters:
@@ -3409,12 +3477,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /commit:
     post:
       tags:
         - Image
-      summary: ImageCommit
+      summary: Imagecommit
       description: Create a new image from a container
       operationId: ImageCommit
       parameters:
@@ -3509,12 +3579,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/{name}/get:
     get:
       tags:
         - Image
-      summary: ImageGet
+      summary: Imageget
       description: >
         Get a tarball containing all images and metadata for a repository.
 
@@ -3590,12 +3662,14 @@ paths:
               schema:
                 contentMediaType: application/x-tar
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/get:
     get:
       tags:
         - Image
-      summary: ImageGetAll
+      summary: Imagegetall
       description: >
         Get a tarball containing all images and metadata for several image
 
@@ -3659,12 +3733,14 @@ paths:
               schema:
                 contentMediaType: application/x-tar
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /images/load:
     post:
       tags:
         - Image
-      summary: ImageLoad
+      summary: Imageload
       description: >
         Load a set of images and tags into a repository.
 
@@ -3729,12 +3805,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /networks:
     get:
       tags:
         - Network
-      summary: NetworkList
+      summary: Networklist
       description: >
         Returns a list of networks. For details on the format, see the
 
@@ -3912,12 +3990,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /networks/{id}:
     get:
       tags:
         - Network
-      summary: NetworkInspect
+      summary: Networkinspect
       description: Inspect a network
       operationId: NetworkInspect
       parameters:
@@ -3965,10 +4045,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     delete:
       tags:
         - Network
-      summary: NetworkDelete
+      summary: Networkdelete
       description: Remove a network
       operationId: NetworkDelete
       parameters:
@@ -4014,12 +4096,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /networks/create:
     post:
       tags:
         - Network
-      summary: NetworkCreate
+      summary: Networkcreate
       description: Create a network
       operationId: NetworkCreate
       parameters: []
@@ -4075,12 +4159,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /networks/{id}/connect:
     post:
       tags:
         - Network
-      summary: NetworkConnect
+      summary: Networkconnect
       description: >-
         The network must be either a local-scoped network or a swarm-scoped
         network with the `attachable` option set. A network cannot be
@@ -4146,12 +4232,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /networks/{id}/disconnect:
     post:
       tags:
         - Network
-      summary: NetworkDisconnect
+      summary: Networkdisconnect
       description: Disconnect a container from a network
       operationId: NetworkDisconnect
       parameters:
@@ -4204,12 +4292,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /networks/prune:
     post:
       tags:
         - Network
-      summary: NetworkPrune
+      summary: Networkprune
       description: Delete unused networks
       operationId: NetworkPrune
       parameters:
@@ -4250,12 +4340,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /volumes:
     get:
       tags:
         - Volume
-      summary: VolumeList
+      summary: Volumelist
       description: List volumes
       operationId: VolumeList
       parameters:
@@ -4297,12 +4389,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /volumes/create:
     post:
       tags:
         - Volume
-      summary: VolumeCreate
+      summary: Volumecreate
       description: Create a volume
       operationId: VolumeCreate
       parameters: []
@@ -4332,12 +4426,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /volumes/{name}:
     get:
       tags:
         - Volume
-      summary: VolumeInspect
+      summary: Volumeinspect
       description: Inspect a volume
       operationId: VolumeInspect
       parameters:
@@ -4370,10 +4466,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     put:
       tags:
         - Volume
-      summary: VolumeUpdate
+      summary: Volumeupdate
       description: |
         "Update a volume. Valid only for Swarm cluster volumes"
       operationId: VolumeUpdate
@@ -4446,10 +4544,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     delete:
       tags:
         - Volume
-      summary: VolumeDelete
+      summary: Volumedelete
       description: Instruct the driver to remove the volume.
       operationId: VolumeDelete
       parameters:
@@ -4503,12 +4603,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /volumes/prune:
     post:
       tags:
         - Volume
-      summary: VolumePrune
+      summary: Volumeprune
       description: Delete unused volumes
       operationId: VolumePrune
       parameters:
@@ -4547,12 +4649,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /containers/{id}/exec:
     post:
       tags:
         - Exec
-      summary: ContainerExec
+      summary: Containerexec
       description: Run a command inside a running container.
       operationId: ContainerExec
       parameters:
@@ -4630,12 +4734,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /exec/{id}/start:
     post:
       tags:
         - Exec
-      summary: ExecStart
+      summary: Execstart
       description: >
         Starts a previously set up exec instance. If detach is true, this
         endpoint
@@ -4684,12 +4790,14 @@ paths:
               schema:
                 contentMediaType: application/vnd.docker.multiplexed-stream
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /exec/{id}/resize:
     post:
       tags:
         - Exec
-      summary: ExecResize
+      summary: Execresize
       description: >
         Resize the TTY session used by an exec instance. This endpoint only
         works
@@ -4758,12 +4866,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /exec/{id}/json:
     get:
       tags:
         - Exec
-      summary: ExecInspect
+      summary: Execinspect
       description: Return low-level information about an exec instance.
       operationId: ExecInspect
       parameters:
@@ -4840,12 +4950,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /swarm:
     get:
       tags:
         - Swarm
-      summary: SwarmInspect
+      summary: Swarminspect
       description: Inspect swarm
       operationId: SwarmInspect
       parameters: []
@@ -4891,12 +5003,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /swarm/init:
     post:
       tags:
         - Swarm
-      summary: SwarmInit
+      summary: Swarminit
       description: Initialize a new swarm
       operationId: SwarmInit
       parameters: []
@@ -4985,12 +5099,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /swarm/join:
     post:
       tags:
         - Swarm
-      summary: SwarmJoin
+      summary: Swarmjoin
       description: Join an existing swarm
       operationId: SwarmJoin
       parameters: []
@@ -5055,12 +5171,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /swarm/leave:
     post:
       tags:
         - Swarm
-      summary: SwarmLeave
+      summary: Swarmleave
       description: Leave a swarm
       operationId: SwarmLeave
       parameters:
@@ -5100,12 +5218,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /swarm/update:
     post:
       tags:
         - Swarm
-      summary: SwarmUpdate
+      summary: Swarmupdate
       description: Update a swarm
       operationId: SwarmUpdate
       parameters:
@@ -5187,12 +5307,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /swarm/unlockkey:
     get:
       tags:
         - Swarm
-      summary: SwarmUnlockkey
+      summary: Swarmunlockkey
       description: Get the unlock key
       operationId: SwarmUnlockkey
       parameters:
@@ -5235,12 +5357,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /swarm/unlock:
     post:
       tags:
         - Swarm
-      summary: SwarmUnlock
+      summary: Swarmunlock
       description: Unlock a locked manager
       operationId: SwarmUnlock
       parameters: []
@@ -5277,12 +5401,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /nodes:
     get:
       tags:
         - Node
-      summary: NodeList
+      summary: Nodelist
       description: List nodes
       operationId: NodeList
       parameters:
@@ -5350,12 +5476,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /nodes/{id}:
     get:
       tags:
         - Node
-      summary: NodeInspect
+      summary: Nodeinspect
       description: Inspect a node
       operationId: NodeInspect
       parameters:
@@ -5407,10 +5535,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     delete:
       tags:
         - Node
-      summary: NodeDelete
+      summary: Nodedelete
       description: Delete a node
       operationId: NodeDelete
       parameters:
@@ -5464,12 +5594,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /nodes/{id}/update:
     post:
       tags:
         - Node
-      summary: NodeUpdate
+      summary: Nodeupdate
       description: Update a node
       operationId: NodeUpdate
       parameters:
@@ -5559,12 +5691,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /services:
     get:
       tags:
         - Service
-      summary: ServiceList
+      summary: Servicelist
       description: List services
       operationId: ServiceList
       parameters:
@@ -5631,12 +5765,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /services/create:
     post:
       tags:
         - Service
-      summary: ServiceCreate
+      summary: Servicecreate
       description: Create a service
       operationId: ServiceCreate
       parameters:
@@ -5701,12 +5837,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /services/{id}:
     get:
       tags:
         - Service
-      summary: ServiceInspect
+      summary: Serviceinspect
       description: Inspect a service
       operationId: ServiceInspect
       parameters:
@@ -5766,10 +5904,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     delete:
       tags:
         - Service
-      summary: ServiceDelete
+      summary: Servicedelete
       description: Delete a service
       operationId: ServiceDelete
       parameters:
@@ -5815,12 +5955,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /services/{id}/update:
     post:
       tags:
         - Service
-      summary: ServiceUpdate
+      summary: Serviceupdate
       description: Update a service
       operationId: ServiceUpdate
       parameters:
@@ -5923,12 +6065,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /services/{id}/logs:
     get:
       tags:
         - Service
-      summary: ServiceLogs
+      summary: Servicelogs
       description: |
         Get `stdout` and `stderr` logs from a service. See also
         [`/containers/{id}/logs`](#operation/ContainerLogs).
@@ -6044,12 +6188,14 @@ paths:
               schema:
                 contentMediaType: application/vnd.docker.multiplexed-stream
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /tasks:
     get:
       tags:
         - Task
-      summary: TaskList
+      summary: Tasklist
       description: List tasks
       operationId: TaskList
       parameters:
@@ -6098,12 +6244,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /tasks/{id}:
     get:
       tags:
         - Task
-      summary: TaskInspect
+      summary: Taskinspect
       description: Inspect a task
       operationId: TaskInspect
       parameters:
@@ -6143,12 +6291,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /tasks/{id}/logs:
     get:
       tags:
         - Task
-      summary: TaskLogs
+      summary: Tasklogs
       description: |
         Get `stdout` and `stderr` logs from a task.
         See also [`/containers/{id}/logs`](#operation/ContainerLogs).
@@ -6264,12 +6414,14 @@ paths:
               schema:
                 contentMediaType: application/vnd.docker.multiplexed-stream
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /secrets:
     get:
       tags:
         - Secret
-      summary: SecretList
+      summary: Secretlist
       description: List secrets
       operationId: SecretList
       parameters:
@@ -6316,12 +6468,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /secrets/create:
     post:
       tags:
         - Secret
-      summary: SecretCreate
+      summary: Secretcreate
       description: Create a secret
       operationId: SecretCreate
       parameters: []
@@ -6362,12 +6516,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /secrets/{id}:
     get:
       tags:
         - Secret
-      summary: SecretInspect
+      summary: Secretinspect
       description: Inspect a secret
       operationId: SecretInspect
       parameters:
@@ -6439,10 +6595,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     delete:
       tags:
         - Secret
-      summary: SecretDelete
+      summary: Secretdelete
       description: Delete a secret
       operationId: SecretDelete
       parameters:
@@ -6479,12 +6637,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /secrets/{id}/update:
     post:
       tags:
         - Secret
-      summary: SecretUpdate
+      summary: Secretupdate
       description: Update a Secret
       operationId: SecretUpdate
       parameters:
@@ -6572,12 +6732,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /configs:
     get:
       tags:
         - Config
-      summary: ConfigList
+      summary: Configlist
       description: List configs
       operationId: ConfigList
       parameters:
@@ -6624,12 +6786,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /configs/create:
     post:
       tags:
         - Config
-      summary: ConfigCreate
+      summary: Configcreate
       description: Create a config
       operationId: ConfigCreate
       parameters: []
@@ -6670,12 +6834,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /configs/{id}:
     get:
       tags:
         - Config
-      summary: ConfigInspect
+      summary: Configinspect
       description: Inspect a config
       operationId: ConfigInspect
       parameters:
@@ -6733,10 +6899,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     delete:
       tags:
         - Config
-      summary: ConfigDelete
+      summary: Configdelete
       description: Delete a config
       operationId: ConfigDelete
       parameters:
@@ -6773,12 +6941,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /configs/{id}/update:
     post:
       tags:
         - Config
-      summary: ConfigUpdate
+      summary: Configupdate
       description: Update a Config
       operationId: ConfigUpdate
       parameters:
@@ -6866,12 +7036,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins:
     get:
       tags:
         - Plugin
-      summary: PluginList
+      summary: Pluginlist
       description: Returns information about installed plugins.
       operationId: PluginList
       parameters:
@@ -6909,12 +7081,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/privileges:
     get:
       tags:
         - Plugin
-      summary: GetPluginPrivileges
+      summary: Getpluginprivileges
       description: Get plugin privileges
       operationId: GetPluginPrivileges
       parameters:
@@ -6958,12 +7132,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/pull:
     post:
       tags:
         - Plugin
-      summary: PluginPull
+      summary: Pluginpull
       description: >
         Pulls and installs a plugin. After the plugin is installed, it can be
 
@@ -7056,12 +7232,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/{name}/json:
     get:
       tags:
         - Plugin
-      summary: PluginInspect
+      summary: Plugininspect
       description: Inspect a plugin
       operationId: PluginInspect
       parameters:
@@ -7105,12 +7283,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/{name}:
     delete:
       tags:
         - Plugin
-      summary: PluginDelete
+      summary: Plugindelete
       description: Remove a plugin
       operationId: PluginDelete
       parameters:
@@ -7164,12 +7344,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/{name}/enable:
     post:
       tags:
         - Plugin
-      summary: PluginEnable
+      summary: Pluginenable
       description: Enable a plugin
       operationId: PluginEnable
       parameters:
@@ -7216,12 +7398,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/{name}/disable:
     post:
       tags:
         - Plugin
-      summary: PluginDisable
+      summary: Plugindisable
       description: Disable a plugin
       operationId: PluginDisable
       parameters:
@@ -7266,12 +7450,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/{name}/upgrade:
     post:
       tags:
         - Plugin
-      summary: PluginUpgrade
+      summary: Pluginupgrade
       description: Upgrade a plugin
       operationId: PluginUpgrade
       parameters:
@@ -7369,12 +7555,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/create:
     post:
       tags:
         - Plugin
-      summary: PluginCreate
+      summary: Plugincreate
       description: Create a plugin
       operationId: PluginCreate
       parameters:
@@ -7424,12 +7612,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/{name}/push:
     post:
       tags:
         - Plugin
-      summary: PluginPush
+      summary: Pluginpush
       description: |
         Push a plugin to the registry.
       operationId: PluginPush
@@ -7468,12 +7658,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /plugins/{name}/set:
     post:
       tags:
         - Plugin
-      summary: PluginSet
+      summary: Pluginset
       description: Configure a plugin
       operationId: PluginSet
       parameters:
@@ -7526,12 +7718,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /auth:
     post:
       tags:
         - System
-      summary: SystemAuth
+      summary: Systemauth
       description: |
         Validate credentials for a registry and, if available, get an identity
         token for accessing the registry without password.
@@ -7582,12 +7776,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /info:
     get:
       tags:
         - System
-      summary: SystemInfo
+      summary: Systeminfo
       description: Get system information
       operationId: SystemInfo
       parameters: []
@@ -7607,12 +7803,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /version:
     get:
       tags:
         - System
-      summary: SystemVersion
+      summary: Systemversion
       description: >-
         Returns the version of Docker that is running and various information
         about the system that Docker is running on.
@@ -7634,12 +7832,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /_ping:
     get:
       tags:
         - System
-      summary: SystemPing
+      summary: Systemping
       description: >-
         This is a dummy endpoint you can use to test if the server is
         accessible.
@@ -7756,12 +7956,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /events:
     get:
       tags:
         - System
-      summary: SystemEvents
+      summary: Systemevents
       description: >
         Stream real-time events from the server.
 
@@ -7893,12 +8095,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /system/df:
     get:
       tags:
         - System
-      summary: SystemDataUsage
+      summary: Systemdatausage
       description: Get data usage information
       operationId: SystemDataUsage
       parameters:
@@ -7941,12 +8145,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /distribution/{name}/json:
     get:
       tags:
         - Distribution
-      summary: DistributionInspect
+      summary: Distributioninspect
       description: |
         Return image digest and platform information by contacting the registry.
       operationId: DistributionInspect
@@ -7986,6 +8192,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
   /session:
     post:
@@ -8039,6 +8247,8 @@ paths:
               schema:
                 contentMediaType: application/vnd.docker.raw-stream
       deprecated: false
+      x-api-evangelist-processing:
+        PascalCaseOperationSummaries: true
     parameters: []
 components:
   schemas:
