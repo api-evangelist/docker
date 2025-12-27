@@ -274,7 +274,18 @@ paths:
       tags:
         - Container
       summary: Container Inspect
-      description: Return low-level information about a container.
+      description: >-
+        The Container Inspect operation retrieves detailed low-level information
+        about a specific Docker container by its ID or name. This GET request
+        returns a comprehensive JSON object containing the container's
+        configuration, state, network settings, mounts, environment variables,
+        and other runtime properties. It provides complete visibility into a
+        container's current status including whether it's running or stopped,
+        resource limits, port bindings, volume mounts, and metadata. This
+        endpoint is essential for monitoring, debugging, and auditing container
+        configurations, and is commonly used by Docker management tools and
+        orchestration platforms to gather container details without affecting
+        the container's execution.
       operationId: ContainerInspect
       parameters:
         - name: id
@@ -322,6 +333,7 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/top:
     get:
