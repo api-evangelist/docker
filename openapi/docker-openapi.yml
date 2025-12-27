@@ -415,7 +415,8 @@ paths:
   /containers/{id}/logs:
     get:
       tags:
-        - Container
+        - Containers
+        - Logs
       summary: Container Logs
       description: >-
         This API operation retrieves the logs from a specific Docker container
@@ -538,11 +539,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/changes:
     get:
       tags:
-        - Container
+        - Containers
+        - Changes
       summary: Container Changes
       description: >-
         This API operation retrieves a list of filesystem changes that have
@@ -612,11 +615,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/export:
     get:
       tags:
-        - Container
+        - Containers
+        - Exports
       summary: Container Export
       description: >-
         This operation exports a Docker container's filesystem as a tar archive.
@@ -665,11 +670,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/stats:
     get:
       tags:
-        - Container
+        - Containers
       summary: Container Stats
       description: >-
         This API operation retrieves real-time resource usage statistics for a
@@ -741,11 +747,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/resize:
     post:
       tags:
-        - Container
+        - Containers
+        - Resize
       summary: Container Resize
       description: >-
         This API operation resizes the TTY (terminal) dimensions for a specified
@@ -815,11 +823,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/start:
     post:
       tags:
-        - Container
+        - Containers
+        - Start
       summary: Container Start
       description: >-
         This API operation starts a previously created Docker container
@@ -893,11 +903,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/stop:
     post:
       tags:
-        - Container
+        - Containers
+        - Stop
       summary: Container Stop
       description: >-
         This API operation stops a running Docker container identified by its
@@ -975,11 +987,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/restart:
     post:
       tags:
-        - Container
+        - Containers
+        - Restart
       summary: Container Restart
       description: >-
         Restarts a specified Docker container by its ID or name. This operation
@@ -1051,11 +1065,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/kill:
     post:
       tags:
-        - Container
+        - Containers
+        - Kill
       summary: Container Kill
       description: >-
         Sends a signal to a running container identified by its ID, which by
@@ -1142,11 +1158,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/update:
     post:
       tags:
-        - Container
+        - Containers
+        - Update
       summary: Container Update
       description: >-
         Updates the configuration of an existing Docker container identified by
@@ -1239,11 +1257,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/rename:
     post:
       tags:
-        - Container
+        - Containers
+        - Rename
       summary: Container Rename
       description: >-
         This API operation allows you to rename an existing Docker container by
@@ -1317,11 +1337,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/pause:
     post:
       tags:
-        - Container
+        - Containers
+        - Pause
       summary: Container Pause
       description: >-
         Pauses all processes within the specified Docker container by sending a
@@ -1378,11 +1400,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/unpause:
     post:
       tags:
-        - Container
+        - Containers
       summary: Container Unpause
       description: >-
         Unpauses a container that was previously paused using the pause
@@ -1439,11 +1462,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/attach:
     post:
       tags:
-        - Container
+        - Containers
+        - Attach
       summary: Container Attach
       description: >-
         Attaches to a running container to interact with its input/output
@@ -1570,11 +1595,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/attach/ws:
     get:
       tags:
-        - Container
+        - Containers
+        - Attach
       summary: Container Attach Websocket
       description: >-
         Attach to a container via WebSocket to interact with its stdin, stdout,
@@ -1697,11 +1724,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/wait:
     post:
       tags:
-        - Container
+        - Containers
+        - Wait
       summary: Container Wait
       description: >-
         This API operation blocks and waits for a container to stop, then
@@ -1777,11 +1806,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}:
     delete:
       tags:
-        - Container
+        - Containers
+        - Delete
       summary: Container Delete
       description: >-
         This API operation removes a specified Docker container from the system
@@ -1893,11 +1924,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/archive:
     get:
       tags:
-        - Container
+        - Containers
+        - Archive
       summary: Container Archive
       description: >-
         This API operation retrieves a tar archive of files or folders from a
@@ -1957,9 +1990,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     put:
       tags:
-        - Container
+        - Put
+        - Containers
+        - Archive
       summary: Put Container Archive
       description: >-
         Uploads a tar archive containing files and directories to be extracted
@@ -2102,11 +2138,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/prune:
     post:
       tags:
-        - Container
+        - Containers
+        - Prune
       summary: Container Prune
       description: >-
         The Container Prune API operation is a POST request to the
@@ -2161,11 +2199,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/json:
     get:
       tags:
         - Image
+        - Lists
       summary: Image List
       description: >-
         This API operation retrieves a list of Docker images available on the
@@ -2262,11 +2302,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /build:
     post:
       tags:
         - Image
+        - Builds
       summary: Image Build
       description: >-
         The Docker Build API operation is a POST request to the /build endpoint
@@ -2628,11 +2670,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /build/prune:
     post:
       tags:
-        - Image
+        - Builds
+        - Prune
       summary: Build Prune
       description: >-
         The Docker Build Prune POST operation to the /build/prune endpoint is
@@ -2732,11 +2776,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/create:
     post:
       tags:
         - Image
+        - Create
       summary: Image Create
       description: >-
         The POST /images/create endpoint is used to pull or import Docker images
@@ -2913,11 +2959,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/{name}/json:
     get:
       tags:
         - Image
+        - Inspect
       summary: Image Inspect
       description: >-
         Returns low-level information about an image identified by its name or
@@ -2977,11 +3025,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/{name}/history:
     get:
       tags:
         - Image
+        - History
       summary: Image History
       description: >-
         This API operation retrieves the history of a Docker image by its name,
@@ -3113,11 +3163,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/{name}/push:
     post:
       tags:
         - Image
+        - Push
       summary: Image Push
       description: >-
         This API operation pushes a Docker image to a configured registry. The
@@ -3230,11 +3282,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/{name}/tag:
     post:
       tags:
         - Image
+        - Tags
       summary: Image Tag
       description: >-
         This API operation tags an existing Docker image with a new name and
@@ -3320,11 +3374,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/{name}:
     delete:
       tags:
         - Image
+        - Delete
       summary: Image Delete
       description: >-
         The Image Delete operation removes a Docker image from the local Docker
@@ -3420,11 +3476,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/search:
     get:
       tags:
         - Image
+        - Search
       summary: Image Search
       description: >-
         This GET operation provides a search interface for discovering Docker
@@ -3532,11 +3590,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/prune:
     post:
       tags:
         - Image
+        - Prune
       summary: Image Prune
       description: >-
         The Docker Image Prune API operation is a POST request to the
@@ -3592,11 +3652,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /commit:
     post:
       tags:
         - Image
+        - Commits
       summary: Image Commit
       description: >-
         This API operation creates a new Docker image from a container's changes
@@ -3708,11 +3770,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/{name}/get:
     get:
       tags:
         - Image
+        - Get
       summary: Image Get
       description: >-
         This API operation retrieves a Docker image and exports it as a tarball
@@ -3766,11 +3830,14 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/get:
     get:
       tags:
         - Image
+        - Get
+        - All
       summary: Image Get All
       description: >-
         This API operation retrieves and exports one or more Docker images from
@@ -3826,11 +3893,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /images/load:
     post:
       tags:
         - Image
+        - Load
       summary: Image Load
       description: >-
         The Docker POST /images/load API operation allows users to load a
@@ -3906,11 +3975,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /networks:
     get:
       tags:
         - Network
+        - Lists
       summary: Network List
       description: >-
         The GET /networks endpoint in the Docker API retrieves a list of all
@@ -4091,11 +4162,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /networks/{id}:
     get:
       tags:
         - Network
+        - Inspect
       summary: Network Inspect
       description: >-
         The Network Inspect operation retrieves detailed information about a
@@ -4158,9 +4231,11 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     delete:
       tags:
         - Network
+        - Delete
       summary: Network Delete
       description: >-
         This API operation removes a specified Docker network from the system by
@@ -4220,11 +4295,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /networks/create:
     post:
       tags:
         - Network
+        - Create
       summary: Network Create
       description: >-
         This API endpoint creates a new Docker network with customizable
@@ -4297,11 +4374,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /networks/{id}/connect:
     post:
       tags:
         - Network
+        - Connect
       summary: Network Connect
       description: >-
         The Docker Network Connect API operation allows you to connect a
@@ -4381,11 +4460,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /networks/{id}/disconnect:
     post:
       tags:
         - Network
+        - Disconnect
       summary: Network Disconnect
       description: >-
         Disconnects a container from a specified Docker network by sending a
@@ -4453,11 +4534,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /networks/prune:
     post:
       tags:
         - Network
+        - Prune
       summary: Network Prune
       description: >-
         This API operation removes all unused networks from the Docker host by
@@ -4510,11 +4593,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /volumes:
     get:
       tags:
         - Volume
+        - Lists
       summary: Volume List
       description: >-
         This API operation retrieves a list of all Docker volumes present on the
@@ -4569,11 +4654,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /volumes/create:
     post:
       tags:
         - Volume
+        - Create
       summary: Volume Create
       description: >-
         Creates a new Docker volume with the specified name and driver options.
@@ -4618,11 +4705,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /volumes/{name}:
     get:
       tags:
         - Volume
+        - Inspect
       summary: Volume Inspect
       description: >-
         This API operation retrieves detailed information about a specific
@@ -4668,9 +4757,11 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     put:
       tags:
         - Volume
+        - Update
       summary: Volume Update
       description: >-
         Updates the specified Docker volume's configuration. This operation
@@ -4755,9 +4846,11 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     delete:
       tags:
         - Volume
+        - Delete
       summary: Volume Delete
       description: >-
         Removes a specified volume from the Docker host by its name identifier.
@@ -4823,11 +4916,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /volumes/prune:
     post:
       tags:
         - Volume
+        - Prune
       summary: Volume Prune
       description: >-
         Removes all unused volumes from the Docker host, freeing up disk space
@@ -4878,11 +4973,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/exec:
     post:
       tags:
-        - Exec
+        - Containers
       summary: Container Exec
       description: >-
         This API operation creates an exec instance within a specified Docker
@@ -4976,11 +5072,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /exec/{id}/start:
     post:
       tags:
-        - Exec
+        - Start
       summary: Exec Start
       description: >-
         Starts a previously created exec instance by its ID. This endpoint
@@ -5036,11 +5133,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /exec/{id}/resize:
     post:
       tags:
-        - Exec
+        - Resize
       summary: Exec Resize
       description: >-
         Resizes the TTY session used by an exec instance identified by the
@@ -5117,11 +5215,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /exec/{id}/json:
     get:
       tags:
-        - Exec
+        - Inspect
       summary: Exec Inspect
       description: >-
         Returns low-level information about an exec instance identified by the
@@ -5211,11 +5310,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /swarm:
     get:
       tags:
         - Swarm
+        - Inspect
       summary: Swarm Inspect
       description: >-
         Retrieves detailed information about the Docker Swarm cluster that the
@@ -5276,6 +5377,7 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /swarm/init:
     post:
@@ -5383,11 +5485,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /swarm/join:
     post:
       tags:
         - Swarm
+        - Join
       summary: Swarm Join
       description: >-
         Joins an existing Docker Swarm cluster by connecting a node to the swarm
@@ -5466,11 +5570,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /swarm/leave:
     post:
       tags:
         - Swarm
+        - Leave
       summary: Swarm Leave
       description: >-
         The Docker Swarm Leave POST operation allows a node to leave an existing
@@ -5524,11 +5630,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /swarm/update:
     post:
       tags:
         - Swarm
+        - Update
       summary: Swarm Update
       description: >-
         Updates the configuration of an existing Docker Swarm cluster by
@@ -5626,6 +5734,7 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /swarm/unlockkey:
     get:
@@ -5686,11 +5795,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /swarm/unlock:
     post:
       tags:
         - Swarm
+        - Unlock
       summary: Swarm Unlock
       description: >-
         ```
@@ -5744,11 +5855,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /nodes:
     get:
       tags:
         - Node
+        - Lists
       summary: Node List
       description: >-
         This API operation retrieves a list of all nodes in a Docker Swarm
@@ -5829,11 +5942,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /nodes/{id}:
     get:
       tags:
         - Node
+        - Inspect
       summary: Node Inspect
       description: >-
         Retrieves detailed information about a specific Docker Swarm node
@@ -5897,9 +6012,11 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     delete:
       tags:
         - Node
+        - Delete
       summary: Node Delete
       description: >-
         Removes a specified node from the Docker Swarm cluster by its unique
@@ -5965,11 +6082,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /nodes/{id}/update:
     post:
       tags:
         - Node
+        - Update
       summary: Node Update
       description: >-
         This API operation updates the configuration of a specific node in a
@@ -6074,11 +6193,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /services:
     get:
       tags:
-        - Service
+        - Services
+        - Lists
       summary: Service List
       description: >-
         Lists all services in the Docker Swarm cluster. This endpoint retrieves
@@ -6158,11 +6279,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /services/create:
     post:
       tags:
-        - Service
+        - Services
+        - Create
       summary: Service Create
       description: >-
         Creates a new service in a Docker Swarm cluster by accepting a service
@@ -6243,11 +6366,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /services/{id}:
     get:
       tags:
-        - Service
+        - Services
+        - Inspect
       summary: Service Inspect
       description: >-
         Retrieves detailed information about a specific Docker service
@@ -6321,9 +6446,11 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     delete:
       tags:
-        - Service
+        - Services
+        - Delete
       summary: Service Delete
       description: >-
         Deletes a Docker service by its unique identifier. This operation
@@ -6381,11 +6508,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /services/{id}/update:
     post:
       tags:
-        - Service
+        - Services
+        - Update
       summary: Service Update
       description: >-
         Updates the specified Docker service by its ID with new configuration
@@ -6501,11 +6630,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /services/{id}/logs:
     get:
       tags:
-        - Service
+        - Services
+        - Logs
       summary: Service Logs
       description: >-
         Get stdout and stderr logs from a service. This endpoint returns a
@@ -6629,11 +6760,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /tasks:
     get:
       tags:
-        - Task
+        - Tasks
+        - Lists
       summary: Task List
       description: >-
         The Docker Tasks GET operation retrieves a list of tasks from the Docker
@@ -6696,11 +6829,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /tasks/{id}:
     get:
       tags:
-        - Task
+        - Tasks
+        - Inspect
       summary: Task Inspect
       description: >-
         Retrieves detailed information about a specific Docker task identified
@@ -6755,11 +6890,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /tasks/{id}/logs:
     get:
       tags:
-        - Task
+        - Tasks
+        - Logs
       summary: Task Logs
       description: >-
         This API operation retrieves the logs generated by a specific Docker
@@ -6884,11 +7021,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /secrets:
     get:
       tags:
-        - Secret
+        - Secrets
+        - Lists
       summary: Secret List
       description: >-
         Returns a list of secrets stored in the Docker Swarm cluster. This
@@ -6950,11 +7089,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /secrets/create:
     post:
       tags:
-        - Secret
+        - Secrets
+        - Create
       summary: Secret Create
       description: >-
         This API operation creates a new secret in Docker Swarm mode by sending
@@ -7011,11 +7152,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /secrets/{id}:
     get:
       tags:
-        - Secret
+        - Secrets
+        - Inspect
       summary: Secret Inspect
       description: >-
         The Secret Inspect operation retrieves detailed information about a
@@ -7101,9 +7244,11 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     delete:
       tags:
-        - Secret
+        - Secrets
+        - Delete
       summary: Secret Delete
       description: >-
         This API operation deletes a specific Docker secret identified by its
@@ -7153,11 +7298,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /secrets/{id}/update:
     post:
       tags:
-        - Secret
+        - Secrets
+        - Update
       summary: Secret Update
       description: >-
         Updates a secret with a new version. This operation requires the secret
@@ -7258,11 +7405,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /configs:
     get:
       tags:
-        - Config
+        - Lists
       summary: Config List
       description: >-
         The Docker Configs List API operation retrieves a list of config objects
@@ -7323,11 +7471,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /configs/create:
     post:
       tags:
-        - Config
+        - Create
       summary: Config Create
       description: >-
         Creates a new config object in the Docker Swarm cluster, allowing you to
@@ -7380,11 +7529,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /configs/{id}:
     get:
       tags:
-        - Config
+        - Inspect
       summary: Config Inspect
       description: >-
         This API operation retrieves detailed information about a specific
@@ -7458,9 +7608,10 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     delete:
       tags:
-        - Config
+        - Delete
       summary: Config Delete
       description: >-
         Removes a Docker config from the swarm cluster by its unique identifier.
@@ -7509,11 +7660,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /configs/{id}/update:
     post:
       tags:
-        - Config
+        - Update
       summary: Config Update
       description: >-
         Updates an existing config by modifying its specification. This
@@ -7616,11 +7768,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins:
     get:
       tags:
         - Plugin
+        - Lists
       summary: Plugin List
       description: >-
         Returns all plugins that are present in the Docker host as a JSON array,
@@ -7671,10 +7825,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/privileges:
     get:
       tags:
+        - Get
         - Plugin
       summary: Get Plugin Privileges
       description: >-
@@ -7732,11 +7888,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/pull:
     post:
       tags:
         - Plugin
+        - Pull
       summary: Plugin Pull
       description: >-
         This API operation allows you to pull or download a Docker plugin from a
@@ -7839,11 +7997,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/{name}/json:
     get:
       tags:
         - Plugin
+        - Inspect
       summary: Plugin Inspect
       description: >-
         Retrieves detailed information about a specific Docker plugin by its
@@ -7900,11 +8060,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/{name}:
     delete:
       tags:
         - Plugin
+        - Delete
       summary: Plugin Delete
       description: >-
         The Docker Plugin Delete API operation removes a specified plugin from
@@ -7972,11 +8134,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/{name}/enable:
     post:
       tags:
         - Plugin
+        - Enables
       summary: Plugin Enable
       description: >-
         Enables a previously installed Docker plugin that is currently in a
@@ -8037,11 +8201,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/{name}/disable:
     post:
       tags:
         - Plugin
+        - Disables
       summary: Plugin Disable
       description: >-
         Disables an active Docker plugin by its name, allowing administrators to
@@ -8099,11 +8265,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/{name}/upgrade:
     post:
       tags:
         - Plugin
+        - Upgrade
       summary: Plugin Upgrade
       description: >-
         Upgrades an existing Docker plugin to a newer version by pulling the
@@ -8214,11 +8382,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/create:
     post:
       tags:
         - Plugin
+        - Create
       summary: Plugin Create
       description: >-
         Creates a new plugin instance by pulling and installing a plugin from a
@@ -8286,11 +8456,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/{name}/push:
     post:
       tags:
         - Plugin
+        - Push
       summary: Plugin Push
       description: >-
         This API operation pushes a Docker plugin to a registry. It requires
@@ -8339,11 +8511,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /plugins/{name}/set:
     post:
       tags:
         - Plugin
+        - Sets
       summary: Plugin Set
       description: >-
         This API operation configures or updates the settings of an existing
@@ -8410,6 +8584,7 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /auth:
     post:
@@ -8477,11 +8652,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /info:
     get:
       tags:
         - System
+        - Info
       summary: System Info
       description: >-
         The Docker System Info GET operation on the /info endpoint retrieves
@@ -8515,11 +8692,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /version:
     get:
       tags:
         - System
+        - Versions
       summary: System Version
       description: >-
         This API operation retrieves comprehensive version information about the
@@ -8552,11 +8731,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /_ping:
     get:
       tags:
         - System
+        - Ping
       summary: System Ping
       description: >-
         The Docker System Ping operation is a lightweight health check endpoint
@@ -8684,11 +8865,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /events:
     get:
       tags:
         - System
+        - Events
       summary: System Events
       description: >-
         Monitor Docker's real-time events stream, which broadcasts a continuous
@@ -8791,11 +8974,14 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /system/df:
     get:
       tags:
         - System
+        - Data
+        - Usage
       summary: System Data Usage
       description: >-
         This API operation retrieves information about Docker disk space usage
@@ -8849,11 +9035,13 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /distribution/{name}/json:
     get:
       tags:
         - Distribution
+        - Inspect
       summary: Distribution Inspect
       description: >-
         This API endpoint retrieves detailed distribution information for a
@@ -8905,11 +9093,12 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /session:
     post:
       tags:
-        - Session
+        - Sessions
       summary: Session
       description: >-
         The POST /session endpoint in the Docker API initiates a new interactive
@@ -8948,6 +9137,7 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
 components:
   schemas:
