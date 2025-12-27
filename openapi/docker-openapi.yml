@@ -1,13 +1,13 @@
 openapi: 3.1.0
 info:
-  title: Docker Engine API
-  description: >
-    The Engine API is an HTTP API served by Docker Engine. It is the API the
-    Docker client uses to communicate with the Engine, so everything the Docker
-    client can do can be done with the API. Most of the client's commands map
-    directly to API endpoints (e.g. `docker ps` is `GET /containers/json`). The
-    notable exception is running containers, which consists of several API
-    calls.
+  title: Docker
+  description: >-
+    Docker is a platform that lets developers package applications and all their
+    dependencies into standardized units called containers. These containers
+    bundle everything needed to run the software—code, runtime, system tools,
+    and libraries—so the application runs consistently across different
+    computing environments, whether that's your laptop, a test server, or a
+    production cloud system. 
   contact: {}
   version: '1.52'
 jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
@@ -24,15 +24,21 @@ paths:
   /containers/json:
     get:
       tags:
-        - Container
+        - Containers
+        - Lists
       summary: Container List
-      description: |
-        Returns a list of containers. For details on the format, see the
-        [inspect endpoint](#operation/ContainerInspect).
-
-        Note that it uses a different, smaller representation of a container
-        than inspecting a single container. For example, the list of linked
-        containers is not propagated .
+      description: >-
+        This operation retrieves a list of containers from the Docker daemon,
+        returning an array of container objects with their details including ID,
+        names, image, command, creation time, state, status, ports, and labels.
+        By default it only shows running containers, but query parameters can be
+        used to show all containers including stopped ones, limit the number of
+        results, apply filters based on various criteria like status, labels, or
+        names, and control the size information included in the response. The
+        endpoint requires appropriate permissions to access the Docker daemon
+        and returns the data in JSON format, making it useful for monitoring,
+        management tools, and automation scripts that need to interact with
+        Docker containers programmatically.
       operationId: ContainerList
       parameters:
         - name: all
@@ -140,13 +146,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/create:
     post:
       tags:
-        - Container
+        - Containers
+        - Create
       summary: Container Create
-      description: Create a container
+      description: >-
+        Creates a new container from a specified Docker image without starting
+        it. This operation accepts a JSON body with configuration parameters
+        including the image name, environment variables, port bindings, volume
+        mounts, network settings, and resource constraints. The container is
+        assigned a unique ID upon creation and remains in a stopped state until
+        explicitly started with a separate API call. This endpoint is commonly
+        used to prepare containers with specific configurations before
+        execution, allowing users to define the runtime behavior, attached
+        volumes, exposed ports, and other container properties that will be
+        applied when the container is eventually started.
       operationId: ContainerCreate
       parameters:
         - name: name
@@ -247,6 +266,8 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/json:
     get:
