@@ -340,7 +340,8 @@ paths:
   /containers/{id}/top:
     get:
       tags:
-        - Container
+        - Containers
+        - Top
       summary: Container Top
       description: >-
         This API operation retrieves the list of running processes inside a
@@ -409,6 +410,7 @@ paths:
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
         WriteDescription: true
+        ChooseTags: true
     parameters: []
   /containers/{id}/logs:
     get:
