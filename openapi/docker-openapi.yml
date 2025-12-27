@@ -669,58 +669,16 @@ paths:
       tags:
         - Container
       summary: Container Stats
-      description: >
-        This endpoint returns a live stream of a container’s resource usage
-
-        statistics.
-
-
-        The `precpu_stats` is the CPU statistic of the *previous* read, and is
-
-        used to calculate the CPU usage percentage. It is not an exact copy
-
-        of the `cpu_stats` field.
-
-
-        If either `precpu_stats.online_cpus` or `cpu_stats.online_cpus` is
-
-        nil then for compatibility with older daemons the length of the
-
-        corresponding `cpu_usage.percpu_usage` array should be used.
-
-
-        On a cgroup v2 host, the following fields are not set
-
-        * `blkio_stats`: all fields other than `io_service_bytes_recursive`
-
-        * `cpu_stats`: `cpu_usage.percpu_usage`
-
-        * `memory_stats`: `max_usage` and `failcnt`
-
-        Also, `memory_stats.stats` fields are incompatible with cgroup v1.
-
-
-        To calculate the values shown by the `stats` command of the docker cli
-        tool
-
-        the following formulas can be used:
-
-        * used_memory = `memory_stats.usage - memory_stats.stats.cache`
-
-        * available_memory = `memory_stats.limit`
-
-        * Memory usage % = `(used_memory / available_memory) * 100.0`
-
-        * cpu_delta = `cpu_stats.cpu_usage.total_usage -
-        precpu_stats.cpu_usage.total_usage`
-
-        * system_cpu_delta = `cpu_stats.system_cpu_usage -
-        precpu_stats.system_cpu_usage`
-
-        * number_cpus = `length(cpu_stats.cpu_usage.percpu_usage)` or
-        `cpu_stats.online_cpus`
-
-        * CPU usage % = `(cpu_delta / system_cpu_delta) * number_cpus * 100.0`
+      description: >-
+        This API operation retrieves real-time resource usage statistics for a
+        specific Docker container identified by its ID. When called, it returns
+        a continuous stream of JSON-formatted data containing metrics such as
+        CPU usage, memory consumption, network I/O, and block I/O statistics for
+        the specified container. The endpoint supports query parameters to
+        control whether it returns a single snapshot or a continuous stream of
+        statistics, making it useful for monitoring container performance and
+        resource utilization in real-time or for collecting historical data
+        points for analysis and debugging purposes.
       operationId: ContainerStats
       parameters:
         - name: id
@@ -780,13 +738,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/resize:
     post:
       tags:
         - Container
       summary: Container Resize
-      description: Resize the TTY for a container.
+      description: >-
+        This API operation resizes the TTY (terminal) dimensions for a specified
+        Docker container by sending a POST request to the
+        /containers/{id}/resize endpoint, where {id} is the container
+        identifier. It accepts query parameters for height and width to adjust
+        the pseudo-terminal size of the container's console, which is
+        particularly useful when working with interactive containers that have a
+        TTY allocated. The operation allows developers and administrators to
+        dynamically adjust terminal dimensions without stopping or restarting
+        the container, ensuring proper display formatting for applications
+        running inside the container that depend on terminal size for rendering
+        output correctly.
       operationId: ContainerResize
       parameters:
         - name: id
@@ -842,13 +812,28 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/start:
     post:
       tags:
         - Container
       summary: Container Start
-      description: Start a container
+      description: >-
+        This API operation starts a previously created Docker container
+        identified by its unique container ID. When invoked via a POST request
+        to the /containers/{id}/start endpoint, it initiates the container's
+        main process and transitions the container from a created or stopped
+        state to a running state. The operation accepts the container ID as a
+        path parameter and may include optional configuration parameters in the
+        request body, such as detach keys for detaching from the container. Upon
+        successful execution, the API returns a 204 No Content status code if
+        the container starts successfully, or appropriate error codes if the
+        container is already running, not found, or if there are issues
+        preventing it from starting. This endpoint is fundamental for container
+        lifecycle management in Docker, allowing applications to
+        programmatically control when containers begin executing their defined
+        workloads.
       operationId: ContainerStart
       parameters:
         - name: id
@@ -905,13 +890,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/stop:
     post:
       tags:
         - Container
       summary: Container Stop
-      description: Stop a container
+      description: >-
+        This API operation stops a running Docker container identified by its
+        unique container ID provided in the URL path. When invoked via a POST
+        request to the endpoint /containers/{id}/stop, it sends a SIGTERM signal
+        to the container's main process, allowing it to gracefully shut down.
+        The operation accepts an optional query parameter 't' to specify the
+        number of seconds to wait before forcefully killing the container with
+        SIGKILL if it hasn't stopped gracefully. Upon successful execution, the
+        API returns a 204 No Content status code if the container was stopped,
+        or 304 Not Modified if the container was already stopped. This is a
+        fundamental container lifecycle management operation commonly used in
+        Docker orchestration and automation workflows.
       operationId: ContainerStop
       parameters:
         - name: id
@@ -975,13 +972,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/restart:
     post:
       tags:
         - Container
       summary: Container Restart
-      description: Restart a container
+      description: >-
+        Restarts a specified Docker container by its ID or name. This operation
+        performs a graceful stop of the container followed by a start, allowing
+        running processes to shut down cleanly before restarting. An optional
+        timeout parameter can be provided to specify how many seconds to wait
+        before forcefully killing the container if it hasn't stopped gracefully.
+        This is useful for applying configuration changes, recovering from
+        errors, or implementing container lifecycle management without
+        completely removing and recreating the container, preserving its
+        configuration and any uncommitted changes to its filesystem.
       operationId: ContainerRestart
       parameters:
         - name: id
@@ -1041,15 +1048,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/kill:
     post:
       tags:
         - Container
       summary: Container Kill
-      description: |
-        Send a POSIX signal to a container, defaulting to killing to the
-        container.
+      description: >-
+        Sends a signal to a running container identified by its ID, which by
+        default is SIGKILL to immediately terminate the container, though other
+        Unix signals can be specified via query parameters. This operation
+        forcefully stops the container's main process without allowing it to
+        gracefully shut down, which is useful when a container is unresponsive
+        or needs to be stopped immediately. The endpoint requires the container
+        ID in the path and returns a 204 No Content status on success, with
+        error responses for cases such as container not found (404) or container
+        not running (409).
       operationId: ContainerKill
       parameters:
         - name: id
@@ -1124,15 +1139,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/update:
     post:
       tags:
         - Container
       summary: Container Update
-      description: |
-        Change various configuration options of a container without having to
-        recreate it.
+      description: >-
+        Updates the configuration of an existing Docker container identified by
+        its ID, allowing you to modify resource constraints and other runtime
+        parameters without recreating the container. This operation enables
+        changes to settings such as CPU shares, memory limits, restart policies,
+        and other container resource allocations while the container continues
+        to run. The request body accepts a JSON payload with the configuration
+        parameters to update, and the API returns the updated container
+        configuration along with any warnings that occurred during the update
+        process. This is particularly useful for adjusting container resources
+        dynamically in response to changing workload requirements without
+        service interruption.
       operationId: ContainerUpdate
       parameters:
         - name: id
@@ -1211,13 +1236,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/rename:
     post:
       tags:
         - Container
       summary: Container Rename
-      description: Rename a container
+      description: >-
+        This API operation allows you to rename an existing Docker container by
+        sending a POST request to the /containers/{id}/rename endpoint, where
+        {id} is the container's ID or name. The new name for the container is
+        provided as a query parameter in the request. This is a straightforward
+        operation that updates the container's identifier without affecting its
+        configuration, state, or running processes. The container can be renamed
+        regardless of whether it is running or stopped. Upon successful
+        execution, the API returns a 204 No Content response, while potential
+        errors include 404 if the container is not found or 409 if the new name
+        is already in use by another container.
       operationId: ContainerRename
       parameters:
         - name: id
@@ -1278,19 +1314,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/pause:
     post:
       tags:
         - Container
       summary: Container Pause
-      description: |
-        Use the freezer cgroup to suspend all processes in a container.
-
-        Traditionally, when suspending a process the `SIGSTOP` signal is used,
-        which is observable by the process being suspended. With the freezer
-        cgroup the process is unaware, and unable to capture, that it is being
-        suspended, and subsequently resumed.
+      description: >-
+        Pauses all processes within the specified Docker container by sending a
+        POST request to the /containers/{id}/pause endpoint, where {id}
+        represents the container's unique identifier or name. When invoked, this
+        operation uses the cgroups freezer to suspend all processes running
+        inside the container, effectively putting the container into a frozen
+        state without stopping it completely. The container remains in memory
+        with its state preserved, consuming minimal CPU resources while paused,
+        and can be resumed later without losing any in-progress work or network
+        connections. This is useful for temporarily halting container operations
+        during maintenance, debugging, or resource management scenarios without
+        the overhead of a full stop and restart cycle.
       operationId: ContainerPause
       parameters:
         - name: id
@@ -1333,13 +1375,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/unpause:
     post:
       tags:
         - Container
       summary: Container Unpause
-      description: Resume a container which has been paused.
+      description: >-
+        Unpauses a container that was previously paused using the pause
+        endpoint. This operation resumes all processes that were frozen within
+        the specified container, allowing the container to continue executing
+        from the exact state where it was paused. The container ID or name must
+        be provided in the path parameter. When successful, the API returns a
+        204 No Content response indicating the container has been successfully
+        unpaused. If the container is not found, a 404 error is returned, and if
+        the container is not in a paused state, a 500 error may be returned.
+        This operation is useful for temporarily halting container execution
+        without stopping it completely, maintaining all process states in memory
+        for quick resumption.
       operationId: ContainerUnpause
       parameters:
         - name: id
@@ -1382,180 +1436,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/attach:
     post:
       tags:
         - Container
       summary: Container Attach
-      description: >
-        Attach to a container to read its output or send it input. You can
-        attach
-
-        to the same container multiple times and you can reattach to containers
-
-        that have been detached.
-
-
-        Either the `stream` or `logs` parameter must be `true` for this endpoint
-
-        to do anything.
-
-
-        See the [documentation for the `docker attach`
-        command](https://docs.docker.com/engine/reference/commandline/attach/)
-
-        for more details.
-
-
-        ### Hijacking
-
-
-        This endpoint hijacks the HTTP connection to transport `stdin`,
-        `stdout`,
-
-        and `stderr` on the same socket.
-
-
-        This is the response from the daemon for an attach request:
-
-
-        ```
-
-        HTTP/1.1 200 OK
-
-        Content-Type: application/vnd.docker.raw-stream
-
-
-        [STREAM]
-
-        ```
-
-
-        After the headers and two new lines, the TCP connection can now be used
-
-        for raw, bidirectional communication between the client and server.
-
-
-        To hint potential proxies about connection hijacking, the Docker client
-
-        can also optionally send connection upgrade headers.
-
-
-        For example, the client sends this request to upgrade the connection:
-
-
-        ```
-
-        POST /containers/16253994b7c4/attach?stream=1&stdout=1 HTTP/1.1
-
-        Upgrade: tcp
-
-        Connection: Upgrade
-
-        ```
-
-
-        The Docker daemon will respond with a `101 UPGRADED` response, and will
-
-        similarly follow with the raw stream:
-
-
-        ```
-
-        HTTP/1.1 101 UPGRADED
-
-        Content-Type: application/vnd.docker.raw-stream
-
-        Connection: Upgrade
-
-        Upgrade: tcp
-
-
-        [STREAM]
-
-        ```
-
-
-        ### Stream format
-
-
-        When the TTY setting is disabled in [`POST
-        /containers/create`](#operation/ContainerCreate),
-
-        the HTTP Content-Type header is set to
-        application/vnd.docker.multiplexed-stream
-
-        and the stream over the hijacked connected is multiplexed to separate
-        out
-
-        `stdout` and `stderr`. The stream consists of a series of frames, each
-
-        containing a header and a payload.
-
-
-        The header contains the information which the stream writes (`stdout` or
-
-        `stderr`). It also contains the size of the associated frame encoded in
-
-        the last four bytes (`uint32`).
-
-
-        It is encoded on the first eight bytes like this:
-
-
-        ```go
-
-        header := [8]byte{STREAM_TYPE, 0, 0, 0, SIZE1, SIZE2, SIZE3, SIZE4}
-
-        ```
-
-
-        `STREAM_TYPE` can be:
-
-
-        - 0: `stdin` (is written on `stdout`)
-
-        - 1: `stdout`
-
-        - 2: `stderr`
-
-
-        `SIZE1, SIZE2, SIZE3, SIZE4` are the four bytes of the `uint32` size
-
-        encoded as big endian.
-
-
-        Following the header is the payload, which is the specified number of
-
-        bytes of `STREAM_TYPE`.
-
-
-        The simplest way to implement this protocol is the following:
-
-
-        1. Read 8 bytes.
-
-        2. Choose `stdout` or `stderr` depending on the first byte.
-
-        3. Extract the frame size from the last four bytes.
-
-        4. Read the extracted size and output it on the correct output.
-
-        5. Goto 1.
-
-
-        ### Stream format when using a TTY
-
-
-        When the TTY setting is enabled in [`POST
-        /containers/create`](#operation/ContainerCreate),
-
-        the stream is not multiplexed. The data exchanged over the hijacked
-
-        connection is simply the raw data from the process PTY and client's
-
-        `stdin`.
+      description: >-
+        Attaches to a running container to interact with its input/output
+        streams, enabling real-time communication with the container's process.
+        This operation establishes a bidirectional connection that allows you to
+        send data to the container's stdin and receive data from its stdout and
+        stderr streams. You can configure which streams to attach to using query
+        parameters, and optionally enable TTY mode for interactive terminal
+        sessions. The connection uses either HTTP upgrade protocol or hijacking
+        the HTTP connection to maintain a persistent stream for reading and
+        writing data. This is commonly used for interactive shell sessions,
+        monitoring container output in real-time, or programmatically
+        interacting with containerized applications.
       operationId: ContainerAttach
       parameters:
         - name: id
@@ -1668,13 +1567,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/attach/ws:
     get:
       tags:
         - Container
       summary: Container Attach Websocket
-      description: Attach to a container via a websocket
+      description: >-
+        Attach to a container via WebSocket to interact with its stdin, stdout,
+        and stderr streams in real-time. This endpoint establishes a WebSocket
+        connection to the specified container identified by its ID or name,
+        allowing bidirectional communication for executing commands and
+        receiving output. You can control which streams to attach (stdin,
+        stdout, stderr) using query parameters, and optionally view historical
+        logs. The WebSocket connection enables interactive sessions with running
+        containers, making it useful for debugging, monitoring, or executing
+        commands that require continuous input/output interaction.
       operationId: ContainerAttachWebsocket
       parameters:
         - name: id
@@ -1785,13 +1694,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/wait:
     post:
       tags:
         - Container
       summary: Container Wait
-      description: Block until a container stops, then returns the exit code.
+      description: >-
+        This API operation blocks and waits for a container to stop, then
+        returns the exit code. When you make a POST request to this endpoint
+        with a container ID, the call will not return until the specified
+        container has finished executing and stopped. Once the container stops,
+        the API responds with the container's exit code, which indicates whether
+        the container completed successfully (typically 0) or encountered an
+        error (non-zero value). This is particularly useful for synchronous
+        workflows where you need to wait for a containerized task to complete
+        before proceeding with subsequent operations, allowing you to determine
+        the outcome of the container's execution and handle success or failure
+        scenarios accordingly.
       operationId: ContainerWait
       parameters:
         - name: id
@@ -1853,13 +1774,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}:
     delete:
       tags:
         - Container
       summary: Container Delete
-      description: Remove a container
+      description: >-
+        This API operation removes a specified Docker container from the system
+        by sending a DELETE request to the /containers/{id} endpoint, where {id}
+        is the unique identifier or name of the container. The operation
+        permanently deletes the container instance, including its filesystem and
+        metadata, but does not remove the container's image or associated
+        volumes by default unless specifically configured to do so through query
+        parameters. This endpoint is typically used when a container is no
+        longer needed and you want to free up system resources, and it requires
+        the container to be stopped before deletion unless the force parameter
+        is set to true.
       operationId: ContainerDelete
       parameters:
         - name: id
@@ -1958,13 +1890,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/archive:
     get:
       tags:
         - Container
       summary: Container Archive
-      description: Get a tar archive of a resource in the filesystem of container id.
+      description: >-
+        This API operation retrieves a tar archive of files or folders from a
+        specified Docker container's filesystem. By providing the container ID
+        in the path parameter and specifying the resource path as a query
+        parameter, you can extract files or directories from a running or
+        stopped container. The response returns a TAR stream containing the
+        requested filesystem content, along with metadata in the response
+        headers that includes information about the archive such as file
+        permissions, modification times, and ownership details. This is
+        particularly useful for backing up data, extracting logs, or copying
+        configuration files from containers without needing to execute commands
+        inside the container or use docker cp commands.
       operationId: ContainerArchive
       parameters:
         - name: id
@@ -2010,18 +1954,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     put:
       tags:
         - Container
       summary: Put Container Archive
-      description: >
-        Upload a tar archive to be extracted to a path in the filesystem of
-        container id.
-
-        `path` parameter is asserted to be a directory. If it exists as a file,
-        400 error
-
-        will be returned with message "not a directory".
+      description: >-
+        Uploads a tar archive containing files and directories to be extracted
+        into a specified path within a container's filesystem. The archive is
+        extracted at the path specified in the query parameter, with the ability
+        to overwrite existing files and directories. This operation allows you
+        to modify the contents of a running or stopped container by injecting
+        new files or replacing existing ones. The container must exist, and the
+        target path must be a valid directory within the container's filesystem.
+        If successful, the files from the archive will be extracted to the
+        specified location, making this useful for updating configuration files,
+        deploying application code, or modifying container contents without
+        rebuilding the image.
       operationId: PutContainerArchive
       parameters:
         - name: id
@@ -2150,13 +2099,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/prune:
     post:
       tags:
         - Container
       summary: Container Prune
-      description: Delete stopped containers
+      description: >-
+        The Container Prune API operation is a POST request to the
+        `/containers/prune` endpoint that removes all stopped containers from
+        the Docker host. This cleanup operation helps reclaim disk space by
+        deleting containers that are no longer running and are not needed. You
+        can optionally provide filters as query parameters to selectively prune
+        containers based on specific criteria such as labels or time
+        constraints. The operation returns a JSON response containing the list
+        of deleted containers and the amount of disk space reclaimed. This is
+        particularly useful for maintaining a clean Docker environment and
+        preventing the accumulation of unnecessary stopped containers over time.
       operationId: ContainerPrune
       parameters:
         - name: filters
@@ -2198,6 +2158,7 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/json:
     get:
@@ -2205,8 +2166,13 @@ paths:
         - Image
       summary: Image List
       description: >-
-        Returns a list of images on the server. Note that it uses a different,
-        smaller representation of an image than inspecting a single image.
+        This API operation retrieves a list of Docker images available on the
+        Docker host. It performs a GET request to the /images/json endpoint and
+        returns a JSON array containing information about each image, including
+        details such as image IDs, repository tags, size, creation date, and
+        other metadata. This endpoint is commonly used to inspect available
+        images, monitor storage usage, or programmatically manage Docker images
+        within containerized environments.
       operationId: ImageList
       parameters:
         - name: all
@@ -2293,31 +2259,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /build:
     post:
       tags:
         - Image
       summary: Image Build
-      description: >
-        Build an image from a tar archive with a `Dockerfile` in it.
-
-
-        The `Dockerfile` specifies how the image is built from the tar archive.
-        It is typically in the archive's root, but can be at a different path or
-        have a different name by specifying the `dockerfile` parameter. [See the
-        `Dockerfile` reference for more
-        information](https://docs.docker.com/engine/reference/builder/).
-
-
-        The Docker daemon performs a preliminary validation of the `Dockerfile`
-        before starting the build, and returns an error if the syntax is
-        incorrect. After that, each instruction is run one-by-one until the ID
-        of the new image is output.
-
-
-        The build is canceled if the client drops the connection by quitting or
-        being killed.
+      description: >-
+        The Docker Build API operation is a POST request to the /build endpoint
+        that constructs a Docker image from a set of source files, typically
+        including a Dockerfile and associated context. This endpoint accepts the
+        build context as a tar archive in the request body, along with various
+        query parameters to configure the build process such as tags, build
+        arguments, target build stage, and caching options. The API streams the
+        build output back to the client in real-time, providing progress updates
+        and any errors encountered during the image creation process. Upon
+        successful completion, the built image is stored in the local Docker
+        daemon's image cache and can be referenced by the specified tag or its
+        generated image ID for subsequent operations like running containers or
+        pushing to a registry.
       operationId: ImageBuild
       parameters:
         - name: dockerfile
@@ -2664,13 +2625,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /build/prune:
     post:
       tags:
         - Image
       summary: Build Prune
-      description: Delete builder cache
+      description: >-
+        The Docker Build Prune POST operation to the /build/prune endpoint is
+        used to remove Docker build cache, helping to reclaim disk space
+        consumed by unused or dangling build artifacts. This endpoint allows
+        developers and system administrators to clean up intermediate layers,
+        unused build stages, and cached images that accumulate during the Docker
+        image building process. Users can specify various filter parameters to
+        control which build cache elements are removed, such as targeting caches
+        older than a specific duration or selecting specific build cache types.
+        The operation returns information about the reclaimed space and the
+        cache objects that were deleted, making it a valuable maintenance tool
+        for managing Docker storage overhead in development and production
+        environments.
       operationId: BuildPrune
       parameters:
         - name: reserved-space
@@ -2755,13 +2729,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/create:
     post:
       tags:
         - Image
       summary: Image Create
-      description: Pull or import an image.
+      description: >-
+        The POST /images/create endpoint is used to pull or import Docker images
+        into the local Docker environment. This operation allows you to create a
+        new image by pulling it from a registry (like Docker Hub) or importing
+        it from a tarball. You can specify the image name and tag through query
+        parameters, and the endpoint supports authentication for private
+        registries. The operation returns a stream of JSON objects that provide
+        status updates during the pull or import process, including progress
+        information for each layer being downloaded. This is equivalent to
+        running the `docker pull` command from the CLI and is essential for
+        obtaining images needed to run containers in your Docker environment.
       operationId: ImageCreate
       parameters:
         - name: fromImage
@@ -2925,13 +2910,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/{name}/json:
     get:
       tags:
         - Image
       summary: Image Inspect
-      description: Return low-level information about an image.
+      description: >-
+        Returns low-level information about an image identified by its name or
+        ID. This endpoint provides detailed metadata including the image's
+        configuration, architecture, operating system, layer information,
+        creation date, size, and other properties. The response contains
+        comprehensive data about the image's build history, exposed ports,
+        environment variables, labels, and the specific layers that compose the
+        image. This operation is useful for examining image details before
+        deployment, validating image properties, or troubleshooting container
+        behavior by understanding the underlying image configuration.
       operationId: ImageInspect
       parameters:
         - name: name
@@ -2979,13 +2974,22 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/{name}/history:
     get:
       tags:
         - Image
       summary: Image History
-      description: Return parent layers of an image.
+      description: >-
+        This API operation retrieves the history of a Docker image by its name,
+        returning a chronological list of layers that make up the image. Each
+        layer in the history represents a step in the image's build process,
+        including details such as the command that created the layer, its size,
+        creation timestamp, and any tags or comments associated with it. This
+        information is useful for understanding how an image was constructed,
+        debugging image builds, identifying which layers consume the most space,
+        and auditing the image's provenance for security or compliance purposes.
       operationId: ImageHistory
       parameters:
         - name: name
@@ -3106,20 +3110,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/{name}/push:
     post:
       tags:
         - Image
       summary: Image Push
-      description: |
-        Push an image to a registry.
-
-        If you wish to push an image on to a private registry, that image must
-        already have a tag which references the registry. For example,
-        `registry.example.com/myimage:latest`.
-
-        The push is cancelled if the HTTP connection is closed.
+      description: >-
+        This API operation pushes a Docker image to a configured registry. The
+        endpoint accepts a POST request to `/images/{name}/push` where `{name}`
+        is the name or ID of the image to be pushed. The operation requires
+        authentication credentials to be passed in the request headers
+        (typically via `X-Registry-Auth`) to authenticate with the target Docker
+        registry. Once invoked, it streams the push progress as JSON objects in
+        the response body, showing the status of each layer being uploaded. The
+        operation will push all tags associated with the image unless a specific
+        tag is included in the image name parameter. Common use cases include
+        deploying images to Docker Hub, private registries, or cloud container
+        registries as part of a CI/CD pipeline or manual deployment workflow.
       operationId: ImagePush
       parameters:
         - name: name
@@ -3218,13 +3227,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/{name}/tag:
     post:
       tags:
         - Image
       summary: Image Tag
-      description: Tag an image so that it becomes part of a repository.
+      description: >-
+        This API operation tags an existing Docker image with a new name and
+        optional tag, creating an additional reference to the same image without
+        duplicating the image data. By sending a POST request to
+        /images/{name}/tag with the image name or ID and specifying the target
+        repository and tag as query parameters, you can create a new alias for
+        an image, which is useful for versioning, organizing images across
+        different repositories, or preparing images for pushing to a registry.
+        The operation does not modify the original image but simply adds a new
+        tag reference in the local Docker image store, and it returns a success
+        response if the tagging operation completes successfully or an error if
+        the source image doesn't exist or if there are issues with the tag
+        format.
       operationId: ImageTag
       parameters:
         - name: name
@@ -3295,18 +3317,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/{name}:
     delete:
       tags:
         - Image
       summary: Image Delete
-      description: |
-        Remove an image, along with any untagged parent images that were
-        referenced by that image.
-
-        Images can't be removed if they have descendant images, are being
-        used by a running container or are being used by a build.
+      description: >-
+        The Image Delete operation removes a Docker image from the local Docker
+        host by specifying its name or ID in the path parameter. When invoked,
+        this endpoint deletes the specified image along with its associated
+        metadata, freeing up disk space on the system. The operation will fail
+        if there are containers currently using the image or if the image has
+        dependent child images, unless force deletion is specified through query
+        parameters. Upon successful deletion, the API returns information about
+        the deleted image layers and untagged images. This is a destructive
+        operation that permanently removes the image from the local registry,
+        though it does not affect images stored in remote Docker registries.
       operationId: ImageDelete
       parameters:
         - name: name
@@ -3389,13 +3417,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/search:
     get:
       tags:
         - Image
       summary: Image Search
-      description: Search for an image on Docker Hub.
+      description: >-
+        This GET operation provides a search interface for discovering Docker
+        images available on Docker Hub or other configured registries. It
+        accepts query parameters to filter and search for images by name, with
+        the ability to limit the number of results returned. The endpoint
+        returns a JSON array containing matching image entries, where each entry
+        typically includes details such as the image name, description, star
+        count, official status, and whether it's an automated build. This
+        operation is commonly used by Docker clients and applications to help
+        users find publicly available images before pulling them to their local
+        systems.
       operationId: ImageSearch
       parameters:
         - name: term
@@ -3490,13 +3529,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/prune:
     post:
       tags:
         - Image
       summary: Image Prune
-      description: Delete unused images
+      description: >-
+        The Docker Image Prune API operation is a POST request to the
+        /images/prune endpoint that removes unused or dangling images from the
+        Docker host to free up disk space. This operation can be configured with
+        optional filters to specify which images should be pruned based on
+        criteria such as labels, timestamps, or whether they are dangling
+        (untagged images not referenced by any container). When executed, it
+        returns information about the images that were deleted and the amount of
+        disk space reclaimed. This is particularly useful for maintaining a
+        clean Docker environment and preventing the accumulation of orphaned
+        image layers that can consume significant storage over time.
       operationId: ImagePrune
       parameters:
         - name: filters
@@ -3539,13 +3589,27 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /commit:
     post:
       tags:
         - Image
       summary: Image Commit
-      description: Create a new image from a container
+      description: >-
+        This API operation creates a new Docker image from a container's changes
+        by committing the current state of a specified container. When invoked
+        via a POST request to the /commit endpoint, it captures all
+        modifications made to a container's filesystem, configuration, and
+        metadata, effectively saving them as a new image layer. The operation
+        accepts parameters such as the container ID, repository name, tag,
+        commit message, author information, and configuration changes to apply
+        to the resulting image. This is particularly useful for preserving
+        manual changes made to a running container, creating checkpoints during
+        development, or building custom images interactively before formalizing
+        them in a Dockerfile. The endpoint returns the newly created image ID
+        upon successful completion, allowing users to reference, push, or deploy
+        the committed image as needed.
       operationId: ImageCommit
       parameters:
         - name: container
@@ -3641,48 +3705,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/{name}/get:
     get:
       tags:
         - Image
       summary: Image Get
-      description: >
-        Get a tarball containing all images and metadata for a repository.
-
-
-        If `name` is a specific name and tag (e.g. `ubuntu:latest`), then only
-        that image (and its parents) are returned. If `name` is an image ID,
-        similarly only that image (and its parents) are returned, but with the
-        exclusion of the `repositories` file in the tarball, as there were no
-        image names referenced.
-
-
-        ### Image tarball format
-
-
-        An image tarball contains [Content as defined in the OCI Image Layout
-        Specification](https://github.com/opencontainers/image-spec/blob/v1.1.1/image-layout.md#content).
-
-
-        Additionally, includes the manifest.json file associated with a
-        backwards compatible docker save format.
-
-
-        If the tarball defines a repository, the tarball should also include a
-        `repositories` file at the root that contains a list of repository and
-        tag names mapped to layer IDs.
-
-
-        ```json
-
-        {
-          "hello-world": {
-            "latest": "565a9d68a73f6706862bfe8409a7f659776d4d60a8d096eb4a3cbce6999cc2a1"
-          }
-        }
-
-        ```
+      description: >-
+        This API operation retrieves a Docker image and exports it as a tarball
+        archive. By sending a GET request to the endpoint with a specific image
+        name, the Docker daemon will package the specified image, including all
+        of its layers and metadata, into a TAR format that can be saved to disk
+        or transferred to another system. This is commonly used for backing up
+        images, sharing them offline, or migrating images between different
+        Docker environments without using a registry. The response is a binary
+        stream containing the image data that can be imported later using the
+        corresponding image load operation.
       operationId: ImageGet
       parameters:
         - name: name
@@ -3724,33 +3763,22 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/get:
     get:
       tags:
         - Image
       summary: Image Get All
-      description: >
-        Get a tarball containing all images and metadata for several image
-
-        repositories.
-
-
-        For each value of the `names` parameter: if it is a specific name and
-
-        tag (e.g. `ubuntu:latest`), then only that image (and its parents) are
-
-        returned; if it is an image ID, similarly only that image (and its
-        parents)
-
-        are returned and there would be no names referenced in the
-        'repositories'
-
-        file for this image ID.
-
-
-        For details on the format, see the [export image
-        endpoint](#operation/ImageGet).
+      description: >-
+        This API operation retrieves and exports one or more Docker images from
+        the Docker daemon as a tarball archive. By making a GET request to the
+        /images/get endpoint, users can download images in a portable format
+        that can be transferred between systems or saved for backup purposes.
+        The endpoint accepts image names or IDs as parameters and returns the
+        image data along with its parent layers, metadata, and configuration in
+        a compressed tar format that can later be imported into another Docker
+        environment using the corresponding image load operation.
       operationId: ImageGetAll
       parameters:
         - name: names
@@ -3795,18 +3823,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /images/load:
     post:
       tags:
         - Image
       summary: Image Load
-      description: >
-        Load a set of images and tags into a repository.
-
-
-        For details on the format, see the [export image
-        endpoint](#operation/ImageGet).
+      description: >-
+        The Docker POST /images/load API operation allows users to load a
+        tarball containing one or more Docker images into the Docker daemon's
+        local image store. This endpoint accepts a tar archive (optionally
+        compressed with gzip, bzip2, or xz) in the request body, which typically
+        contains image layers and metadata exported from another Docker instance
+        using the save command. When invoked, Docker extracts the archive and
+        reconstructs the images with their associated tags, making them
+        available for container creation and other operations. The API returns
+        information about the loaded images, including their names and tags, and
+        is commonly used for offline image transfer, backup restoration, or
+        moving images between isolated Docker environments without requiring
+        access to a container registry.
       operationId: ImageLoad
       parameters:
         - name: quiet
@@ -3867,24 +3903,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /networks:
     get:
       tags:
         - Network
       summary: Network List
-      description: >
-        Returns a list of networks. For details on the format, see the
-
-        [network inspect endpoint](#operation/NetworkInspect).
-
-
-        Note that it uses a different, smaller representation of a network than
-
-        inspecting a single network. For example, the list of containers
-        attached
-
-        to the network is not propagated in API versions 1.28 and up.
+      description: >-
+        The GET /networks endpoint in the Docker API retrieves a list of all
+        networks available in the Docker environment. This operation allows
+        users to query and obtain information about Docker networks, including
+        their names, IDs, drivers, scope, and configuration details. The
+        endpoint supports optional filtering parameters to narrow down results
+        based on specific criteria such as network type, driver, or labels,
+        making it useful for managing and monitoring network resources in
+        containerized applications. The response typically returns an array of
+        network objects containing metadata and configuration information for
+        each network in the Docker host.
       operationId: NetworkList
       parameters:
         - name: filters
@@ -4052,13 +4088,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /networks/{id}:
     get:
       tags:
         - Network
       summary: Network Inspect
-      description: Inspect a network
+      description: >-
+        The Network Inspect operation retrieves detailed information about a
+        specific Docker network by its unique identifier. When invoked with a
+        GET request to the /networks/{id} endpoint, it returns comprehensive
+        data about the network including its name, ID, driver type, scope,
+        configuration details such as subnet and gateway settings, connected
+        containers, internal DNS settings, and various network options. This
+        operation is essential for administrators and automation tools to query
+        network properties, troubleshoot connectivity issues, verify network
+        configurations, and understand which containers are attached to a
+        particular network. The response provides a complete snapshot of the
+        network's current state and configuration at the time of the request.
       operationId: NetworkInspect
       parameters:
         - name: id
@@ -4107,11 +4155,22 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     delete:
       tags:
         - Network
       summary: Network Delete
-      description: Remove a network
+      description: >-
+        This API operation removes a specified Docker network from the system by
+        sending a DELETE request to the `/networks/{id}` endpoint, where `{id}`
+        is the unique identifier of the network to be deleted. When executed, it
+        permanently deletes the network configuration and removes it from
+        Docker's network management system, freeing up resources and making the
+        network name available for reuse. The operation will fail if containers
+        are still attached to the network, requiring those containers to be
+        disconnected first. This is a destructive action that cannot be undone,
+        so it should be used with caution to ensure no active services depend on
+        the network being removed.
       operationId: NetworkDelete
       parameters:
         - name: id
@@ -4158,13 +4217,27 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /networks/create:
     post:
       tags:
         - Network
       summary: Network Create
-      description: Create a network
+      description: >-
+        This API endpoint creates a new Docker network with customizable
+        configurations. It accepts a POST request to `/networks/create` and
+        allows you to specify network parameters such as the network name,
+        driver type (bridge, overlay, macvlan, etc.), IPAM configuration for IP
+        address management, internal network settings, and various
+        driver-specific options. The request body can include labels for
+        metadata, enable IPv6 support, configure network attachability for swarm
+        services, and set ingress or internal flags. Upon successful execution,
+        it returns a response containing the newly created network's unique
+        identifier (ID) along with any warning messages if applicable. This
+        operation is fundamental for establishing isolated network environments
+        where containers can communicate securely and efficiently according to
+        defined networking rules and topologies.
       operationId: NetworkCreate
       parameters: []
       requestBody:
@@ -4221,6 +4294,7 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /networks/{id}/connect:
     post:
@@ -4228,9 +4302,19 @@ paths:
         - Network
       summary: Network Connect
       description: >-
-        The network must be either a local-scoped network or a swarm-scoped
-        network with the `attachable` option set. A network cannot be
-        re-attached to a running container
+        The Docker Network Connect API operation allows you to connect a
+        container to an existing network by sending a POST request to the
+        /networks/{id}/connect endpoint, where {id} represents the network
+        identifier. This operation takes a JSON payload containing the container
+        ID or name to be connected, along with optional endpoint configuration
+        settings such as IP addresses, aliases, and link-local IPs. When
+        executed successfully, the specified container becomes part of the
+        network and can communicate with other containers on that same network
+        using Docker's built-in DNS service and network isolation features. This
+        is particularly useful for dynamically adding containers to networks
+        after they've been created, enabling flexible network topology
+        management in containerized environments without requiring container
+        restarts or network recreation.
       operationId: NetworkConnect
       parameters:
         - name: id
@@ -4294,13 +4378,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /networks/{id}/disconnect:
     post:
       tags:
         - Network
       summary: Network Disconnect
-      description: Disconnect a container from a network
+      description: >-
+        Disconnects a container from a specified Docker network by sending a
+        POST request to the /networks/{id}/disconnect endpoint, where {id} is
+        the network identifier. This operation removes the network attachment
+        from a running or stopped container, effectively isolating it from that
+        particular network while potentially maintaining connections to other
+        networks. The request body typically includes the container ID or name
+        to be disconnected, and optionally a force parameter to forcefully
+        disconnect the container even if it's currently in use. This is useful
+        for network reconfiguration, security isolation, or when restructuring
+        container communication patterns without stopping the container
+        entirely.
       operationId: NetworkDisconnect
       parameters:
         - name: id
@@ -4354,13 +4450,22 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /networks/prune:
     post:
       tags:
         - Network
       summary: Network Prune
-      description: Delete unused networks
+      description: >-
+        This API operation removes all unused networks from the Docker host by
+        sending a POST request to the /networks/prune endpoint. When executed,
+        it deletes networks that are not currently being used by any containers,
+        helping to free up system resources and clean up dangling network
+        configurations. The operation accepts optional filters as query
+        parameters to selectively prune networks based on specific criteria such
+        as labels or creation time, and returns a list of the networks that were
+        successfully deleted along with any space reclaimed.
       operationId: NetworkPrune
       parameters:
         - name: filters
@@ -4402,13 +4507,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /volumes:
     get:
       tags:
         - Volume
       summary: Volume List
-      description: List volumes
+      description: >-
+        This API operation retrieves a list of all Docker volumes present on the
+        host system. When invoked via a GET request to the /volumes endpoint, it
+        returns a collection of volume objects containing details such as volume
+        names, drivers, mount points, labels, and other metadata associated with
+        each volume. The response can typically be filtered using query
+        parameters to narrow down results based on specific criteria like
+        dangling volumes or volume labels, making it useful for volume
+        management, monitoring storage usage, and identifying volumes that may
+        no longer be in use by containers.
       operationId: VolumeList
       parameters:
         - name: filters
@@ -4451,13 +4566,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /volumes/create:
     post:
       tags:
         - Volume
       summary: Volume Create
-      description: Create a volume
+      description: >-
+        Creates a new Docker volume with the specified name and driver options.
+        This endpoint accepts a JSON payload containing volume configuration
+        parameters such as the volume name, driver type (defaulting to 'local'
+        if not specified), driver-specific options, and labels for metadata.
+        Upon successful creation, it returns a 201 status code along with the
+        volume object containing details like the volume name, driver, mount
+        point, creation timestamp, and any associated labels or options. If a
+        volume with the same name already exists, the API will return an error.
+        This operation is essential for managing persistent data storage in
+        Docker containers, allowing data to persist beyond the container
+        lifecycle and enabling data sharing between multiple containers.
       operationId: VolumeCreate
       parameters: []
       requestBody:
@@ -4488,13 +4615,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /volumes/{name}:
     get:
       tags:
         - Volume
       summary: Volume Inspect
-      description: Inspect a volume
+      description: >-
+        This API operation retrieves detailed information about a specific
+        Docker volume by its name. When called with a GET request to the
+        /volumes/{name} endpoint, it returns comprehensive metadata about the
+        volume including its driver, mount point, labels, options, scope, and
+        creation timestamp. This is useful for examining volume configuration,
+        verifying volume properties, or gathering information needed for volume
+        management tasks. The operation requires the volume name as a path
+        parameter and returns a JSON object containing all the volume's
+        attributes, or an error if the volume doesn't exist.
       operationId: VolumeInspect
       parameters:
         - name: name
@@ -4528,12 +4665,21 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     put:
       tags:
         - Volume
       summary: Volume Update
-      description: |
-        "Update a volume. Valid only for Swarm cluster volumes"
+      description: >-
+        Updates the specified Docker volume's configuration. This operation
+        allows you to modify properties of an existing volume identified by its
+        name in the path parameter. The endpoint accepts a PUT request to
+        /volumes/{name} where {name} is the unique identifier of the volume you
+        wish to update. You can use this to change volume settings such as
+        labels, driver options, or other mutable volume attributes depending on
+        the volume driver being used. The operation requires appropriate
+        permissions to modify Docker volumes and will return the updated volume
+        object upon successful completion.
       operationId: VolumeUpdate
       parameters:
         - name: name
@@ -4606,11 +4752,20 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     delete:
       tags:
         - Volume
       summary: Volume Delete
-      description: Instruct the driver to remove the volume.
+      description: >-
+        Removes a specified volume from the Docker host by its name identifier.
+        This operation permanently deletes the volume and all data contained
+        within it, freeing up the associated storage space. The volume must not
+        be in use by any containers at the time of deletion, otherwise the
+        operation will fail with an error. This is a destructive action that
+        cannot be undone, so caution should be exercised when using this
+        endpoint to ensure that any important data has been backed up or is no
+        longer needed before proceeding with the deletion.
       operationId: VolumeDelete
       parameters:
         - name: name
@@ -4665,13 +4820,22 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /volumes/prune:
     post:
       tags:
         - Volume
       summary: Volume Prune
-      description: Delete unused volumes
+      description: >-
+        Removes all unused volumes from the Docker host, freeing up disk space
+        by deleting volumes that are not currently referenced by any containers.
+        This operation is irreversible and will permanently delete volume data,
+        so it should be used with caution in production environments. The
+        endpoint accepts optional filters to selectively prune volumes based on
+        specific criteria such as labels or timestamps, and returns a detailed
+        response including the list of deleted volumes and the total amount of
+        disk space reclaimed.
       operationId: VolumePrune
       parameters:
         - name: filters
@@ -4711,13 +4875,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /containers/{id}/exec:
     post:
       tags:
         - Exec
       summary: Container Exec
-      description: Run a command inside a running container.
+      description: >-
+        This API operation creates an exec instance within a specified Docker
+        container, allowing you to run commands inside an already running
+        container without starting a new container or attaching to the existing
+        process. By sending a POST request to /containers/{id}/exec with the
+        container ID, you can specify the command to execute along with
+        configuration options such as whether to attach to stdin/stdout/stderr,
+        set environment variables, define the working directory, and configure
+        user permissions. The operation returns an exec instance ID that can be
+        used with subsequent API calls to start and interact with the command
+        execution, making it essential for debugging, maintenance tasks, or
+        executing administrative commands within containerized applications
+        without disrupting the container's primary process.
       operationId: ContainerExec
       parameters:
         - name: id
@@ -4796,19 +4973,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /exec/{id}/start:
     post:
       tags:
         - Exec
       summary: Exec Start
-      description: >
-        Starts a previously set up exec instance. If detach is true, this
-        endpoint
-
-        returns immediately after starting the command. Otherwise, it sets up an
-
-        interactive session with the command.
+      description: >-
+        Starts a previously created exec instance by its ID. This endpoint
+        executes the command that was configured when the exec instance was
+        created using /exec/create. The request can specify whether to detach
+        from the exec command, allocate a TTY, or upgrade the connection to a
+        multiplexed stream for interactive use. When successful, it returns the
+        output stream from the executed command, which may include stdout and
+        stderr depending on the configuration. The exec instance must exist and
+        not have been previously started, as exec instances are designed for
+        single use.
       operationId: ExecStart
       parameters:
         - name: id
@@ -4852,18 +5033,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /exec/{id}/resize:
     post:
       tags:
         - Exec
       summary: Exec Resize
-      description: >
-        Resize the TTY session used by an exec instance. This endpoint only
-        works
-
-        if `tty` was specified as part of creating and starting the exec
-        instance.
+      description: >-
+        Resizes the TTY session used by an exec instance identified by the
+        specified ID. This operation allows you to dynamically adjust the
+        dimensions of the pseudo-terminal associated with a running exec process
+        inside a Docker container. You can specify the height and width
+        parameters to set the new terminal size, which is particularly useful
+        when the client terminal window is resized and you need to propagate
+        those dimension changes to the exec session to ensure proper text
+        formatting and display. The exec instance must have been created with a
+        TTY attached for this operation to be meaningful.
       operationId: ExecResize
       parameters:
         - name: id
@@ -4928,13 +5114,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /exec/{id}/json:
     get:
       tags:
         - Exec
       summary: Exec Inspect
-      description: Return low-level information about an exec instance.
+      description: >-
+        Returns low-level information about an exec instance identified by the
+        provided ID. This endpoint retrieves details such as the command being
+        executed, whether the exec instance is still running, the exit code if
+        it has completed, the container ID it's associated with, and various
+        configuration settings like whether TTY is enabled or if the process is
+        running in privileged mode. It's useful for monitoring and debugging
+        exec instances created via the Exec Create endpoint, allowing you to
+        check the status and results of commands executed within running
+        containers.
       operationId: ExecInspect
       parameters:
         - name: id
@@ -5012,13 +5208,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /swarm:
     get:
       tags:
         - Swarm
       summary: Swarm Inspect
-      description: Inspect swarm
+      description: >-
+        Retrieves detailed information about the Docker Swarm cluster that the
+        Docker daemon is a member of, including the Swarm's ID, version,
+        creation and update timestamps, specification details such as
+        orchestration settings, raft consensus configuration, dispatcher
+        settings, CA configuration for certificate management, encryption
+        settings, and task defaults. This endpoint returns the complete Swarm
+        object if the node is part of an active Swarm, or an error if the Docker
+        daemon is not participating in a Swarm cluster. The operation requires
+        the Docker daemon to be running in Swarm mode and provides essential
+        information for managing and monitoring the Swarm's configuration and
+        state.
       operationId: SwarmInspect
       parameters: []
       responses:
@@ -5065,13 +5273,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /swarm/init:
     post:
       tags:
         - Swarm
       summary: Swarm Init
-      description: Initialize a new swarm
+      description: >-
+        Initialize a new swarm cluster by configuring the Docker engine to
+        operate in swarm mode, making the current node the first manager node of
+        the swarm. This operation sets up the Raft consensus protocol for
+        cluster management, generates join tokens for adding worker and manager
+        nodes, and configures the swarm's network settings including the
+        advertised address, listen address, and data path address. The endpoint
+        accepts configuration parameters such as specifications for the
+        Certificate Authority, dispatcher settings, orchestration options, Raft
+        consensus parameters, encryption settings, and task defaults that define
+        how the swarm will operate and manage distributed services across nodes.
       operationId: SwarmInit
       parameters: []
       requestBody:
@@ -5161,13 +5380,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /swarm/join:
     post:
       tags:
         - Swarm
       summary: Swarm Join
-      description: Join an existing swarm
+      description: >-
+        Joins an existing Docker Swarm cluster by connecting a node to the swarm
+        as either a worker or manager. This operation requires connection
+        details including the address of an existing swarm manager node and
+        authentication tokens to establish trust. The request must specify
+        whether the joining node will participate as a worker node that executes
+        tasks or as a manager node that also handles orchestration and cluster
+        management duties. Join tokens are obtained from an existing swarm
+        manager and differ based on the intended role, providing a secure
+        mechanism to control cluster membership and prevent unauthorized nodes
+        from joining the swarm.
       operationId: SwarmJoin
       parameters: []
       requestBody:
@@ -5233,13 +5463,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /swarm/leave:
     post:
       tags:
         - Swarm
       summary: Swarm Leave
-      description: Leave a swarm
+      description: >-
+        The Docker Swarm Leave POST operation allows a node to leave an existing
+        Docker Swarm cluster. When executed, this endpoint removes the node from
+        the swarm, effectively disconnecting it from the cluster's shared
+        resources and workload distribution. The operation typically requires a
+        force parameter to be set to true if the node is a manager, as managers
+        need explicit confirmation to leave the swarm to prevent accidental
+        disruption of cluster management. Once a node leaves the swarm, it
+        returns to a standalone Docker host and will no longer participate in
+        swarm orchestration, load balancing, or service deployment until it
+        either rejoins the existing swarm or initializes a new one.
       operationId: SwarmLeave
       parameters:
         - name: force
@@ -5280,13 +5521,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /swarm/update:
     post:
       tags:
         - Swarm
       summary: Swarm Update
-      description: Update a swarm
+      description: >-
+        Updates the configuration of an existing Docker Swarm cluster by
+        modifying settings such as the orchestration configuration, raft
+        consensus parameters, dispatcher settings, certificate authority
+        configuration, encryption settings, and task defaults. This operation
+        requires the current configuration version number to ensure the update
+        is applied to the most recent state of the swarm, preventing conflicts
+        from concurrent modifications. The endpoint accepts a JSON payload
+        containing the desired swarm specification parameters and returns the
+        updated swarm information upon successful execution. Only managers in
+        the swarm cluster have permission to perform this operation, and it
+        requires the swarm to already be initialized before any updates can be
+        applied.
       operationId: SwarmUpdate
       parameters:
         - name: version
@@ -5369,13 +5623,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /swarm/unlockkey:
     get:
       tags:
         - Swarm
       summary: Swarm Unlockkey
-      description: Get the unlock key
+      description: >-
+        The Docker Swarm Unlockkey GET operation retrieves the unlock key
+        required to access a locked Docker Swarm manager node after it has been
+        restarted. When a Swarm cluster is configured with autolock enabled for
+        enhanced security, manager nodes encrypt their Raft logs at rest and
+        require an unlock key to decrypt them upon restart. This endpoint
+        returns the current unlock key that administrators need to manually
+        unlock manager nodes using the docker swarm unlock command, ensuring
+        that sensitive cluster data remains encrypted when nodes are offline and
+        preventing unauthorized access to the Swarm's state and secrets.
       operationId: SwarmUnlockkey
       parameters:
         - name: Content-Type
@@ -5419,13 +5683,27 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /swarm/unlock:
     post:
       tags:
         - Swarm
       summary: Swarm Unlock
-      description: Unlock a locked manager
+      description: >-
+        ```
+
+        The Docker Swarm Unlock POST operation is used to unlock a locked swarm
+        manager by providing the unlock key. When a swarm is configured with
+        autolock enabled, manager nodes require an unlock key to decrypt their
+        Raft logs after a restart, preventing unauthorized access to sensitive
+        swarm data. This endpoint accepts the unlock key in the request body and
+        attempts to unlock the swarm manager, allowing it to rejoin the swarm
+        cluster and resume normal operations. If the provided unlock key is
+        correct, the manager will be unlocked and become fully operational;
+        otherwise, an error will be returned indicating an invalid unlock key.
+
+        ```
       operationId: SwarmUnlock
       parameters: []
       requestBody:
@@ -5463,13 +5741,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /nodes:
     get:
       tags:
         - Node
       summary: Node List
-      description: List nodes
+      description: >-
+        This API operation retrieves a list of all nodes in a Docker Swarm
+        cluster, returning comprehensive information about each node including
+        their ID, hostname, status, availability, role (manager or worker),
+        platform details, resource specifications, and Swarm-specific metadata.
+        The GET request to the /nodes endpoint provides administrators with a
+        complete inventory of the infrastructure participating in the Swarm,
+        enabling monitoring of node health, capacity planning, and cluster
+        management tasks without requiring any request parameters for basic
+        listing functionality.
       operationId: NodeList
       parameters:
         - name: filters
@@ -5538,13 +5826,22 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /nodes/{id}:
     get:
       tags:
         - Node
       summary: Node Inspect
-      description: Inspect a node
+      description: >-
+        Retrieves detailed information about a specific Docker Swarm node
+        identified by its ID or name. This operation returns comprehensive data
+        about the node including its status, availability, role (manager or
+        worker), resources, platform details, engine version, and Swarm-specific
+        configuration such as labels and constraints. It is typically used by
+        administrators and orchestration tools to monitor node health, assess
+        cluster capacity, and make decisions about task placement and node
+        management within a Docker Swarm cluster.
       operationId: NodeInspect
       parameters:
         - name: id
@@ -5597,11 +5894,20 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     delete:
       tags:
         - Node
       summary: Node Delete
-      description: Delete a node
+      description: >-
+        Removes a specified node from the Docker Swarm cluster by its unique
+        identifier. This operation is typically used when decommissioning a node
+        or removing a failed node from the swarm. The node must be in a down
+        state or demoted from manager status before deletion, and any tasks
+        running on the node should be drained or rescheduled to other nodes
+        first. Once deleted, the node's data is permanently removed from the
+        swarm's internal state, and the node would need to be rejoined to the
+        cluster if it needs to participate again in the future.
       operationId: NodeDelete
       parameters:
         - name: id
@@ -5656,13 +5962,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /nodes/{id}/update:
     post:
       tags:
         - Node
       summary: Node Update
-      description: Update a node
+      description: >-
+        This API operation updates the configuration of a specific node in a
+        Docker Swarm cluster by sending a POST request to the /nodes/{id}/update
+        endpoint, where {id} represents the unique identifier of the target
+        node. It allows administrators to modify node attributes such as
+        availability (active, pause, or drain), role (worker or manager),
+        labels, and other node-specific settings. The operation typically
+        requires the node's current version number to ensure safe concurrent
+        updates and prevent conflicts. This endpoint is commonly used for
+        maintenance tasks like draining a node before shutdown, promoting
+        workers to managers, or updating node metadata for orchestration
+        purposes.
       operationId: NodeUpdate
       parameters:
         - name: id
@@ -5753,13 +6071,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /services:
     get:
       tags:
         - Service
       summary: Service List
-      description: List services
+      description: >-
+        Lists all services in the Docker Swarm cluster. This endpoint retrieves
+        information about services that have been created and are managed by the
+        Swarm orchestrator. The response includes details such as service IDs,
+        names, replicas, update configurations, and task templates. Filters can
+        be applied using query parameters to narrow down results based on
+        specific criteria like service name, ID, or labels. This operation
+        requires the Docker daemon to be running in Swarm mode and is typically
+        used by orchestration tools and dashboards to monitor and display the
+        current state of deployed services across the cluster.
       operationId: ServiceList
       parameters:
         - name: filters
@@ -5827,13 +6155,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /services/create:
     post:
       tags:
         - Service
       summary: Service Create
-      description: Create a service
+      description: >-
+        Creates a new service in a Docker Swarm cluster by accepting a service
+        specification in JSON format and returning the newly created service's
+        ID. This operation requires the Docker daemon to be running in Swarm
+        mode and accepts parameters defining the service configuration including
+        the container image, replicas, networks, volumes, environment variables,
+        resource constraints, placement preferences, and update policies. The
+        request must include authentication credentials if pulling images from
+        private registries, and the response includes the service ID which can
+        be used for subsequent operations like inspecting, updating, or removing
+        the service. Only managers in the Swarm cluster have permission to
+        create services, and the operation will fail if attempted on a worker
+        node or if the daemon is not operating in Swarm mode.
       operationId: ServiceCreate
       parameters:
         - name: X-Registry-Auth
@@ -5899,13 +6240,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /services/{id}:
     get:
       tags:
         - Service
       summary: Service Inspect
-      description: Inspect a service
+      description: >-
+        Retrieves detailed information about a specific Docker service
+        identified by its ID or name. This operation returns comprehensive
+        service configuration including the service specification, creation and
+        update timestamps, version information, task template details, placement
+        constraints, update and rollback configurations, network attachments,
+        and endpoint specifications. The response provides the current state of
+        the service and all parameters that define how the service operates
+        within the Docker Swarm cluster, making it essential for monitoring,
+        debugging, and managing containerized services in a distributed
+        environment.
       operationId: ServiceInspect
       parameters:
         - name: id
@@ -5966,11 +6318,20 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     delete:
       tags:
         - Service
       summary: Service Delete
-      description: Delete a service
+      description: >-
+        Deletes a Docker service by its unique identifier. This operation
+        removes the specified service from the Docker Swarm cluster, stopping
+        all running tasks and containers associated with it. The service ID must
+        be provided in the URL path as a required parameter. Once deleted, the
+        service and its configuration are permanently removed from the cluster,
+        though any volumes or networks created separately may need to be cleaned
+        up independently. This is a destructive operation that cannot be undone,
+        so caution should be exercised when calling this endpoint.
       operationId: ServiceDelete
       parameters:
         - name: id
@@ -6017,13 +6378,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /services/{id}/update:
     post:
       tags:
         - Service
       summary: Service Update
-      description: Update a service
+      description: >-
+        Updates the specified Docker service by its ID with new configuration
+        parameters. This operation allows you to modify service properties such
+        as the number of replicas, resource constraints, update configurations,
+        network settings, and other service specifications. The update is
+        performed using the service's ID in the path, and requires passing the
+        new service configuration in the request body along with the current
+        version number to prevent conflicts. Docker will perform a rolling
+        update based on the service's update configuration, ensuring minimal
+        disruption to running tasks while applying the changes.
       operationId: ServiceUpdate
       parameters:
         - name: id
@@ -6127,18 +6498,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /services/{id}/logs:
     get:
       tags:
         - Service
       summary: Service Logs
-      description: |
-        Get `stdout` and `stderr` logs from a service. See also
-        [`/containers/{id}/logs`](#operation/ContainerLogs).
-
-        **Note**: This endpoint works only for services with the `local`,
-        `json-file` or `journald` logging drivers.
+      description: >-
+        Get stdout and stderr logs from a service. This endpoint returns a
+        stream of logs from the specified service. The logs can be filtered by
+        timestamp and can include both stdout and stderr output. It supports
+        following the log output in real-time similar to the `docker service
+        logs` command. The response is returned as a streaming text format, with
+        each log entry prefixed with stream identifier information. Optional
+        query parameters allow controlling the number of lines returned,
+        filtering by timestamps, and specifying whether to return stdout,
+        stderr, or both streams.
       operationId: ServiceLogs
       parameters:
         - name: id
@@ -6250,13 +6626,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /tasks:
     get:
       tags:
         - Task
       summary: Task List
-      description: List tasks
+      description: >-
+        The Docker Tasks GET operation retrieves a list of tasks from the Docker
+        Swarm cluster. Tasks represent individual units of work that are
+        assigned to nodes in the swarm to execute containers as part of a
+        service. This endpoint allows you to query and filter tasks based on
+        various criteria such as service name, node ID, desired state, or
+        labels, returning detailed information about each task including its
+        current state, container specifications, timestamps, and resource
+        assignments. It's primarily used for monitoring service deployment
+        status, debugging service issues, and tracking the distribution of
+        containers across swarm nodes.
       operationId: TaskList
       parameters:
         - name: filters
@@ -6306,13 +6693,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /tasks/{id}:
     get:
       tags:
         - Task
       summary: Task Inspect
-      description: Inspect a task
+      description: >-
+        Retrieves detailed information about a specific Docker task identified
+        by its unique ID. This operation returns comprehensive metadata about
+        the task including its current state, configuration, container
+        specifications, network settings, resource constraints, timestamps, and
+        execution details. The response provides visibility into the task's
+        lifecycle status, assigned node, desired state, and any error messages
+        or status updates. This endpoint is essential for monitoring individual
+        tasks within a Docker Swarm service, allowing administrators and
+        applications to track task execution, troubleshoot failures, and verify
+        that tasks are running with the correct specifications and resource
+        allocations.
       operationId: TaskInspect
       parameters:
         - name: id
@@ -6353,18 +6752,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /tasks/{id}/logs:
     get:
       tags:
         - Task
       summary: Task Logs
-      description: |
-        Get `stdout` and `stderr` logs from a task.
-        See also [`/containers/{id}/logs`](#operation/ContainerLogs).
-
-        **Note**: This endpoint works only for services with the `local`,
-        `json-file` or `journald` logging drivers.
+      description: >-
+        This API operation retrieves the logs generated by a specific Docker
+        task identified by its unique ID. It returns the stdout and stderr
+        output streams from the task's execution, allowing developers and
+        administrators to monitor task progress, debug issues, and review
+        historical execution data. The endpoint supports various query
+        parameters to filter and format the log output, such as specifying
+        timestamps, following log streams in real-time, and limiting the number
+        of log lines returned. This is particularly useful in Docker Swarm mode
+        for tracking the behavior of distributed tasks across multiple nodes in
+        a cluster.
       operationId: TaskLogs
       parameters:
         - name: id
@@ -6476,13 +6881,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /secrets:
     get:
       tags:
         - Secret
       summary: Secret List
-      description: List secrets
+      description: >-
+        Returns a list of secrets stored in the Docker Swarm cluster. This
+        endpoint retrieves metadata about all secrets that the authenticated
+        user has access to, including their ID, version, creation and update
+        timestamps, and specification details. Secrets in Docker Swarm are used
+        to securely store and manage sensitive data such as passwords, API keys,
+        and certificates that can be made available to services. The response
+        includes an array of secret objects, but does not return the actual
+        secret data values for security reasons. This operation requires
+        appropriate permissions within the Swarm cluster and is typically used
+        by administrators or orchestration tools to inventory and manage the
+        secrets available to containerized services.
       operationId: SecretList
       parameters:
         - name: filters
@@ -6530,13 +6947,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /secrets/create:
     post:
       tags:
         - Secret
       summary: Secret Create
-      description: Create a secret
+      description: >-
+        This API operation creates a new secret in Docker Swarm mode by sending
+        a POST request to the /secrets/create endpoint. Secrets are sensitive
+        data such as passwords, SSH private keys, SSL certificates, or any other
+        data that should not be stored unencrypted in a Dockerfile or
+        application source code. When creating a secret, you provide the secret
+        data along with metadata such as the secret name and optional labels.
+        The secret data is encrypted during transit and at rest within the
+        Docker Swarm cluster, and is only made available to services that have
+        been explicitly granted access to it. Upon successful creation, the API
+        returns the ID of the newly created secret, which can then be referenced
+        when creating or updating services that need access to this sensitive
+        information.
       operationId: SecretCreate
       parameters: []
       requestBody:
@@ -6578,13 +7008,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /secrets/{id}:
     get:
       tags:
         - Secret
       summary: Secret Inspect
-      description: Inspect a secret
+      description: >-
+        The Secret Inspect operation retrieves detailed information about a
+        specific Docker secret by its unique identifier. This GET request is
+        made to the `/secrets/{id}` endpoint where `{id}` is the secret's ID or
+        name, and it returns comprehensive metadata about the secret including
+        its specification, version information, creation and update timestamps,
+        and labels, though the actual secret data itself remains encrypted and
+        is not exposed through this endpoint. This operation is useful for
+        administrators and applications that need to verify secret properties,
+        check version details, or audit secret configurations without accessing
+        the sensitive data stored within the secret.
       operationId: SecretInspect
       parameters:
         - name: id
@@ -6657,11 +7098,21 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     delete:
       tags:
         - Secret
       summary: Secret Delete
-      description: Delete a secret
+      description: >-
+        This API operation deletes a specific Docker secret identified by its
+        unique ID. When invoked, it removes the secret from the Docker Swarm,
+        making it permanently unavailable to any services or containers that
+        might have been using it. The operation requires the secret ID to be
+        provided in the URL path parameter and typically returns a success
+        status when the deletion is completed. This is a destructive action that
+        cannot be undone, so the secret data will be irrecoverably removed from
+        the system. Services currently using the deleted secret may experience
+        failures or need to be updated with alternative secrets.
       operationId: SecretDelete
       parameters:
         - name: id
@@ -6699,13 +7150,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /secrets/{id}/update:
     post:
       tags:
         - Secret
       summary: Secret Update
-      description: Update a Secret
+      description: >-
+        Updates a secret with a new version. This operation requires the secret
+        ID and the current version number specified in the query parameters. The
+        secret must exist and the version number must match the current version
+        of the secret. The request body should contain the new secret data and
+        optional metadata such as name, labels, or driver configuration. Upon
+        successful update, the secret version is incremented and a new secret
+        object is returned. This is useful for rotating credentials or updating
+        configuration data stored as secrets without changing the secret ID or
+        references to it in services.
       operationId: SecretUpdate
       parameters:
         - name: id
@@ -6794,13 +7255,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /configs:
     get:
       tags:
         - Config
       summary: Config List
-      description: List configs
+      description: >-
+        The Docker Configs List API operation retrieves a list of config objects
+        from a Docker swarm cluster. Configs are arbitrary data that can be
+        stored in the swarm and made available to services, typically used for
+        storing non-sensitive configuration files. This GET endpoint returns an
+        array of config resources with their metadata including ID, version
+        information, creation and update timestamps, and specifications such as
+        name, labels, and data. The operation supports filtering options to
+        narrow down results based on specific criteria like config names or
+        labels, making it useful for managing and discovering configuration data
+        across swarm services.
       operationId: ConfigList
       parameters:
         - name: filters
@@ -6848,13 +7320,22 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /configs/create:
     post:
       tags:
         - Config
       summary: Config Create
-      description: Create a config
+      description: >-
+        Creates a new config object in the Docker Swarm cluster, allowing you to
+        store non-sensitive configuration data such as application settings,
+        environment variables, or configuration files that can be mounted into
+        service containers at runtime. The config is immutable once created and
+        can be referenced by services through their configuration
+        specifications, providing a centralized way to manage configuration data
+        across distributed services without embedding it directly in images or
+        requiring external configuration management systems.
       operationId: ConfigCreate
       parameters: []
       requestBody:
@@ -6896,13 +7377,26 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /configs/{id}:
     get:
       tags:
         - Config
       summary: Config Inspect
-      description: Inspect a config
+      description: >-
+        This API operation retrieves detailed information about a specific
+        Docker configuration object identified by its unique ID. When invoked
+        with a GET request to the /configs/{id} endpoint, it returns
+        comprehensive metadata about the configuration, including its creation
+        timestamp, last update time, version information, labels, and the
+        configuration data itself. This operation is commonly used by
+        administrators and orchestration tools to examine configuration details,
+        verify configuration content, or gather information needed for
+        configuration management tasks within a Docker Swarm environment. The
+        endpoint requires appropriate permissions to access the configuration
+        data and will return an error if the specified configuration ID does not
+        exist or if the user lacks sufficient authorization.
       operationId: ConfigInspect
       parameters:
         - name: id
@@ -6961,11 +7455,20 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     delete:
       tags:
         - Config
       summary: Config Delete
-      description: Delete a config
+      description: >-
+        Removes a Docker config from the swarm cluster by its unique identifier.
+        This operation permanently deletes the specified config object, making
+        it unavailable to any services that might reference it. The config must
+        not be in use by any active services at the time of deletion, otherwise
+        the operation will fail. Once deleted, the config cannot be recovered
+        and any services attempting to use it will encounter errors. This is a
+        privileged operation that requires appropriate administrative
+        permissions within the Docker swarm environment.
       operationId: ConfigDelete
       parameters:
         - name: id
@@ -7003,13 +7506,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /configs/{id}/update:
     post:
       tags:
         - Config
       summary: Config Update
-      description: Update a Config
+      description: >-
+        Updates an existing config by modifying its specification. This
+        operation requires the config ID and version number to ensure safe
+        concurrent updates. The request body contains the updated config
+        specification including name, labels, and data, while the version
+        parameter in the query string prevents conflicts from simultaneous
+        modifications. Only certain fields like labels can be modified; the
+        actual secret data itself cannot be changed after creation. The
+        operation returns a 200 status code on success, 400 for bad parameters,
+        404 if the config is not found, 500 for server errors, and 503 if the
+        node is not part of a swarm cluster, as configs are a swarm-mode only
+        feature.
       operationId: ConfigUpdate
       parameters:
         - name: id
@@ -7098,13 +7613,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins:
     get:
       tags:
         - Plugin
       summary: Plugin List
-      description: Returns information about installed plugins.
+      description: >-
+        Returns all plugins that are present in the Docker host as a JSON array,
+        including both active and inactive plugins. The response includes
+        comprehensive details about each plugin such as the unique ID, name,
+        enabled state, plugin settings and configuration. This endpoint does not
+        require any parameters and provides a complete inventory of plugins
+        available on the Docker daemon, which can be used for plugin management,
+        monitoring plugin status, or determining which plugins are installed
+        before attempting operations that depend on specific plugin
+        functionality.
       operationId: PluginList
       parameters:
         - name: filters
@@ -7143,13 +7668,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/privileges:
     get:
       tags:
         - Plugin
       summary: Get Plugin Privileges
-      description: Get plugin privileges
+      description: >-
+        This API operation retrieves the list of privileges required by a Docker
+        plugin to function properly. When called, it returns detailed
+        information about the permissions and capabilities that a specific
+        plugin needs to access on the Docker host system, such as network
+        access, mount points, device access, or other system resources. This
+        endpoint is typically used before installing or enabling a plugin to
+        review and understand what level of access the plugin requires, allowing
+        administrators to make informed security decisions about whether to
+        grant those privileges.
       operationId: GetPluginPrivileges
       parameters:
         - name: remote
@@ -7194,17 +7729,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/pull:
     post:
       tags:
         - Plugin
       summary: Plugin Pull
-      description: >
-        Pulls and installs a plugin. After the plugin is installed, it can be
-
-        enabled using the [`POST /plugins/{name}/enable`
-        endpoint](#operation/PostPluginsEnable).
+      description: >-
+        This API operation allows you to pull or download a Docker plugin from a
+        registry to the local Docker host. The POST request to the /plugins/pull
+        endpoint initiates the plugin installation process by fetching the
+        specified plugin and its layers from the configured registry, similar to
+        how Docker images are pulled. You can specify the plugin name and
+        optional parameters such as the remote reference or registry
+        authentication credentials. The operation is asynchronous and typically
+        returns progress information as the plugin layers are downloaded and
+        extracted, making the plugin available for use on the Docker daemon once
+        the pull operation completes successfully.
       operationId: PluginPull
       parameters:
         - name: remote
@@ -7294,13 +7836,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/{name}/json:
     get:
       tags:
         - Plugin
       summary: Plugin Inspect
-      description: Inspect a plugin
+      description: >-
+        Retrieves detailed information about a specific Docker plugin by its
+        name or ID. This operation returns a JSON object containing the plugin's
+        configuration, settings, manifest, and current state including whether
+        it is enabled or disabled. The response includes metadata such as the
+        plugin's ID, name, tag, active status, settings, and the plugin's
+        capabilities. This endpoint is useful for examining plugin
+        specifications, understanding what permissions and capabilities a plugin
+        requires, and verifying plugin configuration before enabling or during
+        troubleshooting.
       operationId: PluginInspect
       parameters:
         - name: name
@@ -7345,13 +7897,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/{name}:
     delete:
       tags:
         - Plugin
       summary: Plugin Delete
-      description: Remove a plugin
+      description: >-
+        The Docker Plugin Delete API operation removes a specified plugin from
+        the Docker host by sending a DELETE request to the /plugins/{name}
+        endpoint, where {name} represents the name or ID of the plugin to be
+        deleted. This operation permanently removes the plugin and its
+        associated data from the system. The plugin must be disabled before it
+        can be deleted, otherwise the operation will fail. Optional query
+        parameters can be included to force removal even if the plugin is in
+        use. Upon successful deletion, the API typically returns a 200 or 204
+        status code, while errors such as attempting to delete an enabled plugin
+        or a non-existent plugin will return appropriate error responses.
       operationId: PluginDelete
       parameters:
         - name: name
@@ -7406,13 +7969,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/{name}/enable:
     post:
       tags:
         - Plugin
       summary: Plugin Enable
-      description: Enable a plugin
+      description: >-
+        Enables a previously installed Docker plugin that is currently in a
+        disabled state. This operation activates the plugin's functionality,
+        making it available for use by Docker containers and services. The
+        plugin must already be installed on the system before it can be enabled.
+        The endpoint accepts the plugin name as a path parameter and optionally
+        supports a timeout query parameter to specify how long to wait for the
+        plugin to start. Once enabled, the plugin will run and provide its
+        intended capabilities to the Docker environment until it is explicitly
+        disabled or the Docker daemon is restarted without the plugin configured
+        to auto-enable.
       operationId: PluginEnable
       parameters:
         - name: name
@@ -7460,13 +8034,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/{name}/disable:
     post:
       tags:
         - Plugin
       summary: Plugin Disable
-      description: Disable a plugin
+      description: >-
+        Disables an active Docker plugin by its name, allowing administrators to
+        deactivate plugin functionality without completely removing it from the
+        system. This operation accepts the plugin name as a path parameter and
+        optionally supports a force parameter to disable the plugin even if it's
+        currently in use by containers or other resources. When successfully
+        executed, the plugin transitions to a disabled state where it no longer
+        provides its capabilities to the Docker daemon, but remains installed
+        and can be re-enabled later without requiring reinstallation or
+        reconfiguration.
       operationId: PluginDisable
       parameters:
         - name: name
@@ -7512,13 +8096,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/{name}/upgrade:
     post:
       tags:
         - Plugin
       summary: Plugin Upgrade
-      description: Upgrade a plugin
+      description: >-
+        Upgrades an existing Docker plugin to a newer version by pulling the
+        specified plugin image from a registry. This operation requires the
+        plugin name as a path parameter and accepts configuration options such
+        as the remote repository reference and registry authentication
+        credentials. The upgrade process will pull the new plugin image,
+        validate it, and replace the current version while preserving the
+        plugin's configuration and settings. This is useful for keeping plugins
+        up-to-date with bug fixes, security patches, or new features without
+        having to completely remove and reinstall them.
       operationId: PluginUpgrade
       parameters:
         - name: name
@@ -7617,13 +8211,28 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/create:
     post:
       tags:
         - Plugin
       summary: Plugin Create
-      description: Create a plugin
+      description: >-
+        Creates a new plugin instance by pulling and installing a plugin from a
+        registry or by creating it from a local tarball. The operation accepts a
+        plugin name and optional configuration parameters, then downloads the
+        specified plugin image, unpacks it, and registers it with the Docker
+        daemon. The request can include a remote reference to pull from a
+        registry or use a tarball from the request body for local installation.
+        Authentication credentials can be provided via the X-Registry-Auth
+        header when pulling from private registries. The operation returns
+        immediately with a 204 status code upon successful creation, while any
+        errors during plugin installation or validation will result in
+        appropriate error responses. This endpoint is essential for extending
+        Docker functionality through third-party or custom plugins for
+        networking, storage, authorization, or other plugin types supported by
+        the Docker plugin system.
       operationId: PluginCreate
       parameters:
         - name: name
@@ -7674,14 +8283,21 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/{name}/push:
     post:
       tags:
         - Plugin
       summary: Plugin Push
-      description: |
-        Push a plugin to the registry.
+      description: >-
+        This API operation pushes a Docker plugin to a registry. It requires
+        authentication and uses POST method to push the specified plugin
+        identified by the 'name' parameter in the URL path to a Docker registry.
+        The operation is similar to pushing Docker images, requiring proper
+        credentials and registry configuration. Upon successful execution, the
+        plugin becomes available in the target registry for distribution and can
+        be pulled by other Docker hosts that have access to that registry.
       operationId: PluginPush
       parameters:
         - name: name
@@ -7720,13 +8336,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /plugins/{name}/set:
     post:
       tags:
         - Plugin
       summary: Plugin Set
-      description: Configure a plugin
+      description: >-
+        This API operation configures or updates the settings of an existing
+        Docker plugin identified by its name. It uses a POST request to the
+        /plugins/{name}/set endpoint, where {name} is replaced with the specific
+        plugin name. The operation allows administrators to modify plugin
+        configuration parameters without needing to remove and reinstall the
+        plugin, making it useful for adjusting plugin behavior or settings after
+        installation. The request typically includes a JSON body containing the
+        new configuration values or environment variables that should be applied
+        to the plugin, and the plugin may need to be disabled before certain
+        settings can be changed.
       operationId: PluginSet
       parameters:
         - name: name
@@ -7780,15 +8407,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /auth:
     post:
       tags:
         - System
       summary: System Auth
-      description: |
-        Validate credentials for a registry and, if available, get an identity
-        token for accessing the registry without password.
+      description: >-
+        This API operation authenticates a user against a Docker registry and
+        returns identity token information. When invoked via POST request to the
+        /auth endpoint, it validates user credentials (typically username and
+        password) against the configured authentication backend or registry
+        service. Upon successful authentication, the operation returns
+        authentication tokens or session information that can be used for
+        subsequent registry operations such as pulling or pushing images. This
+        is a fundamental security operation that establishes user identity and
+        permissions within the Docker ecosystem, enabling secure access control
+        to container images and registry resources.
       operationId: SystemAuth
       parameters: []
       requestBody:
@@ -7838,13 +8474,24 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /info:
     get:
       tags:
         - System
       summary: System Info
-      description: Get system information
+      description: >-
+        The Docker System Info GET operation on the /info endpoint retrieves
+        comprehensive system-wide information about the Docker daemon and the
+        host system it runs on. This includes details such as the number of
+        containers and images, server version, storage driver configuration,
+        kernel version, operating system, architecture, available memory and
+        CPUs, registry configuration, and various daemon settings. It provides
+        essential diagnostic and monitoring data that helps administrators
+        understand the current state and capabilities of their Docker
+        installation, making it particularly useful for troubleshooting,
+        capacity planning, and system health checks.
       operationId: SystemInfo
       parameters: []
       responses:
@@ -7865,6 +8512,7 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /version:
     get:
@@ -7872,8 +8520,15 @@ paths:
         - System
       summary: System Version
       description: >-
-        Returns the version of Docker that is running and various information
-        about the system that Docker is running on.
+        This API operation retrieves comprehensive version information about the
+        Docker system. When invoked via a GET request to the /version endpoint,
+        it returns detailed metadata including the Docker daemon version, API
+        version, Git commit hash, Go runtime version, operating system and
+        architecture details, kernel version, and build time information. This
+        endpoint is typically used for diagnostics, compatibility checks, and
+        system monitoring purposes, allowing clients to verify which version of
+        Docker they are communicating with and ensure compatibility between
+        client and server components.
       operationId: SystemVersion
       parameters: []
       responses:
@@ -7894,6 +8549,7 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /_ping:
     get:
@@ -7901,8 +8557,15 @@ paths:
         - System
       summary: System Ping
       description: >-
-        This is a dummy endpoint you can use to test if the server is
-        accessible.
+        The Docker System Ping operation is a lightweight health check endpoint
+        accessible via a GET request to `/_ping` that returns a simple response
+        indicating whether the Docker daemon is accessible and responsive. This
+        endpoint is commonly used for monitoring purposes, load balancer health
+        checks, and automated systems that need to verify Docker service
+        availability without performing resource-intensive operations. It
+        typically returns a 200 OK status with a minimal response body (often
+        just "OK") when the daemon is functioning properly, making it an
+        efficient way to confirm basic connectivity and daemon responsiveness.
       operationId: SystemPing
       parameters: []
       responses:
@@ -8018,55 +8681,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /events:
     get:
       tags:
         - System
       summary: System Events
-      description: >
-        Stream real-time events from the server.
-
-
-        Various objects within Docker report events when something happens to
-        them.
-
-
-        Containers report these events: `attach`, `commit`, `copy`, `create`,
-        `destroy`, `detach`, `die`, `exec_create`, `exec_detach`, `exec_start`,
-        `exec_die`, `export`, `health_status`, `kill`, `oom`, `pause`, `rename`,
-        `resize`, `restart`, `start`, `stop`, `top`, `unpause`, `update`, and
-        `prune`
-
-
-        Images report these events: `create`, `delete`, `import`, `load`,
-        `pull`, `push`, `save`, `tag`, `untag`, and `prune`
-
-
-        Volumes report these events: `create`, `mount`, `unmount`, `destroy`,
-        and `prune`
-
-
-        Networks report these events: `create`, `connect`, `disconnect`,
-        `destroy`, `update`, `remove`, and `prune`
-
-
-        The Docker daemon reports these events: `reload`
-
-
-        Services report these events: `create`, `update`, and `remove`
-
-
-        Nodes report these events: `create`, `update`, and `remove`
-
-
-        Secrets report these events: `create`, `update`, and `remove`
-
-
-        Configs report these events: `create`, `update`, and `remove`
-
-
-        The Builder reports `prune` events
+      description: >-
+        Monitor Docker's real-time events stream, which broadcasts a continuous
+        feed of system-level activities including container lifecycle changes
+        (start, stop, create, destroy), image operations (pull, push, delete),
+        network events, volume modifications, and daemon-level notifications.
+        This endpoint provides a persistent HTTP connection that streams
+        newline-delimited JSON objects, allowing clients to receive immediate
+        notifications of Docker system changes as they occur, with optional
+        filtering capabilities by event type, container, image, or time range to
+        narrow the event stream to specific areas of interest.
       operationId: SystemEvents
       parameters:
         - name: since
@@ -8157,13 +8788,21 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /system/df:
     get:
       tags:
         - System
       summary: System Data Usage
-      description: Get data usage information
+      description: >-
+        This API operation retrieves information about Docker disk space usage
+        across different data types. When invoked, it returns a comprehensive
+        breakdown of space consumed by images, containers, volumes, and build
+        cache on the Docker host. The response includes details such as the
+        number of items, their active/inactive status, total size, and
+        reclaimable space for each category, helping administrators monitor and
+        manage Docker's storage footprint efficiently.
       operationId: SystemDataUsage
       parameters:
         - name: type
@@ -8207,14 +8846,23 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /distribution/{name}/json:
     get:
       tags:
         - Distribution
       summary: Distribution Inspect
-      description: |
-        Return image digest and platform information by contacting the registry.
+      description: >-
+        This API endpoint retrieves detailed distribution information for a
+        specific Docker image in JSON format. By making a GET request to
+        /distribution/{name}/json with the image name as a parameter, it returns
+        manifest and descriptor data about how the image is distributed across
+        registries, including digest information, platform details, and layer
+        metadata. This is useful for inspecting the distribution manifest of an
+        image without pulling it, allowing users to verify image integrity,
+        check available platforms, and understand the image's structure in
+        remote registries before downloading.
       operationId: DistributionInspect
       parameters:
         - name: name
@@ -8254,37 +8902,25 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
   /session:
     post:
       tags:
         - Session
       summary: Session
-      description: |
-        Start a new interactive session with a server. Session allows server to
-        call back to the client for advanced capabilities.
-
-        ### Hijacking
-
-        This endpoint hijacks the HTTP connection to HTTP2 transport that allows
-        the client to expose gPRC services on that connection.
-
-        For example, the client sends this request to upgrade the connection:
-
-        ```
-        POST /session HTTP/1.1
-        Upgrade: h2c
-        Connection: Upgrade
-        ```
-
-        The Docker daemon responds with a `101 UPGRADED` response follow with
-        the raw stream:
-
-        ```
-        HTTP/1.1 101 UPGRADED
-        Connection: Upgrade
-        Upgrade: h2c
-        ```
+      description: >-
+        The POST /session endpoint in the Docker API initiates a new interactive
+        session with a Docker container, enabling real-time communication and
+        command execution. This operation establishes a persistent connection
+        that allows clients to send commands and receive responses from a
+        running container, similar to attaching to a container's stdin/stdout
+        streams. The session endpoint is particularly useful for creating
+        interactive terminal sessions, executing debugging commands, or
+        performing administrative tasks that require ongoing interaction with
+        the containerized application. Upon successful invocation, the API
+        returns session identifiers and connection details that can be used to
+        maintain and manage the active session throughout its lifecycle.
       operationId: Session
       parameters: []
       responses:
@@ -8309,6 +8945,7 @@ paths:
       deprecated: false
       x-api-evangelist-processing:
         SplitPascalCaseOperationSummaries: true
+        WriteDescription: true
     parameters: []
 components:
   schemas:
