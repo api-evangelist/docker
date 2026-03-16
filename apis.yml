@@ -23,12 +23,12 @@ type: Index
 image: https://www.docker.com/sites/default/files/d8/2019-07/docker-logo-blue.png
 access: 3rd-Party
 created: '2025-06-05'
-modified: '2025-12-28'
+modified: '2026-03-16'
 position: Consumer
 description: Docker is a platform for developers and sysadmins to develop, deploy, and run applications with containers.
 maintainers:
 - FN: Kin Lane
-  email: info@apievangelist.com
+  email: kin@apievangelist.com
 - FN: Docker, Inc.
   email: info@docker.com
   url: https://www.docker.com
