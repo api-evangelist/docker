@@ -544,8 +544,8 @@ paths:
   /containers/{id}/changes:
     get:
       tags:
-        - Containers
         - Changes
+        - Containers
       summary: Docker Container Changes
       description: >-
         This API operation retrieves a list of filesystem changes that have
@@ -1467,8 +1467,8 @@ paths:
   /containers/{id}/attach:
     post:
       tags:
-        - Containers
         - Attach
+        - Containers
       summary: Docker Container Attach
       description: >-
         Attaches to a running container to interact with its input/output
@@ -1600,8 +1600,8 @@ paths:
   /containers/{id}/attach/ws:
     get:
       tags:
-        - Containers
         - Attach
+        - Containers
       summary: Docker Container Attach Websocket
       description: >-
         Attach to a container via WebSocket to interact with its stdin, stdout,
@@ -1929,8 +1929,8 @@ paths:
   /containers/{id}/archive:
     get:
       tags:
-        - Containers
         - Archive
+        - Containers
       summary: Docker Container Archive
       description: >-
         This API operation retrieves a tar archive of files or folders from a
@@ -1993,9 +1993,9 @@ paths:
         ChooseTags: true
     put:
       tags:
-        - Put
-        - Containers
         - Archive
+        - Containers
+        - Put
       summary: Docker Put Container Archive
       description: >-
         Uploads a tar archive containing files and directories to be extracted
@@ -2307,8 +2307,8 @@ paths:
   /build:
     post:
       tags:
-        - Image
         - Builds
+        - Image
       summary: Docker Image Build
       description: >-
         The Docker Build API operation is a POST request to the /build endpoint
@@ -2781,8 +2781,8 @@ paths:
   /images/create:
     post:
       tags:
-        - Image
         - Create
+        - Image
       summary: Docker Image Create
       description: >-
         The POST /images/create endpoint is used to pull or import Docker images
@@ -3030,8 +3030,8 @@ paths:
   /images/{name}/history:
     get:
       tags:
-        - Image
         - History
+        - Image
       summary: Docker Image History
       description: >-
         This API operation retrieves the history of a Docker image by its name,
@@ -3288,7 +3288,6 @@ paths:
     post:
       tags:
         - Image
-        - Tags
       summary: Docker Image Tag
       description: >-
         This API operation tags an existing Docker image with a new name and
@@ -3379,8 +3378,8 @@ paths:
   /images/{name}:
     delete:
       tags:
-        - Image
         - Delete
+        - Image
       summary: Docker Image Delete
       description: >-
         The Image Delete operation removes a Docker image from the local Docker
@@ -3657,8 +3656,8 @@ paths:
   /commit:
     post:
       tags:
-        - Image
         - Commits
+        - Image
       summary: Docker Image Commit
       description: >-
         This API operation creates a new Docker image from a container's changes
@@ -3775,8 +3774,8 @@ paths:
   /images/{name}/get:
     get:
       tags:
-        - Image
         - Get
+        - Image
       summary: Docker Image Get
       description: >-
         This API operation retrieves a Docker image and exports it as a tarball
@@ -3835,9 +3834,9 @@ paths:
   /images/get:
     get:
       tags:
-        - Image
-        - Get
         - All
+        - Get
+        - Image
       summary: Docker Image Get All
       description: >-
         This API operation retrieves and exports one or more Docker images from
@@ -3980,8 +3979,8 @@ paths:
   /networks:
     get:
       tags:
-        - Network
         - Lists
+        - Network
       summary: Docker Network List
       description: >-
         The GET /networks endpoint in the Docker API retrieves a list of all
@@ -4167,8 +4166,8 @@ paths:
   /networks/{id}:
     get:
       tags:
-        - Network
         - Inspect
+        - Network
       summary: Docker Network Inspect
       description: >-
         The Network Inspect operation retrieves detailed information about a
@@ -4234,8 +4233,8 @@ paths:
         ChooseTags: true
     delete:
       tags:
-        - Network
         - Delete
+        - Network
       summary: Docker Network Delete
       description: >-
         This API operation removes a specified Docker network from the system by
@@ -4300,8 +4299,8 @@ paths:
   /networks/create:
     post:
       tags:
-        - Network
         - Create
+        - Network
       summary: Docker Network Create
       description: >-
         This API endpoint creates a new Docker network with customizable
@@ -4379,8 +4378,8 @@ paths:
   /networks/{id}/connect:
     post:
       tags:
-        - Network
         - Connect
+        - Network
       summary: Docker Network Connect
       description: >-
         The Docker Network Connect API operation allows you to connect a
@@ -4465,8 +4464,8 @@ paths:
   /networks/{id}/disconnect:
     post:
       tags:
-        - Network
         - Disconnect
+        - Network
       summary: Docker Network Disconnect
       description: >-
         Disconnects a container from a specified Docker network by sending a
@@ -4598,8 +4597,8 @@ paths:
   /volumes:
     get:
       tags:
-        - Volume
         - Lists
+        - Volume
       summary: Docker Volume List
       description: >-
         This API operation retrieves a list of all Docker volumes present on the
@@ -4659,8 +4658,8 @@ paths:
   /volumes/create:
     post:
       tags:
-        - Volume
         - Create
+        - Volume
       summary: Docker Volume Create
       description: >-
         Creates a new Docker volume with the specified name and driver options.
@@ -4710,8 +4709,8 @@ paths:
   /volumes/{name}:
     get:
       tags:
-        - Volume
         - Inspect
+        - Volume
       summary: Docker Volume Inspect
       description: >-
         This API operation retrieves detailed information about a specific
@@ -4760,8 +4759,8 @@ paths:
         ChooseTags: true
     put:
       tags:
-        - Volume
         - Update
+        - Volume
       summary: Docker Volume Update
       description: >-
         Updates the specified Docker volume's configuration. This operation
@@ -4849,8 +4848,8 @@ paths:
         ChooseTags: true
     delete:
       tags:
-        - Volume
         - Delete
+        - Volume
       summary: Docker Volume Delete
       description: >-
         Removes a specified volume from the Docker host by its name identifier.
@@ -4921,8 +4920,8 @@ paths:
   /volumes/prune:
     post:
       tags:
-        - Volume
         - Prune
+        - Volume
       summary: Docker Volume Prune
       description: >-
         Removes all unused volumes from the Docker host, freeing up disk space
@@ -5315,8 +5314,8 @@ paths:
   /swarm:
     get:
       tags:
-        - Swarm
         - Inspect
+        - Swarm
       summary: Docker Swarm Inspect
       description: >-
         Retrieves detailed information about the Docker Swarm cluster that the
@@ -5490,8 +5489,8 @@ paths:
   /swarm/join:
     post:
       tags:
-        - Swarm
         - Join
+        - Swarm
       summary: Docker Swarm Join
       description: >-
         Joins an existing Docker Swarm cluster by connecting a node to the swarm
@@ -5575,8 +5574,8 @@ paths:
   /swarm/leave:
     post:
       tags:
-        - Swarm
         - Leave
+        - Swarm
       summary: Docker Swarm Leave
       description: >-
         The Docker Swarm Leave POST operation allows a node to leave an existing
@@ -5860,8 +5859,8 @@ paths:
   /nodes:
     get:
       tags:
-        - Node
         - Lists
+        - Node
       summary: Docker Node List
       description: >-
         This API operation retrieves a list of all nodes in a Docker Swarm
@@ -5947,8 +5946,8 @@ paths:
   /nodes/{id}:
     get:
       tags:
-        - Node
         - Inspect
+        - Node
       summary: Docker Node Inspect
       description: >-
         Retrieves detailed information about a specific Docker Swarm node
@@ -6015,8 +6014,8 @@ paths:
         ChooseTags: true
     delete:
       tags:
-        - Node
         - Delete
+        - Node
       summary: Docker Node Delete
       description: >-
         Removes a specified node from the Docker Swarm cluster by its unique
@@ -6198,7 +6197,6 @@ paths:
   /services:
     get:
       tags:
-        - Services
         - Lists
       summary: Docker Service List
       description: >-
@@ -6284,7 +6282,6 @@ paths:
   /services/create:
     post:
       tags:
-        - Services
         - Create
       summary: Docker Service Create
       description: >-
@@ -6371,7 +6368,6 @@ paths:
   /services/{id}:
     get:
       tags:
-        - Services
         - Inspect
       summary: Docker Service Inspect
       description: >-
@@ -6449,7 +6445,6 @@ paths:
         ChooseTags: true
     delete:
       tags:
-        - Services
         - Delete
       summary: Docker Service Delete
       description: >-
@@ -6513,7 +6508,6 @@ paths:
   /services/{id}/update:
     post:
       tags:
-        - Services
         - Update
       summary: Docker Service Update
       description: >-
@@ -6635,7 +6629,6 @@ paths:
   /services/{id}/logs:
     get:
       tags:
-        - Services
         - Logs
       summary: Docker Service Logs
       description: >-
@@ -6765,8 +6758,8 @@ paths:
   /tasks:
     get:
       tags:
-        - Tasks
         - Lists
+        - Tasks
       summary: Docker Task List
       description: >-
         The Docker Tasks GET operation retrieves a list of tasks from the Docker
@@ -6834,8 +6827,8 @@ paths:
   /tasks/{id}:
     get:
       tags:
-        - Tasks
         - Inspect
+        - Tasks
       summary: Docker Task Inspect
       description: >-
         Retrieves detailed information about a specific Docker task identified
@@ -6895,8 +6888,8 @@ paths:
   /tasks/{id}/logs:
     get:
       tags:
-        - Tasks
         - Logs
+        - Tasks
       summary: Docker Task Logs
       description: >-
         This API operation retrieves the logs generated by a specific Docker
@@ -7026,8 +7019,8 @@ paths:
   /secrets:
     get:
       tags:
-        - Secrets
         - Lists
+        - Secrets
       summary: Docker Secret List
       description: >-
         Returns a list of secrets stored in the Docker Swarm cluster. This
@@ -7094,8 +7087,8 @@ paths:
   /secrets/create:
     post:
       tags:
-        - Secrets
         - Create
+        - Secrets
       summary: Docker Secret Create
       description: >-
         This API operation creates a new secret in Docker Swarm mode by sending
@@ -7157,8 +7150,8 @@ paths:
   /secrets/{id}:
     get:
       tags:
-        - Secrets
         - Inspect
+        - Secrets
       summary: Docker Secret Inspect
       description: >-
         The Secret Inspect operation retrieves detailed information about a
@@ -7247,8 +7240,8 @@ paths:
         ChooseTags: true
     delete:
       tags:
-        - Secrets
         - Delete
+        - Secrets
       summary: Docker Secret Delete
       description: >-
         This API operation deletes a specific Docker secret identified by its
@@ -7773,8 +7766,8 @@ paths:
   /plugins:
     get:
       tags:
-        - Plugin
         - Lists
+        - Plugin
       summary: Docker Plugin List
       description: >-
         Returns all plugins that are present in the Docker host as a JSON array,
@@ -8002,8 +7995,8 @@ paths:
   /plugins/{name}/json:
     get:
       tags:
-        - Plugin
         - Inspect
+        - Plugin
       summary: Docker Plugin Inspect
       description: >-
         Retrieves detailed information about a specific Docker plugin by its
@@ -8065,8 +8058,8 @@ paths:
   /plugins/{name}:
     delete:
       tags:
-        - Plugin
         - Delete
+        - Plugin
       summary: Docker Plugin Delete
       description: >-
         The Docker Plugin Delete API operation removes a specified plugin from
@@ -8139,8 +8132,8 @@ paths:
   /plugins/{name}/enable:
     post:
       tags:
-        - Plugin
         - Enables
+        - Plugin
       summary: Docker Plugin Enable
       description: >-
         Enables a previously installed Docker plugin that is currently in a
@@ -8206,8 +8199,8 @@ paths:
   /plugins/{name}/disable:
     post:
       tags:
-        - Plugin
         - Disables
+        - Plugin
       summary: Docker Plugin Disable
       description: >-
         Disables an active Docker plugin by its name, allowing administrators to
@@ -8387,8 +8380,8 @@ paths:
   /plugins/create:
     post:
       tags:
-        - Plugin
         - Create
+        - Plugin
       summary: Docker Plugin Create
       description: >-
         Creates a new plugin instance by pulling and installing a plugin from a
@@ -8657,8 +8650,8 @@ paths:
   /info:
     get:
       tags:
-        - System
         - Info
+        - System
       summary: Docker System Info
       description: >-
         The Docker System Info GET operation on the /info endpoint retrieves
@@ -8736,8 +8729,8 @@ paths:
   /_ping:
     get:
       tags:
-        - System
         - Ping
+        - System
       summary: Docker System Ping
       description: >-
         The Docker System Ping operation is a lightweight health check endpoint
@@ -8870,8 +8863,8 @@ paths:
   /events:
     get:
       tags:
-        - System
         - Events
+        - System
       summary: Docker System Events
       description: >-
         Monitor Docker's real-time events stream, which broadcasts a continuous
@@ -8979,8 +8972,8 @@ paths:
   /system/df:
     get:
       tags:
-        - System
         - Data
+        - System
         - Usage
       summary: Docker System Data Usage
       description: >-
@@ -20291,63 +20284,74 @@ components:
       const: '{}'
       type: string
 tags:
-  - name: Container
-    description: |
-      Create and manage containers.
+  - name: All
+  - name: Archive
+  - name: Attach
+  - name: Builds
+  - name: Changes
+  - name: Commits
+  - name: Connect
+  - name: Containers
+  - name: Create
+  - name: Data
+  - name: Delete
+  - name: Disables
+  - name: Disconnect
+  - name: Distribution
+    description: ''
+  - name: Enables
+  - name: Events
+  - name: Exports
+  - name: Get
+  - name: History
   - name: Image
+  - name: Info
+  - name: Inspect
+  - name: Join
+  - name: Kill
+  - name: Leave
+  - name: Lists
+  - name: Load
+  - name: Logs
   - name: Network
     description: |
       Networks are user-defined networks that containers can be attached to.
       See the [networking documentation](https://docs.docker.com/network/)
       for more information.
-  - name: Volume
+  - name: Node
     description: |
-      Create and manage persistent storage that can be attached to containers.
-  - name: Exec
-    description: >
-      Run new commands inside running containers. Refer to the
-
-      [command-line
-      reference](https://docs.docker.com/engine/reference/commandline/exec/)
-
-      for more information.
-
-
-      To exec a command in a container, you first need to create an exec
-      instance,
-
-      then start it. These two API endpoints are wrapped up in a single
-      command-line
-
-      command, `docker exec`.
+      Nodes are instances of the Engine participating in a swarm. Swarm mode
+      must be enabled for these endpoints to work.
+  - name: Pause
+  - name: Ping
+  - name: Plugin
+  - name: Prune
+  - name: Pull
+  - name: Push
+  - name: Put
+  - name: Rename
+  - name: Resize
+  - name: Restart
+  - name: Search
+  - name: Secrets
+  - name: Sessions
+  - name: Sets
+  - name: Start
+  - name: Stop
   - name: Swarm
     description: |
       Engines can be clustered together in a swarm. Refer to the
       [swarm mode documentation](https://docs.docker.com/engine/swarm/)
       for more information.
-  - name: Node
-    description: |
-      Nodes are instances of the Engine participating in a swarm. Swarm mode
-      must be enabled for these endpoints to work.
-  - name: Service
-    description: |
-      Services are the definitions of tasks to run on a swarm. Swarm mode must
-      be enabled for these endpoints to work.
-  - name: Task
-    description: |
-      A task is a container running on a swarm. It is the atomic scheduling unit
-      of swarm. Swarm mode must be enabled for these endpoints to work.
-  - name: Secret
-    description: |
-      Secrets are sensitive data that can be used by services. Swarm mode must
-      be enabled for these endpoints to work.
-  - name: Config
-    description: |
-      Configs are application configurations that can be used by services. Swarm
-      mode must be enabled for these endpoints to work.
-  - name: Plugin
   - name: System
-  - name: Distribution
-    description: ''
-  - name: Session
-    description: ''
+  - name: Tasks
+  - name: Top
+  - name: Unlock
+  - name: Update
+  - name: Upgrade
+  - name: Usage
+  - name: Versions
+  - name: Volume
+    description: |
+      Create and manage persistent storage that can be attached to containers.
+  - name: Wait
