@@ -26,7 +26,7 @@ paths:
       tags:
         - Containers
         - Lists
-      summary: Container List
+      summary: Docker Container List
       description: >-
         This API operation retrieves a list of all Docker containers on the host
         system, returning their details in JSON format. When invoked via a GET
@@ -154,7 +154,7 @@ paths:
       tags:
         - Containers
         - Create
-      summary: Container Create
+      summary: Docker Container Create
       description: >-
         Creates a new container from a specified Docker image without starting
         it. This operation accepts a JSON body with configuration parameters
@@ -274,7 +274,7 @@ paths:
       tags:
         - Containers
         - Inspect
-      summary: Container Inspect
+      summary: Docker Container Inspect
       description: >-
         The Container Inspect operation retrieves detailed low-level information
         about a specific Docker container by its ID or name. This GET request
@@ -342,7 +342,7 @@ paths:
       tags:
         - Containers
         - Top
-      summary: Container Top
+      summary: Docker Container Top
       description: >-
         This API operation retrieves the list of running processes inside a
         specified Docker container, similar to executing the Unix 'ps' command.
@@ -417,7 +417,7 @@ paths:
       tags:
         - Containers
         - Logs
-      summary: Container Logs
+      summary: Docker Container Logs
       description: >-
         This API operation retrieves the logs from a specific Docker container
         identified by its ID. It returns the stdout and stderr streams that have
@@ -546,7 +546,7 @@ paths:
       tags:
         - Containers
         - Changes
-      summary: Container Changes
+      summary: Docker Container Changes
       description: >-
         This API operation retrieves a list of filesystem changes that have
         occurred within a specified Docker container since it was created. By
@@ -577,12 +577,12 @@ paths:
                   $ref: '#/components/schemas/FilesystemChange'
                 description: ''
                 examples:
-                  - - Path: /dev
-                      Kind: 0
-                    - Path: /dev/kmsg
-                      Kind: 1
-                    - Path: /test
-                      Kind: 1
+                  -   - Path: /dev
+                        Kind: 0
+                      - Path: /dev/kmsg
+                        Kind: 1
+                      - Path: /test
+                        Kind: 1
                 contentMediaType: application/json
               example:
                 - Path: /dev
@@ -622,7 +622,7 @@ paths:
       tags:
         - Containers
         - Exports
-      summary: Container Export
+      summary: Docker Container Export
       description: >-
         This operation exports a Docker container's filesystem as a tar archive.
         When you make a GET request to this endpoint with a specific container
@@ -676,7 +676,7 @@ paths:
     get:
       tags:
         - Containers
-      summary: Container Stats
+      summary: Docker Container Stats
       description: >-
         This API operation retrieves real-time resource usage statistics for a
         specific Docker container identified by its ID. When called, it returns
@@ -754,7 +754,7 @@ paths:
       tags:
         - Containers
         - Resize
-      summary: Container Resize
+      summary: Docker Container Resize
       description: >-
         This API operation resizes the TTY (terminal) dimensions for a specified
         Docker container by sending a POST request to the
@@ -830,7 +830,7 @@ paths:
       tags:
         - Containers
         - Start
-      summary: Container Start
+      summary: Docker Container Start
       description: >-
         This API operation starts a previously created Docker container
         identified by its unique container ID. When invoked via a POST request
@@ -910,7 +910,7 @@ paths:
       tags:
         - Containers
         - Stop
-      summary: Container Stop
+      summary: Docker Container Stop
       description: >-
         This API operation stops a running Docker container identified by its
         unique container ID provided in the URL path. When invoked via a POST
@@ -994,7 +994,7 @@ paths:
       tags:
         - Containers
         - Restart
-      summary: Container Restart
+      summary: Docker Container Restart
       description: >-
         Restarts a specified Docker container by its ID or name. This operation
         performs a graceful stop of the container followed by a start, allowing
@@ -1072,7 +1072,7 @@ paths:
       tags:
         - Containers
         - Kill
-      summary: Container Kill
+      summary: Docker Container Kill
       description: >-
         Sends a signal to a running container identified by its ID, which by
         default is SIGKILL to immediately terminate the container, though other
@@ -1165,7 +1165,7 @@ paths:
       tags:
         - Containers
         - Update
-      summary: Container Update
+      summary: Docker Container Update
       description: >-
         Updates the configuration of an existing Docker container identified by
         its ID, allowing you to modify resource constraints and other runtime
@@ -1264,7 +1264,7 @@ paths:
       tags:
         - Containers
         - Rename
-      summary: Container Rename
+      summary: Docker Container Rename
       description: >-
         This API operation allows you to rename an existing Docker container by
         sending a POST request to the /containers/{id}/rename endpoint, where
@@ -1344,7 +1344,7 @@ paths:
       tags:
         - Containers
         - Pause
-      summary: Container Pause
+      summary: Docker Container Pause
       description: >-
         Pauses all processes within the specified Docker container by sending a
         POST request to the /containers/{id}/pause endpoint, where {id}
@@ -1406,7 +1406,7 @@ paths:
     post:
       tags:
         - Containers
-      summary: Container Unpause
+      summary: Docker Container Unpause
       description: >-
         Unpauses a container that was previously paused using the pause
         endpoint. This operation resumes all processes that were frozen within
@@ -1469,7 +1469,7 @@ paths:
       tags:
         - Containers
         - Attach
-      summary: Container Attach
+      summary: Docker Container Attach
       description: >-
         Attaches to a running container to interact with its input/output
         streams, enabling real-time communication with the container's process.
@@ -1602,7 +1602,7 @@ paths:
       tags:
         - Containers
         - Attach
-      summary: Container Attach Websocket
+      summary: Docker Container Attach Websocket
       description: >-
         Attach to a container via WebSocket to interact with its stdin, stdout,
         and stderr streams in real-time. This endpoint establishes a WebSocket
@@ -1731,7 +1731,7 @@ paths:
       tags:
         - Containers
         - Wait
-      summary: Container Wait
+      summary: Docker Container Wait
       description: >-
         This API operation blocks and waits for a container to stop, then
         returns the exit code. When you make a POST request to this endpoint
@@ -1813,7 +1813,7 @@ paths:
       tags:
         - Containers
         - Delete
-      summary: Container Delete
+      summary: Docker Container Delete
       description: >-
         This API operation removes a specified Docker container from the system
         by sending a DELETE request to the /containers/{id} endpoint, where {id}
@@ -1931,7 +1931,7 @@ paths:
       tags:
         - Containers
         - Archive
-      summary: Container Archive
+      summary: Docker Container Archive
       description: >-
         This API operation retrieves a tar archive of files or folders from a
         specified Docker container's filesystem. By providing the container ID
@@ -1996,7 +1996,7 @@ paths:
         - Put
         - Containers
         - Archive
-      summary: Put Container Archive
+      summary: Docker Put Container Archive
       description: >-
         Uploads a tar archive containing files and directories to be extracted
         into a specified path within a container's filesystem. The archive is
@@ -2145,7 +2145,7 @@ paths:
       tags:
         - Containers
         - Prune
-      summary: Container Prune
+      summary: Docker Container Prune
       description: >-
         The Container Prune API operation is a POST request to the
         `/containers/prune` endpoint that removes all stopped containers from
@@ -2206,7 +2206,7 @@ paths:
       tags:
         - Image
         - Lists
-      summary: Image List
+      summary: Docker Image List
       description: >-
         This API operation retrieves a list of Docker images available on the
         Docker host. It performs a GET request to the /images/json endpoint and
@@ -2309,7 +2309,7 @@ paths:
       tags:
         - Image
         - Builds
-      summary: Image Build
+      summary: Docker Image Build
       description: >-
         The Docker Build API operation is a POST request to the /build endpoint
         that constructs a Docker image from a set of source files, typically
@@ -2677,7 +2677,7 @@ paths:
       tags:
         - Builds
         - Prune
-      summary: Build Prune
+      summary: Docker Build Prune
       description: >-
         The Docker Build Prune POST operation to the /build/prune endpoint is
         used to remove Docker build cache, helping to reclaim disk space
@@ -2783,7 +2783,7 @@ paths:
       tags:
         - Image
         - Create
-      summary: Image Create
+      summary: Docker Image Create
       description: >-
         The POST /images/create endpoint is used to pull or import Docker images
         into the local Docker environment. This operation allows you to create a
@@ -2966,7 +2966,7 @@ paths:
       tags:
         - Image
         - Inspect
-      summary: Image Inspect
+      summary: Docker Image Inspect
       description: >-
         Returns low-level information about an image identified by its name or
         ID. This endpoint provides detailed metadata including the image's
@@ -3032,7 +3032,7 @@ paths:
       tags:
         - Image
         - History
-      summary: Image History
+      summary: Docker Image History
       description: >-
         This API operation retrieves the history of a Docker image by its name,
         returning a chronological list of layers that make up the image. Each
@@ -3079,38 +3079,38 @@ paths:
                   $ref: '#/components/schemas/HistoryResponseItem'
                 description: ''
                 examples:
-                  - - Id: >-
-                        3db9c44f45209632d6050b35958829c3a2aa256d81b9a7be45b362ff85c54710
-                      Created: 1398108230
-                      CreatedBy: >-
-                        /bin/sh -c #(nop) ADD
-                        file:eb15dbd63394e063b805a3c32ca7bf0266ef64676d5a6fab4801f2e81e2a5148
-                        in /
-                      Tags:
-                        - ubuntu:lucid
-                        - ubuntu:10.04
-                      Size: 182964289
-                      Comment: ''
-                    - Id: >-
-                        6cfa4d1f33fb861d4d114f43b25abd0ac737509268065cdfd69d544a59c85ab8
-                      Created: 1398108222
-                      CreatedBy: >-
-                        /bin/sh -c #(nop) MAINTAINER Tianon Gravi
-                        <admwiggin@gmail.com> - mkimage-debootstrap.sh -i
-                        iproute,iputils-ping,ubuntu-minimal -t lucid.tar.xz
-                        lucid http://archive.ubuntu.com/ubuntu/
-                      Tags: []
-                      Size: 0
-                      Comment: ''
-                    - Id: >-
-                        511136ea3c5a64f264b78b5433614aec563103b4d4702f3ba7d4d2698e22c158
-                      Created: 1371157430
-                      CreatedBy: ''
-                      Tags:
-                        - scratch12:latest
-                        - scratch:latest
-                      Size: 0
-                      Comment: Imported from -
+                  -   - Id: >-
+                          3db9c44f45209632d6050b35958829c3a2aa256d81b9a7be45b362ff85c54710
+                        Created: 1398108230
+                        CreatedBy: >-
+                          /bin/sh -c #(nop) ADD
+                          file:eb15dbd63394e063b805a3c32ca7bf0266ef64676d5a6fab4801f2e81e2a5148
+                          in /
+                        Tags:
+                          - ubuntu:lucid
+                          - ubuntu:10.04
+                        Size: 182964289
+                        Comment: ''
+                      - Id: >-
+                          6cfa4d1f33fb861d4d114f43b25abd0ac737509268065cdfd69d544a59c85ab8
+                        Created: 1398108222
+                        CreatedBy: >-
+                          /bin/sh -c #(nop) MAINTAINER Tianon Gravi
+                          <admwiggin@gmail.com> - mkimage-debootstrap.sh -i
+                          iproute,iputils-ping,ubuntu-minimal -t lucid.tar.xz
+                          lucid http://archive.ubuntu.com/ubuntu/
+                        Tags: []
+                        Size: 0
+                        Comment: ''
+                      - Id: >-
+                          511136ea3c5a64f264b78b5433614aec563103b4d4702f3ba7d4d2698e22c158
+                        Created: 1371157430
+                        CreatedBy: ''
+                        Tags:
+                          - scratch12:latest
+                          - scratch:latest
+                        Size: 0
+                        Comment: Imported from -
                 contentMediaType: application/json
               example:
                 - Id: >-
@@ -3170,7 +3170,7 @@ paths:
       tags:
         - Image
         - Push
-      summary: Image Push
+      summary: Docker Image Push
       description: >-
         This API operation pushes a Docker image to a configured registry. The
         endpoint accepts a POST request to `/images/{name}/push` where `{name}`
@@ -3289,7 +3289,7 @@ paths:
       tags:
         - Image
         - Tags
-      summary: Image Tag
+      summary: Docker Image Tag
       description: >-
         This API operation tags an existing Docker image with a new name and
         optional tag, creating an additional reference to the same image without
@@ -3381,7 +3381,7 @@ paths:
       tags:
         - Image
         - Delete
-      summary: Image Delete
+      summary: Docker Image Delete
       description: >-
         The Image Delete operation removes a Docker image from the local Docker
         host by specifying its name or ID in the path parameter. When invoked,
@@ -3443,9 +3443,9 @@ paths:
                   $ref: '#/components/schemas/ImageDeleteResponseItem'
                 description: ''
                 examples:
-                  - - Untagged: 3e2f21a89f
-                    - Deleted: 3e2f21a89f
-                    - Deleted: 53b4f83ac9
+                  -   - Untagged: 3e2f21a89f
+                      - Deleted: 3e2f21a89f
+                      - Deleted: 53b4f83ac9
                 contentMediaType: application/json
               example:
                 - Untagged: 3e2f21a89f
@@ -3483,7 +3483,7 @@ paths:
       tags:
         - Image
         - Search
-      summary: Image Search
+      summary: Docker Image Search
       description: >-
         This GET operation provides a search interface for discovering Docker
         images available on Docker Hub or other configured registries. It
@@ -3539,25 +3539,25 @@ paths:
                   $ref: '#/components/schemas/ImageSearchResponseItem'
                 description: ''
                 examples:
-                  - - description: >-
-                        A minimal Docker image based on Alpine Linux with a
-                        complete package index and only 5 MB in size!
-                      is_official: true
-                      is_automated: false
-                      name: alpine
-                      star_count: 10093
-                    - description: Busybox base image.
-                      is_official: true
-                      is_automated: false
-                      name: Busybox base image.
-                      star_count: 3037
-                    - description: >-
-                        The PostgreSQL object-relational database system
-                        provides reliability and data integrity.
-                      is_official: true
-                      is_automated: false
-                      name: postgres
-                      star_count: 12408
+                  -   - description: >-
+                          A minimal Docker image based on Alpine Linux with a
+                          complete package index and only 5 MB in size!
+                        is_official: true
+                        is_automated: false
+                        name: alpine
+                        star_count: 10093
+                      - description: Busybox base image.
+                        is_official: true
+                        is_automated: false
+                        name: Busybox base image.
+                        star_count: 3037
+                      - description: >-
+                          The PostgreSQL object-relational database system
+                          provides reliability and data integrity.
+                        is_official: true
+                        is_automated: false
+                        name: postgres
+                        star_count: 12408
                 contentMediaType: application/json
               example:
                 - description: >-
@@ -3597,7 +3597,7 @@ paths:
       tags:
         - Image
         - Prune
-      summary: Image Prune
+      summary: Docker Image Prune
       description: >-
         The Docker Image Prune API operation is a POST request to the
         /images/prune endpoint that removes unused or dangling images from the
@@ -3659,7 +3659,7 @@ paths:
       tags:
         - Image
         - Commits
-      summary: Image Commit
+      summary: Docker Image Commit
       description: >-
         This API operation creates a new Docker image from a container's changes
         by committing the current state of a specified container. When invoked
@@ -3777,7 +3777,7 @@ paths:
       tags:
         - Image
         - Get
-      summary: Image Get
+      summary: Docker Image Get
       description: >-
         This API operation retrieves a Docker image and exports it as a tarball
         archive. By sending a GET request to the endpoint with a specific image
@@ -3838,7 +3838,7 @@ paths:
         - Image
         - Get
         - All
-      summary: Image Get All
+      summary: Docker Image Get All
       description: >-
         This API operation retrieves and exports one or more Docker images from
         the Docker daemon as a tarball archive. By making a GET request to the
@@ -3900,7 +3900,7 @@ paths:
       tags:
         - Image
         - Load
-      summary: Image Load
+      summary: Docker Image Load
       description: >-
         The Docker POST /images/load API operation allows users to load a
         tarball containing one or more Docker images into the Docker daemon's
@@ -3982,7 +3982,7 @@ paths:
       tags:
         - Network
         - Lists
-      summary: Network List
+      summary: Docker Network List
       description: >-
         The GET /networks endpoint in the Docker API retrieves a list of all
         networks available in the Docker environment. This operation allows
@@ -4041,60 +4041,60 @@ paths:
                   $ref: '#/components/schemas/Network'
                 description: ''
                 examples:
-                  - - Name: bridge
-                      Id: >-
-                        f2de39df4171b0dc801e8002d1d999b77256983dfc63041c0f34030aa3977566
-                      Created: '2016-10-19T06:21:00.416Z'
-                      Scope: local
-                      Driver: bridge
-                      EnableIPv4: true
-                      EnableIPv6: false
-                      Internal: false
-                      Attachable: false
-                      Ingress: false
-                      IPAM:
-                        Driver: default
-                        Config:
-                          - Subnet: 172.17.0.0/16
-                      Options:
-                        com.docker.network.bridge.default_bridge: 'true'
-                        com.docker.network.bridge.enable_icc: 'true'
-                        com.docker.network.bridge.enable_ip_masquerade: 'true'
-                        com.docker.network.bridge.host_binding_ipv4: 0.0.0.0
-                        com.docker.network.bridge.name: docker0
-                        com.docker.network.driver.mtu: '1500'
-                    - Name: none
-                      Id: >-
-                        e086a3893b05ab69242d3c44e49483a3bbbd3a26b46baa8f61ab797c1088d794
-                      Created: '1901-01-01T00:00:00.000Z'
-                      Scope: local
-                      Driver: 'null'
-                      EnableIPv4: false
-                      EnableIPv6: false
-                      Internal: false
-                      Attachable: false
-                      Ingress: false
-                      IPAM:
-                        Driver: default
-                        Config: []
-                      Containers: {}
-                      Options: {}
-                    - Name: host
-                      Id: >-
-                        13e871235c677f196c4e1ecebb9dc733b9b2d2ab589e30c539efeda84a24215e
-                      Created: '1901-01-01T00:00:00.000Z'
-                      Scope: local
-                      Driver: host
-                      EnableIPv4: false
-                      EnableIPv6: false
-                      Internal: false
-                      Attachable: false
-                      Ingress: false
-                      IPAM:
-                        Driver: default
-                        Config: []
-                      Containers: {}
-                      Options: {}
+                  -   - Name: bridge
+                        Id: >-
+                          f2de39df4171b0dc801e8002d1d999b77256983dfc63041c0f34030aa3977566
+                        Created: '2016-10-19T06:21:00.416Z'
+                        Scope: local
+                        Driver: bridge
+                        EnableIPv4: true
+                        EnableIPv6: false
+                        Internal: false
+                        Attachable: false
+                        Ingress: false
+                        IPAM:
+                          Driver: default
+                          Config:
+                            - Subnet: 172.17.0.0/16
+                        Options:
+                          com.docker.network.bridge.default_bridge: 'true'
+                          com.docker.network.bridge.enable_icc: 'true'
+                          com.docker.network.bridge.enable_ip_masquerade: 'true'
+                          com.docker.network.bridge.host_binding_ipv4: 0.0.0.0
+                          com.docker.network.bridge.name: docker0
+                          com.docker.network.driver.mtu: '1500'
+                      - Name: none
+                        Id: >-
+                          e086a3893b05ab69242d3c44e49483a3bbbd3a26b46baa8f61ab797c1088d794
+                        Created: '1901-01-01T00:00:00.000Z'
+                        Scope: local
+                        Driver: 'null'
+                        EnableIPv4: false
+                        EnableIPv6: false
+                        Internal: false
+                        Attachable: false
+                        Ingress: false
+                        IPAM:
+                          Driver: default
+                          Config: []
+                        Containers: {}
+                        Options: {}
+                      - Name: host
+                        Id: >-
+                          13e871235c677f196c4e1ecebb9dc733b9b2d2ab589e30c539efeda84a24215e
+                        Created: '1901-01-01T00:00:00.000Z'
+                        Scope: local
+                        Driver: host
+                        EnableIPv4: false
+                        EnableIPv6: false
+                        Internal: false
+                        Attachable: false
+                        Ingress: false
+                        IPAM:
+                          Driver: default
+                          Config: []
+                        Containers: {}
+                        Options: {}
                 contentMediaType: application/json
               example:
                 - Name: bridge
@@ -4169,7 +4169,7 @@ paths:
       tags:
         - Network
         - Inspect
-      summary: Network Inspect
+      summary: Docker Network Inspect
       description: >-
         The Network Inspect operation retrieves detailed information about a
         specific Docker network by its unique identifier. When invoked with a
@@ -4236,7 +4236,7 @@ paths:
       tags:
         - Network
         - Delete
-      summary: Network Delete
+      summary: Docker Network Delete
       description: >-
         This API operation removes a specified Docker network from the system by
         sending a DELETE request to the `/networks/{id}` endpoint, where `{id}`
@@ -4302,7 +4302,7 @@ paths:
       tags:
         - Network
         - Create
-      summary: Network Create
+      summary: Docker Network Create
       description: >-
         This API endpoint creates a new Docker network with customizable
         configurations. It accepts a POST request to `/networks/create` and
@@ -4381,7 +4381,7 @@ paths:
       tags:
         - Network
         - Connect
-      summary: Network Connect
+      summary: Docker Network Connect
       description: >-
         The Docker Network Connect API operation allows you to connect a
         container to an existing network by sending a POST request to the
@@ -4467,7 +4467,7 @@ paths:
       tags:
         - Network
         - Disconnect
-      summary: Network Disconnect
+      summary: Docker Network Disconnect
       description: >-
         Disconnects a container from a specified Docker network by sending a
         POST request to the /networks/{id}/disconnect endpoint, where {id} is
@@ -4541,7 +4541,7 @@ paths:
       tags:
         - Network
         - Prune
-      summary: Network Prune
+      summary: Docker Network Prune
       description: >-
         This API operation removes all unused networks from the Docker host by
         sending a POST request to the /networks/prune endpoint. When executed,
@@ -4600,7 +4600,7 @@ paths:
       tags:
         - Volume
         - Lists
-      summary: Volume List
+      summary: Docker Volume List
       description: >-
         This API operation retrieves a list of all Docker volumes present on the
         host system. When invoked via a GET request to the /volumes endpoint, it
@@ -4661,7 +4661,7 @@ paths:
       tags:
         - Volume
         - Create
-      summary: Volume Create
+      summary: Docker Volume Create
       description: >-
         Creates a new Docker volume with the specified name and driver options.
         This endpoint accepts a JSON payload containing volume configuration
@@ -4712,7 +4712,7 @@ paths:
       tags:
         - Volume
         - Inspect
-      summary: Volume Inspect
+      summary: Docker Volume Inspect
       description: >-
         This API operation retrieves detailed information about a specific
         Docker volume by its name. When called with a GET request to the
@@ -4762,7 +4762,7 @@ paths:
       tags:
         - Volume
         - Update
-      summary: Volume Update
+      summary: Docker Volume Update
       description: >-
         Updates the specified Docker volume's configuration. This operation
         allows you to modify properties of an existing volume identified by its
@@ -4851,7 +4851,7 @@ paths:
       tags:
         - Volume
         - Delete
-      summary: Volume Delete
+      summary: Docker Volume Delete
       description: >-
         Removes a specified volume from the Docker host by its name identifier.
         This operation permanently deletes the volume and all data contained
@@ -4923,7 +4923,7 @@ paths:
       tags:
         - Volume
         - Prune
-      summary: Volume Prune
+      summary: Docker Volume Prune
       description: >-
         Removes all unused volumes from the Docker host, freeing up disk space
         by deleting volumes that are not currently referenced by any containers.
@@ -4979,7 +4979,7 @@ paths:
     post:
       tags:
         - Containers
-      summary: Container Exec
+      summary: Docker Container Exec
       description: >-
         This API operation creates an exec instance within a specified Docker
         container, allowing you to run commands inside an already running
@@ -5078,7 +5078,7 @@ paths:
     post:
       tags:
         - Start
-      summary: Exec Start
+      summary: Docker Exec Start
       description: >-
         Starts a previously created exec instance by its ID. This endpoint
         executes the command that was configured when the exec instance was
@@ -5139,7 +5139,7 @@ paths:
     post:
       tags:
         - Resize
-      summary: Exec Resize
+      summary: Docker Exec Resize
       description: >-
         Resizes the TTY session used by an exec instance identified by the
         specified ID. This operation allows you to dynamically adjust the
@@ -5221,7 +5221,7 @@ paths:
     get:
       tags:
         - Inspect
-      summary: Exec Inspect
+      summary: Docker Exec Inspect
       description: >-
         Returns low-level information about an exec instance identified by the
         provided ID. This endpoint retrieves details such as the command being
@@ -5317,7 +5317,7 @@ paths:
       tags:
         - Swarm
         - Inspect
-      summary: Swarm Inspect
+      summary: Docker Swarm Inspect
       description: >-
         Retrieves detailed information about the Docker Swarm cluster that the
         Docker daemon is a member of, including the Swarm's ID, version,
@@ -5383,7 +5383,7 @@ paths:
     post:
       tags:
         - Swarm
-      summary: Swarm Init
+      summary: Docker Swarm Init
       description: >-
         Initialize a new swarm cluster by configuring the Docker engine to
         operate in swarm mode, making the current node the first manager node of
@@ -5492,7 +5492,7 @@ paths:
       tags:
         - Swarm
         - Join
-      summary: Swarm Join
+      summary: Docker Swarm Join
       description: >-
         Joins an existing Docker Swarm cluster by connecting a node to the swarm
         as either a worker or manager. This operation requires connection
@@ -5577,7 +5577,7 @@ paths:
       tags:
         - Swarm
         - Leave
-      summary: Swarm Leave
+      summary: Docker Swarm Leave
       description: >-
         The Docker Swarm Leave POST operation allows a node to leave an existing
         Docker Swarm cluster. When executed, this endpoint removes the node from
@@ -5637,7 +5637,7 @@ paths:
       tags:
         - Swarm
         - Update
-      summary: Swarm Update
+      summary: Docker Swarm Update
       description: >-
         Updates the configuration of an existing Docker Swarm cluster by
         modifying settings such as the orchestration configuration, raft
@@ -5740,7 +5740,7 @@ paths:
     get:
       tags:
         - Swarm
-      summary: Swarm Unlockkey
+      summary: Docker Swarm Unlockkey
       description: >-
         The Docker Swarm Unlockkey GET operation retrieves the unlock key
         required to access a locked Docker Swarm manager node after it has been
@@ -5802,7 +5802,7 @@ paths:
       tags:
         - Swarm
         - Unlock
-      summary: Swarm Unlock
+      summary: Docker Swarm Unlock
       description: >-
         ```
 
@@ -5862,7 +5862,7 @@ paths:
       tags:
         - Node
         - Lists
-      summary: Node List
+      summary: Docker Node List
       description: >-
         This API operation retrieves a list of all nodes in a Docker Swarm
         cluster, returning comprehensive information about each node including
@@ -5949,7 +5949,7 @@ paths:
       tags:
         - Node
         - Inspect
-      summary: Node Inspect
+      summary: Docker Node Inspect
       description: >-
         Retrieves detailed information about a specific Docker Swarm node
         identified by its ID or name. This operation returns comprehensive data
@@ -6017,7 +6017,7 @@ paths:
       tags:
         - Node
         - Delete
-      summary: Node Delete
+      summary: Docker Node Delete
       description: >-
         Removes a specified node from the Docker Swarm cluster by its unique
         identifier. This operation is typically used when decommissioning a node
@@ -6089,7 +6089,7 @@ paths:
       tags:
         - Node
         - Update
-      summary: Node Update
+      summary: Docker Node Update
       description: >-
         This API operation updates the configuration of a specific node in a
         Docker Swarm cluster by sending a POST request to the /nodes/{id}/update
@@ -6200,7 +6200,7 @@ paths:
       tags:
         - Services
         - Lists
-      summary: Service List
+      summary: Docker Service List
       description: >-
         Lists all services in the Docker Swarm cluster. This endpoint retrieves
         information about services that have been created and are managed by the
@@ -6286,7 +6286,7 @@ paths:
       tags:
         - Services
         - Create
-      summary: Service Create
+      summary: Docker Service Create
       description: >-
         Creates a new service in a Docker Swarm cluster by accepting a service
         specification in JSON format and returning the newly created service's
@@ -6373,7 +6373,7 @@ paths:
       tags:
         - Services
         - Inspect
-      summary: Service Inspect
+      summary: Docker Service Inspect
       description: >-
         Retrieves detailed information about a specific Docker service
         identified by its ID or name. This operation returns comprehensive
@@ -6451,7 +6451,7 @@ paths:
       tags:
         - Services
         - Delete
-      summary: Service Delete
+      summary: Docker Service Delete
       description: >-
         Deletes a Docker service by its unique identifier. This operation
         removes the specified service from the Docker Swarm cluster, stopping
@@ -6515,7 +6515,7 @@ paths:
       tags:
         - Services
         - Update
-      summary: Service Update
+      summary: Docker Service Update
       description: >-
         Updates the specified Docker service by its ID with new configuration
         parameters. This operation allows you to modify service properties such
@@ -6637,7 +6637,7 @@ paths:
       tags:
         - Services
         - Logs
-      summary: Service Logs
+      summary: Docker Service Logs
       description: >-
         Get stdout and stderr logs from a service. This endpoint returns a
         stream of logs from the specified service. The logs can be filtered by
@@ -6767,7 +6767,7 @@ paths:
       tags:
         - Tasks
         - Lists
-      summary: Task List
+      summary: Docker Task List
       description: >-
         The Docker Tasks GET operation retrieves a list of tasks from the Docker
         Swarm cluster. Tasks represent individual units of work that are
@@ -6836,7 +6836,7 @@ paths:
       tags:
         - Tasks
         - Inspect
-      summary: Task Inspect
+      summary: Docker Task Inspect
       description: >-
         Retrieves detailed information about a specific Docker task identified
         by its unique ID. This operation returns comprehensive metadata about
@@ -6897,7 +6897,7 @@ paths:
       tags:
         - Tasks
         - Logs
-      summary: Task Logs
+      summary: Docker Task Logs
       description: >-
         This API operation retrieves the logs generated by a specific Docker
         task identified by its unique ID. It returns the stdout and stderr
@@ -7028,7 +7028,7 @@ paths:
       tags:
         - Secrets
         - Lists
-      summary: Secret List
+      summary: Docker Secret List
       description: >-
         Returns a list of secrets stored in the Docker Swarm cluster. This
         endpoint retrieves metadata about all secrets that the authenticated
@@ -7096,7 +7096,7 @@ paths:
       tags:
         - Secrets
         - Create
-      summary: Secret Create
+      summary: Docker Secret Create
       description: >-
         This API operation creates a new secret in Docker Swarm mode by sending
         a POST request to the /secrets/create endpoint. Secrets are sensitive
@@ -7159,7 +7159,7 @@ paths:
       tags:
         - Secrets
         - Inspect
-      summary: Secret Inspect
+      summary: Docker Secret Inspect
       description: >-
         The Secret Inspect operation retrieves detailed information about a
         specific Docker secret by its unique identifier. This GET request is
@@ -7249,7 +7249,7 @@ paths:
       tags:
         - Secrets
         - Delete
-      summary: Secret Delete
+      summary: Docker Secret Delete
       description: >-
         This API operation deletes a specific Docker secret identified by its
         unique ID. When invoked, it removes the secret from the Docker Swarm,
@@ -7305,7 +7305,7 @@ paths:
       tags:
         - Secrets
         - Update
-      summary: Secret Update
+      summary: Docker Secret Update
       description: >-
         Updates a secret with a new version. This operation requires the secret
         ID and the current version number specified in the query parameters. The
@@ -7411,7 +7411,7 @@ paths:
     get:
       tags:
         - Lists
-      summary: Config List
+      summary: Docker Config List
       description: >-
         The Docker Configs List API operation retrieves a list of config objects
         from a Docker swarm cluster. Configs are arbitrary data that can be
@@ -7477,7 +7477,7 @@ paths:
     post:
       tags:
         - Create
-      summary: Config Create
+      summary: Docker Config Create
       description: >-
         Creates a new config object in the Docker Swarm cluster, allowing you to
         store non-sensitive configuration data such as application settings,
@@ -7535,7 +7535,7 @@ paths:
     get:
       tags:
         - Inspect
-      summary: Config Inspect
+      summary: Docker Config Inspect
       description: >-
         This API operation retrieves detailed information about a specific
         Docker configuration object identified by its unique ID. When invoked
@@ -7612,7 +7612,7 @@ paths:
     delete:
       tags:
         - Delete
-      summary: Config Delete
+      summary: Docker Config Delete
       description: >-
         Removes a Docker config from the swarm cluster by its unique identifier.
         This operation permanently deletes the specified config object, making
@@ -7666,7 +7666,7 @@ paths:
     post:
       tags:
         - Update
-      summary: Config Update
+      summary: Docker Config Update
       description: >-
         Updates an existing config by modifying its specification. This
         operation requires the config ID and version number to ensure safe
@@ -7775,7 +7775,7 @@ paths:
       tags:
         - Plugin
         - Lists
-      summary: Plugin List
+      summary: Docker Plugin List
       description: >-
         Returns all plugins that are present in the Docker host as a JSON array,
         including both active and inactive plugins. The response includes
@@ -7832,7 +7832,7 @@ paths:
       tags:
         - Get
         - Plugin
-      summary: Get Plugin Privileges
+      summary: Docker Get Plugin Privileges
       description: >-
         This API operation retrieves the list of privileges required by a Docker
         plugin to function properly. When called, it returns detailed
@@ -7895,7 +7895,7 @@ paths:
       tags:
         - Plugin
         - Pull
-      summary: Plugin Pull
+      summary: Docker Plugin Pull
       description: >-
         This API operation allows you to pull or download a Docker plugin from a
         registry to the local Docker host. The POST request to the /plugins/pull
@@ -7954,18 +7954,18 @@ paths:
                 $ref: '#/components/schemas/PluginPrivilege'
               description: ''
               examples:
-                - - Name: network
-                    Description: ''
-                    Value:
-                      - host
-                  - Name: mount
-                    Description: ''
-                    Value:
-                      - /data
-                  - Name: device
-                    Description: ''
-                    Value:
-                      - /dev/cpu_dma_latency
+                -   - Name: network
+                      Description: ''
+                      Value:
+                        - host
+                    - Name: mount
+                      Description: ''
+                      Value:
+                        - /data
+                    - Name: device
+                      Description: ''
+                      Value:
+                        - /dev/cpu_dma_latency
               contentMediaType: application/json
             example:
               - Name: network
@@ -8004,7 +8004,7 @@ paths:
       tags:
         - Plugin
         - Inspect
-      summary: Plugin Inspect
+      summary: Docker Plugin Inspect
       description: >-
         Retrieves detailed information about a specific Docker plugin by its
         name or ID. This operation returns a JSON object containing the plugin's
@@ -8067,7 +8067,7 @@ paths:
       tags:
         - Plugin
         - Delete
-      summary: Plugin Delete
+      summary: Docker Plugin Delete
       description: >-
         The Docker Plugin Delete API operation removes a specified plugin from
         the Docker host by sending a DELETE request to the /plugins/{name}
@@ -8141,7 +8141,7 @@ paths:
       tags:
         - Plugin
         - Enables
-      summary: Plugin Enable
+      summary: Docker Plugin Enable
       description: >-
         Enables a previously installed Docker plugin that is currently in a
         disabled state. This operation activates the plugin's functionality,
@@ -8208,7 +8208,7 @@ paths:
       tags:
         - Plugin
         - Disables
-      summary: Plugin Disable
+      summary: Docker Plugin Disable
       description: >-
         Disables an active Docker plugin by its name, allowing administrators to
         deactivate plugin functionality without completely removing it from the
@@ -8272,7 +8272,7 @@ paths:
       tags:
         - Plugin
         - Upgrade
-      summary: Plugin Upgrade
+      summary: Docker Plugin Upgrade
       description: >-
         Upgrades an existing Docker plugin to a newer version by pulling the
         specified plugin image from a registry. This operation requires the
@@ -8326,18 +8326,18 @@ paths:
                 $ref: '#/components/schemas/PluginPrivilege'
               description: ''
               examples:
-                - - Name: network
-                    Description: ''
-                    Value:
-                      - host
-                  - Name: mount
-                    Description: ''
-                    Value:
-                      - /data
-                  - Name: device
-                    Description: ''
-                    Value:
-                      - /dev/cpu_dma_latency
+                -   - Name: network
+                      Description: ''
+                      Value:
+                        - host
+                    - Name: mount
+                      Description: ''
+                      Value:
+                        - /data
+                    - Name: device
+                      Description: ''
+                      Value:
+                        - /dev/cpu_dma_latency
               contentMediaType: application/json
             example:
               - Name: network
@@ -8389,7 +8389,7 @@ paths:
       tags:
         - Plugin
         - Create
-      summary: Plugin Create
+      summary: Docker Plugin Create
       description: >-
         Creates a new plugin instance by pulling and installing a plugin from a
         registry or by creating it from a local tarball. The operation accepts a
@@ -8463,7 +8463,7 @@ paths:
       tags:
         - Plugin
         - Push
-      summary: Plugin Push
+      summary: Docker Plugin Push
       description: >-
         This API operation pushes a Docker plugin to a registry. It requires
         authentication and uses POST method to push the specified plugin
@@ -8518,7 +8518,7 @@ paths:
       tags:
         - Plugin
         - Sets
-      summary: Plugin Set
+      summary: Docker Plugin Set
       description: >-
         This API operation configures or updates the settings of an existing
         Docker plugin identified by its name. It uses a POST request to the
@@ -8550,7 +8550,7 @@ paths:
                 type: string
               description: ''
               examples:
-                - - DEBUG=1
+                -   - DEBUG=1
               contentMediaType: application/json
             example:
               - DEBUG=1
@@ -8590,7 +8590,7 @@ paths:
     post:
       tags:
         - System
-      summary: System Auth
+      summary: Docker System Auth
       description: >-
         This API operation authenticates a user against a Docker registry and
         returns identity token information. When invoked via POST request to the
@@ -8659,7 +8659,7 @@ paths:
       tags:
         - System
         - Info
-      summary: System Info
+      summary: Docker System Info
       description: >-
         The Docker System Info GET operation on the /info endpoint retrieves
         comprehensive system-wide information about the Docker daemon and the
@@ -8699,7 +8699,7 @@ paths:
       tags:
         - System
         - Versions
-      summary: System Version
+      summary: Docker System Version
       description: >-
         This API operation retrieves comprehensive version information about the
         Docker system. When invoked via a GET request to the /version endpoint,
@@ -8738,7 +8738,7 @@ paths:
       tags:
         - System
         - Ping
-      summary: System Ping
+      summary: Docker System Ping
       description: >-
         The Docker System Ping operation is a lightweight health check endpoint
         accessible via a GET request to `/_ping` that returns a simple response
@@ -8872,7 +8872,7 @@ paths:
       tags:
         - System
         - Events
-      summary: System Events
+      summary: Docker System Events
       description: >-
         Monitor Docker's real-time events stream, which broadcasts a continuous
         feed of system-level activities including container lifecycle changes
@@ -8982,7 +8982,7 @@ paths:
         - System
         - Data
         - Usage
-      summary: System Data Usage
+      summary: Docker System Data Usage
       description: >-
         This API operation retrieves information about Docker disk space usage
         across different data types. When invoked, it returns a comprehensive
@@ -9042,7 +9042,7 @@ paths:
       tags:
         - Distribution
         - Inspect
-      summary: Distribution Inspect
+      summary: Docker Distribution Inspect
       description: >-
         This API endpoint retrieves detailed distribution information for a
         specific Docker image in JSON format. By making a GET request to
@@ -9099,7 +9099,7 @@ paths:
     post:
       tags:
         - Sessions
-      summary: Session
+      summary: Docker Session
       description: >-
         The POST /session endpoint in the Docker API initiates a new interactive
         session with a Docker container, enabling real-time communication and
@@ -9298,9 +9298,9 @@ components:
             type: string
           description: ''
           examples:
-            - - '0'
-              - '1'
-              - GPU-fef8089b-4820-abfc-e83e-94318197576e
+            -   - '0'
+                - '1'
+                - GPU-fef8089b-4820-abfc-e83e-94318197576e
         Capabilities:
           type: array
           items:
@@ -9321,9 +9321,9 @@ components:
 
             select a driver with the required capabilities.
           examples:
-            - - - gpu
-                - nvidia
-                - compute
+            -   -   - gpu
+                    - nvidia
+                    - compute
         Options:
           type: object
           additionalProperties:
@@ -9703,15 +9703,15 @@ components:
 
             String resources (e.g, `GPU=UUID1`).
           examples:
-            - - DiscreteResourceSpec:
-                  Kind: SSD
-                  Value: 3
-              - NamedResourceSpec:
-                  Kind: GPU
-                  Value: UUID1
-              - NamedResourceSpec:
-                  Kind: GPU
-                  Value: UUID2
+            -   - DiscreteResourceSpec:
+                    Kind: SSD
+                    Value: 3
+                - NamedResourceSpec:
+                    Kind: GPU
+                    Value: UUID1
+                - NamedResourceSpec:
+                    Kind: GPU
+                    Value: UUID2
       description: |-
         An object describing the resources which can be advertised by a node and
         requested by a task.
@@ -10150,7 +10150,7 @@ components:
               53/udp:
                 - HostIp: 0.0.0.0
                   HostPort: '53'
-              2377/tcp: null
+              2377/tcp:
         RestartPolicy:
           allOf:
             - $ref: '#/components/schemas/RestartPolicy'
@@ -10195,8 +10195,8 @@ components:
             contentEncoding: int32
           description: Initial console size, as an `[height, width]` array.
           examples:
-            - - 80
-              - 64
+            -   - 80
+                - 64
         Annotations:
           type: object
           additionalProperties:
@@ -10396,17 +10396,17 @@ components:
             The list of paths to be masked inside the container (this overrides
             the default set of paths).
           examples:
-            - - /proc/asound
-              - /proc/acpi
-              - /proc/kcore
-              - /proc/keys
-              - /proc/latency_stats
-              - /proc/timer_list
-              - /proc/timer_stats
-              - /proc/sched_debug
-              - /proc/scsi
-              - /sys/firmware
-              - /sys/devices/virtual/powercap
+            -   - /proc/asound
+                - /proc/acpi
+                - /proc/kcore
+                - /proc/keys
+                - /proc/latency_stats
+                - /proc/timer_list
+                - /proc/timer_stats
+                - /proc/sched_debug
+                - /proc/scsi
+                - /sys/firmware
+                - /sys/devices/virtual/powercap
         ReadonlyPaths:
           type: array
           items:
@@ -10415,11 +10415,11 @@ components:
             The list of paths to be set as read-only inside the container
             (this overrides the default set of paths).
           examples:
-            - - /proc/bus
-              - /proc/fs
-              - /proc/irq
-              - /proc/sys
-              - /proc/sysrq-trigger
+            -   - /proc/bus
+                - /proc/fs
+                - /proc/irq
+                - /proc/sys
+                - /proc/sysrq-trigger
       description: Container configuration that depends on the host we are running on
     ContainerConfig:
       title: ContainerConfig
@@ -10496,15 +10496,15 @@ components:
 
             environment, rather than to have an empty value.
           examples:
-            - - >-
-                PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            -   - >-
+                  PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         Cmd:
           type: array
           items:
             type: string
           description: Command to run specified as a string or an array of strings.
           examples:
-            - - /bin/sh
+            -   - /bin/sh
         Healthcheck:
           allOf:
             - $ref: '#/components/schemas/HealthConfig'
@@ -10588,8 +10588,8 @@ components:
             type: string
           description: Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
           examples:
-            - - /bin/sh
-              - '-c'
+            -   - /bin/sh
+                - '-c'
       description: Configuration for a container that is portable between hosts.
     ImageConfig:
       title: ImageConfig
@@ -10623,15 +10623,15 @@ components:
 
             environment, rather than to have an empty value.
           examples:
-            - - >-
-                PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            -   - >-
+                  PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         Cmd:
           type: array
           items:
             type: string
           description: Command to run specified as a string or an array of strings.
           examples:
-            - - /bin/sh
+            -   - /bin/sh
         Healthcheck:
           allOf:
             - $ref: '#/components/schemas/HealthConfig'
@@ -10701,8 +10701,8 @@ components:
             type: string
           description: Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
           examples:
-            - - /bin/sh
-              - '-c'
+            -   - /bin/sh
+                - '-c'
       description: |-
         Configuration of the image. These fields are used as defaults
         when starting a container from the image.
@@ -10790,7 +10790,7 @@ components:
               53/udp:
                 - HostIp: 0.0.0.0
                   HostPort: '53'
-              2377/tcp: null
+              2377/tcp:
         Networks:
           type: object
           additionalProperties:
@@ -10994,10 +10994,10 @@ components:
 
             "untagged", in which case it can still be referenced by its ID.
           examples:
-            - - example:1.0
-              - example:latest
-              - example:stable
-              - internal.registry.example.com:5000/example:1.0
+            -   - example:1.0
+                - example:latest
+                - example:stable
+                - internal.registry.example.com:5000/example:1.0
         RepoDigests:
           type: array
           items:
@@ -11020,10 +11020,10 @@ components:
 
             the manifest is generated and its digest calculated.
           examples:
-            - - >-
-                example@sha256:afcc7f1ac1b49db317a7196c902e61c6c3c4607d63599ee1a82d702d249a0ccb
-              - >-
-                internal.registry.example.com:5000/example@sha256:b69959407d21e8a062e0416bf13405bb2b71ed7a84dde4158ebafacfa06f5578
+            -   - >-
+                  example@sha256:afcc7f1ac1b49db317a7196c902e61c6c3c4607d63599ee1a82d702d249a0ccb
+                - >-
+                  internal.registry.example.com:5000/example@sha256:b69959407d21e8a062e0416bf13405bb2b71ed7a84dde4158ebafacfa06f5578
         Comment:
           type: string
           description: >-
@@ -11157,10 +11157,10 @@ components:
 
             "untagged", in which case it can still be referenced by its ID.
           examples:
-            - - example:1.0
-              - example:latest
-              - example:stable
-              - internal.registry.example.com:5000/example:1.0
+            -   - example:1.0
+                - example:latest
+                - example:stable
+                - internal.registry.example.com:5000/example:1.0
         RepoDigests:
           type: array
           items:
@@ -11183,10 +11183,10 @@ components:
 
             the manifest is generated and its digest calculated.
           examples:
-            - - >-
-                example@sha256:afcc7f1ac1b49db317a7196c902e61c6c3c4607d63599ee1a82d702d249a0ccb
-              - >-
-                internal.registry.example.com:5000/example@sha256:b69959407d21e8a062e0416bf13405bb2b71ed7a84dde4158ebafacfa06f5578
+            -   - >-
+                  example@sha256:afcc7f1ac1b49db317a7196c902e61c6c3c4607d63599ee1a82d702d249a0ccb
+                - >-
+                  internal.registry.example.com:5000/example@sha256:b69959407d21e8a062e0416bf13405bb2b71ed7a84dde4158ebafacfa06f5578
         Created:
           type: integer
           description: |-
@@ -11910,7 +11910,7 @@ components:
             type: string
           description: List of parent build cache record IDs.
           examples:
-            - - hw53o5aio51xtltp5xjp8v7fx
+            -   - hw53o5aio51xtltp5xjp8v7fx
         Type:
           allOf:
             - $ref: '#/components/schemas/Type4'
@@ -12142,8 +12142,8 @@ components:
             type: string
           description: ''
           examples:
-            - - container_1
-              - container_2
+            -   - container_1
+                - container_2
         MacAddress:
           type: string
           description: >-
@@ -12157,8 +12157,8 @@ components:
             type: string
           description: ''
           examples:
-            - - server_x
-              - server_y
+            -   - server_x
+                - server_y
         DriverOpts:
           type: object
           additionalProperties:
@@ -12245,10 +12245,10 @@ components:
 
             `my.ctr.testnet`.
           examples:
-            - - foobar
-              - server_x
-              - server_y
-              - my.ctr
+            -   - foobar
+                - server_x
+                - server_y
+                - my.ctr
       description: Configuration for a network endpoint.
     EndpointIPAMConfig:
       title: EndpointIPAMConfig
@@ -12268,8 +12268,8 @@ components:
             type: string
           description: ''
           examples:
-            - - 169.254.34.68
-              - fe80::3468
+            -   - 169.254.34.68
+                - fe80::3468
       description: EndpointIPAMConfig represents an endpoint's IPAM configuration.
     PluginMount:
       title: PluginMount
@@ -12314,8 +12314,8 @@ components:
             type: string
           description: ''
           examples:
-            - - rbind
-              - rw
+            -   - rbind
+                - rw
     PluginDevice:
       title: PluginDevice
       required:
@@ -12374,7 +12374,7 @@ components:
             type: string
           description: ''
           examples:
-            - - host
+            -   - host
       description: |-
         Describes a permission the user has to accept upon installing
         the plugin.
@@ -12672,40 +12672,40 @@ components:
             $ref: '#/components/schemas/Plugin1'
           description: ''
           examples:
-            - - Type: Log
-                Name: awslogs
-              - Type: Log
-                Name: fluentd
-              - Type: Log
-                Name: gcplogs
-              - Type: Log
-                Name: gelf
-              - Type: Log
-                Name: journald
-              - Type: Log
-                Name: json-file
-              - Type: Log
-                Name: splunk
-              - Type: Log
-                Name: syslog
-              - Type: Network
-                Name: bridge
-              - Type: Network
-                Name: host
-              - Type: Network
-                Name: ipvlan
-              - Type: Network
-                Name: macvlan
-              - Type: Network
-                Name: 'null'
-              - Type: Network
-                Name: overlay
-              - Type: Volume
-                Name: local
-              - Type: Volume
-                Name: localhost:5000/vieux/sshfs:latest
-              - Type: Volume
-                Name: vieux/sshfs:latest
+            -   - Type: Log
+                  Name: awslogs
+                - Type: Log
+                  Name: fluentd
+                - Type: Log
+                  Name: gcplogs
+                - Type: Log
+                  Name: gelf
+                - Type: Log
+                  Name: journald
+                - Type: Log
+                  Name: json-file
+                - Type: Log
+                  Name: splunk
+                - Type: Log
+                  Name: syslog
+                - Type: Network
+                  Name: bridge
+                - Type: Network
+                  Name: host
+                - Type: Network
+                  Name: ipvlan
+                - Type: Network
+                  Name: macvlan
+                - Type: Network
+                  Name: 'null'
+                - Type: Network
+                  Name: overlay
+                - Type: Volume
+                  Name: local
+                - Type: Volume
+                  Name: localhost:5000/vieux/sshfs:latest
+                - Type: Volume
+                  Name: vieux/sshfs:latest
       description: EngineDescription provides information about an engine.
     TLSInfo:
       title: TLSInfo
@@ -13386,15 +13386,15 @@ components:
 
             String resources (e.g, `GPU=UUID1`).
           examples:
-            - - DiscreteResourceSpec:
-                  Kind: SSD
-                  Value: 3
-              - NamedResourceSpec:
-                  Kind: GPU
-                  Value: UUID1
-              - NamedResourceSpec:
-                  Kind: GPU
-                  Value: UUID2
+            -   - DiscreteResourceSpec:
+                    Kind: SSD
+                    Value: 3
+                - NamedResourceSpec:
+                    Kind: GPU
+                    Value: UUID1
+                - NamedResourceSpec:
+                    Kind: GPU
+                    Value: UUID2
         Status:
           allOf:
             - $ref: '#/components/schemas/TaskStatus'
@@ -13751,9 +13751,9 @@ components:
             FIXME(thaJeztah): this should have "omitempty" in the generated
             type.
           examples:
-            - - >-
-                unable to pin image doesnotexist:latest to digest: image
-                library/doesnotexist:latest not found
+            -   - >-
+                  unable to pin image doesnotexist:latest to digest: image
+                  library/doesnotexist:latest not found
       description: |-
         contains the information returned to a client on the
         creation of a new service.
@@ -13805,8 +13805,8 @@ components:
             type: string
           description: The arguments to the command being run
           examples:
-            - - '-c'
-              - exit 9
+            -   - '-c'
+                - exit 9
         State:
           allOf:
             - $ref: '#/components/schemas/ContainerState'
@@ -13938,8 +13938,8 @@ components:
             type: string
           description: IDs of exec instances that are running in the container.
           examples:
-            - - b35395de42bc8abd327f9dd65d913b9ba28c74d2f0734eeeae84fa1c616a0fca
-              - 3fc1232e5cd20c8de182ed81178503dc6437f4e7ef12b52cc5e8de020652f1c4
+            -   - b35395de42bc8abd327f9dd65d913b9ba28c74d2f0734eeeae84fa1c616a0fca
+                - 3fc1232e5cd20c8de182ed81178503dc6437f4e7ef12b52cc5e8de020652f1c4
         HostConfig:
           allOf:
             - $ref: '#/components/schemas/HostConfig'
@@ -14030,7 +14030,7 @@ components:
 
             For historic reasons, names are prefixed with a forward-slash (`/`).
           examples:
-            - - /funny_chatelet
+            -   - /funny_chatelet
         Image:
           type: string
           description: >-
@@ -14520,7 +14520,7 @@ components:
             type: string
           description: Warnings encountered when updating the container.
           examples:
-            - - Published ports are discarded when using host network mode
+            -   - Published ports are discarded when using host network mode
       description: Response for a successful container-update.
     ContainerStatsResponse:
       title: ContainerStatsResponse
@@ -15292,12 +15292,12 @@ components:
             > formatting of values and labels, should not be considered stable,
             > and may change without notice.
           examples:
-            - - - Backing Filesystem
-                - extfs
-              - - Supports d_type
-                - 'true'
-              - - Native Overlay Diff
-                - 'true'
+            -   -   - Backing Filesystem
+                    - extfs
+                -   - Supports d_type
+                    - 'true'
+                -   - Native Overlay Diff
+                    - 'true'
         DockerRootDir:
           type: string
           description: |-
@@ -15545,15 +15545,15 @@ components:
 
             String resources (e.g, `GPU=UUID1`).
           examples:
-            - - DiscreteResourceSpec:
-                  Kind: SSD
-                  Value: 3
-              - NamedResourceSpec:
-                  Kind: GPU
-                  Value: UUID1
-              - NamedResourceSpec:
-                  Kind: GPU
-                  Value: UUID2
+            -   - DiscreteResourceSpec:
+                    Kind: SSD
+                    Value: 3
+                - NamedResourceSpec:
+                    Kind: GPU
+                    Value: UUID1
+                - NamedResourceSpec:
+                    Kind: GPU
+                    Value: UUID2
         HttpProxy:
           type: string
           description: >-
@@ -15636,8 +15636,8 @@ components:
 
             > on a manager node in the Swarm.
           examples:
-            - - storage=ssd
-              - production
+            -   - storage=ssd
+                - production
         ExperimentalBuild:
           type: boolean
           description: Indicates if experimental features are enabled on the daemon.
@@ -15785,11 +15785,11 @@ components:
             be present, and are included as a comma-separated list of key/value
             pairs.
           examples:
-            - - name=apparmor
-              - name=seccomp,profile=default
-              - name=selinux
-              - name=userns
-              - name=rootless
+            -   - name=apparmor
+                - name=seccomp,profile=default
+                - name=selinux
+                - name=userns
+                - name=rootless
         ProductLicense:
           type: string
           description: |-
@@ -15848,7 +15848,7 @@ components:
             These messages can be printed by the client as information to the
             user.
           examples:
-            - - 'WARNING: No memory limit support'
+            -   - 'WARNING: No memory limit support'
         CDISpecDirs:
           type: array
           items:
@@ -15875,8 +15875,8 @@ components:
 
             always be returned.
           examples:
-            - - /etc/cdi
-              - /var/run/cdi
+            -   - /etc/cdi
+                - /var/run/cdi
         Containerd:
           allOf:
             - $ref: '#/components/schemas/ContainerdInfo'
@@ -15938,8 +15938,8 @@ components:
             > formatting of values and labels, should not be considered stable,
             > and may change without notice.
           examples:
-            - - - ReloadedAt
-                - '2025-01-01T00:00:00.000Z'
+            -   -   - ReloadedAt
+                    - '2025-01-01T00:00:00.000Z'
       description: >-
         Information about the daemon's firewalling configuration.
 
@@ -15956,41 +15956,41 @@ components:
             type: string
           description: Names of available volume-drivers, and network-driver plugins.
           examples:
-            - - local
+            -   - local
         Network:
           type: array
           items:
             type: string
           description: Names of available network-drivers, and network-driver plugins.
           examples:
-            - - bridge
-              - host
-              - ipvlan
-              - macvlan
-              - 'null'
-              - overlay
+            -   - bridge
+                - host
+                - ipvlan
+                - macvlan
+                - 'null'
+                - overlay
         Authorization:
           type: array
           items:
             type: string
           description: Names of available authorization plugins.
           examples:
-            - - img-authz-plugin
-              - hbm
+            -   - img-authz-plugin
+                - hbm
         Log:
           type: array
           items:
             type: string
           description: Names of available logging-drivers, and logging-driver plugins.
           examples:
-            - - awslogs
-              - fluentd
-              - gcplogs
-              - gelf
-              - journald
-              - json-file
-              - splunk
-              - syslog
+            -   - awslogs
+                - fluentd
+                - gcplogs
+                - gelf
+                - journald
+                - json-file
+                - splunk
+                - syslog
       description: |-
         Available plugins per type.
 
@@ -16055,8 +16055,8 @@ components:
 
             > CAs instead of enabling this option.
           examples:
-            - - '::1/128'
-              - 127.0.0.0/8
+            -   - '::1/128'
+                - 127.0.0.0/8
         IndexConfigs:
           type: object
           additionalProperties:
@@ -16091,8 +16091,8 @@ components:
             List of registry URLs that act as a mirror for the official
             (`docker.io`) registry.
           examples:
-            - - https://hub-mirror.corp.example.com:5000/
-              - https://[2001:db8:a0b:12f0::1]/
+            -   - https://hub-mirror.corp.example.com:5000/
+                - https://[2001:db8:a0b:12f0::1]/
       description: RegistryServiceConfig stores daemon registry services configuration.
     IndexInfo:
       title: IndexInfo
@@ -16109,9 +16109,9 @@ components:
             type: string
           description: List of mirrors, expressed as URIs.
           examples:
-            - - https://hub-mirror.corp.example.com:5000/
-              - https://registry-2.docker.io/
-              - https://registry-3.docker.io/
+            -   - https://hub-mirror.corp.example.com:5000/
+                - https://registry-2.docker.io/
+                - https://registry-3.docker.io/
         Secure:
           type: boolean
           description: >-
@@ -16170,8 +16170,8 @@ components:
             type: string
           description: List of command-line arguments to pass to the runtime when invoked.
           examples:
-            - - '--debug'
-              - '--systemd-cgroup=false'
+            -   - '--debug'
+                - '--systemd-cgroup=false'
         status:
           type: object
           additionalProperties:
@@ -16265,12 +16265,12 @@ components:
             $ref: '#/components/schemas/PeerNode'
           description: List of ID's and addresses of other managers in the swarm.
           examples:
-            - - NodeID: 71izy0goik036k48jg985xnds
-                Addr: 10.0.0.158:2377
-              - NodeID: 79y6h1o4gv8n120drcprv5nmc
-                Addr: 10.0.0.159:2377
-              - NodeID: k67qz4598weg5unwwffg6z1m1
-                Addr: 10.0.0.46:2377
+            -   - NodeID: 71izy0goik036k48jg985xnds
+                  Addr: 10.0.0.158:2377
+                - NodeID: 79y6h1o4gv8n120drcprv5nmc
+                  Addr: 10.0.0.159:2377
+                - NodeID: k67qz4598weg5unwwffg6z1m1
+                  Addr: 10.0.0.46:2377
         Nodes:
           type: integer
           description: Total number of nodes in the swarm.
@@ -16502,7 +16502,7 @@ components:
 
             OS feature (for example on Windows `win32k`).
           examples:
-            - - win32k
+            -   - win32k
         variant:
           type: string
           description: |-
@@ -16998,15 +16998,15 @@ components:
 
             environment, rather than to have an empty value.
           examples:
-            - - >-
-                PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            -   - >-
+                  PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         Cmd:
           type: array
           items:
             type: string
           description: Command to run specified as a string or an array of strings.
           examples:
-            - - /bin/sh
+            -   - /bin/sh
         Healthcheck:
           allOf:
             - $ref: '#/components/schemas/HealthConfig'
@@ -17090,8 +17090,8 @@ components:
             type: string
           description: Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
           examples:
-            - - /bin/sh
-              - '-c'
+            -   - /bin/sh
+                - '-c'
         HostConfig:
           allOf:
             - $ref: '#/components/schemas/HostConfig'
@@ -17406,8 +17406,8 @@ components:
             type: string
           description: ''
           examples:
-            - - /usr/bin/sample-volume-plugin
-              - /data
+            -   - /usr/bin/sample-volume-plugin
+                - /data
         WorkDir:
           type: string
           examples:
@@ -17607,10 +17607,10 @@ components:
             A list of kernel capabilities to add to the default set
             for the container.
           examples:
-            - - CAP_NET_RAW
-              - CAP_SYS_ADMIN
-              - CAP_SYS_CHROOT
-              - CAP_SYSLOG
+            -   - CAP_NET_RAW
+                - CAP_SYS_ADMIN
+                - CAP_SYS_CHROOT
+                - CAP_SYSLOG
         CapabilityDrop:
           type: array
           items:
@@ -17619,7 +17619,7 @@ components:
             A list of kernel capabilities to drop from the default set
             for the container.
           examples:
-            - - CAP_NET_RAW
+            -   - CAP_NET_RAW
         Ulimits:
           type: array
           items:
@@ -17822,8 +17822,8 @@ components:
             contentEncoding: int32
           description: Initial console size, as an `[height, width]` array.
           examples:
-            - - 80
-              - 64
+            -   - 80
+                - 64
         DetachKeys:
           type: string
           description: |-
@@ -17920,8 +17920,8 @@ components:
             contentEncoding: int32
           description: Initial console size, as an `[height, width]` array.
           examples:
-            - - 80
-              - 64
+            -   - 80
+                - 64
     ExposedPorts:
       title: ExposedPorts
       const: '{}'
@@ -18127,8 +18127,8 @@ components:
             type: string
           description: The IDs of the containers that are using this image.
           examples:
-            - - ede54ee1fda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c7430
-              - abadbce344c096744d8d6071a90d474d28af8f1034b5ea9fb03c3f4bfc6d005e
+            -   - ede54ee1fda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c7430
+                - abadbce344c096744d8d6071a90d474d28af8f1034b5ea9fb03c3f4bfc6d005e
         Size:
           $ref: '#/components/schemas/Size1'
       description: |-
@@ -18229,7 +18229,7 @@ components:
             type: string
           description: ''
           examples:
-            - - docker.volumedriver/1.0
+            -   - docker.volumedriver/1.0
         Socket:
           type: string
           examples:
@@ -18355,8 +18355,8 @@ components:
             type: string
           description: ''
           examples:
-            - - CAP_SYS_ADMIN
-              - CAP_SYSLOG
+            -   - CAP_SYS_ADMIN
+                - CAP_SYSLOG
         AllowAllDevices:
           type: boolean
           examples:
@@ -18776,11 +18776,11 @@ components:
             purposes by using the [`node update
             endpoint`](#operation/NodeUpdate).
           examples:
-            - - node.hostname!=node3.corp.example.com
-              - node.role!=manager
-              - node.labels.type==production
-              - node.platform.os==linux
-              - node.platform.arch==x86_64
+            -   - node.hostname!=node3.corp.example.com
+                - node.role!=manager
+                - node.labels.type==production
+                - node.platform.os==linux
+                - node.platform.arch==x86_64
         Preferences:
           type: array
           items:
@@ -18790,10 +18790,10 @@ components:
             such as topology. They are provided in order from highest to
             lowest precedence.
           examples:
-            - - Spread:
-                  SpreadDescriptor: node.labels.datacenter
-              - Spread:
-                  SpreadDescriptor: node.labels.rack
+            -   - Spread:
+                    SpreadDescriptor: node.labels.datacenter
+                - Spread:
+                    SpreadDescriptor: node.labels.rack
         MaxReplicas:
           type: integer
           description: |-
@@ -19190,10 +19190,10 @@ components:
             type: string
           description: ''
           examples:
-            - - >-
-                sha256:1834950e52ce4d5a88a1bbd131c537f4d0e56d10ff0dd69e66be3b7dfa9df7e6
-              - >-
-                sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef
+            -   - >-
+                  sha256:1834950e52ce4d5a88a1bbd131c537f4d0e56d10ff0dd69e66be3b7dfa9df7e6
+                - >-
+                  sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef
       description: Information about the image's RootFS, including the layer IDs.
     Rootfs1:
       title: Rootfs1
@@ -19209,10 +19209,10 @@ components:
             type: string
           description: ''
           examples:
-            - - >-
-                sha256:675532206fbf3030b8458f88d6e26d4eb1577688a25efec97154c94e8b6b4887
-              - >-
-                sha256:e216a057b1cb1efc11f8a268f37ef62083e70b1b38323ba252e25ac88904a7e8
+            -   - >-
+                  sha256:675532206fbf3030b8458f88d6e26d4eb1577688a25efec97154c94e8b6b4887
+                - >-
+                  sha256:e216a057b1cb1efc11f8a268f37ef62083e70b1b38323ba252e25ac88904a7e8
     Scope:
       title: Scope
       enum:
@@ -19366,7 +19366,7 @@ components:
             type: string
           description: ''
           examples:
-            - - DEBUG=0
+            -   - DEBUG=0
         Args:
           type: array
           items:
@@ -19752,7 +19752,7 @@ components:
             should be provided as as 2-length arrays, where the first item is
             the key and the second the value.
           examples:
-            - - - noexec
+            -   -   - noexec
       description: Optional configuration for the `tmpfs` type.
     Type:
       title: Type
