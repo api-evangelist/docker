@@ -33,7 +33,7 @@ Docker is a platform that lets developers package applications and all their dep
 #### Properties
 
 - [Documentation]( https://www.docker.com/)
-- [OpenAPI](openapi/docker-openapi.yml)
+- [OpenAPI](openapi/docker-openapi.yml) — Docker Engine API v1.54 (Swagger 2.0)
 
 ## Common Properties
 
