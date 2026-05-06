@@ -1,0 +1,3644 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Docker Engine API
+  description: 'The Engine API is an HTTP API served by Docker Engine. It is the API the Docker client uses to communicate
+    with the Engine, so everything the Docker client can do can be done with the API. Most of the client''s commands map directly
+    to API endpoints (e.g. `docker ps` is `GET /containers/json`). The notable exception is running containers, which consists
+    of several API calls. # Errors The API uses standard HTTP status codes to indicate the success or failure of the API call.
+    The body of the response will be JSON in the following format: ``` { "message": "page not found" } ``` # Versioning The
+    AP'
+  tags:
+  - Docker
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: docker
+    baseUri: https://api.example.com
+    description: Docker Engine API HTTP API.
+    resources:
+    - name: containers-json
+      path: /containers/json
+      operations:
+      - name: containerlist
+        method: GET
+        description: List containers
+        inputParameters:
+        - name: all
+          in: query
+          type: string
+          description: Return all containers. By default, only running containers are shown.
+        - name: limit
+          in: query
+          type: string
+          description: Return this number of most recently created containers, including non-running ones.
+        - name: size
+          in: query
+          type: string
+          description: Return the size of container as fields `SizeRw` and `SizeRootFs`.
+        - name: filters
+          in: query
+          type: string
+          description: 'Filters to process on the container list, encoded as JSON (a `map[string][]string`). For example,
+            `{"status": ["paused"]}` will only return paused containers. A'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-create
+      path: /containers/create
+      operations:
+      - name: containercreate
+        method: POST
+        description: Create a container
+        inputParameters:
+        - name: name
+          in: query
+          type: string
+          description: Assign the specified name to the container. Must match `/?[a-zA-Z0-9][a-zA-Z0-9_.-]+`.
+        - name: platform
+          in: query
+          type: string
+          description: Platform in the format `os[/arch[/variant]]` used for image lookup. When specified, the daemon checks
+            if the requested image is present in the local image cache
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-json
+      path: /containers/{id}/json
+      operations:
+      - name: containerinspect
+        method: GET
+        description: Inspect a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: size
+          in: query
+          type: string
+          description: Return the size of container as fields `SizeRw` and `SizeRootFs`
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-top
+      path: /containers/{id}/top
+      operations:
+      - name: containertop
+        method: GET
+        description: List processes running inside a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: ps_args
+          in: query
+          type: string
+          description: The arguments to pass to `ps`. For example, `aux`
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-logs
+      path: /containers/{id}/logs
+      operations:
+      - name: containerlogs
+        method: GET
+        description: Get container logs
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: follow
+          in: query
+          type: string
+          description: Keep connection after returning logs.
+        - name: stdout
+          in: query
+          type: string
+          description: Return logs from `stdout`
+        - name: stderr
+          in: query
+          type: string
+          description: Return logs from `stderr`
+        - name: since
+          in: query
+          type: string
+          description: Only return logs since this time, as a UNIX timestamp
+        - name: until
+          in: query
+          type: string
+          description: Only return logs before this time, as a UNIX timestamp
+        - name: timestamps
+          in: query
+          type: string
+          description: Add timestamps to every log line
+        - name: tail
+          in: query
+          type: string
+          description: Only return this number of log lines from the end of the logs. Specify as an integer or `all` to output
+            all log lines.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-changes
+      path: /containers/{id}/changes
+      operations:
+      - name: containerchanges
+        method: GET
+        description: Get changes on a container’s filesystem
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-export
+      path: /containers/{id}/export
+      operations:
+      - name: containerexport
+        method: GET
+        description: Export a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-stats
+      path: /containers/{id}/stats
+      operations:
+      - name: containerstats
+        method: GET
+        description: Get container stats based on resource usage
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: stream
+          in: query
+          type: string
+          description: Stream the output. If false, the stats will be output once and then it will disconnect.
+        - name: one-shot
+          in: query
+          type: string
+          description: Only get a single stat instead of waiting for 2 cycles. Must be used with `stream=false`.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-resize
+      path: /containers/{id}/resize
+      operations:
+      - name: containerresize
+        method: POST
+        description: Resize a container TTY
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: h
+          in: query
+          type: string
+          required: true
+          description: Height of the TTY session in characters
+        - name: w
+          in: query
+          type: string
+          required: true
+          description: Width of the TTY session in characters
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-start
+      path: /containers/{id}/start
+      operations:
+      - name: containerstart
+        method: POST
+        description: Start a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: detachKeys
+          in: query
+          type: string
+          description: 'Override the key sequence for detaching a container. Format is a single character `[a-Z]` or `ctrl-<value>`
+            where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,`'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-stop
+      path: /containers/{id}/stop
+      operations:
+      - name: containerstop
+        method: POST
+        description: Stop a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: signal
+          in: query
+          type: string
+          description: Signal to send to the container as an integer or string (e.g. `SIGINT`).
+        - name: t
+          in: query
+          type: string
+          description: Number of seconds to wait before killing the container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-restart
+      path: /containers/{id}/restart
+      operations:
+      - name: containerrestart
+        method: POST
+        description: Restart a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: signal
+          in: query
+          type: string
+          description: Signal to send to the container as an integer or string (e.g. `SIGINT`).
+        - name: t
+          in: query
+          type: string
+          description: Number of seconds to wait before killing the container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-kill
+      path: /containers/{id}/kill
+      operations:
+      - name: containerkill
+        method: POST
+        description: Kill a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: signal
+          in: query
+          type: string
+          description: Signal to send to the container as an integer or string (e.g. `SIGINT`).
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-update
+      path: /containers/{id}/update
+      operations:
+      - name: containerupdate
+        method: POST
+        description: Update a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-rename
+      path: /containers/{id}/rename
+      operations:
+      - name: containerrename
+        method: POST
+        description: Rename a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: name
+          in: query
+          type: string
+          required: true
+          description: New name for the container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-pause
+      path: /containers/{id}/pause
+      operations:
+      - name: containerpause
+        method: POST
+        description: Pause a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-unpause
+      path: /containers/{id}/unpause
+      operations:
+      - name: containerunpause
+        method: POST
+        description: Unpause a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-attach
+      path: /containers/{id}/attach
+      operations:
+      - name: containerattach
+        method: POST
+        description: Attach to a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: detachKeys
+          in: query
+          type: string
+          description: 'Override the key sequence for detaching a container.Format is a single character `[a-Z]` or `ctrl-<value>`
+            where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,` '
+        - name: logs
+          in: query
+          type: string
+          description: Replay previous logs from the container. This is useful for attaching to a container that has started
+            and you want to output everything since the container star
+        - name: stream
+          in: query
+          type: string
+          description: Stream attached streams from the time the request was made onwards.
+        - name: stdin
+          in: query
+          type: string
+          description: Attach to `stdin`
+        - name: stdout
+          in: query
+          type: string
+          description: Attach to `stdout`
+        - name: stderr
+          in: query
+          type: string
+          description: Attach to `stderr`
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-attach-ws
+      path: /containers/{id}/attach/ws
+      operations:
+      - name: containerattachwebsocket
+        method: GET
+        description: Attach to a container via a websocket
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: detachKeys
+          in: query
+          type: string
+          description: 'Override the key sequence for detaching a container.Format is a single character `[a-Z]` or `ctrl-<value>`
+            where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,`,'
+        - name: logs
+          in: query
+          type: string
+          description: Return logs
+        - name: stream
+          in: query
+          type: string
+          description: Return stream
+        - name: stdin
+          in: query
+          type: string
+          description: Attach to `stdin`
+        - name: stdout
+          in: query
+          type: string
+          description: Attach to `stdout`
+        - name: stderr
+          in: query
+          type: string
+          description: Attach to `stderr`
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-wait
+      path: /containers/{id}/wait
+      operations:
+      - name: containerwait
+        method: POST
+        description: Wait for a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: condition
+          in: query
+          type: string
+          description: Wait until a container state reaches the given condition. Defaults to `not-running` if omitted or empty.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id
+      path: /containers/{id}
+      operations:
+      - name: containerdelete
+        method: DELETE
+        description: Remove a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: v
+          in: query
+          type: string
+          description: Remove anonymous volumes associated with the container.
+        - name: force
+          in: query
+          type: string
+          description: If the container is running, kill it before removing it.
+        - name: link
+          in: query
+          type: string
+          description: Remove the specified link associated with the container.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-archive
+      path: /containers/{id}/archive
+      operations:
+      - name: containerarchive
+        method: GET
+        description: Get an archive of a filesystem resource in a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: path
+          in: query
+          type: string
+          required: true
+          description: Resource in the container’s filesystem to archive.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: putcontainerarchive
+        method: PUT
+        description: Extract an archive of files or folders to a directory in a container
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of the container
+        - name: path
+          in: query
+          type: string
+          required: true
+          description: Path to a directory in the container to extract the archive’s contents into.
+        - name: noOverwriteDirNonDir
+          in: query
+          type: string
+          description: If `1`, `true`, or `True` then it will be an error if unpacking the given content would cause an existing
+            directory to be replaced with a non-directory and vice
+        - name: copyUIDGID
+          in: query
+          type: string
+          description: If `1`, `true`, then it will copy UID/GID maps to the dest file or dir
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-prune
+      path: /containers/prune
+      operations:
+      - name: containerprune
+        method: POST
+        description: Delete stopped containers
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: 'Filters to process on the prune list, encoded as JSON (a `map[string][]string`). Available filters:
+            - `until=<timestamp>` Prune containers created before this t'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-json
+      path: /images/json
+      operations:
+      - name: imagelist
+        method: GET
+        description: List Images
+        inputParameters:
+        - name: all
+          in: query
+          type: string
+          description: Show all images. Only images from a final layer (no children) are shown by default.
+        - name: filters
+          in: query
+          type: string
+          description: 'A JSON encoded value of the filters (a `map[string][]string`) to process on the images list. Available
+            filters: - `before`=(`<image-name>[:<tag>]`, `<image id>`'
+        - name: shared-size
+          in: query
+          type: string
+          description: Compute and show shared size as a `SharedSize` field on each image.
+        - name: digests
+          in: query
+          type: string
+          description: Show digest information as a `RepoDigests` field on each image.
+        - name: manifests
+          in: query
+          type: string
+          description: Include `Manifests` in the image summary.
+        - name: identity
+          in: query
+          type: string
+          description: Include `Identity` in each manifest summary. Requires `manifests=1`.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: build
+      path: /build
+      operations:
+      - name: imagebuild
+        method: POST
+        description: Build an image
+        inputParameters:
+        - name: dockerfile
+          in: query
+          type: string
+          description: Path within the build context to the `Dockerfile`. This is ignored if `remote` is specified and points
+            to an external `Dockerfile`.
+        - name: t
+          in: query
+          type: string
+          description: A name and optional tag to apply to the image in the `name:tag` format. If you omit the tag the default
+            `latest` value is assumed. You can provide several `t` p
+        - name: extrahosts
+          in: query
+          type: string
+          description: Extra hosts to add to /etc/hosts
+        - name: remote
+          in: query
+          type: string
+          description: 'A Git repository URI or HTTP/HTTPS context URI. If the URI points to a single text file, the file’s
+            contents are placed into a file called `Dockerfile` and the '
+        - name: q
+          in: query
+          type: string
+          description: Suppress verbose build output.
+        - name: nocache
+          in: query
+          type: string
+          description: Do not use the cache when building the image.
+        - name: cachefrom
+          in: query
+          type: string
+          description: JSON array of images used for build cache resolution.
+        - name: pull
+          in: query
+          type: string
+          description: Attempt to pull the image even if an older image exists locally.
+        - name: rm
+          in: query
+          type: string
+          description: Remove intermediate containers after a successful build.
+        - name: forcerm
+          in: query
+          type: string
+          description: Always remove intermediate containers, even upon failure.
+        - name: memory
+          in: query
+          type: string
+          description: Set memory limit for build.
+        - name: memswap
+          in: query
+          type: string
+          description: Total memory (memory + swap). Set as `-1` to disable swap.
+        - name: cpushares
+          in: query
+          type: string
+          description: CPU shares (relative weight).
+        - name: cpusetcpus
+          in: query
+          type: string
+          description: CPUs in which to allow execution (e.g., `0-3`, `0,1`).
+        - name: cpuperiod
+          in: query
+          type: string
+          description: The length of a CPU period in microseconds.
+        - name: cpuquota
+          in: query
+          type: string
+          description: Microseconds of CPU time that the container can get in a CPU period.
+        - name: buildargs
+          in: query
+          type: string
+          description: 'JSON map of string pairs for build-time variables. Users pass these values at build-time. Docker uses
+            the buildargs as the environment context for commands run '
+        - name: shmsize
+          in: query
+          type: string
+          description: Size of `/dev/shm` in bytes. The size must be greater than 0. If omitted the system uses 64MB.
+        - name: squash
+          in: query
+          type: string
+          description: Squash the resulting images layers into a single layer. *(Experimental release only.)*
+        - name: labels
+          in: query
+          type: string
+          description: Arbitrary key/value labels to set on the image, as a JSON map of string pairs.
+        - name: networkmode
+          in: query
+          type: string
+          description: 'Sets the networking mode for the run commands during build. Supported standard values are: `bridge`,
+            `host`, `none`, and `container:<name|id>`. Any other value '
+        - name: Content-type
+          in: header
+          type: string
+        - name: X-Registry-Config
+          in: header
+          type: string
+          description: 'This is a base64-encoded JSON object with auth configurations for multiple registries that a build
+            may refer to. The key is a registry URL, and the value is an '
+        - name: platform
+          in: query
+          type: string
+          description: Platform in the format os[/arch[/variant]]
+        - name: target
+          in: query
+          type: string
+          description: Target build stage
+        - name: outputs
+          in: query
+          type: string
+          description: 'BuildKit output configuration in the format of a stringified JSON array of objects. Each object must
+            have two top-level properties: `Type` and `Attrs`. The `Typ'
+        - name: version
+          in: query
+          type: string
+          description: Version of the builder backend to use. - `1` is the first generation classic (deprecated) builder in
+            the Docker daemon (default) - `2` is [BuildKit](https://git
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: build-prune
+      path: /build/prune
+      operations:
+      - name: buildprune
+        method: POST
+        description: Delete builder cache
+        inputParameters:
+        - name: reserved-space
+          in: query
+          type: string
+          description: Amount of disk space in bytes to keep for cache
+        - name: max-used-space
+          in: query
+          type: string
+          description: Maximum amount of disk space allowed to keep for cache
+        - name: min-free-space
+          in: query
+          type: string
+          description: Target amount of free disk space after pruning
+        - name: all
+          in: query
+          type: string
+          description: Remove all types of build cache
+        - name: filters
+          in: query
+          type: string
+          description: 'A JSON encoded value of the filters (a `map[string][]string`) to process on the list of build cache
+            objects. Available filters: - `until=<timestamp>` remove cac'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-create
+      path: /images/create
+      operations:
+      - name: imagecreate
+        method: POST
+        description: Create an image
+        inputParameters:
+        - name: fromImage
+          in: query
+          type: string
+          description: 'Name of the image to pull. If the name includes a tag or digest, specific behavior applies: - If only
+            `fromImage` includes a tag, that tag is used. - If both `f'
+        - name: fromSrc
+          in: query
+          type: string
+          description: Source to import. The value may be a URL from which the image can be retrieved or `-` to read the image
+            from the request body. This parameter may only be used w
+        - name: repo
+          in: query
+          type: string
+          description: Repository name given to an image when it is imported. The repo may include a tag. This parameter may
+            only be used when importing an image.
+        - name: tag
+          in: query
+          type: string
+          description: Tag or digest. If empty when pulling an image, this causes all tags for the given image to be pulled.
+        - name: message
+          in: query
+          type: string
+          description: Set commit message for imported image.
+        - name: X-Registry-Auth
+          in: header
+          type: string
+          description: A base64url-encoded auth configuration. Refer to the [authentication section](#section/Authentication)
+            for details.
+        - name: changes
+          in: query
+          type: string
+          description: 'Apply `Dockerfile` instructions to the image that is created, for example: `changes=ENV DEBUG=true`.
+            Note that `ENV DEBUG=true` should be URI component encoded.'
+        - name: platform
+          in: query
+          type: string
+          description: Platform in the format os[/arch[/variant]]. When used in combination with the `fromImage` option, the
+            daemon checks if the given image is present in the local i
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-name-json
+      path: /images/{name}/json
+      operations:
+      - name: imageinspect
+        method: GET
+        description: Inspect an image
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+          description: Image name or id
+        - name: manifests
+          in: query
+          type: string
+          description: Include Manifests in the image summary. The `manifests` and `platform` options are mutually exclusive,
+            and an error is produced if both are set.
+        - name: platform
+          in: query
+          type: string
+          description: JSON-encoded OCI platform to select the platform-variant. If omitted, it defaults to any locally available
+            platform, prioritizing the daemon's host platform. If
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-name-history
+      path: /images/{name}/history
+      operations:
+      - name: imagehistory
+        method: GET
+        description: Get the history of an image
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+          description: Image name or ID
+        - name: platform
+          in: query
+          type: string
+          description: JSON-encoded OCI platform to select the platform-variant. If omitted, it defaults to any locally available
+            platform, prioritizing the daemon's host platform. If
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-name-push
+      path: /images/{name}/push
+      operations:
+      - name: imagepush
+        method: POST
+        description: Push an image
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+          description: Name of the image to push. For example, `registry.example.com/myimage`. The image must be present in
+            the local image store with the same name. The name should b
+        - name: tag
+          in: query
+          type: string
+          description: Tag of the image to push. For example, `latest`. If no tag is provided, all tags of the given image
+            that are present in the local image store are pushed.
+        - name: platform
+          in: query
+          type: string
+          description: JSON-encoded OCI platform to select the platform-variant to push. If not provided, all available variants
+            will attempt to be pushed. If the daemon provides a mu
+        - name: X-Registry-Auth
+          in: header
+          type: string
+          required: true
+          description: A base64url-encoded auth configuration. Refer to the [authentication section](#section/Authentication)
+            for details.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-name-tag
+      path: /images/{name}/tag
+      operations:
+      - name: imagetag
+        method: POST
+        description: Tag an image
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+          description: Image name or ID to tag.
+        - name: repo
+          in: query
+          type: string
+          description: The repository to tag in. For example, `someuser/someimage`.
+        - name: tag
+          in: query
+          type: string
+          description: The name of the new tag.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-name
+      path: /images/{name}
+      operations:
+      - name: imagedelete
+        method: DELETE
+        description: Remove an image
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+          description: Image name or ID
+        - name: force
+          in: query
+          type: string
+          description: Remove the image even if it is being used by stopped containers or has other tags
+        - name: noprune
+          in: query
+          type: string
+          description: Do not delete untagged parent images
+        - name: platforms
+          in: query
+          type: string
+          description: Select platform-specific content to delete. Multiple values are accepted. Each platform is a OCI platform
+            encoded as a JSON string.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-search
+      path: /images/search
+      operations:
+      - name: imagesearch
+        method: GET
+        description: Search images
+        inputParameters:
+        - name: term
+          in: query
+          type: string
+          required: true
+          description: Term to search
+        - name: limit
+          in: query
+          type: string
+          description: Maximum number of results to return
+        - name: filters
+          in: query
+          type: string
+          description: 'A JSON encoded value of the filters (a `map[string][]string`) to process on the images list. Available
+            filters: - `is-official=(true|false)` - `stars=<number>` '
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-prune
+      path: /images/prune
+      operations:
+      - name: imageprune
+        method: POST
+        description: Delete unused images
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: 'Filters to process on the prune list, encoded as JSON (a `map[string][]string`). Available filters:
+            - `dangling=<boolean>` When set to `true` (or `1`), prune on'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: auth
+      path: /auth
+      operations:
+      - name: systemauth
+        method: POST
+        description: Check auth configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: info
+      path: /info
+      operations:
+      - name: systeminfo
+        method: GET
+        description: Get system information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: version
+      path: /version
+      operations:
+      - name: systemversion
+        method: GET
+        description: Get version
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: ping
+      path: /_ping
+      operations:
+      - name: systemping
+        method: GET
+        description: Ping
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: commit
+      path: /commit
+      operations:
+      - name: imagecommit
+        method: POST
+        description: Create a new image from a container
+        inputParameters:
+        - name: container
+          in: query
+          type: string
+          description: The ID or name of the container to commit
+        - name: repo
+          in: query
+          type: string
+          description: Repository name for the created image
+        - name: tag
+          in: query
+          type: string
+          description: Tag name for the create image
+        - name: comment
+          in: query
+          type: string
+          description: Commit message
+        - name: author
+          in: query
+          type: string
+          description: Author of the image (e.g., `John Hannibal Smith <hannibal@a-team.com>`)
+        - name: pause
+          in: query
+          type: string
+          description: Whether to pause the container before committing
+        - name: changes
+          in: query
+          type: string
+          description: '`Dockerfile` instructions to apply while committing'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: events
+      path: /events
+      operations:
+      - name: systemevents
+        method: GET
+        description: Monitor events
+        inputParameters:
+        - name: since
+          in: query
+          type: string
+          description: Show events created since this timestamp then stream new events.
+        - name: until
+          in: query
+          type: string
+          description: Show events created until this timestamp then stop streaming.
+        - name: filters
+          in: query
+          type: string
+          description: 'A JSON encoded value of filters (a `map[string][]string`) to process on the event list. Available
+            filters: - `config=<string>` config name or ID - `container=<s'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: system-df
+      path: /system/df
+      operations:
+      - name: systemdatausage
+        method: GET
+        description: Get data usage information
+        inputParameters:
+        - name: type
+          in: query
+          type: string
+          description: Object types, for which to compute and return data.
+        - name: verbose
+          in: query
+          type: string
+          description: Show detailed information on space usage.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-name-get
+      path: /images/{name}/get
+      operations:
+      - name: imageget
+        method: GET
+        description: Export an image
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+          description: Image name or ID
+        - name: platform
+          in: query
+          type: string
+          description: JSON encoded OCI platform describing a platform which will be used to select a platform-specific image
+            to be saved if the image is multi-platform. If not provid
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-get
+      path: /images/get
+      operations:
+      - name: imagegetall
+        method: GET
+        description: Export several images
+        inputParameters:
+        - name: names
+          in: query
+          type: string
+          description: Image names to filter by
+        - name: platform
+          in: query
+          type: string
+          description: JSON encoded OCI platform(s) which will be used to select the platform-specific image(s) to be saved
+            if the image is multi-platform. If not provided, the full m
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: images-load
+      path: /images/load
+      operations:
+      - name: imageload
+        method: POST
+        description: Import images
+        inputParameters:
+        - name: quiet
+          in: query
+          type: string
+          description: Suppress progress details during load.
+        - name: platform
+          in: query
+          type: string
+          description: JSON encoded OCI platform(s) which will be used to select the platform-specific image(s) to load if
+            the image is multi-platform. If not provided, the full multi
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: containers-id-exec
+      path: /containers/{id}/exec
+      operations:
+      - name: containerexec
+        method: POST
+        description: Create an exec instance
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: ID or name of container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: exec-id-start
+      path: /exec/{id}/start
+      operations:
+      - name: execstart
+        method: POST
+        description: Start an exec instance
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Exec instance ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: exec-id-resize
+      path: /exec/{id}/resize
+      operations:
+      - name: execresize
+        method: POST
+        description: Resize an exec instance
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Exec instance ID
+        - name: h
+          in: query
+          type: string
+          required: true
+          description: Height of the TTY session in characters
+        - name: w
+          in: query
+          type: string
+          required: true
+          description: Width of the TTY session in characters
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: exec-id-json
+      path: /exec/{id}/json
+      operations:
+      - name: execinspect
+        method: GET
+        description: Inspect an exec instance
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Exec instance ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: volumes
+      path: /volumes
+      operations:
+      - name: volumelist
+        method: GET
+        description: List volumes
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: 'JSON encoded value of the filters (a `map[string][]string`) to process on the volumes list. Available
+            filters: - `dangling=<boolean>` When set to `true` (or `1`'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: volumes-create
+      path: /volumes/create
+      operations:
+      - name: volumecreate
+        method: POST
+        description: Create a volume
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: volumes-name
+      path: /volumes/{name}
+      operations:
+      - name: volumeinspect
+        method: GET
+        description: Inspect a volume
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+          description: Volume name or ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: volumeupdate
+        method: PUT
+        description: '"Update a volume. Valid only for Swarm cluster volumes"'
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+          description: The name or ID of the volume
+        - name: version
+          in: query
+          type: string
+          required: true
+          description: The version number of the volume being updated. This is required to avoid conflicting writes. Found
+            in the volume's `ClusterVolume` field.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: volumedelete
+        method: DELETE
+        description: Remove a volume
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+          description: Volume name or ID
+        - name: force
+          in: query
+          type: string
+          description: Force the removal of the volume
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: volumes-prune
+      path: /volumes/prune
+      operations:
+      - name: volumeprune
+        method: POST
+        description: Delete unused volumes
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: 'Filters to process on the prune list, encoded as JSON (a `map[string][]string`). Available filters:
+            - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<ke'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: networks
+      path: /networks
+      operations:
+      - name: networklist
+        method: GET
+        description: List networks
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: 'JSON encoded value of the filters (a `map[string][]string`) to process on the networks list. Available
+            filters: - `dangling=<boolean>` When set to `true` (or `1'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: networks-id
+      path: /networks/{id}
+      operations:
+      - name: networkinspect
+        method: GET
+        description: Inspect a network
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Network ID or name
+        - name: verbose
+          in: query
+          type: string
+          description: Detailed inspect output for troubleshooting
+        - name: scope
+          in: query
+          type: string
+          description: Filter the network by scope (swarm, global, or local)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: networkdelete
+        method: DELETE
+        description: Remove a network
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Network ID or name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: networks-create
+      path: /networks/create
+      operations:
+      - name: networkcreate
+        method: POST
+        description: Create a network
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: networks-id-connect
+      path: /networks/{id}/connect
+      operations:
+      - name: networkconnect
+        method: POST
+        description: Connect a container to a network
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Network ID or name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: docker-rest
+    description: REST adapter for Docker Engine API.
+    resources:
+    - path: /containers/json
+      name: containerlist
+      operations:
+      - method: GET
+        name: containerlist
+        description: List containers
+        call: docker.containerlist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/create
+      name: containercreate
+      operations:
+      - method: POST
+        name: containercreate
+        description: Create a container
+        call: docker.containercreate
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/json
+      name: containerinspect
+      operations:
+      - method: GET
+        name: containerinspect
+        description: Inspect a container
+        call: docker.containerinspect
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/top
+      name: containertop
+      operations:
+      - method: GET
+        name: containertop
+        description: List processes running inside a container
+        call: docker.containertop
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/logs
+      name: containerlogs
+      operations:
+      - method: GET
+        name: containerlogs
+        description: Get container logs
+        call: docker.containerlogs
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/changes
+      name: containerchanges
+      operations:
+      - method: GET
+        name: containerchanges
+        description: Get changes on a container’s filesystem
+        call: docker.containerchanges
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/export
+      name: containerexport
+      operations:
+      - method: GET
+        name: containerexport
+        description: Export a container
+        call: docker.containerexport
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/stats
+      name: containerstats
+      operations:
+      - method: GET
+        name: containerstats
+        description: Get container stats based on resource usage
+        call: docker.containerstats
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/resize
+      name: containerresize
+      operations:
+      - method: POST
+        name: containerresize
+        description: Resize a container TTY
+        call: docker.containerresize
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/start
+      name: containerstart
+      operations:
+      - method: POST
+        name: containerstart
+        description: Start a container
+        call: docker.containerstart
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/stop
+      name: containerstop
+      operations:
+      - method: POST
+        name: containerstop
+        description: Stop a container
+        call: docker.containerstop
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/restart
+      name: containerrestart
+      operations:
+      - method: POST
+        name: containerrestart
+        description: Restart a container
+        call: docker.containerrestart
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/kill
+      name: containerkill
+      operations:
+      - method: POST
+        name: containerkill
+        description: Kill a container
+        call: docker.containerkill
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/update
+      name: containerupdate
+      operations:
+      - method: POST
+        name: containerupdate
+        description: Update a container
+        call: docker.containerupdate
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/rename
+      name: containerrename
+      operations:
+      - method: POST
+        name: containerrename
+        description: Rename a container
+        call: docker.containerrename
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/pause
+      name: containerpause
+      operations:
+      - method: POST
+        name: containerpause
+        description: Pause a container
+        call: docker.containerpause
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/unpause
+      name: containerunpause
+      operations:
+      - method: POST
+        name: containerunpause
+        description: Unpause a container
+        call: docker.containerunpause
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/attach
+      name: containerattach
+      operations:
+      - method: POST
+        name: containerattach
+        description: Attach to a container
+        call: docker.containerattach
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/attach/ws
+      name: containerattachwebsocket
+      operations:
+      - method: GET
+        name: containerattachwebsocket
+        description: Attach to a container via a websocket
+        call: docker.containerattachwebsocket
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/wait
+      name: containerwait
+      operations:
+      - method: POST
+        name: containerwait
+        description: Wait for a container
+        call: docker.containerwait
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}
+      name: containerdelete
+      operations:
+      - method: DELETE
+        name: containerdelete
+        description: Remove a container
+        call: docker.containerdelete
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/archive
+      name: containerarchive
+      operations:
+      - method: GET
+        name: containerarchive
+        description: Get an archive of a filesystem resource in a container
+        call: docker.containerarchive
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/archive
+      name: putcontainerarchive
+      operations:
+      - method: PUT
+        name: putcontainerarchive
+        description: Extract an archive of files or folders to a directory in a container
+        call: docker.putcontainerarchive
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/prune
+      name: containerprune
+      operations:
+      - method: POST
+        name: containerprune
+        description: Delete stopped containers
+        call: docker.containerprune
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/json
+      name: imagelist
+      operations:
+      - method: GET
+        name: imagelist
+        description: List Images
+        call: docker.imagelist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /build
+      name: imagebuild
+      operations:
+      - method: POST
+        name: imagebuild
+        description: Build an image
+        call: docker.imagebuild
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /build/prune
+      name: buildprune
+      operations:
+      - method: POST
+        name: buildprune
+        description: Delete builder cache
+        call: docker.buildprune
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/create
+      name: imagecreate
+      operations:
+      - method: POST
+        name: imagecreate
+        description: Create an image
+        call: docker.imagecreate
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/{name}/json
+      name: imageinspect
+      operations:
+      - method: GET
+        name: imageinspect
+        description: Inspect an image
+        call: docker.imageinspect
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/{name}/history
+      name: imagehistory
+      operations:
+      - method: GET
+        name: imagehistory
+        description: Get the history of an image
+        call: docker.imagehistory
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/{name}/push
+      name: imagepush
+      operations:
+      - method: POST
+        name: imagepush
+        description: Push an image
+        call: docker.imagepush
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/{name}/tag
+      name: imagetag
+      operations:
+      - method: POST
+        name: imagetag
+        description: Tag an image
+        call: docker.imagetag
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/{name}
+      name: imagedelete
+      operations:
+      - method: DELETE
+        name: imagedelete
+        description: Remove an image
+        call: docker.imagedelete
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/search
+      name: imagesearch
+      operations:
+      - method: GET
+        name: imagesearch
+        description: Search images
+        call: docker.imagesearch
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/prune
+      name: imageprune
+      operations:
+      - method: POST
+        name: imageprune
+        description: Delete unused images
+        call: docker.imageprune
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /auth
+      name: systemauth
+      operations:
+      - method: POST
+        name: systemauth
+        description: Check auth configuration
+        call: docker.systemauth
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /info
+      name: systeminfo
+      operations:
+      - method: GET
+        name: systeminfo
+        description: Get system information
+        call: docker.systeminfo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /version
+      name: systemversion
+      operations:
+      - method: GET
+        name: systemversion
+        description: Get version
+        call: docker.systemversion
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /_ping
+      name: systemping
+      operations:
+      - method: GET
+        name: systemping
+        description: Ping
+        call: docker.systemping
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /commit
+      name: imagecommit
+      operations:
+      - method: POST
+        name: imagecommit
+        description: Create a new image from a container
+        call: docker.imagecommit
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /events
+      name: systemevents
+      operations:
+      - method: GET
+        name: systemevents
+        description: Monitor events
+        call: docker.systemevents
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /system/df
+      name: systemdatausage
+      operations:
+      - method: GET
+        name: systemdatausage
+        description: Get data usage information
+        call: docker.systemdatausage
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/{name}/get
+      name: imageget
+      operations:
+      - method: GET
+        name: imageget
+        description: Export an image
+        call: docker.imageget
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/get
+      name: imagegetall
+      operations:
+      - method: GET
+        name: imagegetall
+        description: Export several images
+        call: docker.imagegetall
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /images/load
+      name: imageload
+      operations:
+      - method: POST
+        name: imageload
+        description: Import images
+        call: docker.imageload
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /containers/{id}/exec
+      name: containerexec
+      operations:
+      - method: POST
+        name: containerexec
+        description: Create an exec instance
+        call: docker.containerexec
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /exec/{id}/start
+      name: execstart
+      operations:
+      - method: POST
+        name: execstart
+        description: Start an exec instance
+        call: docker.execstart
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /exec/{id}/resize
+      name: execresize
+      operations:
+      - method: POST
+        name: execresize
+        description: Resize an exec instance
+        call: docker.execresize
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /exec/{id}/json
+      name: execinspect
+      operations:
+      - method: GET
+        name: execinspect
+        description: Inspect an exec instance
+        call: docker.execinspect
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /volumes
+      name: volumelist
+      operations:
+      - method: GET
+        name: volumelist
+        description: List volumes
+        call: docker.volumelist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /volumes/create
+      name: volumecreate
+      operations:
+      - method: POST
+        name: volumecreate
+        description: Create a volume
+        call: docker.volumecreate
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /volumes/{name}
+      name: volumeinspect
+      operations:
+      - method: GET
+        name: volumeinspect
+        description: Inspect a volume
+        call: docker.volumeinspect
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /volumes/{name}
+      name: volumeupdate
+      operations:
+      - method: PUT
+        name: volumeupdate
+        description: '"Update a volume. Valid only for Swarm cluster volumes"'
+        call: docker.volumeupdate
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /volumes/{name}
+      name: volumedelete
+      operations:
+      - method: DELETE
+        name: volumedelete
+        description: Remove a volume
+        call: docker.volumedelete
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /volumes/prune
+      name: volumeprune
+      operations:
+      - method: POST
+        name: volumeprune
+        description: Delete unused volumes
+        call: docker.volumeprune
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /networks
+      name: networklist
+      operations:
+      - method: GET
+        name: networklist
+        description: List networks
+        call: docker.networklist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /networks/{id}
+      name: networkinspect
+      operations:
+      - method: GET
+        name: networkinspect
+        description: Inspect a network
+        call: docker.networkinspect
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /networks/{id}
+      name: networkdelete
+      operations:
+      - method: DELETE
+        name: networkdelete
+        description: Remove a network
+        call: docker.networkdelete
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /networks/create
+      name: networkcreate
+      operations:
+      - method: POST
+        name: networkcreate
+        description: Create a network
+        call: docker.networkcreate
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /networks/{id}/connect
+      name: networkconnect
+      operations:
+      - method: POST
+        name: networkconnect
+        description: Connect a container to a network
+        call: docker.networkconnect
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: docker-mcp
+    transport: http
+    description: MCP adapter for Docker Engine API for AI agent use.
+    tools:
+    - name: containerlist
+      description: List containers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.containerlist
+      with:
+        all: tools.all
+        limit: tools.limit
+        size: tools.size
+        filters: tools.filters
+      inputParameters:
+      - name: all
+        type: string
+        description: Return all containers. By default, only running containers are shown.
+      - name: limit
+        type: string
+        description: Return this number of most recently created containers, including non-running ones.
+      - name: size
+        type: string
+        description: Return the size of container as fields `SizeRw` and `SizeRootFs`.
+      - name: filters
+        type: string
+        description: 'Filters to process on the container list, encoded as JSON (a `map[string][]string`). For example, `{"status":
+          ["paused"]}` will only return paused containers. A'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containercreate
+      description: Create a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containercreate
+      with:
+        name: tools.name
+        platform: tools.platform
+      inputParameters:
+      - name: name
+        type: string
+        description: Assign the specified name to the container. Must match `/?[a-zA-Z0-9][a-zA-Z0-9_.-]+`.
+      - name: platform
+        type: string
+        description: Platform in the format `os[/arch[/variant]]` used for image lookup. When specified, the daemon checks
+          if the requested image is present in the local image cache
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerinspect
+      description: Inspect a container
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.containerinspect
+      with:
+        id: tools.id
+        size: tools.size
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: size
+        type: string
+        description: Return the size of container as fields `SizeRw` and `SizeRootFs`
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containertop
+      description: List processes running inside a container
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.containertop
+      with:
+        id: tools.id
+        ps_args: tools.ps_args
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: ps_args
+        type: string
+        description: The arguments to pass to `ps`. For example, `aux`
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerlogs
+      description: Get container logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.containerlogs
+      with:
+        id: tools.id
+        follow: tools.follow
+        stdout: tools.stdout
+        stderr: tools.stderr
+        since: tools.since
+        until: tools.until
+        timestamps: tools.timestamps
+        tail: tools.tail
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: follow
+        type: string
+        description: Keep connection after returning logs.
+      - name: stdout
+        type: string
+        description: Return logs from `stdout`
+      - name: stderr
+        type: string
+        description: Return logs from `stderr`
+      - name: since
+        type: string
+        description: Only return logs since this time, as a UNIX timestamp
+      - name: until
+        type: string
+        description: Only return logs before this time, as a UNIX timestamp
+      - name: timestamps
+        type: string
+        description: Add timestamps to every log line
+      - name: tail
+        type: string
+        description: Only return this number of log lines from the end of the logs. Specify as an integer or `all` to output
+          all log lines.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerchanges
+      description: Get changes on a container’s filesystem
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.containerchanges
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerexport
+      description: Export a container
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.containerexport
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerstats
+      description: Get container stats based on resource usage
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.containerstats
+      with:
+        id: tools.id
+        stream: tools.stream
+        one-shot: tools.one-shot
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: stream
+        type: string
+        description: Stream the output. If false, the stats will be output once and then it will disconnect.
+      - name: one-shot
+        type: string
+        description: Only get a single stat instead of waiting for 2 cycles. Must be used with `stream=false`.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerresize
+      description: Resize a container TTY
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerresize
+      with:
+        id: tools.id
+        h: tools.h
+        w: tools.w
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: h
+        type: string
+        description: Height of the TTY session in characters
+        required: true
+      - name: w
+        type: string
+        description: Width of the TTY session in characters
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerstart
+      description: Start a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerstart
+      with:
+        id: tools.id
+        detachKeys: tools.detachKeys
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: detachKeys
+        type: string
+        description: 'Override the key sequence for detaching a container. Format is a single character `[a-Z]` or `ctrl-<value>`
+          where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,`'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerstop
+      description: Stop a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerstop
+      with:
+        id: tools.id
+        signal: tools.signal
+        t: tools.t
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: signal
+        type: string
+        description: Signal to send to the container as an integer or string (e.g. `SIGINT`).
+      - name: t
+        type: string
+        description: Number of seconds to wait before killing the container
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerrestart
+      description: Restart a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerrestart
+      with:
+        id: tools.id
+        signal: tools.signal
+        t: tools.t
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: signal
+        type: string
+        description: Signal to send to the container as an integer or string (e.g. `SIGINT`).
+      - name: t
+        type: string
+        description: Number of seconds to wait before killing the container
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerkill
+      description: Kill a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerkill
+      with:
+        id: tools.id
+        signal: tools.signal
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: signal
+        type: string
+        description: Signal to send to the container as an integer or string (e.g. `SIGINT`).
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerupdate
+      description: Update a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerupdate
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerrename
+      description: Rename a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerrename
+      with:
+        id: tools.id
+        name: tools.name
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: name
+        type: string
+        description: New name for the container
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerpause
+      description: Pause a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerpause
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerunpause
+      description: Unpause a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerunpause
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerattach
+      description: Attach to a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerattach
+      with:
+        id: tools.id
+        detachKeys: tools.detachKeys
+        logs: tools.logs
+        stream: tools.stream
+        stdin: tools.stdin
+        stdout: tools.stdout
+        stderr: tools.stderr
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: detachKeys
+        type: string
+        description: 'Override the key sequence for detaching a container.Format is a single character `[a-Z]` or `ctrl-<value>`
+          where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,` '
+      - name: logs
+        type: string
+        description: Replay previous logs from the container. This is useful for attaching to a container that has started
+          and you want to output everything since the container star
+      - name: stream
+        type: string
+        description: Stream attached streams from the time the request was made onwards.
+      - name: stdin
+        type: string
+        description: Attach to `stdin`
+      - name: stdout
+        type: string
+        description: Attach to `stdout`
+      - name: stderr
+        type: string
+        description: Attach to `stderr`
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerattachwebsocket
+      description: Attach to a container via a websocket
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.containerattachwebsocket
+      with:
+        id: tools.id
+        detachKeys: tools.detachKeys
+        logs: tools.logs
+        stream: tools.stream
+        stdin: tools.stdin
+        stdout: tools.stdout
+        stderr: tools.stderr
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: detachKeys
+        type: string
+        description: 'Override the key sequence for detaching a container.Format is a single character `[a-Z]` or `ctrl-<value>`
+          where `<value>` is one of: `a-z`, `@`, `^`, `[`, `,`,'
+      - name: logs
+        type: string
+        description: Return logs
+      - name: stream
+        type: string
+        description: Return stream
+      - name: stdin
+        type: string
+        description: Attach to `stdin`
+      - name: stdout
+        type: string
+        description: Attach to `stdout`
+      - name: stderr
+        type: string
+        description: Attach to `stderr`
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerwait
+      description: Wait for a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerwait
+      with:
+        id: tools.id
+        condition: tools.condition
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: condition
+        type: string
+        description: Wait until a container state reaches the given condition. Defaults to `not-running` if omitted or empty.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerdelete
+      description: Remove a container
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: docker.containerdelete
+      with:
+        id: tools.id
+        v: tools.v
+        force: tools.force
+        link: tools.link
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: v
+        type: string
+        description: Remove anonymous volumes associated with the container.
+      - name: force
+        type: string
+        description: If the container is running, kill it before removing it.
+      - name: link
+        type: string
+        description: Remove the specified link associated with the container.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerarchive
+      description: Get an archive of a filesystem resource in a container
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.containerarchive
+      with:
+        id: tools.id
+        path: tools.path
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: path
+        type: string
+        description: Resource in the container’s filesystem to archive.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: putcontainerarchive
+      description: Extract an archive of files or folders to a directory in a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: docker.putcontainerarchive
+      with:
+        id: tools.id
+        path: tools.path
+        noOverwriteDirNonDir: tools.noOverwriteDirNonDir
+        copyUIDGID: tools.copyUIDGID
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of the container
+        required: true
+      - name: path
+        type: string
+        description: Path to a directory in the container to extract the archive’s contents into.
+        required: true
+      - name: noOverwriteDirNonDir
+        type: string
+        description: If `1`, `true`, or `True` then it will be an error if unpacking the given content would cause an existing
+          directory to be replaced with a non-directory and vice
+      - name: copyUIDGID
+        type: string
+        description: If `1`, `true`, then it will copy UID/GID maps to the dest file or dir
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerprune
+      description: Delete stopped containers
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerprune
+      with:
+        filters: tools.filters
+      inputParameters:
+      - name: filters
+        type: string
+        description: 'Filters to process on the prune list, encoded as JSON (a `map[string][]string`). Available filters:
+          - `until=<timestamp>` Prune containers created before this t'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagelist
+      description: List Images
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.imagelist
+      with:
+        all: tools.all
+        filters: tools.filters
+        shared-size: tools.shared-size
+        digests: tools.digests
+        manifests: tools.manifests
+        identity: tools.identity
+      inputParameters:
+      - name: all
+        type: string
+        description: Show all images. Only images from a final layer (no children) are shown by default.
+      - name: filters
+        type: string
+        description: 'A JSON encoded value of the filters (a `map[string][]string`) to process on the images list. Available
+          filters: - `before`=(`<image-name>[:<tag>]`, `<image id>`'
+      - name: shared-size
+        type: string
+        description: Compute and show shared size as a `SharedSize` field on each image.
+      - name: digests
+        type: string
+        description: Show digest information as a `RepoDigests` field on each image.
+      - name: manifests
+        type: string
+        description: Include `Manifests` in the image summary.
+      - name: identity
+        type: string
+        description: Include `Identity` in each manifest summary. Requires `manifests=1`.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagebuild
+      description: Build an image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.imagebuild
+      with:
+        dockerfile: tools.dockerfile
+        t: tools.t
+        extrahosts: tools.extrahosts
+        remote: tools.remote
+        q: tools.q
+        nocache: tools.nocache
+        cachefrom: tools.cachefrom
+        pull: tools.pull
+        rm: tools.rm
+        forcerm: tools.forcerm
+        memory: tools.memory
+        memswap: tools.memswap
+        cpushares: tools.cpushares
+        cpusetcpus: tools.cpusetcpus
+        cpuperiod: tools.cpuperiod
+        cpuquota: tools.cpuquota
+        buildargs: tools.buildargs
+        shmsize: tools.shmsize
+        squash: tools.squash
+        labels: tools.labels
+        networkmode: tools.networkmode
+        platform: tools.platform
+        target: tools.target
+        outputs: tools.outputs
+        version: tools.version
+      inputParameters:
+      - name: dockerfile
+        type: string
+        description: Path within the build context to the `Dockerfile`. This is ignored if `remote` is specified and points
+          to an external `Dockerfile`.
+      - name: t
+        type: string
+        description: A name and optional tag to apply to the image in the `name:tag` format. If you omit the tag the default
+          `latest` value is assumed. You can provide several `t` p
+      - name: extrahosts
+        type: string
+        description: Extra hosts to add to /etc/hosts
+      - name: remote
+        type: string
+        description: 'A Git repository URI or HTTP/HTTPS context URI. If the URI points to a single text file, the file’s
+          contents are placed into a file called `Dockerfile` and the '
+      - name: q
+        type: string
+        description: Suppress verbose build output.
+      - name: nocache
+        type: string
+        description: Do not use the cache when building the image.
+      - name: cachefrom
+        type: string
+        description: JSON array of images used for build cache resolution.
+      - name: pull
+        type: string
+        description: Attempt to pull the image even if an older image exists locally.
+      - name: rm
+        type: string
+        description: Remove intermediate containers after a successful build.
+      - name: forcerm
+        type: string
+        description: Always remove intermediate containers, even upon failure.
+      - name: memory
+        type: string
+        description: Set memory limit for build.
+      - name: memswap
+        type: string
+        description: Total memory (memory + swap). Set as `-1` to disable swap.
+      - name: cpushares
+        type: string
+        description: CPU shares (relative weight).
+      - name: cpusetcpus
+        type: string
+        description: CPUs in which to allow execution (e.g., `0-3`, `0,1`).
+      - name: cpuperiod
+        type: string
+        description: The length of a CPU period in microseconds.
+      - name: cpuquota
+        type: string
+        description: Microseconds of CPU time that the container can get in a CPU period.
+      - name: buildargs
+        type: string
+        description: 'JSON map of string pairs for build-time variables. Users pass these values at build-time. Docker uses
+          the buildargs as the environment context for commands run '
+      - name: shmsize
+        type: string
+        description: Size of `/dev/shm` in bytes. The size must be greater than 0. If omitted the system uses 64MB.
+      - name: squash
+        type: string
+        description: Squash the resulting images layers into a single layer. *(Experimental release only.)*
+      - name: labels
+        type: string
+        description: Arbitrary key/value labels to set on the image, as a JSON map of string pairs.
+      - name: networkmode
+        type: string
+        description: 'Sets the networking mode for the run commands during build. Supported standard values are: `bridge`,
+          `host`, `none`, and `container:<name|id>`. Any other value '
+      - name: platform
+        type: string
+        description: Platform in the format os[/arch[/variant]]
+      - name: target
+        type: string
+        description: Target build stage
+      - name: outputs
+        type: string
+        description: 'BuildKit output configuration in the format of a stringified JSON array of objects. Each object must
+          have two top-level properties: `Type` and `Attrs`. The `Typ'
+      - name: version
+        type: string
+        description: Version of the builder backend to use. - `1` is the first generation classic (deprecated) builder in
+          the Docker daemon (default) - `2` is [BuildKit](https://git
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: buildprune
+      description: Delete builder cache
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.buildprune
+      with:
+        reserved-space: tools.reserved-space
+        max-used-space: tools.max-used-space
+        min-free-space: tools.min-free-space
+        all: tools.all
+        filters: tools.filters
+      inputParameters:
+      - name: reserved-space
+        type: string
+        description: Amount of disk space in bytes to keep for cache
+      - name: max-used-space
+        type: string
+        description: Maximum amount of disk space allowed to keep for cache
+      - name: min-free-space
+        type: string
+        description: Target amount of free disk space after pruning
+      - name: all
+        type: string
+        description: Remove all types of build cache
+      - name: filters
+        type: string
+        description: 'A JSON encoded value of the filters (a `map[string][]string`) to process on the list of build cache
+          objects. Available filters: - `until=<timestamp>` remove cac'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagecreate
+      description: Create an image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.imagecreate
+      with:
+        fromImage: tools.fromImage
+        fromSrc: tools.fromSrc
+        repo: tools.repo
+        tag: tools.tag
+        message: tools.message
+        changes: tools.changes
+        platform: tools.platform
+      inputParameters:
+      - name: fromImage
+        type: string
+        description: 'Name of the image to pull. If the name includes a tag or digest, specific behavior applies: - If only
+          `fromImage` includes a tag, that tag is used. - If both `f'
+      - name: fromSrc
+        type: string
+        description: Source to import. The value may be a URL from which the image can be retrieved or `-` to read the image
+          from the request body. This parameter may only be used w
+      - name: repo
+        type: string
+        description: Repository name given to an image when it is imported. The repo may include a tag. This parameter may
+          only be used when importing an image.
+      - name: tag
+        type: string
+        description: Tag or digest. If empty when pulling an image, this causes all tags for the given image to be pulled.
+      - name: message
+        type: string
+        description: Set commit message for imported image.
+      - name: changes
+        type: string
+        description: 'Apply `Dockerfile` instructions to the image that is created, for example: `changes=ENV DEBUG=true`.
+          Note that `ENV DEBUG=true` should be URI component encoded.'
+      - name: platform
+        type: string
+        description: Platform in the format os[/arch[/variant]]. When used in combination with the `fromImage` option, the
+          daemon checks if the given image is present in the local i
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imageinspect
+      description: Inspect an image
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.imageinspect
+      with:
+        name: tools.name
+        manifests: tools.manifests
+        platform: tools.platform
+      inputParameters:
+      - name: name
+        type: string
+        description: Image name or id
+        required: true
+      - name: manifests
+        type: string
+        description: Include Manifests in the image summary. The `manifests` and `platform` options are mutually exclusive,
+          and an error is produced if both are set.
+      - name: platform
+        type: string
+        description: JSON-encoded OCI platform to select the platform-variant. If omitted, it defaults to any locally available
+          platform, prioritizing the daemon's host platform. If
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagehistory
+      description: Get the history of an image
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.imagehistory
+      with:
+        name: tools.name
+        platform: tools.platform
+      inputParameters:
+      - name: name
+        type: string
+        description: Image name or ID
+        required: true
+      - name: platform
+        type: string
+        description: JSON-encoded OCI platform to select the platform-variant. If omitted, it defaults to any locally available
+          platform, prioritizing the daemon's host platform. If
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagepush
+      description: Push an image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.imagepush
+      with:
+        name: tools.name
+        tag: tools.tag
+        platform: tools.platform
+      inputParameters:
+      - name: name
+        type: string
+        description: Name of the image to push. For example, `registry.example.com/myimage`. The image must be present in
+          the local image store with the same name. The name should b
+        required: true
+      - name: tag
+        type: string
+        description: Tag of the image to push. For example, `latest`. If no tag is provided, all tags of the given image that
+          are present in the local image store are pushed.
+      - name: platform
+        type: string
+        description: JSON-encoded OCI platform to select the platform-variant to push. If not provided, all available variants
+          will attempt to be pushed. If the daemon provides a mu
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagetag
+      description: Tag an image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.imagetag
+      with:
+        name: tools.name
+        repo: tools.repo
+        tag: tools.tag
+      inputParameters:
+      - name: name
+        type: string
+        description: Image name or ID to tag.
+        required: true
+      - name: repo
+        type: string
+        description: The repository to tag in. For example, `someuser/someimage`.
+      - name: tag
+        type: string
+        description: The name of the new tag.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagedelete
+      description: Remove an image
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: docker.imagedelete
+      with:
+        name: tools.name
+        force: tools.force
+        noprune: tools.noprune
+        platforms: tools.platforms
+      inputParameters:
+      - name: name
+        type: string
+        description: Image name or ID
+        required: true
+      - name: force
+        type: string
+        description: Remove the image even if it is being used by stopped containers or has other tags
+      - name: noprune
+        type: string
+        description: Do not delete untagged parent images
+      - name: platforms
+        type: string
+        description: Select platform-specific content to delete. Multiple values are accepted. Each platform is a OCI platform
+          encoded as a JSON string.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagesearch
+      description: Search images
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.imagesearch
+      with:
+        term: tools.term
+        limit: tools.limit
+        filters: tools.filters
+      inputParameters:
+      - name: term
+        type: string
+        description: Term to search
+        required: true
+      - name: limit
+        type: string
+        description: Maximum number of results to return
+      - name: filters
+        type: string
+        description: 'A JSON encoded value of the filters (a `map[string][]string`) to process on the images list. Available
+          filters: - `is-official=(true|false)` - `stars=<number>` '
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imageprune
+      description: Delete unused images
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.imageprune
+      with:
+        filters: tools.filters
+      inputParameters:
+      - name: filters
+        type: string
+        description: 'Filters to process on the prune list, encoded as JSON (a `map[string][]string`). Available filters:
+          - `dangling=<boolean>` When set to `true` (or `1`), prune on'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: systemauth
+      description: Check auth configuration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.systemauth
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: systeminfo
+      description: Get system information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.systeminfo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: systemversion
+      description: Get version
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.systemversion
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: systemping
+      description: Ping
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.systemping
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagecommit
+      description: Create a new image from a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.imagecommit
+      with:
+        container: tools.container
+        repo: tools.repo
+        tag: tools.tag
+        comment: tools.comment
+        author: tools.author
+        pause: tools.pause
+        changes: tools.changes
+      inputParameters:
+      - name: container
+        type: string
+        description: The ID or name of the container to commit
+      - name: repo
+        type: string
+        description: Repository name for the created image
+      - name: tag
+        type: string
+        description: Tag name for the create image
+      - name: comment
+        type: string
+        description: Commit message
+      - name: author
+        type: string
+        description: Author of the image (e.g., `John Hannibal Smith <hannibal@a-team.com>`)
+      - name: pause
+        type: string
+        description: Whether to pause the container before committing
+      - name: changes
+        type: string
+        description: '`Dockerfile` instructions to apply while committing'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: systemevents
+      description: Monitor events
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.systemevents
+      with:
+        since: tools.since
+        until: tools.until
+        filters: tools.filters
+      inputParameters:
+      - name: since
+        type: string
+        description: Show events created since this timestamp then stream new events.
+      - name: until
+        type: string
+        description: Show events created until this timestamp then stop streaming.
+      - name: filters
+        type: string
+        description: 'A JSON encoded value of filters (a `map[string][]string`) to process on the event list. Available filters:
+          - `config=<string>` config name or ID - `container=<s'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: systemdatausage
+      description: Get data usage information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.systemdatausage
+      with:
+        type: tools.type
+        verbose: tools.verbose
+      inputParameters:
+      - name: type
+        type: string
+        description: Object types, for which to compute and return data.
+      - name: verbose
+        type: string
+        description: Show detailed information on space usage.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imageget
+      description: Export an image
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.imageget
+      with:
+        name: tools.name
+        platform: tools.platform
+      inputParameters:
+      - name: name
+        type: string
+        description: Image name or ID
+        required: true
+      - name: platform
+        type: string
+        description: JSON encoded OCI platform describing a platform which will be used to select a platform-specific image
+          to be saved if the image is multi-platform. If not provid
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imagegetall
+      description: Export several images
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.imagegetall
+      with:
+        names: tools.names
+        platform: tools.platform
+      inputParameters:
+      - name: names
+        type: string
+        description: Image names to filter by
+      - name: platform
+        type: string
+        description: JSON encoded OCI platform(s) which will be used to select the platform-specific image(s) to be saved
+          if the image is multi-platform. If not provided, the full m
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: imageload
+      description: Import images
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.imageload
+      with:
+        quiet: tools.quiet
+        platform: tools.platform
+      inputParameters:
+      - name: quiet
+        type: string
+        description: Suppress progress details during load.
+      - name: platform
+        type: string
+        description: JSON encoded OCI platform(s) which will be used to select the platform-specific image(s) to load if the
+          image is multi-platform. If not provided, the full multi
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: containerexec
+      description: Create an exec instance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.containerexec
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: ID or name of container
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: execstart
+      description: Start an exec instance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.execstart
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: Exec instance ID
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: execresize
+      description: Resize an exec instance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.execresize
+      with:
+        id: tools.id
+        h: tools.h
+        w: tools.w
+      inputParameters:
+      - name: id
+        type: string
+        description: Exec instance ID
+        required: true
+      - name: h
+        type: string
+        description: Height of the TTY session in characters
+        required: true
+      - name: w
+        type: string
+        description: Width of the TTY session in characters
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: execinspect
+      description: Inspect an exec instance
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.execinspect
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: Exec instance ID
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: volumelist
+      description: List volumes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.volumelist
+      with:
+        filters: tools.filters
+      inputParameters:
+      - name: filters
+        type: string
+        description: 'JSON encoded value of the filters (a `map[string][]string`) to process on the volumes list. Available
+          filters: - `dangling=<boolean>` When set to `true` (or `1`'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: volumecreate
+      description: Create a volume
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.volumecreate
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: volumeinspect
+      description: Inspect a volume
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.volumeinspect
+      with:
+        name: tools.name
+      inputParameters:
+      - name: name
+        type: string
+        description: Volume name or ID
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: volumeupdate
+      description: '"Update a volume. Valid only for Swarm cluster volumes"'
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: docker.volumeupdate
+      with:
+        name: tools.name
+        version: tools.version
+      inputParameters:
+      - name: name
+        type: string
+        description: The name or ID of the volume
+        required: true
+      - name: version
+        type: string
+        description: The version number of the volume being updated. This is required to avoid conflicting writes. Found in
+          the volume's `ClusterVolume` field.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: volumedelete
+      description: Remove a volume
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: docker.volumedelete
+      with:
+        name: tools.name
+        force: tools.force
+      inputParameters:
+      - name: name
+        type: string
+        description: Volume name or ID
+        required: true
+      - name: force
+        type: string
+        description: Force the removal of the volume
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: volumeprune
+      description: Delete unused volumes
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.volumeprune
+      with:
+        filters: tools.filters
+      inputParameters:
+      - name: filters
+        type: string
+        description: 'Filters to process on the prune list, encoded as JSON (a `map[string][]string`). Available filters:
+          - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<ke'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: networklist
+      description: List networks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.networklist
+      with:
+        filters: tools.filters
+      inputParameters:
+      - name: filters
+        type: string
+        description: 'JSON encoded value of the filters (a `map[string][]string`) to process on the networks list. Available
+          filters: - `dangling=<boolean>` When set to `true` (or `1'
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: networkinspect
+      description: Inspect a network
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker.networkinspect
+      with:
+        id: tools.id
+        verbose: tools.verbose
+        scope: tools.scope
+      inputParameters:
+      - name: id
+        type: string
+        description: Network ID or name
+        required: true
+      - name: verbose
+        type: string
+        description: Detailed inspect output for troubleshooting
+      - name: scope
+        type: string
+        description: Filter the network by scope (swarm, global, or local)
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: networkdelete
+      description: Remove a network
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: docker.networkdelete
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: Network ID or name
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: networkcreate
+      description: Create a network
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.networkcreate
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: networkconnect
+      description: Connect a container to a network
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker.networkconnect
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: Network ID or name
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
