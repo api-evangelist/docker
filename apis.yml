@@ -54,6 +54,10 @@ common:
     url: https://www.docker.com/legal/privacy
   - type: Twitter
     url: https://twitter.com/docker
+  - type: Integrations
+    url: https://www.docker.com/partners/
+integrations:
+  - name: Become a Docker Verified Publisher
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
