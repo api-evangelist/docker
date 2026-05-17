@@ -31,7 +31,7 @@ apis:
         url: https://docs.docker.com/
       - type: OpenAPI
         url: openapi/docker-openapi.yml
-      - type: Getting Started
+      - type: GettingStarted
         url: https://docs.docker.com/get-started/
 common:
   - type: Website
@@ -40,17 +40,17 @@ common:
     url: https://docs.docker.com/
   - type: Blog
     url: https://www.docker.com/blog/
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/docker
   - type: Pricing
     url: https://www.docker.com/pricing/
-  - type: Sign Up
+  - type: SignUp
     url: https://hub.docker.com/signup
-  - type: Status
+  - type: StatusPage
     url: https://www.dockerstatus.com/
-  - type: Terms of Service
+  - type: TermsOfService
     url: https://www.docker.com/legal/docker-terms-service
-  - type: Privacy Policy
+  - type: PrivacyPolicy
     url: https://www.docker.com/legal/privacy
   - type: Twitter
     url: https://twitter.com/docker
