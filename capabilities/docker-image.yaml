@@ -1,0 +1,1074 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Docker Engine API — Image
+  description: 'Docker Engine API — Image. 15 operations. Lead operation: Build an image. Self-contained Naftiko capability
+    covering one Docker business surface.'
+  tags:
+  - Docker
+  - Image
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    DOCKER_API_KEY: DOCKER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: docker-image
+    baseUri: ''
+    description: Docker Engine API — Image business capability. Self-contained, no shared references.
+    resources:
+    - name: build
+      path: /build
+      operations:
+      - name: imagebuild
+        method: POST
+        description: Build an image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: inputStream
+          in: body
+          type: string
+          description: 'A tar archive compressed with one of the following algorithms: identity (no compression), gzip, bzip2,
+            xz.'
+        - name: dockerfile
+          in: query
+          type: string
+          description: Path within the build context to the `Dockerfile`. This is ignored if `remote` is specified and points
+            to an external `Dockerfile`.
+        - name: t
+          in: query
+          type: string
+          description: A name and optional tag to apply to the image in the `name:tag` format. If you omit the tag the default
+            `latest` value is assumed. You can provide several `t` p
+        - name: extrahosts
+          in: query
+          type: string
+          description: Extra hosts to add to /etc/hosts
+        - name: remote
+          in: query
+          type: string
+          description: 'A Git repository URI or HTTP/HTTPS context URI. If the URI points to a single text file, the file’s
+            contents are placed into a file called `Dockerfile` and the '
+        - name: q
+          in: query
+          type: boolean
+          description: Suppress verbose build output.
+        - name: nocache
+          in: query
+          type: boolean
+          description: Do not use the cache when building the image.
+        - name: cachefrom
+          in: query
+          type: string
+          description: JSON array of images used for build cache resolution.
+        - name: pull
+          in: query
+          type: string
+          description: Attempt to pull the image even if an older image exists locally.
+        - name: rm
+          in: query
+          type: boolean
+          description: Remove intermediate containers after a successful build.
+        - name: forcerm
+          in: query
+          type: boolean
+          description: Always remove intermediate containers, even upon failure.
+        - name: memory
+          in: query
+          type: integer
+          description: Set memory limit for build.
+        - name: memswap
+          in: query
+          type: integer
+          description: Total memory (memory + swap). Set as `-1` to disable swap.
+        - name: cpushares
+          in: query
+          type: integer
+          description: CPU shares (relative weight).
+        - name: cpusetcpus
+          in: query
+          type: string
+          description: CPUs in which to allow execution (e.g., `0-3`, `0,1`).
+        - name: cpuperiod
+          in: query
+          type: integer
+          description: The length of a CPU period in microseconds.
+        - name: cpuquota
+          in: query
+          type: integer
+          description: Microseconds of CPU time that the container can get in a CPU period.
+        - name: buildargs
+          in: query
+          type: string
+          description: 'JSON map of string pairs for build-time variables. Users pass these values at build-time. Docker uses
+            the buildargs as the environment context for commands run '
+        - name: shmsize
+          in: query
+          type: integer
+          description: Size of `/dev/shm` in bytes. The size must be greater than 0. If omitted the system uses 64MB.
+        - name: squash
+          in: query
+          type: boolean
+          description: Squash the resulting images layers into a single layer. *(Experimental release only.)*
+        - name: labels
+          in: query
+          type: string
+          description: Arbitrary key/value labels to set on the image, as a JSON map of string pairs.
+        - name: networkmode
+          in: query
+          type: string
+          description: Sets the networking mode for the run commands during build. Supported
+        - name: Content-type
+          in: header
+          type: string
+        - name: X-Registry-Config
+          in: header
+          type: string
+          description: This is a base64-encoded JSON object with auth configurations for multiple registries that a build
+            may refer to.
+        - name: platform
+          in: query
+          type: string
+          description: Platform in the format os[/arch[/variant]]
+        - name: target
+          in: query
+          type: string
+          description: Target build stage
+        - name: outputs
+          in: query
+          type: string
+          description: BuildKit output configuration in the format of a stringified JSON array of objects.
+        - name: version
+          in: query
+          type: string
+          description: Version of the builder backend to use.
+    - name: build-prune
+      path: /build/prune
+      operations:
+      - name: buildprune
+        method: POST
+        description: Delete builder cache
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reserved-space
+          in: query
+          type: integer
+          description: Amount of disk space in bytes to keep for cache
+        - name: max-used-space
+          in: query
+          type: integer
+          description: Maximum amount of disk space allowed to keep for cache
+        - name: min-free-space
+          in: query
+          type: integer
+          description: Target amount of free disk space after pruning
+        - name: all
+          in: query
+          type: boolean
+          description: Remove all types of build cache
+        - name: filters
+          in: query
+          type: string
+          description: A JSON encoded value of the filters (a `map[string][]string`) to
+    - name: commit
+      path: /commit
+      operations:
+      - name: imagecommit
+        method: POST
+        description: Create a new image from a container
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: containerConfig
+          in: body
+          type: string
+          description: The container configuration
+        - name: container
+          in: query
+          type: string
+          description: The ID or name of the container to commit
+        - name: repo
+          in: query
+          type: string
+          description: Repository name for the created image
+        - name: tag
+          in: query
+          type: string
+          description: Tag name for the create image
+        - name: comment
+          in: query
+          type: string
+          description: Commit message
+        - name: author
+          in: query
+          type: string
+          description: Author of the image (e.g., `John Hannibal Smith <hannibal@a-team.com>`)
+        - name: pause
+          in: query
+          type: boolean
+          description: Whether to pause the container before committing
+        - name: changes
+          in: query
+          type: string
+          description: '`Dockerfile` instructions to apply while committing'
+    - name: images-create
+      path: /images/create
+      operations:
+      - name: imagecreate
+        method: POST
+        description: Create an image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: fromImage
+          in: query
+          type: string
+          description: 'Name of the image to pull. If the name includes a tag or digest, specific behavior applies:'
+        - name: fromSrc
+          in: query
+          type: string
+          description: Source to import. The value may be a URL from which the image can be retrieved or `-` to read the image
+            from the request body. This parameter may only be used w
+        - name: repo
+          in: query
+          type: string
+          description: Repository name given to an image when it is imported. The repo may include a tag. This parameter may
+            only be used when importing an image.
+        - name: tag
+          in: query
+          type: string
+          description: Tag or digest. If empty when pulling an image, this causes all tags for the given image to be pulled.
+        - name: message
+          in: query
+          type: string
+          description: Set commit message for imported image.
+        - name: inputImage
+          in: body
+          type: string
+          description: Image content if the value `-` has been specified in fromSrc query parameter
+        - name: X-Registry-Auth
+          in: header
+          type: string
+          description: A base64url-encoded auth configuration.
+        - name: changes
+          in: query
+          type: array
+          description: Apply `Dockerfile` instructions to the image that is created,
+        - name: platform
+          in: query
+          type: string
+          description: Platform in the format os[/arch[/variant]].
+    - name: images-get
+      path: /images/get
+      operations:
+      - name: imagegetall
+        method: GET
+        description: Export several images
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: names
+          in: query
+          type: array
+          description: Image names to filter by
+        - name: platform
+          in: query
+          type: array
+          description: JSON encoded OCI platform(s) which will be used to select the
+    - name: images-json
+      path: /images/json
+      operations:
+      - name: imagelist
+        method: GET
+        description: List Images
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: all
+          in: query
+          type: boolean
+          description: Show all images. Only images from a final layer (no children) are shown by default.
+        - name: filters
+          in: query
+          type: string
+          description: A JSON encoded value of the filters (a `map[string][]string`) to
+        - name: shared-size
+          in: query
+          type: boolean
+          description: Compute and show shared size as a `SharedSize` field on each image.
+        - name: digests
+          in: query
+          type: boolean
+          description: Show digest information as a `RepoDigests` field on each image.
+        - name: manifests
+          in: query
+          type: boolean
+          description: Include `Manifests` in the image summary.
+        - name: identity
+          in: query
+          type: boolean
+          description: Include `Identity` in each manifest summary. Requires `manifests=1`.
+    - name: images-load
+      path: /images/load
+      operations:
+      - name: imageload
+        method: POST
+        description: Import images
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: imagesTarball
+          in: body
+          type: string
+          description: Tar archive containing images
+        - name: quiet
+          in: query
+          type: boolean
+          description: Suppress progress details during load.
+        - name: platform
+          in: query
+          type: array
+          description: JSON encoded OCI platform(s) which will be used to select the
+    - name: images-prune
+      path: /images/prune
+      operations:
+      - name: imageprune
+        method: POST
+        description: Delete unused images
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: 'Filters to process on the prune list, encoded as JSON (a `map[string][]string`). Available filters:'
+    - name: images-search
+      path: /images/search
+      operations:
+      - name: imagesearch
+        method: GET
+        description: Search images
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: term
+          in: query
+          type: string
+          description: Term to search
+          required: true
+        - name: limit
+          in: query
+          type: integer
+          description: Maximum number of results to return
+        - name: filters
+          in: query
+          type: string
+          description: 'A JSON encoded value of the filters (a `map[string][]string`) to process on the images list. Available
+            filters:'
+    - name: images-name
+      path: /images/{name}
+      operations:
+      - name: imagedelete
+        method: DELETE
+        description: Remove an image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: Image name or ID
+          required: true
+        - name: force
+          in: query
+          type: boolean
+          description: Remove the image even if it is being used by stopped containers or has other tags
+        - name: noprune
+          in: query
+          type: boolean
+          description: Do not delete untagged parent images
+        - name: platforms
+          in: query
+          type: array
+          description: Select platform-specific content to delete.
+    - name: images-name-get
+      path: /images/{name}/get
+      operations:
+      - name: imageget
+        method: GET
+        description: Export an image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: Image name or ID
+          required: true
+        - name: platform
+          in: query
+          type: array
+          description: JSON encoded OCI platform describing a platform which will be used
+    - name: images-name-history
+      path: /images/{name}/history
+      operations:
+      - name: imagehistory
+        method: GET
+        description: Get the history of an image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: Image name or ID
+          required: true
+        - name: platform
+          in: query
+          type: string
+          description: JSON-encoded OCI platform to select the platform-variant.
+    - name: images-name-json
+      path: /images/{name}/json
+      operations:
+      - name: imageinspect
+        method: GET
+        description: Inspect an image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: Image name or id
+          required: true
+        - name: manifests
+          in: query
+          type: boolean
+          description: Include Manifests in the image summary.
+        - name: platform
+          in: query
+          type: string
+          description: JSON-encoded OCI platform to select the platform-variant.
+    - name: images-name-push
+      path: /images/{name}/push
+      operations:
+      - name: imagepush
+        method: POST
+        description: Push an image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: Name of the image to push. For example, `registry.example.com/myimage`.
+          required: true
+        - name: tag
+          in: query
+          type: string
+          description: Tag of the image to push. For example, `latest`. If no tag is provided,
+        - name: platform
+          in: query
+          type: string
+          description: JSON-encoded OCI platform to select the platform-variant to push.
+        - name: X-Registry-Auth
+          in: header
+          type: string
+          description: A base64url-encoded auth configuration.
+          required: true
+    - name: images-name-tag
+      path: /images/{name}/tag
+      operations:
+      - name: imagetag
+        method: POST
+        description: Tag an image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: Image name or ID to tag.
+          required: true
+        - name: repo
+          in: query
+          type: string
+          description: The repository to tag in. For example, `someuser/someimage`.
+        - name: tag
+          in: query
+          type: string
+          description: The name of the new tag.
+  exposes:
+  - type: rest
+    namespace: docker-image-rest
+    port: 8080
+    description: REST adapter for Docker Engine API — Image. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/build
+      name: build
+      description: REST surface for build.
+      operations:
+      - method: POST
+        name: imagebuild
+        description: Build an image
+        call: docker-image.imagebuild
+        with:
+          inputStream: rest.inputStream
+          dockerfile: rest.dockerfile
+          t: rest.t
+          extrahosts: rest.extrahosts
+          remote: rest.remote
+          q: rest.q
+          nocache: rest.nocache
+          cachefrom: rest.cachefrom
+          pull: rest.pull
+          rm: rest.rm
+          forcerm: rest.forcerm
+          memory: rest.memory
+          memswap: rest.memswap
+          cpushares: rest.cpushares
+          cpusetcpus: rest.cpusetcpus
+          cpuperiod: rest.cpuperiod
+          cpuquota: rest.cpuquota
+          buildargs: rest.buildargs
+          shmsize: rest.shmsize
+          squash: rest.squash
+          labels: rest.labels
+          networkmode: rest.networkmode
+          Content-type: rest.Content-type
+          X-Registry-Config: rest.X-Registry-Config
+          platform: rest.platform
+          target: rest.target
+          outputs: rest.outputs
+          version: rest.version
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/build/prune
+      name: build-prune
+      description: REST surface for build-prune.
+      operations:
+      - method: POST
+        name: buildprune
+        description: Delete builder cache
+        call: docker-image.buildprune
+        with:
+          reserved-space: rest.reserved-space
+          max-used-space: rest.max-used-space
+          min-free-space: rest.min-free-space
+          all: rest.all
+          filters: rest.filters
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/commit
+      name: commit
+      description: REST surface for commit.
+      operations:
+      - method: POST
+        name: imagecommit
+        description: Create a new image from a container
+        call: docker-image.imagecommit
+        with:
+          containerConfig: rest.containerConfig
+          container: rest.container
+          repo: rest.repo
+          tag: rest.tag
+          comment: rest.comment
+          author: rest.author
+          pause: rest.pause
+          changes: rest.changes
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/create
+      name: images-create
+      description: REST surface for images-create.
+      operations:
+      - method: POST
+        name: imagecreate
+        description: Create an image
+        call: docker-image.imagecreate
+        with:
+          fromImage: rest.fromImage
+          fromSrc: rest.fromSrc
+          repo: rest.repo
+          tag: rest.tag
+          message: rest.message
+          inputImage: rest.inputImage
+          X-Registry-Auth: rest.X-Registry-Auth
+          changes: rest.changes
+          platform: rest.platform
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/get
+      name: images-get
+      description: REST surface for images-get.
+      operations:
+      - method: GET
+        name: imagegetall
+        description: Export several images
+        call: docker-image.imagegetall
+        with:
+          names: rest.names
+          platform: rest.platform
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/json
+      name: images-json
+      description: REST surface for images-json.
+      operations:
+      - method: GET
+        name: imagelist
+        description: List Images
+        call: docker-image.imagelist
+        with:
+          all: rest.all
+          filters: rest.filters
+          shared-size: rest.shared-size
+          digests: rest.digests
+          manifests: rest.manifests
+          identity: rest.identity
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/load
+      name: images-load
+      description: REST surface for images-load.
+      operations:
+      - method: POST
+        name: imageload
+        description: Import images
+        call: docker-image.imageload
+        with:
+          imagesTarball: rest.imagesTarball
+          quiet: rest.quiet
+          platform: rest.platform
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/prune
+      name: images-prune
+      description: REST surface for images-prune.
+      operations:
+      - method: POST
+        name: imageprune
+        description: Delete unused images
+        call: docker-image.imageprune
+        with:
+          filters: rest.filters
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/search
+      name: images-search
+      description: REST surface for images-search.
+      operations:
+      - method: GET
+        name: imagesearch
+        description: Search images
+        call: docker-image.imagesearch
+        with:
+          term: rest.term
+          limit: rest.limit
+          filters: rest.filters
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/{name}
+      name: images-name
+      description: REST surface for images-name.
+      operations:
+      - method: DELETE
+        name: imagedelete
+        description: Remove an image
+        call: docker-image.imagedelete
+        with:
+          name: rest.name
+          force: rest.force
+          noprune: rest.noprune
+          platforms: rest.platforms
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/{name}/get
+      name: images-name-get
+      description: REST surface for images-name-get.
+      operations:
+      - method: GET
+        name: imageget
+        description: Export an image
+        call: docker-image.imageget
+        with:
+          name: rest.name
+          platform: rest.platform
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/{name}/history
+      name: images-name-history
+      description: REST surface for images-name-history.
+      operations:
+      - method: GET
+        name: imagehistory
+        description: Get the history of an image
+        call: docker-image.imagehistory
+        with:
+          name: rest.name
+          platform: rest.platform
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/{name}/json
+      name: images-name-json
+      description: REST surface for images-name-json.
+      operations:
+      - method: GET
+        name: imageinspect
+        description: Inspect an image
+        call: docker-image.imageinspect
+        with:
+          name: rest.name
+          manifests: rest.manifests
+          platform: rest.platform
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/{name}/push
+      name: images-name-push
+      description: REST surface for images-name-push.
+      operations:
+      - method: POST
+        name: imagepush
+        description: Push an image
+        call: docker-image.imagepush
+        with:
+          name: rest.name
+          tag: rest.tag
+          platform: rest.platform
+          X-Registry-Auth: rest.X-Registry-Auth
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/images/{name}/tag
+      name: images-name-tag
+      description: REST surface for images-name-tag.
+      operations:
+      - method: POST
+        name: imagetag
+        description: Tag an image
+        call: docker-image.imagetag
+        with:
+          name: rest.name
+          repo: rest.repo
+          tag: rest.tag
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: docker-image-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Docker Engine API — Image. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: build-image
+      description: Build an image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-image.imagebuild
+      with:
+        inputStream: tools.inputStream
+        dockerfile: tools.dockerfile
+        t: tools.t
+        extrahosts: tools.extrahosts
+        remote: tools.remote
+        q: tools.q
+        nocache: tools.nocache
+        cachefrom: tools.cachefrom
+        pull: tools.pull
+        rm: tools.rm
+        forcerm: tools.forcerm
+        memory: tools.memory
+        memswap: tools.memswap
+        cpushares: tools.cpushares
+        cpusetcpus: tools.cpusetcpus
+        cpuperiod: tools.cpuperiod
+        cpuquota: tools.cpuquota
+        buildargs: tools.buildargs
+        shmsize: tools.shmsize
+        squash: tools.squash
+        labels: tools.labels
+        networkmode: tools.networkmode
+        Content-type: tools.Content-type
+        X-Registry-Config: tools.X-Registry-Config
+        platform: tools.platform
+        target: tools.target
+        outputs: tools.outputs
+        version: tools.version
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-builder-cache
+      description: Delete builder cache
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-image.buildprune
+      with:
+        reserved-space: tools.reserved-space
+        max-used-space: tools.max-used-space
+        min-free-space: tools.min-free-space
+        all: tools.all
+        filters: tools.filters
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-new-image-container
+      description: Create a new image from a container
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-image.imagecommit
+      with:
+        containerConfig: tools.containerConfig
+        container: tools.container
+        repo: tools.repo
+        tag: tools.tag
+        comment: tools.comment
+        author: tools.author
+        pause: tools.pause
+        changes: tools.changes
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-image
+      description: Create an image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-image.imagecreate
+      with:
+        fromImage: tools.fromImage
+        fromSrc: tools.fromSrc
+        repo: tools.repo
+        tag: tools.tag
+        message: tools.message
+        inputImage: tools.inputImage
+        X-Registry-Auth: tools.X-Registry-Auth
+        changes: tools.changes
+        platform: tools.platform
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: export-several-images
+      description: Export several images
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-image.imagegetall
+      with:
+        names: tools.names
+        platform: tools.platform
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-images
+      description: List Images
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-image.imagelist
+      with:
+        all: tools.all
+        filters: tools.filters
+        shared-size: tools.shared-size
+        digests: tools.digests
+        manifests: tools.manifests
+        identity: tools.identity
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: import-images
+      description: Import images
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-image.imageload
+      with:
+        imagesTarball: tools.imagesTarball
+        quiet: tools.quiet
+        platform: tools.platform
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-unused-images
+      description: Delete unused images
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-image.imageprune
+      with:
+        filters: tools.filters
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: search-images
+      description: Search images
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-image.imagesearch
+      with:
+        term: tools.term
+        limit: tools.limit
+        filters: tools.filters
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: remove-image
+      description: Remove an image
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: docker-image.imagedelete
+      with:
+        name: tools.name
+        force: tools.force
+        noprune: tools.noprune
+        platforms: tools.platforms
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: export-image
+      description: Export an image
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-image.imageget
+      with:
+        name: tools.name
+        platform: tools.platform
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-history-image
+      description: Get the history of an image
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-image.imagehistory
+      with:
+        name: tools.name
+        platform: tools.platform
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: inspect-image
+      description: Inspect an image
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-image.imageinspect
+      with:
+        name: tools.name
+        manifests: tools.manifests
+        platform: tools.platform
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: push-image
+      description: Push an image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-image.imagepush
+      with:
+        name: tools.name
+        tag: tools.tag
+        platform: tools.platform
+        X-Registry-Auth: tools.X-Registry-Auth
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tag-image
+      description: Tag an image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-image.imagetag
+      with:
+        name: tools.name
+        repo: tools.repo
+        tag: tools.tag
+      outputParameters:
+      - type: object
+        mapping: $.

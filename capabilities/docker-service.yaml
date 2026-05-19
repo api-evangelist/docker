@@ -1,0 +1,369 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Docker Engine API — Service
+  description: 'Docker Engine API — Service. 6 operations. Lead operation: List services. Self-contained Naftiko capability
+    covering one Docker business surface.'
+  tags:
+  - Docker
+  - Service
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    DOCKER_API_KEY: DOCKER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: docker-service
+    baseUri: ''
+    description: Docker Engine API — Service business capability. Self-contained, no shared references.
+    resources:
+    - name: services
+      path: /services
+      operations:
+      - name: servicelist
+        method: GET
+        description: List services
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: A JSON encoded value of the filters (a `map[string][]string`) to
+        - name: status
+          in: query
+          type: boolean
+          description: Include service status, with count of running and desired tasks.
+    - name: services-create
+      path: /services/create
+      operations:
+      - name: servicecreate
+        method: POST
+        description: Create a service
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: string
+          required: true
+        - name: X-Registry-Auth
+          in: header
+          type: string
+          description: A base64url-encoded auth configuration for pulling from private
+    - name: services-id
+      path: /services/{id}
+      operations:
+      - name: serviceinspect
+        method: GET
+        description: Inspect a service
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID or name of service.
+          required: true
+        - name: insertDefaults
+          in: query
+          type: boolean
+          description: Fill empty fields with default values.
+      - name: servicedelete
+        method: DELETE
+        description: Delete a service
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID or name of service.
+          required: true
+    - name: services-id-logs
+      path: /services/{id}/logs
+      operations:
+      - name: servicelogs
+        method: GET
+        description: Get service logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID or name of the service
+          required: true
+        - name: details
+          in: query
+          type: boolean
+          description: Show service context and extra details provided to logs.
+        - name: follow
+          in: query
+          type: boolean
+          description: Keep connection after returning logs.
+        - name: stdout
+          in: query
+          type: boolean
+          description: Return logs from `stdout`
+        - name: stderr
+          in: query
+          type: boolean
+          description: Return logs from `stderr`
+        - name: since
+          in: query
+          type: integer
+          description: Only return logs since this time, as a UNIX timestamp
+        - name: timestamps
+          in: query
+          type: boolean
+          description: Add timestamps to every log line
+        - name: tail
+          in: query
+          type: string
+          description: Only return this number of log lines from the end of the logs.
+    - name: services-id-update
+      path: /services/{id}/update
+      operations:
+      - name: serviceupdate
+        method: POST
+        description: Update a service
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID or name of service.
+          required: true
+        - name: body
+          in: body
+          type: string
+          required: true
+        - name: version
+          in: query
+          type: integer
+          description: The version number of the service object being updated. This is
+          required: true
+        - name: registryAuthFrom
+          in: query
+          type: string
+          description: If the `X-Registry-Auth` header is not specified, this parameter
+        - name: rollback
+          in: query
+          type: string
+          description: Set to this parameter to `previous` to cause a server-side rollback
+        - name: X-Registry-Auth
+          in: header
+          type: string
+          description: A base64url-encoded auth configuration for pulling from private
+  exposes:
+  - type: rest
+    namespace: docker-service-rest
+    port: 8080
+    description: REST adapter for Docker Engine API — Service. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/services
+      name: services
+      description: REST surface for services.
+      operations:
+      - method: GET
+        name: servicelist
+        description: List services
+        call: docker-service.servicelist
+        with:
+          filters: rest.filters
+          status: rest.status
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/services/create
+      name: services-create
+      description: REST surface for services-create.
+      operations:
+      - method: POST
+        name: servicecreate
+        description: Create a service
+        call: docker-service.servicecreate
+        with:
+          body: rest.body
+          X-Registry-Auth: rest.X-Registry-Auth
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/services/{id}
+      name: services-id
+      description: REST surface for services-id.
+      operations:
+      - method: GET
+        name: serviceinspect
+        description: Inspect a service
+        call: docker-service.serviceinspect
+        with:
+          id: rest.id
+          insertDefaults: rest.insertDefaults
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: servicedelete
+        description: Delete a service
+        call: docker-service.servicedelete
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/services/{id}/logs
+      name: services-id-logs
+      description: REST surface for services-id-logs.
+      operations:
+      - method: GET
+        name: servicelogs
+        description: Get service logs
+        call: docker-service.servicelogs
+        with:
+          id: rest.id
+          details: rest.details
+          follow: rest.follow
+          stdout: rest.stdout
+          stderr: rest.stderr
+          since: rest.since
+          timestamps: rest.timestamps
+          tail: rest.tail
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/services/{id}/update
+      name: services-id-update
+      description: REST surface for services-id-update.
+      operations:
+      - method: POST
+        name: serviceupdate
+        description: Update a service
+        call: docker-service.serviceupdate
+        with:
+          id: rest.id
+          body: rest.body
+          version: rest.version
+          registryAuthFrom: rest.registryAuthFrom
+          rollback: rest.rollback
+          X-Registry-Auth: rest.X-Registry-Auth
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: docker-service-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Docker Engine API — Service. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-services
+      description: List services
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-service.servicelist
+      with:
+        filters: tools.filters
+        status: tools.status
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-service
+      description: Create a service
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-service.servicecreate
+      with:
+        body: tools.body
+        X-Registry-Auth: tools.X-Registry-Auth
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: inspect-service
+      description: Inspect a service
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-service.serviceinspect
+      with:
+        id: tools.id
+        insertDefaults: tools.insertDefaults
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-service
+      description: Delete a service
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: docker-service.servicedelete
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-service-logs
+      description: Get service logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-service.servicelogs
+      with:
+        id: tools.id
+        details: tools.details
+        follow: tools.follow
+        stdout: tools.stdout
+        stderr: tools.stderr
+        since: tools.since
+        timestamps: tools.timestamps
+        tail: tools.tail
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-service
+      description: Update a service
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-service.serviceupdate
+      with:
+        id: tools.id
+        body: tools.body
+        version: tools.version
+        registryAuthFrom: tools.registryAuthFrom
+        rollback: tools.rollback
+        X-Registry-Auth: tools.X-Registry-Auth
+      outputParameters:
+      - type: object
+        mapping: $.

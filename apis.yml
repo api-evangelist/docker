@@ -1,69 +1,101 @@
 aid: docker
 name: Docker
-description: >-
-  Docker is a platform for developers and sysadmins to build, share, and run applications in containers, packaging code and dependencies together for consistent deployment across environments.
+description: Docker is a platform for developers and sysadmins to build, share, and run applications in containers, packaging
+  code and dependencies together for consistent deployment across environments.
 type: Index
 image: https://www.docker.com/sites/default/files/d8/2019-07/docker-logo-blue.png
 access: 3rd-Party
 tags:
-  - Cloud
-  - Containers
-  - DevOps
-  - Infrastructure
-  - Microservices
-url: >-
-  https://raw.githubusercontent.com/api-evangelist/docker/refs/heads/main/apis.yml
+- Cloud
+- Containers
+- DevOps
+- Infrastructure
+- Microservices
+url: https://raw.githubusercontent.com/api-evangelist/docker/refs/heads/main/apis.yml
 created: '2025-06-05'
 modified: '2026-05-19'
 position: Consumer
 specificationVersion: '0.19'
 apis:
-  - aid: docker:docker
-    name: Docker
-    description: >-
-      Docker is a platform that lets developers package applications and all their dependencies into standardized units called containers. These containers bundle everything needed to run the software—code, runtime, system tools, and libraries—so the application runs consistently across different computing environments.
-    humanURL: https://www.docker.com/
-    tags:
-      - Containers
-      - DevOps
-    properties:
-      - type: Documentation
-        url: https://docs.docker.com/
-      - type: OpenAPI
-        url: openapi/docker-openapi.yml
-      - type: GettingStarted
-        url: https://docs.docker.com/get-started/
-common:
-  - type: Website
-    url: https://www.docker.com/
+- aid: docker:docker
+  name: Docker
+  description: Docker is a platform that lets developers package applications and all their dependencies into standardized
+    units called containers. These containers bundle everything needed to run the software—code, runtime, system tools, and
+    libraries—so the application runs consistently across different computing environments.
+  humanURL: https://www.docker.com/
+  tags:
+  - Containers
+  - DevOps
+  properties:
   - type: Documentation
     url: https://docs.docker.com/
-  - type: Blog
-    url: https://www.docker.com/blog/
-  - type: GitHubOrganization
-    url: https://github.com/docker
-  - type: Pricing
-    url: https://www.docker.com/pricing/
-  - type: SignUp
-    url: https://hub.docker.com/signup
-  - type: StatusPage
-    url: https://www.dockerstatus.com/
-  - type: TermsOfService
-    url: https://www.docker.com/legal/docker-terms-service
-  - type: PrivacyPolicy
-    url: https://www.docker.com/legal/privacy
-  - type: Twitter
-    url: https://twitter.com/docker
-  - type: Integrations
-    url: https://www.docker.com/partners/
-  - name: MCP Server
-    url: https://github.com/docker/mcp-gateway
-    type: MCPServer
+  - type: OpenAPI
+    url: openapi/docker-openapi.yml
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+  - type: NaftikoCapability
+    url: capabilities/docker-config.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-container.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-distribution.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-exec.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-image.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-network.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-node.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-plugin.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-secret.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-service.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-session.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-swarm.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-system.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-task.yaml
+  - type: NaftikoCapability
+    url: capabilities/docker-volume.yaml
+common:
+- type: LinkedIn
+  url: https://www.linkedin.com/company/docker
+- type: Website
+  url: https://www.docker.com/
+- type: Documentation
+  url: https://docs.docker.com/
+- type: Blog
+  url: https://www.docker.com/blog/
+- type: GitHubOrganization
+  url: https://github.com/docker
+- type: Pricing
+  url: https://www.docker.com/pricing/
+- type: SignUp
+  url: https://hub.docker.com/signup
+- type: StatusPage
+  url: https://www.dockerstatus.com/
+- type: TermsOfService
+  url: https://www.docker.com/legal/docker-terms-service
+- type: PrivacyPolicy
+  url: https://www.docker.com/legal/privacy
+- type: Twitter
+  url: https://twitter.com/docker
+- type: Integrations
+  url: https://www.docker.com/partners/
+- name: MCP Server
+  url: https://github.com/docker/mcp-gateway
+  type: MCPServer
 integrations:
-  - name: Become a Docker Verified Publisher
+- name: Become a Docker Verified Publisher
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
-  - FN: Docker, Inc.
-    email: info@docker.com
-    url: https://www.docker.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
+- FN: Docker, Inc.
+  email: info@docker.com
+  url: https://www.docker.com

@@ -1,0 +1,344 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Docker Engine API — Network
+  description: 'Docker Engine API — Network. 7 operations. Lead operation: List networks. Self-contained Naftiko capability
+    covering one Docker business surface.'
+  tags:
+  - Docker
+  - Network
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    DOCKER_API_KEY: DOCKER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: docker-network
+    baseUri: ''
+    description: Docker Engine API — Network business capability. Self-contained, no shared references.
+    resources:
+    - name: networks
+      path: /networks
+      operations:
+      - name: networklist
+        method: GET
+        description: List networks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: JSON encoded value of the filters (a `map[string][]string`) to process
+    - name: networks-create
+      path: /networks/create
+      operations:
+      - name: networkcreate
+        method: POST
+        description: Create a network
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: networkConfig
+          in: body
+          type: object
+          description: Network configuration
+          required: true
+    - name: networks-prune
+      path: /networks/prune
+      operations:
+      - name: networkprune
+        method: POST
+        description: Delete unused networks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: Filters to process on the prune list, encoded as JSON (a `map[string][]string`).
+    - name: networks-id
+      path: /networks/{id}
+      operations:
+      - name: networkinspect
+        method: GET
+        description: Inspect a network
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Network ID or name
+          required: true
+        - name: verbose
+          in: query
+          type: boolean
+          description: Detailed inspect output for troubleshooting
+        - name: scope
+          in: query
+          type: string
+          description: Filter the network by scope (swarm, global, or local)
+      - name: networkdelete
+        method: DELETE
+        description: Remove a network
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Network ID or name
+          required: true
+    - name: networks-id-connect
+      path: /networks/{id}/connect
+      operations:
+      - name: networkconnect
+        method: POST
+        description: Connect a container to a network
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Network ID or name
+          required: true
+        - name: container
+          in: body
+          type: string
+          required: true
+    - name: networks-id-disconnect
+      path: /networks/{id}/disconnect
+      operations:
+      - name: networkdisconnect
+        method: POST
+        description: Disconnect a container from a network
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Network ID or name
+          required: true
+        - name: container
+          in: body
+          type: string
+          required: true
+  exposes:
+  - type: rest
+    namespace: docker-network-rest
+    port: 8080
+    description: REST adapter for Docker Engine API — Network. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/networks
+      name: networks
+      description: REST surface for networks.
+      operations:
+      - method: GET
+        name: networklist
+        description: List networks
+        call: docker-network.networklist
+        with:
+          filters: rest.filters
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/networks/create
+      name: networks-create
+      description: REST surface for networks-create.
+      operations:
+      - method: POST
+        name: networkcreate
+        description: Create a network
+        call: docker-network.networkcreate
+        with:
+          networkConfig: rest.networkConfig
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/networks/prune
+      name: networks-prune
+      description: REST surface for networks-prune.
+      operations:
+      - method: POST
+        name: networkprune
+        description: Delete unused networks
+        call: docker-network.networkprune
+        with:
+          filters: rest.filters
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/networks/{id}
+      name: networks-id
+      description: REST surface for networks-id.
+      operations:
+      - method: GET
+        name: networkinspect
+        description: Inspect a network
+        call: docker-network.networkinspect
+        with:
+          id: rest.id
+          verbose: rest.verbose
+          scope: rest.scope
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: networkdelete
+        description: Remove a network
+        call: docker-network.networkdelete
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/networks/{id}/connect
+      name: networks-id-connect
+      description: REST surface for networks-id-connect.
+      operations:
+      - method: POST
+        name: networkconnect
+        description: Connect a container to a network
+        call: docker-network.networkconnect
+        with:
+          id: rest.id
+          container: rest.container
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/networks/{id}/disconnect
+      name: networks-id-disconnect
+      description: REST surface for networks-id-disconnect.
+      operations:
+      - method: POST
+        name: networkdisconnect
+        description: Disconnect a container from a network
+        call: docker-network.networkdisconnect
+        with:
+          id: rest.id
+          container: rest.container
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: docker-network-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Docker Engine API — Network. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-networks
+      description: List networks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-network.networklist
+      with:
+        filters: tools.filters
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-network
+      description: Create a network
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-network.networkcreate
+      with:
+        networkConfig: tools.networkConfig
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-unused-networks
+      description: Delete unused networks
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-network.networkprune
+      with:
+        filters: tools.filters
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: inspect-network
+      description: Inspect a network
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-network.networkinspect
+      with:
+        id: tools.id
+        verbose: tools.verbose
+        scope: tools.scope
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: remove-network
+      description: Remove a network
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: docker-network.networkdelete
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: connect-container-network
+      description: Connect a container to a network
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-network.networkconnect
+      with:
+        id: tools.id
+        container: tools.container
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: disconnect-container-network
+      description: Disconnect a container from a network
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-network.networkdisconnect
+      with:
+        id: tools.id
+        container: tools.container
+      outputParameters:
+      - type: object
+        mapping: $.

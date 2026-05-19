@@ -1,0 +1,77 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Docker Engine API — Distribution
+  description: 'Docker Engine API — Distribution. 1 operations. Lead operation: Get image information from the registry. Self-contained
+    Naftiko capability covering one Docker business surface.'
+  tags:
+  - Docker
+  - Distribution
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    DOCKER_API_KEY: DOCKER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: docker-distribution
+    baseUri: ''
+    description: Docker Engine API — Distribution business capability. Self-contained, no shared references.
+    resources:
+    - name: distribution-name-json
+      path: /distribution/{name}/json
+      operations:
+      - name: distributioninspect
+        method: GET
+        description: Get image information from the registry
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: Image name or id
+          required: true
+  exposes:
+  - type: rest
+    namespace: docker-distribution-rest
+    port: 8080
+    description: REST adapter for Docker Engine API — Distribution. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/distribution/{name}/json
+      name: distribution-name-json
+      description: REST surface for distribution-name-json.
+      operations:
+      - method: GET
+        name: distributioninspect
+        description: Get image information from the registry
+        call: docker-distribution.distributioninspect
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: docker-distribution-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Docker Engine API — Distribution. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-image-information-registry
+      description: Get image information from the registry
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-distribution.distributioninspect
+      with:
+        name: tools.name
+      outputParameters:
+      - type: object
+        mapping: $.

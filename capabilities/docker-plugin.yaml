@@ -1,0 +1,560 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Docker Engine API — Plugin
+  description: 'Docker Engine API — Plugin. 11 operations. Lead operation: List plugins. Self-contained Naftiko capability
+    covering one Docker business surface.'
+  tags:
+  - Docker
+  - Plugin
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    DOCKER_API_KEY: DOCKER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: docker-plugin
+    baseUri: ''
+    description: Docker Engine API — Plugin business capability. Self-contained, no shared references.
+    resources:
+    - name: plugins
+      path: /plugins
+      operations:
+      - name: pluginlist
+        method: GET
+        description: List plugins
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: A JSON encoded value of the filters (a `map[string][]string`) to
+    - name: plugins-create
+      path: /plugins/create
+      operations:
+      - name: plugincreate
+        method: POST
+        description: Create a plugin
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: query
+          type: string
+          description: The name of the plugin. The `:latest` tag is optional, and is the
+          required: true
+        - name: tarContext
+          in: body
+          type: string
+          description: Path to tar containing plugin rootfs and manifest
+    - name: plugins-privileges
+      path: /plugins/privileges
+      operations:
+      - name: getpluginprivileges
+        method: GET
+        description: Get plugin privileges
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: remote
+          in: query
+          type: string
+          description: The name of the plugin. The `:latest` tag is optional, and is the
+          required: true
+    - name: plugins-pull
+      path: /plugins/pull
+      operations:
+      - name: pluginpull
+        method: POST
+        description: Install a plugin
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: remote
+          in: query
+          type: string
+          description: Remote reference for plugin to install.
+          required: true
+        - name: name
+          in: query
+          type: string
+          description: Local name for the pulled plugin.
+        - name: X-Registry-Auth
+          in: header
+          type: string
+          description: A base64url-encoded auth configuration to use when pulling a plugin
+        - name: body
+          in: body
+          type: array
+    - name: plugins-name
+      path: /plugins/{name}
+      operations:
+      - name: plugindelete
+        method: DELETE
+        description: Remove a plugin
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: The name of the plugin. The `:latest` tag is optional, and is the
+          required: true
+        - name: force
+          in: query
+          type: boolean
+          description: Disable the plugin before removing. This may result in issues if the
+    - name: plugins-name-disable
+      path: /plugins/{name}/disable
+      operations:
+      - name: plugindisable
+        method: POST
+        description: Disable a plugin
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: The name of the plugin. The `:latest` tag is optional, and is the
+          required: true
+        - name: force
+          in: query
+          type: boolean
+          description: Force disable a plugin even if still in use.
+    - name: plugins-name-enable
+      path: /plugins/{name}/enable
+      operations:
+      - name: pluginenable
+        method: POST
+        description: Enable a plugin
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: The name of the plugin. The `:latest` tag is optional, and is the
+          required: true
+        - name: timeout
+          in: query
+          type: integer
+          description: Set the HTTP client timeout (in seconds)
+    - name: plugins-name-json
+      path: /plugins/{name}/json
+      operations:
+      - name: plugininspect
+        method: GET
+        description: Inspect a plugin
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: The name of the plugin. The `:latest` tag is optional, and is the
+          required: true
+    - name: plugins-name-push
+      path: /plugins/{name}/push
+      operations:
+      - name: pluginpush
+        method: POST
+        description: Push a plugin
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: The name of the plugin. The `:latest` tag is optional, and is the
+          required: true
+    - name: plugins-name-set
+      path: /plugins/{name}/set
+      operations:
+      - name: pluginset
+        method: POST
+        description: Configure a plugin
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: The name of the plugin. The `:latest` tag is optional, and is the
+          required: true
+        - name: body
+          in: body
+          type: array
+    - name: plugins-name-upgrade
+      path: /plugins/{name}/upgrade
+      operations:
+      - name: pluginupgrade
+        method: POST
+        description: Upgrade a plugin
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          description: The name of the plugin. The `:latest` tag is optional, and is the
+          required: true
+        - name: remote
+          in: query
+          type: string
+          description: Remote reference to upgrade to.
+          required: true
+        - name: X-Registry-Auth
+          in: header
+          type: string
+          description: A base64url-encoded auth configuration to use when pulling a plugin
+        - name: body
+          in: body
+          type: array
+  exposes:
+  - type: rest
+    namespace: docker-plugin-rest
+    port: 8080
+    description: REST adapter for Docker Engine API — Plugin. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/plugins
+      name: plugins
+      description: REST surface for plugins.
+      operations:
+      - method: GET
+        name: pluginlist
+        description: List plugins
+        call: docker-plugin.pluginlist
+        with:
+          filters: rest.filters
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/create
+      name: plugins-create
+      description: REST surface for plugins-create.
+      operations:
+      - method: POST
+        name: plugincreate
+        description: Create a plugin
+        call: docker-plugin.plugincreate
+        with:
+          name: rest.name
+          tarContext: rest.tarContext
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/privileges
+      name: plugins-privileges
+      description: REST surface for plugins-privileges.
+      operations:
+      - method: GET
+        name: getpluginprivileges
+        description: Get plugin privileges
+        call: docker-plugin.getpluginprivileges
+        with:
+          remote: rest.remote
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/pull
+      name: plugins-pull
+      description: REST surface for plugins-pull.
+      operations:
+      - method: POST
+        name: pluginpull
+        description: Install a plugin
+        call: docker-plugin.pluginpull
+        with:
+          remote: rest.remote
+          name: rest.name
+          X-Registry-Auth: rest.X-Registry-Auth
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/{name}
+      name: plugins-name
+      description: REST surface for plugins-name.
+      operations:
+      - method: DELETE
+        name: plugindelete
+        description: Remove a plugin
+        call: docker-plugin.plugindelete
+        with:
+          name: rest.name
+          force: rest.force
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/{name}/disable
+      name: plugins-name-disable
+      description: REST surface for plugins-name-disable.
+      operations:
+      - method: POST
+        name: plugindisable
+        description: Disable a plugin
+        call: docker-plugin.plugindisable
+        with:
+          name: rest.name
+          force: rest.force
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/{name}/enable
+      name: plugins-name-enable
+      description: REST surface for plugins-name-enable.
+      operations:
+      - method: POST
+        name: pluginenable
+        description: Enable a plugin
+        call: docker-plugin.pluginenable
+        with:
+          name: rest.name
+          timeout: rest.timeout
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/{name}/json
+      name: plugins-name-json
+      description: REST surface for plugins-name-json.
+      operations:
+      - method: GET
+        name: plugininspect
+        description: Inspect a plugin
+        call: docker-plugin.plugininspect
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/{name}/push
+      name: plugins-name-push
+      description: REST surface for plugins-name-push.
+      operations:
+      - method: POST
+        name: pluginpush
+        description: Push a plugin
+        call: docker-plugin.pluginpush
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/{name}/set
+      name: plugins-name-set
+      description: REST surface for plugins-name-set.
+      operations:
+      - method: POST
+        name: pluginset
+        description: Configure a plugin
+        call: docker-plugin.pluginset
+        with:
+          name: rest.name
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/plugins/{name}/upgrade
+      name: plugins-name-upgrade
+      description: REST surface for plugins-name-upgrade.
+      operations:
+      - method: POST
+        name: pluginupgrade
+        description: Upgrade a plugin
+        call: docker-plugin.pluginupgrade
+        with:
+          name: rest.name
+          remote: rest.remote
+          X-Registry-Auth: rest.X-Registry-Auth
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: docker-plugin-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Docker Engine API — Plugin. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-plugins
+      description: List plugins
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-plugin.pluginlist
+      with:
+        filters: tools.filters
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-plugin
+      description: Create a plugin
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-plugin.plugincreate
+      with:
+        name: tools.name
+        tarContext: tools.tarContext
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-plugin-privileges
+      description: Get plugin privileges
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-plugin.getpluginprivileges
+      with:
+        remote: tools.remote
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: install-plugin
+      description: Install a plugin
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-plugin.pluginpull
+      with:
+        remote: tools.remote
+        name: tools.name
+        X-Registry-Auth: tools.X-Registry-Auth
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: remove-plugin
+      description: Remove a plugin
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: docker-plugin.plugindelete
+      with:
+        name: tools.name
+        force: tools.force
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: disable-plugin
+      description: Disable a plugin
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-plugin.plugindisable
+      with:
+        name: tools.name
+        force: tools.force
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: enable-plugin
+      description: Enable a plugin
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-plugin.pluginenable
+      with:
+        name: tools.name
+        timeout: tools.timeout
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: inspect-plugin
+      description: Inspect a plugin
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-plugin.plugininspect
+      with:
+        name: tools.name
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: push-plugin
+      description: Push a plugin
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-plugin.pluginpush
+      with:
+        name: tools.name
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: configure-plugin
+      description: Configure a plugin
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-plugin.pluginset
+      with:
+        name: tools.name
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: upgrade-plugin
+      description: Upgrade a plugin
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: docker-plugin.pluginupgrade
+      with:
+        name: tools.name
+        remote: tools.remote
+        X-Registry-Auth: tools.X-Registry-Auth
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

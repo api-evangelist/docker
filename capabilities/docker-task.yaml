@@ -1,0 +1,202 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Docker Engine API — Task
+  description: 'Docker Engine API — Task. 3 operations. Lead operation: List tasks. Self-contained Naftiko capability covering
+    one Docker business surface.'
+  tags:
+  - Docker
+  - Task
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    DOCKER_API_KEY: DOCKER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: docker-task
+    baseUri: ''
+    description: Docker Engine API — Task business capability. Self-contained, no shared references.
+    resources:
+    - name: tasks
+      path: /tasks
+      operations:
+      - name: tasklist
+        method: GET
+        description: List tasks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filters
+          in: query
+          type: string
+          description: A JSON encoded value of the filters (a `map[string][]string`) to
+    - name: tasks-id
+      path: /tasks/{id}
+      operations:
+      - name: taskinspect
+        method: GET
+        description: Inspect a task
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the task
+          required: true
+    - name: tasks-id-logs
+      path: /tasks/{id}/logs
+      operations:
+      - name: tasklogs
+        method: GET
+        description: Get task logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the task
+          required: true
+        - name: details
+          in: query
+          type: boolean
+          description: Show task context and extra details provided to logs.
+        - name: follow
+          in: query
+          type: boolean
+          description: Keep connection after returning logs.
+        - name: stdout
+          in: query
+          type: boolean
+          description: Return logs from `stdout`
+        - name: stderr
+          in: query
+          type: boolean
+          description: Return logs from `stderr`
+        - name: since
+          in: query
+          type: integer
+          description: Only return logs since this time, as a UNIX timestamp
+        - name: timestamps
+          in: query
+          type: boolean
+          description: Add timestamps to every log line
+        - name: tail
+          in: query
+          type: string
+          description: Only return this number of log lines from the end of the logs.
+  exposes:
+  - type: rest
+    namespace: docker-task-rest
+    port: 8080
+    description: REST adapter for Docker Engine API — Task. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/tasks
+      name: tasks
+      description: REST surface for tasks.
+      operations:
+      - method: GET
+        name: tasklist
+        description: List tasks
+        call: docker-task.tasklist
+        with:
+          filters: rest.filters
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/tasks/{id}
+      name: tasks-id
+      description: REST surface for tasks-id.
+      operations:
+      - method: GET
+        name: taskinspect
+        description: Inspect a task
+        call: docker-task.taskinspect
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/tasks/{id}/logs
+      name: tasks-id-logs
+      description: REST surface for tasks-id-logs.
+      operations:
+      - method: GET
+        name: tasklogs
+        description: Get task logs
+        call: docker-task.tasklogs
+        with:
+          id: rest.id
+          details: rest.details
+          follow: rest.follow
+          stdout: rest.stdout
+          stderr: rest.stderr
+          since: rest.since
+          timestamps: rest.timestamps
+          tail: rest.tail
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: docker-task-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Docker Engine API — Task. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-tasks
+      description: List tasks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-task.tasklist
+      with:
+        filters: tools.filters
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: inspect-task
+      description: Inspect a task
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-task.taskinspect
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-task-logs
+      description: Get task logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: docker-task.tasklogs
+      with:
+        id: tools.id
+        details: tools.details
+        follow: tools.follow
+        stdout: tools.stdout
+        stderr: tools.stderr
+        since: tools.since
+        timestamps: tools.timestamps
+        tail: tools.tail
+      outputParameters:
+      - type: object
+        mapping: $.
