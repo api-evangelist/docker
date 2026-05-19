@@ -14,7 +14,7 @@ tags:
 url: >-
   https://raw.githubusercontent.com/api-evangelist/docker/refs/heads/main/apis.yml
 created: '2025-06-05'
-modified: '2026-04-28'
+modified: '2026-05-19'
 position: Consumer
 specificationVersion: '0.19'
 apis:
@@ -56,6 +56,9 @@ common:
     url: https://twitter.com/docker
   - type: Integrations
     url: https://www.docker.com/partners/
+  - name: MCP Server
+    url: https://github.com/docker/mcp-gateway
+    type: MCPServer
 integrations:
   - name: Become a Docker Verified Publisher
 maintainers:
