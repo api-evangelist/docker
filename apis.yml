@@ -91,6 +91,8 @@ common:
 - name: MCP Server
   url: https://github.com/docker/mcp-gateway
   type: MCPServer
+- type: LLMsTxt
+  url: https://docs.docker.com/llms.txt
 integrations:
 - name: Become a Docker Verified Publisher
 maintainers:
