@@ -1,0 +1,2951 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Docker Engine API",
+    "version": "1.54"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Container",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List containers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/json",
+            "params": [
+              {
+                "name": "all",
+                "value": "",
+                "type": "query",
+                "description": "Return all containers. By default, only running containers are shown.\n"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Return this number of most recently created containers, including\nnon-running ones.\n"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Return the size of container as fields `SizeRw` and `SizeRootFs`.\n"
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the container list, encoded as JSON (a\n`map[string][]string`). For example, `{\"status\": [\"paused\"]}` will\nonly return paused containers.\n\nAvailable filters:\n\n- `ancestor`=(`<image-name>[:<tag>]`, `<image id>`, or `<image@digest>`)\n- `before`=(`<container id>` or `<container name>`)\n- `expose`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`)\n- `exited=<int>` containers with exit code of `<int>`\n- `health`=(`starting`|`healthy`|`unhealthy`|`none`)\n- `id=<ID>` a container's ID\n- `isolation=`(`default`|`process`|`hyperv`) (Windows daemon only)\n- `is-task=`(`true`|`false`)\n- `label=key` or `label=\"key=value\"` of a container label\n- `name=<name>` a container's name\n- `network`=(`<network id>` or `<network name>`)\n- `publish`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`)\n- `since`=(`<container id>` or `<container name>`)\n- `status=`(`created`|`restarting`|`running`|`removing`|`paused`|`exited`|`dead`)\n- `volume`=(`<volume name>` or `<mount point destination>`)\n"
+              }
+            ]
+          },
+          "docs": "Returns a list of containers. For details on the format, see the\n[inspect endpoint](#operation/ContainerInspect).\n\nNote that it uses a different, smaller representation of a container\nthan inspecting a single container. For example, the list of linked\ncontainers is not propagated .\n"
+        },
+        {
+          "info": {
+            "name": "Create a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/create",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Assign the specified name to the container. Must match\n`/?[a-zA-Z0-9][a-zA-Z0-9_.-]+`.\n"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Platform in the format `os[/arch[/variant]]` used for image lookup.\n\nWhen specified, the daemon checks if the requested image is present\nin the local image cache with the given OS and Architecture, and\notherwise returns a `404` status.\n\nIf the option is not set, the host's native OS and Architecture are\nused to look up the image in the image cache. However, if no platform\nis passed and the given image does exist in the local image cache,\nbut its OS or architecture does not match, the container is created\nwith the available image, and a warning is added to the `Warnings`\nfield in the response, for example;\n\n    WARNING: The requested image's platform (linux/arm64/v8) does not\n             match the detected host platform (linux/amd64) and no\n             specific platform was requested\n"
+              }
+            ]
+          },
+          "docs": "Create a container"
+        },
+        {
+          "info": {
+            "name": "Inspect a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/json",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Return the size of container as fields `SizeRw` and `SizeRootFs`"
+              }
+            ]
+          },
+          "docs": "Return low-level information about a container."
+        },
+        {
+          "info": {
+            "name": "List processes running inside a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/top",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "ps_args",
+                "value": "",
+                "type": "query",
+                "description": "The arguments to pass to `ps`. For example, `aux`"
+              }
+            ]
+          },
+          "docs": "On Unix systems, this is done by running the `ps` command. This endpoint\nis not supported on Windows.\n"
+        },
+        {
+          "info": {
+            "name": "Get container logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/logs",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "follow",
+                "value": "",
+                "type": "query",
+                "description": "Keep connection after returning logs."
+              },
+              {
+                "name": "stdout",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stdout`"
+              },
+              {
+                "name": "stderr",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stderr`"
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only return logs since this time, as a UNIX timestamp"
+              },
+              {
+                "name": "until",
+                "value": "",
+                "type": "query",
+                "description": "Only return logs before this time, as a UNIX timestamp"
+              },
+              {
+                "name": "timestamps",
+                "value": "",
+                "type": "query",
+                "description": "Add timestamps to every log line"
+              },
+              {
+                "name": "tail",
+                "value": "",
+                "type": "query",
+                "description": "Only return this number of log lines from the end of the logs.\nSpecify as an integer or `all` to output all log lines.\n"
+              }
+            ]
+          },
+          "docs": "Get `stdout` and `stderr` logs from a container.\n\nNote: This endpoint works only for containers with the `json-file` or\n`journald` logging driver.\n"
+        },
+        {
+          "info": {
+            "name": "Get changes on a container’s filesystem",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/changes",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Returns which files in a container's filesystem have been added, deleted,\nor modified. The `Kind` of modification can be one of:\n\n- `0`: Modified (\"C\")\n- `1`: Added (\"A\")\n- `2`: Deleted (\"D\")\n"
+        },
+        {
+          "info": {
+            "name": "Export a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/export",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Export the contents of a container as a tarball."
+        },
+        {
+          "info": {
+            "name": "Get container stats based on resource usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/stats",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "stream",
+                "value": "",
+                "type": "query",
+                "description": "Stream the output. If false, the stats will be output once and then\nit will disconnect.\n"
+              },
+              {
+                "name": "one-shot",
+                "value": "",
+                "type": "query",
+                "description": "Only get a single stat instead of waiting for 2 cycles. Must be used\nwith `stream=false`.\n"
+              }
+            ]
+          },
+          "docs": "This endpoint returns a live stream of a container’s resource usage\nstatistics.\n\nThe `precpu_stats` is the CPU statistic of the *previous* read, and is\nused to calculate the CPU usage percentage. It is not an exact copy\nof the `cpu_stats` field.\n\nIf either `precpu_stats.online_cpus` or `cpu_stats.online_cpus` is\nnil then for compatibility with older daemons the length of the\ncorresponding `cpu_usage.percpu_usage` array should be used.\n\nOn a cgroup v2 host, the following fields are not set\n* `blk"
+        },
+        {
+          "info": {
+            "name": "Resize a container TTY",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/resize",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "h",
+                "value": "",
+                "type": "query",
+                "description": "Height of the TTY session in characters"
+              },
+              {
+                "name": "w",
+                "value": "",
+                "type": "query",
+                "description": "Width of the TTY session in characters"
+              }
+            ]
+          },
+          "docs": "Resize the TTY for a container."
+        },
+        {
+          "info": {
+            "name": "Start a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/start",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "detachKeys",
+                "value": "",
+                "type": "query",
+                "description": "Override the key sequence for detaching a container. Format is a\nsingle character `[a-Z]` or `ctrl-<value>` where `<value>` is one\nof: `a-z`, `@`, `^`, `[`, `,` or `_`.\n"
+              }
+            ]
+          },
+          "docs": "Start a container"
+        },
+        {
+          "info": {
+            "name": "Stop a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/stop",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "signal",
+                "value": "",
+                "type": "query",
+                "description": "Signal to send to the container as an integer or string (e.g. `SIGINT`).\n"
+              },
+              {
+                "name": "t",
+                "value": "",
+                "type": "query",
+                "description": "Number of seconds to wait before killing the container"
+              }
+            ]
+          },
+          "docs": "Stop a container"
+        },
+        {
+          "info": {
+            "name": "Restart a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/restart",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "signal",
+                "value": "",
+                "type": "query",
+                "description": "Signal to send to the container as an integer or string (e.g. `SIGINT`).\n"
+              },
+              {
+                "name": "t",
+                "value": "",
+                "type": "query",
+                "description": "Number of seconds to wait before killing the container"
+              }
+            ]
+          },
+          "docs": "Restart a container"
+        },
+        {
+          "info": {
+            "name": "Kill a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/kill",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "signal",
+                "value": "",
+                "type": "query",
+                "description": "Signal to send to the container as an integer or string (e.g. `SIGINT`).\n"
+              }
+            ]
+          },
+          "docs": "Send a POSIX signal to a container, defaulting to killing to the\ncontainer.\n"
+        },
+        {
+          "info": {
+            "name": "Update a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/update",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Change various configuration options of a container without having to\nrecreate it.\n"
+        },
+        {
+          "info": {
+            "name": "Rename a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/rename",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "New name for the container"
+              }
+            ]
+          },
+          "docs": "Rename a container"
+        },
+        {
+          "info": {
+            "name": "Pause a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/pause",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Use the freezer cgroup to suspend all processes in a container.\n\nTraditionally, when suspending a process the `SIGSTOP` signal is used,\nwhich is observable by the process being suspended. With the freezer\ncgroup the process is unaware, and unable to capture, that it is being\nsuspended, and subsequently resumed.\n"
+        },
+        {
+          "info": {
+            "name": "Unpause a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/unpause",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Resume a container which has been paused."
+        },
+        {
+          "info": {
+            "name": "Attach to a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/attach",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "detachKeys",
+                "value": "",
+                "type": "query",
+                "description": "Override the key sequence for detaching a container.Format is a single\ncharacter `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`,\n`@`, `^`, `[`, `,` or `_`.\n"
+              },
+              {
+                "name": "logs",
+                "value": "",
+                "type": "query",
+                "description": "Replay previous logs from the container.\n\nThis is useful for attaching to a container that has started and you\nwant to output everything since the container started.\n\nIf `stream` is also enabled, once all the previous output has been\nreturned, it will seamlessly transition into streaming current\noutput.\n"
+              },
+              {
+                "name": "stream",
+                "value": "",
+                "type": "query",
+                "description": "Stream attached streams from the time the request was made onwards.\n"
+              },
+              {
+                "name": "stdin",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stdin`"
+              },
+              {
+                "name": "stdout",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stdout`"
+              },
+              {
+                "name": "stderr",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stderr`"
+              }
+            ]
+          },
+          "docs": "Attach to a container to read its output or send it input. You can attach\nto the same container multiple times and you can reattach to containers\nthat have been detached.\n\nEither the `stream` or `logs` parameter must be `true` for this endpoint\nto do anything.\n\nSee the [documentation for the `docker attach` command](https://docs.docker.com/engine/reference/commandline/attach/)\nfor more details.\n\n### Hijacking\n\nThis endpoint hijacks the HTTP connection to transport `stdin`, `stdout`,\nand `stderr`"
+        },
+        {
+          "info": {
+            "name": "Attach to a container via a websocket",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/attach/ws",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "detachKeys",
+                "value": "",
+                "type": "query",
+                "description": "Override the key sequence for detaching a container.Format is a single\ncharacter `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`,\n`@`, `^`, `[`, `,`, or `_`.\n"
+              },
+              {
+                "name": "logs",
+                "value": "",
+                "type": "query",
+                "description": "Return logs"
+              },
+              {
+                "name": "stream",
+                "value": "",
+                "type": "query",
+                "description": "Return stream"
+              },
+              {
+                "name": "stdin",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stdin`"
+              },
+              {
+                "name": "stdout",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stdout`"
+              },
+              {
+                "name": "stderr",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stderr`"
+              }
+            ]
+          },
+          "docs": "Attach to a container via a websocket"
+        },
+        {
+          "info": {
+            "name": "Wait for a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/wait",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "condition",
+                "value": "",
+                "type": "query",
+                "description": "Wait until a container state reaches the given condition.\n\nDefaults to `not-running` if omitted or empty.\n"
+              }
+            ]
+          },
+          "docs": "Block until a container stops, then returns the exit code."
+        },
+        {
+          "info": {
+            "name": "Remove a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/containers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "v",
+                "value": "",
+                "type": "query",
+                "description": "Remove anonymous volumes associated with the container."
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "If the container is running, kill it before removing it."
+              },
+              {
+                "name": "link",
+                "value": "",
+                "type": "query",
+                "description": "Remove the specified link associated with the container."
+              }
+            ]
+          },
+          "docs": "Remove a container"
+        },
+        {
+          "info": {
+            "name": "Get an archive of a filesystem resource in a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/archive",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Resource in the container’s filesystem to archive."
+              }
+            ]
+          },
+          "docs": "Get a tar archive of a resource in the filesystem of container id."
+        },
+        {
+          "info": {
+            "name": "Extract an archive of files or folders to a directory in a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/containers/:id/archive",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Path to a directory in the container to extract the archive’s contents into. "
+              },
+              {
+                "name": "noOverwriteDirNonDir",
+                "value": "",
+                "type": "query",
+                "description": "If `1`, `true`, or `True` then it will be an error if unpacking the\ngiven content would cause an existing directory to be replaced with\na non-directory and vice versa.\n"
+              },
+              {
+                "name": "copyUIDGID",
+                "value": "",
+                "type": "query",
+                "description": "If `1`, `true`, then it will copy UID/GID maps to the dest file or\ndir\n"
+              }
+            ]
+          },
+          "docs": "Upload a tar archive to be extracted to a path in the filesystem of container id.\n`path` parameter is asserted to be a directory. If it exists as a file, 400 error\nwill be returned with message \"not a directory\".\n"
+        },
+        {
+          "info": {
+            "name": "Get information about files in a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "HEAD",
+            "url": "{{baseUrl}}/containers/:id/archive",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Resource in the container’s filesystem to archive."
+              }
+            ]
+          },
+          "docs": "A response header `X-Docker-Container-Path-Stat` is returned, containing\na base64 - encoded JSON object with some filesystem header information\nabout the path.\n"
+        },
+        {
+          "info": {
+            "name": "Delete stopped containers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/prune",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the prune list, encoded as JSON (a `map[string][]string`).\n\nAvailable filters:\n- `until=<timestamp>` Prune containers created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time.\n- `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune containers with (or without, in case `label!=...` is used) the specified labels.\n"
+              }
+            ]
+          },
+          "docs": "Delete stopped containers"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Image",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Images",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/images/json",
+            "params": [
+              {
+                "name": "all",
+                "value": "",
+                "type": "query",
+                "description": "Show all images. Only images from a final layer (no children) are shown by default."
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the images list.\n\nAvailable filters:\n\n- `before`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)\n- `dangling=true`\n- `label=key` or `label=\"key=value\"` of an image label\n- `reference`=(`<image-name>[:<tag>]`)\n- `since`=(`<image-name>[:<tag>]`,  `<image id>` or `<image@digest>`)\n- `until=<timestamp>`\n"
+              },
+              {
+                "name": "shared-size",
+                "value": "",
+                "type": "query",
+                "description": "Compute and show shared size as a `SharedSize` field on each image."
+              },
+              {
+                "name": "digests",
+                "value": "",
+                "type": "query",
+                "description": "Show digest information as a `RepoDigests` field on each image."
+              },
+              {
+                "name": "manifests",
+                "value": "",
+                "type": "query",
+                "description": "Include `Manifests` in the image summary."
+              },
+              {
+                "name": "identity",
+                "value": "",
+                "type": "query",
+                "description": "Include `Identity` in each manifest summary. Requires `manifests=1`."
+              }
+            ]
+          },
+          "docs": "Returns a list of images on the server. Note that it uses a different, smaller representation of an image than inspecting a single image."
+        },
+        {
+          "info": {
+            "name": "Build an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/build",
+            "headers": [
+              {
+                "name": "Content-type",
+                "value": ""
+              },
+              {
+                "name": "X-Registry-Config",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "dockerfile",
+                "value": "",
+                "type": "query",
+                "description": "Path within the build context to the `Dockerfile`. This is ignored if `remote` is specified and points to an external `Dockerfile`."
+              },
+              {
+                "name": "t",
+                "value": "",
+                "type": "query",
+                "description": "A name and optional tag to apply to the image in the `name:tag` format. If you omit the tag the default `latest` value is assumed. You can provide several `t` parameters."
+              },
+              {
+                "name": "extrahosts",
+                "value": "",
+                "type": "query",
+                "description": "Extra hosts to add to /etc/hosts"
+              },
+              {
+                "name": "remote",
+                "value": "",
+                "type": "query",
+                "description": "A Git repository URI or HTTP/HTTPS context URI. If the URI points to a single text file, the file’s contents are placed into a file called `Dockerfile` and the image is built from that file. If the URI points to a tarball, the file is downloaded by the daemon and the contents therein used as the context for the build. If the URI points to a tarball and the `dockerfile` parameter is also specified, there must be a file with the corresponding path inside the tarball."
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Suppress verbose build output."
+              },
+              {
+                "name": "nocache",
+                "value": "",
+                "type": "query",
+                "description": "Do not use the cache when building the image."
+              },
+              {
+                "name": "cachefrom",
+                "value": "",
+                "type": "query",
+                "description": "JSON array of images used for build cache resolution."
+              },
+              {
+                "name": "pull",
+                "value": "",
+                "type": "query",
+                "description": "Attempt to pull the image even if an older image exists locally."
+              },
+              {
+                "name": "rm",
+                "value": "",
+                "type": "query",
+                "description": "Remove intermediate containers after a successful build."
+              },
+              {
+                "name": "forcerm",
+                "value": "",
+                "type": "query",
+                "description": "Always remove intermediate containers, even upon failure."
+              },
+              {
+                "name": "memory",
+                "value": "",
+                "type": "query",
+                "description": "Set memory limit for build."
+              },
+              {
+                "name": "memswap",
+                "value": "",
+                "type": "query",
+                "description": "Total memory (memory + swap). Set as `-1` to disable swap."
+              },
+              {
+                "name": "cpushares",
+                "value": "",
+                "type": "query",
+                "description": "CPU shares (relative weight)."
+              },
+              {
+                "name": "cpusetcpus",
+                "value": "",
+                "type": "query",
+                "description": "CPUs in which to allow execution (e.g., `0-3`, `0,1`)."
+              },
+              {
+                "name": "cpuperiod",
+                "value": "",
+                "type": "query",
+                "description": "The length of a CPU period in microseconds."
+              },
+              {
+                "name": "cpuquota",
+                "value": "",
+                "type": "query",
+                "description": "Microseconds of CPU time that the container can get in a CPU period."
+              },
+              {
+                "name": "buildargs",
+                "value": "",
+                "type": "query",
+                "description": "JSON map of string pairs for build-time variables. Users pass these values at build-time. Docker uses the buildargs as the environment context for commands run via the `Dockerfile` RUN instruction, or for variable expansion in other `Dockerfile` instructions. This is not meant for passing secret values.\n\nFor example, the build arg `FOO=bar` would become `{\"FOO\":\"bar\"}` in JSON. This would result in the query parameter `buildargs={\"FOO\":\"bar\"}`. Note that `{\"FOO\":\"bar\"}` should be URI component encoded.\n\n[Read more about the buildargs instruction.](https://docs.docker.com/engine/reference/builder/#arg)\n"
+              },
+              {
+                "name": "shmsize",
+                "value": "",
+                "type": "query",
+                "description": "Size of `/dev/shm` in bytes. The size must be greater than 0. If omitted the system uses 64MB."
+              },
+              {
+                "name": "squash",
+                "value": "",
+                "type": "query",
+                "description": "Squash the resulting images layers into a single layer. *(Experimental release only.)*"
+              },
+              {
+                "name": "labels",
+                "value": "",
+                "type": "query",
+                "description": "Arbitrary key/value labels to set on the image, as a JSON map of string pairs."
+              },
+              {
+                "name": "networkmode",
+                "value": "",
+                "type": "query",
+                "description": "Sets the networking mode for the run commands during build. Supported\nstandard values are: `bridge`, `host`, `none`, and `container:<name|id>`.\nAny other value is taken as a custom network's name or ID to which this\ncontainer should connect to.\n"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Platform in the format os[/arch[/variant]]"
+              },
+              {
+                "name": "target",
+                "value": "",
+                "type": "query",
+                "description": "Target build stage"
+              },
+              {
+                "name": "outputs",
+                "value": "",
+                "type": "query",
+                "description": "BuildKit output configuration in the format of a stringified JSON array of objects.\nEach object must have two top-level properties: `Type` and `Attrs`.\nThe `Type` property must be set to 'moby'.\nThe `Attrs` property is a map of attributes for the BuildKit output configuration.\nSee https://docs.docker.com/build/exporters/oci-docker/ for more information.\n\nExample:\n\n```\n[{\"Type\":\"moby\",\"Attrs\":{\"type\":\"image\",\"force-compression\":\"true\",\"compression\":\"zstd\"}}]\n```\n"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "Version of the builder backend to use.\n\n- `1` is the first generation classic (deprecated) builder in the Docker daemon (default)\n- `2` is [BuildKit](https://github.com/moby/buildkit)\n"
+              }
+            ]
+          },
+          "docs": "Build an image from a tar archive with a `Dockerfile` in it.\n\nThe `Dockerfile` specifies how the image is built from the tar archive. It is typically in the archive's root, but can be at a different path or have a different name by specifying the `dockerfile` parameter. [See the `Dockerfile` reference for more information](https://docs.docker.com/engine/reference/builder/).\n\nThe Docker daemon performs a preliminary validation of the `Dockerfile` before starting the build, and returns an error if"
+        },
+        {
+          "info": {
+            "name": "Delete builder cache",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/build/prune",
+            "params": [
+              {
+                "name": "reserved-space",
+                "value": "",
+                "type": "query",
+                "description": "Amount of disk space in bytes to keep for cache"
+              },
+              {
+                "name": "max-used-space",
+                "value": "",
+                "type": "query",
+                "description": "Maximum amount of disk space allowed to keep for cache"
+              },
+              {
+                "name": "min-free-space",
+                "value": "",
+                "type": "query",
+                "description": "Target amount of free disk space after pruning"
+              },
+              {
+                "name": "all",
+                "value": "",
+                "type": "query",
+                "description": "Remove all types of build cache"
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the list of build cache objects.\n\nAvailable filters:\n\n- `until=<timestamp>` remove cache older than `<timestamp>`. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon's local time.\n- `id=<id>`\n- `parent=<id>`\n- `type=<string>`\n- `description=<string>`\n- `inuse`\n- `shared`\n- `private`\n"
+              }
+            ]
+          },
+          "docs": "Delete builder cache"
+        },
+        {
+          "info": {
+            "name": "Create an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/images/create",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fromImage",
+                "value": "",
+                "type": "query",
+                "description": "Name of the image to pull. If the name includes a tag or digest, specific behavior applies:\n\n- If only `fromImage` includes a tag, that tag is used.\n- If both `fromImage` and `tag` are provided, `tag` takes precedence.\n- If `fromImage` includes a digest, the image is pulled by digest, and `tag` is ignored.\n- If neither a tag nor digest is specified, all tags are pulled.\n"
+              },
+              {
+                "name": "fromSrc",
+                "value": "",
+                "type": "query",
+                "description": "Source to import. The value may be a URL from which the image can be retrieved or `-` to read the image from the request body. This parameter may only be used when importing an image."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "query",
+                "description": "Repository name given to an image when it is imported. The repo may include a tag. This parameter may only be used when importing an image."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Tag or digest. If empty when pulling an image, this causes all tags for the given image to be pulled."
+              },
+              {
+                "name": "message",
+                "value": "",
+                "type": "query",
+                "description": "Set commit message for imported image."
+              },
+              {
+                "name": "changes",
+                "value": "",
+                "type": "query",
+                "description": "Apply `Dockerfile` instructions to the image that is created,\nfor example: `changes=ENV DEBUG=true`.\nNote that `ENV DEBUG=true` should be URI component encoded.\n\nSupported `Dockerfile` instructions:\n`CMD`|`ENTRYPOINT`|`ENV`|`EXPOSE`|`ONBUILD`|`USER`|`VOLUME`|`WORKDIR`\n"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Platform in the format os[/arch[/variant]].\n\nWhen used in combination with the `fromImage` option, the daemon checks\nif the given image is present in the local image cache with the given\nOS and Architecture, and otherwise attempts to pull the image. If the\noption is not set, the host's native OS and Architecture are used.\nIf the given image does not exist in the local image cache, the daemon\nattempts to pull the image with the host's native OS and Architecture.\nIf the given image does exists in the local image cache, but its OS or\narchitecture does not match, a warning is produced.\n\nWhen used with the `fromSrc` option to import an image from an archive,\nthis option sets the platform information for the imported image. If\nthe option is not set, the host's native OS and Architecture are used\nfor the imported image.\n"
+              }
+            ]
+          },
+          "docs": "Pull or import an image."
+        },
+        {
+          "info": {
+            "name": "Inspect an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/images/:name/json",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Image name or id"
+              },
+              {
+                "name": "manifests",
+                "value": "",
+                "type": "query",
+                "description": "Include Manifests in the image summary.\n\nThe `manifests` and `platform` options are mutually exclusive, and\nan error is produced if both are set."
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "JSON-encoded OCI platform to select the platform-variant.\nIf omitted, it defaults to any locally available platform,\nprioritizing the daemon's host platform.\n\nIf the daemon provides a multi-platform image store, this selects\nthe platform-variant to show inspect. If the image is\na single-platform image, or if the multi-platform image does not\nprovide a variant matching the given platform, an error is returned.\n\nThe `platform` and `manifests` options are mutually exclusive, and\nan error is produced if both are set.\n\nExample: `{\"os\": \"linux\", \"architecture\": \"arm\", \"variant\": \"v5\"}`"
+              }
+            ]
+          },
+          "docs": "Return low-level information about an image."
+        },
+        {
+          "info": {
+            "name": "Get the history of an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/images/:name/history",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Image name or ID"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "JSON-encoded OCI platform to select the platform-variant.\nIf omitted, it defaults to any locally available platform,\nprioritizing the daemon's host platform.\n\nIf the daemon provides a multi-platform image store, this selects\nthe platform-variant to show the history for. If the image is\na single-platform image, or if the multi-platform image does not\nprovide a variant matching the given platform, an error is returned.\n\nExample: `{\"os\": \"linux\", \"architecture\": \"arm\", \"variant\": \"v5\"}`\n"
+              }
+            ]
+          },
+          "docs": "Return parent layers of an image."
+        },
+        {
+          "info": {
+            "name": "Push an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/images/:name/push",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the image to push. For example, `registry.example.com/myimage`.\nThe image must be present in the local image store with the same name.\n\nThe name should be provided without tag; if a tag is provided, it\nis ignored. For example, `registry.example.com/myimage:latest` is\nconsidered equivalent to `registry.example.com/myimage`.\n\nUse the `tag` parameter to specify the tag to push.\n"
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Tag of the image to push. For example, `latest`. If no tag is provided,\nall tags of the given image that are present in the local image store\nare pushed.\n"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "JSON-encoded OCI platform to select the platform-variant to push.\nIf not provided, all available variants will attempt to be pushed.\n\nIf the daemon provides a multi-platform image store, this selects\nthe platform-variant to push to the registry. If the image is\na single-platform image, or if the multi-platform image does not\nprovide a variant matching the given platform, an error is returned.\n\nExample: `{\"os\": \"linux\", \"architecture\": \"arm\", \"variant\": \"v5\"}`\n"
+              }
+            ]
+          },
+          "docs": "Push an image to a registry.\n\nIf you wish to push an image on to a private registry, that image must\nalready have a tag which references the registry. For example,\n`registry.example.com/myimage:latest`.\n\nThe push is cancelled if the HTTP connection is closed.\n"
+        },
+        {
+          "info": {
+            "name": "Tag an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/images/:name/tag",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Image name or ID to tag."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "query",
+                "description": "The repository to tag in. For example, `someuser/someimage`."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "The name of the new tag."
+              }
+            ]
+          },
+          "docs": "Create a tag that refers to a source image.\n\nThis creates an additional reference (tag) to the source image. The tag\ncan include a different repository name and/or tag. If the repository\nor tag already exists, it will be overwritten.\n"
+        },
+        {
+          "info": {
+            "name": "Remove an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/images/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Image name or ID"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Remove the image even if it is being used by stopped containers or has other tags"
+              },
+              {
+                "name": "noprune",
+                "value": "",
+                "type": "query",
+                "description": "Do not delete untagged parent images"
+              },
+              {
+                "name": "platforms",
+                "value": "",
+                "type": "query",
+                "description": "Select platform-specific content to delete.\nMultiple values are accepted.\nEach platform is a OCI platform encoded as a JSON string.\n"
+              }
+            ]
+          },
+          "docs": "Remove an image, along with any untagged parent images that were\nreferenced by that image.\n\nImages can't be removed if they have descendant images, are being\nused by a running container or are being used by a build.\n"
+        },
+        {
+          "info": {
+            "name": "Search images",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/images/search",
+            "params": [
+              {
+                "name": "term",
+                "value": "",
+                "type": "query",
+                "description": "Term to search"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return"
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to process on the images list. Available filters:\n\n- `is-official=(true|false)`\n- `stars=<number>` Matches images that has at least 'number' stars.\n"
+              }
+            ]
+          },
+          "docs": "Search for an image on Docker Hub."
+        },
+        {
+          "info": {
+            "name": "Delete unused images",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/images/prune",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the prune list, encoded as JSON (a `map[string][]string`). Available filters:\n\n- `dangling=<boolean>` When set to `true` (or `1`), prune only\n   unused *and* untagged images. When set to `false`\n   (or `0`), all unused images are pruned.\n- `until=<string>` Prune images created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time.\n- `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune images with (or without, in case `label!=...` is used) the specified labels.\n"
+              }
+            ]
+          },
+          "docs": "Delete unused images"
+        },
+        {
+          "info": {
+            "name": "Create a new image from a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/commit",
+            "params": [
+              {
+                "name": "container",
+                "value": "",
+                "type": "query",
+                "description": "The ID or name of the container to commit"
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "query",
+                "description": "Repository name for the created image"
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Tag name for the create image"
+              },
+              {
+                "name": "comment",
+                "value": "",
+                "type": "query",
+                "description": "Commit message"
+              },
+              {
+                "name": "author",
+                "value": "",
+                "type": "query",
+                "description": "Author of the image (e.g., `John Hannibal Smith <hannibal@a-team.com>`)"
+              },
+              {
+                "name": "pause",
+                "value": "",
+                "type": "query",
+                "description": "Whether to pause the container before committing"
+              },
+              {
+                "name": "changes",
+                "value": "",
+                "type": "query",
+                "description": "`Dockerfile` instructions to apply while committing"
+              }
+            ]
+          },
+          "docs": "Create a new image from a container"
+        },
+        {
+          "info": {
+            "name": "Export an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/images/:name/get",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Image name or ID"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "JSON encoded OCI platform describing a platform which will be used\nto select a platform-specific image to be saved if the image is\nmulti-platform.\nIf not provided, the full multi-platform image will be saved.\n\nExample: `{\"os\": \"linux\", \"architecture\": \"arm\", \"variant\": \"v5\"}`\n"
+              }
+            ]
+          },
+          "docs": "Get a tarball containing all images and metadata for a repository.\n\nIf `name` is a specific name and tag (e.g. `ubuntu:latest`), then only that image (and its parents) are returned. If `name` is an image ID, similarly only that image (and its parents) are returned, but with the exclusion of the `repositories` file in the tarball, as there were no image names referenced.\n\n### Image tarball format\n\nAn image tarball contains [Content as defined in the OCI Image Layout Specification](https://github."
+        },
+        {
+          "info": {
+            "name": "Export several images",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/images/get",
+            "params": [
+              {
+                "name": "names",
+                "value": "",
+                "type": "query",
+                "description": "Image names to filter by"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "JSON encoded OCI platform(s) which will be used to select the\nplatform-specific image(s) to be saved if the image is\nmulti-platform. If not provided, the full multi-platform image\nwill be saved.\n\nExample: `{\"os\": \"linux\", \"architecture\": \"arm\", \"variant\": \"v5\"}`\n"
+              }
+            ]
+          },
+          "docs": "Get a tarball containing all images and metadata for several image\nrepositories.\n\nFor each value of the `names` parameter: if it is a specific name and\ntag (e.g. `ubuntu:latest`), then only that image (and its parents) are\nreturned; if it is an image ID, similarly only that image (and its parents)\nare returned and there would be no names referenced in the 'repositories'\nfile for this image ID.\n\nFor details on the format, see the [export image endpoint](#operation/ImageGet).\n"
+        },
+        {
+          "info": {
+            "name": "Import images",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/images/load",
+            "params": [
+              {
+                "name": "quiet",
+                "value": "",
+                "type": "query",
+                "description": "Suppress progress details during load."
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "JSON encoded OCI platform(s) which will be used to select the\nplatform-specific image(s) to load if the image is\nmulti-platform. If not provided, the full multi-platform image\nwill be loaded.\n\nExample: `{\"os\": \"linux\", \"architecture\": \"arm\", \"variant\": \"v5\"}`\n"
+              }
+            ]
+          },
+          "docs": "Load a set of images and tags into a repository.\n\nFor details on the format, see the [export image endpoint](#operation/ImageGet).\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "System",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Check auth configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth"
+          },
+          "docs": "Validate credentials for a registry and, if available, get an identity\ntoken for accessing the registry without password.\n"
+        },
+        {
+          "info": {
+            "name": "Get system information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/info"
+          },
+          "docs": "Get system information"
+        },
+        {
+          "info": {
+            "name": "Get version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/version"
+          },
+          "docs": "Returns the version of Docker that is running and various information about the system that Docker is running on."
+        },
+        {
+          "info": {
+            "name": "Ping",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/_ping"
+          },
+          "docs": "This is a dummy endpoint you can use to test if the server is accessible."
+        },
+        {
+          "info": {
+            "name": "Ping",
+            "type": "http"
+          },
+          "http": {
+            "method": "HEAD",
+            "url": "{{baseUrl}}/_ping"
+          },
+          "docs": "This is a dummy endpoint you can use to test if the server is accessible."
+        },
+        {
+          "info": {
+            "name": "Monitor events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/events",
+            "params": [
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Show events created since this timestamp then stream new events."
+              },
+              {
+                "name": "until",
+                "value": "",
+                "type": "query",
+                "description": "Show events created until this timestamp then stop streaming."
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of filters (a `map[string][]string`) to process on the event list. Available filters:\n\n- `config=<string>` config name or ID\n- `container=<string>` container name or ID\n- `daemon=<string>` daemon name or ID\n- `event=<string>` event type\n- `image=<string>` image name or ID\n- `label=<string>` image or container label\n- `network=<string>` network name or ID\n- `node=<string>` node ID\n- `plugin`=<string> plugin name or ID\n- `scope`=<string> local or swarm\n- `secret=<string>` secret name or ID\n- `service=<string>` service name or ID\n- `type=<string>` object to filter by, one of `container`, `image`, `volume`, `network`, `daemon`, `plugin`, `node`, `service`, `secret` or `config`\n- `volume=<string>` volume name\n"
+              }
+            ]
+          },
+          "docs": "Stream real-time events from the server.\n\nVarious objects within Docker report events when something happens to them.\n\nContainers report these events: `attach`, `commit`, `copy`, `create`, `destroy`, `detach`, `die`, `exec_create`, `exec_detach`, `exec_start`, `exec_die`, `export`, `health_status`, `kill`, `oom`, `pause`, `rename`, `resize`, `restart`, `start`, `stop`, `top`, `unpause`, `update`, and `prune`\n\nImages report these events: `create`, `delete`, `import`, `load`, `pull`, `push`, `save"
+        },
+        {
+          "info": {
+            "name": "Get data usage information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/system/df",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Object types, for which to compute and return data.\n"
+              },
+              {
+                "name": "verbose",
+                "value": "",
+                "type": "query",
+                "description": "Show detailed information on space usage.\n"
+              }
+            ]
+          },
+          "docs": "Get data usage information"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Exec",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an exec instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/exec",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of container"
+              }
+            ]
+          },
+          "docs": "Run a command inside a running container."
+        },
+        {
+          "info": {
+            "name": "Start an exec instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/exec/:id/start",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Exec instance ID"
+              }
+            ]
+          },
+          "docs": "Starts a previously set up exec instance. If detach is true, this endpoint\nreturns immediately after starting the command. Otherwise, it sets up an\ninteractive session with the command.\n"
+        },
+        {
+          "info": {
+            "name": "Resize an exec instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/exec/:id/resize",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Exec instance ID"
+              },
+              {
+                "name": "h",
+                "value": "",
+                "type": "query",
+                "description": "Height of the TTY session in characters"
+              },
+              {
+                "name": "w",
+                "value": "",
+                "type": "query",
+                "description": "Width of the TTY session in characters"
+              }
+            ]
+          },
+          "docs": "Resize the TTY session used by an exec instance. This endpoint only works\nif `tty` was specified as part of creating and starting the exec instance.\n"
+        },
+        {
+          "info": {
+            "name": "Inspect an exec instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/exec/:id/json",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Exec instance ID"
+              }
+            ]
+          },
+          "docs": "Return low-level information about an exec instance."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Volume",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List volumes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/volumes",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the volumes list. Available filters:\n\n- `dangling=<boolean>` When set to `true` (or `1`), returns all\n   volumes that are not in use by a container. When set to `false`\n   (or `0`), only volumes that are in use by one or more\n   containers are returned.\n- `driver=<volume-driver-name>` Matches volumes based on their driver.\n- `label=<key>` or `label=<key>:<value>` Matches volumes based on\n   the presence of a `label` alone or a `label` and a value.\n- `name=<volume-name>` Matches all or part of a volume name.\n"
+              }
+            ]
+          },
+          "docs": "List volumes"
+        },
+        {
+          "info": {
+            "name": "Create a volume",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/volumes/create"
+          },
+          "docs": "Create a volume"
+        },
+        {
+          "info": {
+            "name": "Inspect a volume",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/volumes/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Volume name or ID"
+              }
+            ]
+          },
+          "docs": "Inspect a volume"
+        },
+        {
+          "info": {
+            "name": "\"Update a volume. Valid only for Swarm cluster volumes\"\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/volumes/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name or ID of the volume"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the volume being updated. This is required to\navoid conflicting writes. Found in the volume's `ClusterVolume`\nfield.\n"
+              }
+            ]
+          },
+          "docs": "\"Update a volume. Valid only for Swarm cluster volumes\"\n"
+        },
+        {
+          "info": {
+            "name": "Remove a volume",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/volumes/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Volume name or ID"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Force the removal of the volume"
+              }
+            ]
+          },
+          "docs": "Instruct the driver to remove the volume."
+        },
+        {
+          "info": {
+            "name": "Delete unused volumes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/volumes/prune",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the prune list, encoded as JSON (a `map[string][]string`).\n\nAvailable filters:\n- `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune volumes with (or without, in case `label!=...` is used) the specified labels.\n- `all` (`all=true`) - Consider all (local) volumes for pruning and not just anonymous volumes.\n"
+              }
+            ]
+          },
+          "docs": "Delete unused volumes"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Network",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List networks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/networks",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "JSON encoded value of the filters (a `map[string][]string`) to process\non the networks list.\n\nAvailable filters:\n\n- `dangling=<boolean>` When set to `true` (or `1`), returns all\n   networks that are not in use by a container. When set to `false`\n   (or `0`), only networks that are in use by one or more\n   containers are returned.\n- `driver=<driver-name>` Matches a network's driver.\n- `id=<network-id>` Matches all or part of a network ID.\n- `label=<key>` or `label=<key>=<value>` of a network label.\n- `name=<network-name>` Matches all or part of a network name.\n- `scope=[\"swarm\"|\"global\"|\"local\"]` Filters networks by scope (`swarm`, `global`, or `local`).\n- `type=[\"custom\"|\"builtin\"]` Filters networks by type. The `custom` keyword returns all user-defined networks.\n"
+              }
+            ]
+          },
+          "docs": "Returns a list of networks. For details on the format, see the\n[network inspect endpoint](#operation/NetworkInspect).\n\nNote that it uses a different, smaller representation of a network than\ninspecting a single network. For example, the list of containers attached\nto the network is not propagated in API versions 1.28 and up.\n"
+        },
+        {
+          "info": {
+            "name": "Inspect a network",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/networks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Network ID or name"
+              },
+              {
+                "name": "verbose",
+                "value": "",
+                "type": "query",
+                "description": "Detailed inspect output for troubleshooting"
+              },
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Filter the network by scope (swarm, global, or local)"
+              }
+            ]
+          },
+          "docs": "Inspect a network"
+        },
+        {
+          "info": {
+            "name": "Remove a network",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/networks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Network ID or name"
+              }
+            ]
+          },
+          "docs": "Remove a network"
+        },
+        {
+          "info": {
+            "name": "Create a network",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/networks/create"
+          },
+          "docs": "Create a network"
+        },
+        {
+          "info": {
+            "name": "Connect a container to a network",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/networks/:id/connect",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Network ID or name"
+              }
+            ]
+          },
+          "docs": "The network must be either a local-scoped network or a swarm-scoped network with the `attachable` option set. A network cannot be re-attached to a running container"
+        },
+        {
+          "info": {
+            "name": "Disconnect a container from a network",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/networks/:id/disconnect",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Network ID or name"
+              }
+            ]
+          },
+          "docs": "Disconnect a container from a network"
+        },
+        {
+          "info": {
+            "name": "Delete unused networks",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/networks/prune",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the prune list, encoded as JSON (a `map[string][]string`).\n\nAvailable filters:\n- `until=<timestamp>` Prune networks created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time.\n- `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune networks with (or without, in case `label!=...` is used) the specified labels.\n"
+              }
+            ]
+          },
+          "docs": "Delete unused networks"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Plugin",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List plugins",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plugins",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the plugin list.\n\nAvailable filters:\n\n- `capability=<capability name>`\n- `enable=<true>|<false>`\n"
+              }
+            ]
+          },
+          "docs": "Returns information about installed plugins."
+        },
+        {
+          "info": {
+            "name": "Get plugin privileges",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plugins/privileges",
+            "params": [
+              {
+                "name": "remote",
+                "value": "",
+                "type": "query",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Get plugin privileges"
+        },
+        {
+          "info": {
+            "name": "Install a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/pull",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "remote",
+                "value": "",
+                "type": "query",
+                "description": "Remote reference for plugin to install.\n\nThe `:latest` tag is optional, and is used as the default if omitted.\n"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Local name for the pulled plugin.\n\nThe `:latest` tag is optional, and is used as the default if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Pulls and installs a plugin. After the plugin is installed, it can be\nenabled using the [`POST /plugins/{name}/enable` endpoint](#operation/PostPluginsEnable).\n"
+        },
+        {
+          "info": {
+            "name": "Inspect a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plugins/:name/json",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Inspect a plugin"
+        },
+        {
+          "info": {
+            "name": "Remove a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/plugins/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Disable the plugin before removing. This may result in issues if the\nplugin is in use by a container.\n"
+              }
+            ]
+          },
+          "docs": "Remove a plugin"
+        },
+        {
+          "info": {
+            "name": "Enable a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/enable",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query",
+                "description": "Set the HTTP client timeout (in seconds)"
+              }
+            ]
+          },
+          "docs": "Enable a plugin"
+        },
+        {
+          "info": {
+            "name": "Disable a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/disable",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Force disable a plugin even if still in use.\n"
+              }
+            ]
+          },
+          "docs": "Disable a plugin"
+        },
+        {
+          "info": {
+            "name": "Upgrade a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/upgrade",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              },
+              {
+                "name": "remote",
+                "value": "",
+                "type": "query",
+                "description": "Remote reference to upgrade to.\n\nThe `:latest` tag is optional, and is used as the default if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Upgrade a plugin"
+        },
+        {
+          "info": {
+            "name": "Create a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/create",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Create a plugin"
+        },
+        {
+          "info": {
+            "name": "Push a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/push",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Push a plugin to the registry.\n"
+        },
+        {
+          "info": {
+            "name": "Configure a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/set",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Configure a plugin"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Node",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List nodes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/nodes",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the nodes list, encoded as JSON (a `map[string][]string`).\n\nAvailable filters:\n- `id=<node id>`\n- `label=<engine label>`\n- `membership=`(`accepted`|`pending`)`\n- `name=<node name>`\n- `node.label=<node label>`\n- `role=`(`manager`|`worker`)`\n"
+              }
+            ]
+          },
+          "docs": "List nodes"
+        },
+        {
+          "info": {
+            "name": "Inspect a node",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/nodes/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID or name of the node"
+              }
+            ]
+          },
+          "docs": "Inspect a node"
+        },
+        {
+          "info": {
+            "name": "Delete a node",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/nodes/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID or name of the node"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Force remove a node from the swarm"
+              }
+            ]
+          },
+          "docs": "Delete a node"
+        },
+        {
+          "info": {
+            "name": "Update a node",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/nodes/:id/update",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the node"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the node object being updated. This is required\nto avoid conflicting writes.\n"
+              }
+            ]
+          },
+          "docs": "Update a node"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Swarm",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Inspect swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/swarm"
+          },
+          "docs": "Inspect swarm"
+        },
+        {
+          "info": {
+            "name": "Initialize a new swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/init"
+          },
+          "docs": "Initialize a new swarm"
+        },
+        {
+          "info": {
+            "name": "Join an existing swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/join"
+          },
+          "docs": "Join an existing swarm"
+        },
+        {
+          "info": {
+            "name": "Leave a swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/leave",
+            "params": [
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Force leave swarm, even if this is the last manager or that it will\nbreak the cluster.\n"
+              }
+            ]
+          },
+          "docs": "Leave a swarm"
+        },
+        {
+          "info": {
+            "name": "Update a swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/update",
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the swarm object being updated. This is\nrequired to avoid conflicting writes.\n"
+              },
+              {
+                "name": "rotateWorkerToken",
+                "value": "",
+                "type": "query",
+                "description": "Rotate the worker join token."
+              },
+              {
+                "name": "rotateManagerToken",
+                "value": "",
+                "type": "query",
+                "description": "Rotate the manager join token."
+              },
+              {
+                "name": "rotateManagerUnlockKey",
+                "value": "",
+                "type": "query",
+                "description": "Rotate the manager unlock key."
+              }
+            ]
+          },
+          "docs": "Update a swarm"
+        },
+        {
+          "info": {
+            "name": "Get the unlock key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/swarm/unlockkey"
+          },
+          "docs": "Get the unlock key"
+        },
+        {
+          "info": {
+            "name": "Unlock a locked manager",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/unlock"
+          },
+          "docs": "Unlock a locked manager"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Service",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/services",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the services list.\n\nAvailable filters:\n\n- `id=<service id>`\n- `label=<service label>`\n- `mode=[\"replicated\"|\"global\"]`\n- `name=<service name>`\n"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Include service status, with count of running and desired tasks.\n"
+              }
+            ]
+          },
+          "docs": "List services"
+        },
+        {
+          "info": {
+            "name": "Create a service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/services/create",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Create a service"
+        },
+        {
+          "info": {
+            "name": "Inspect a service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/services/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of service."
+              },
+              {
+                "name": "insertDefaults",
+                "value": "",
+                "type": "query",
+                "description": "Fill empty fields with default values."
+              }
+            ]
+          },
+          "docs": "Inspect a service"
+        },
+        {
+          "info": {
+            "name": "Delete a service",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/services/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of service."
+              }
+            ]
+          },
+          "docs": "Delete a service"
+        },
+        {
+          "info": {
+            "name": "Update a service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/services/:id/update",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of service."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the service object being updated. This is\nrequired to avoid conflicting writes.\nThis version number should be the value as currently set on the\nservice *before* the update. You can find the current version by\ncalling `GET /services/{id}`\n"
+              },
+              {
+                "name": "registryAuthFrom",
+                "value": "",
+                "type": "query",
+                "description": "If the `X-Registry-Auth` header is not specified, this parameter\nindicates where to find registry authorization credentials.\n"
+              },
+              {
+                "name": "rollback",
+                "value": "",
+                "type": "query",
+                "description": "Set to this parameter to `previous` to cause a server-side rollback\nto the previous service spec. The supplied spec will be ignored in\nthis case.\n"
+              }
+            ]
+          },
+          "docs": "Update a service"
+        },
+        {
+          "info": {
+            "name": "Get service logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/services/:id/logs",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the service"
+              },
+              {
+                "name": "details",
+                "value": "",
+                "type": "query",
+                "description": "Show service context and extra details provided to logs."
+              },
+              {
+                "name": "follow",
+                "value": "",
+                "type": "query",
+                "description": "Keep connection after returning logs."
+              },
+              {
+                "name": "stdout",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stdout`"
+              },
+              {
+                "name": "stderr",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stderr`"
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only return logs since this time, as a UNIX timestamp"
+              },
+              {
+                "name": "timestamps",
+                "value": "",
+                "type": "query",
+                "description": "Add timestamps to every log line"
+              },
+              {
+                "name": "tail",
+                "value": "",
+                "type": "query",
+                "description": "Only return this number of log lines from the end of the logs.\nSpecify as an integer or `all` to output all log lines.\n"
+              }
+            ]
+          },
+          "docs": "Get `stdout` and `stderr` logs from a service. See also\n[`/containers/{id}/logs`](#operation/ContainerLogs).\n\n**Note**: This endpoint works only for services with the `local`,\n`json-file` or `journald` logging drivers.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Task",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/tasks",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the tasks list.\n\nAvailable filters:\n\n- `desired-state=(running | shutdown | accepted)`\n- `id=<task id>`\n- `label=key` or `label=\"key=value\"`\n- `name=<task name>`\n- `node=<node id or name>`\n- `service=<service name>`\n"
+              }
+            ]
+          },
+          "docs": "List tasks"
+        },
+        {
+          "info": {
+            "name": "Inspect a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/tasks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the task"
+              }
+            ]
+          },
+          "docs": "Inspect a task"
+        },
+        {
+          "info": {
+            "name": "Get task logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/tasks/:id/logs",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the task"
+              },
+              {
+                "name": "details",
+                "value": "",
+                "type": "query",
+                "description": "Show task context and extra details provided to logs."
+              },
+              {
+                "name": "follow",
+                "value": "",
+                "type": "query",
+                "description": "Keep connection after returning logs."
+              },
+              {
+                "name": "stdout",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stdout`"
+              },
+              {
+                "name": "stderr",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stderr`"
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only return logs since this time, as a UNIX timestamp"
+              },
+              {
+                "name": "timestamps",
+                "value": "",
+                "type": "query",
+                "description": "Add timestamps to every log line"
+              },
+              {
+                "name": "tail",
+                "value": "",
+                "type": "query",
+                "description": "Only return this number of log lines from the end of the logs.\nSpecify as an integer or `all` to output all log lines.\n"
+              }
+            ]
+          },
+          "docs": "Get `stdout` and `stderr` logs from a task.\nSee also [`/containers/{id}/logs`](#operation/ContainerLogs).\n\n**Note**: This endpoint works only for services with the `local`,\n`json-file` or `journald` logging drivers.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Secret",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List secrets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/secrets",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the secrets list.\n\nAvailable filters:\n\n- `id=<secret id>`\n- `label=<key> or label=<key>=value`\n- `name=<secret name>`\n- `names=<secret name>`\n"
+              }
+            ]
+          },
+          "docs": "List secrets"
+        },
+        {
+          "info": {
+            "name": "Create a secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/secrets/create"
+          },
+          "docs": "Create a secret"
+        },
+        {
+          "info": {
+            "name": "Inspect a secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/secrets/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the secret"
+              }
+            ]
+          },
+          "docs": "Inspect a secret"
+        },
+        {
+          "info": {
+            "name": "Delete a secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/secrets/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the secret"
+              }
+            ]
+          },
+          "docs": "Delete a secret"
+        },
+        {
+          "info": {
+            "name": "Update a Secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/secrets/:id/update",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID or name of the secret"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the secret object being updated. This is\nrequired to avoid conflicting writes.\n"
+              }
+            ]
+          },
+          "docs": "Update a Secret"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Config",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/configs",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the configs list.\n\nAvailable filters:\n\n- `id=<config id>`\n- `label=<key> or label=<key>=value`\n- `name=<config name>`\n- `names=<config name>`\n"
+              }
+            ]
+          },
+          "docs": "List configs"
+        },
+        {
+          "info": {
+            "name": "Create a config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/configs/create"
+          },
+          "docs": "Create a config"
+        },
+        {
+          "info": {
+            "name": "Inspect a config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the config"
+              }
+            ]
+          },
+          "docs": "Inspect a config"
+        },
+        {
+          "info": {
+            "name": "Delete a config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the config"
+              }
+            ]
+          },
+          "docs": "Delete a config"
+        },
+        {
+          "info": {
+            "name": "Update a Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/configs/:id/update",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID or name of the config"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the config object being updated. This is\nrequired to avoid conflicting writes.\n"
+              }
+            ]
+          },
+          "docs": "Update a Config"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Distribution",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get image information from the registry",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/distribution/:name/json",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Image name or id"
+              }
+            ]
+          },
+          "docs": "Return image digest and platform information by contacting the registry.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Session",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initialize interactive session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/session"
+          },
+          "docs": "Start a new interactive session with a server. Session allows server to\ncall back to the client for advanced capabilities.\n\n> **Deprecated**: This endpoint is deprecated and will be removed in a future version.\n> Server should support gRPC directly on the listening socket.\n\n### Hijacking\n\nThis endpoint hijacks the HTTP connection to HTTP2 transport that allows\nthe client to expose gPRC services on that connection.\n\nFor example, the client sends this request to upgrade the connection:\n\n```\nPOST /"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
