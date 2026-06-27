@@ -48,7 +48,7 @@ common:
     url: https://github.com/docker
   - type: Pricing
     url: https://www.docker.com/pricing/
-  - type: SignUp
+  - type: Signup
     url: https://hub.docker.com/signup
   - type: StatusPage
     url: https://www.dockerstatus.com/
@@ -63,7 +63,7 @@ common:
   - name: MCP Server
     url: https://github.com/docker/mcp-gateway
     type: MCPServer
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://docs.docker.com/llms.txt
 integrations:
   - name: Become a Docker Verified Publisher
