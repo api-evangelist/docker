@@ -36,6 +36,8 @@ apis:
       - type: GettingStarted
         url: https://docs.docker.com/get-started/
 common:
+  - type: AgenticAccess
+    url: agentic-access/docker-agentic-access.yml
   - type: VulnerabilityDisclosure
     url: security/docker-vulnerability-disclosure.yml
   - type: DomainSecurity
