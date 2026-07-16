@@ -1,0 +1,120 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/docker-openapi.yml
+docs: https://docs.docker.com/reference/api/engine/
+notes: >-
+  Entity-relationship graph derived from the Docker Engine API tags and the
+  $ref / id-reference structure of its definitions. Core objects map to the
+  spec's tag groups; relationships are read from HostConfig, NetworkSettings,
+  Mount, and Swarm task/service references.
+entities:
+  - name: Container
+    tag: Container
+    schema: "#/definitions/ContainerInspectResponse"
+    id_field: Id
+    relationships:
+      - type: belongs_to
+        target: Image
+        via: Image
+      - type: has_many
+        target: Network
+        via: NetworkSettings.Networks
+      - type: has_many
+        target: Volume
+        via: Mounts
+      - type: has_many
+        target: Exec
+        via: exec instances
+  - name: Image
+    tag: Image
+    schema: "#/definitions/ImageInspect"
+    id_field: Id
+    relationships:
+      - type: has_many
+        target: Container
+        via: Containers
+  - name: Network
+    tag: Network
+    schema: "#/definitions/Network"
+    id_field: Id
+    relationships:
+      - type: has_many
+        target: Container
+        via: Containers (EndpointResource)
+  - name: Volume
+    tag: Volume
+    schema: "#/definitions/Volume"
+    id_field: Name
+  - name: Exec
+    tag: Exec
+    schema: "#/definitions/ExecInspectResponse"
+    id_field: ID
+    relationships:
+      - type: belongs_to
+        target: Container
+        via: ContainerID
+  - name: Swarm
+    tag: Swarm
+    schema: "#/definitions/Swarm"
+    id_field: ID
+    relationships:
+      - type: has_many
+        target: Node
+        via: cluster membership
+      - type: has_many
+        target: Service
+      - type: has_many
+        target: Secret
+      - type: has_many
+        target: Config
+  - name: Node
+    tag: Node
+    schema: "#/definitions/Node"
+    id_field: ID
+    relationships:
+      - type: has_many
+        target: Task
+        via: assigned tasks
+  - name: Service
+    tag: Service
+    schema: "#/definitions/Service"
+    id_field: ID
+    relationships:
+      - type: has_many
+        target: Task
+      - type: has_many
+        target: Network
+        via: Spec.TaskTemplate.Networks
+      - type: has_many
+        target: Secret
+        via: Spec.TaskTemplate.ContainerSpec.Secrets
+      - type: has_many
+        target: Config
+        via: Spec.TaskTemplate.ContainerSpec.Configs
+  - name: Task
+    tag: Task
+    schema: "#/definitions/Task"
+    id_field: ID
+    relationships:
+      - type: belongs_to
+        target: Service
+        via: ServiceID
+      - type: belongs_to
+        target: Node
+        via: NodeID
+  - name: Secret
+    tag: Secret
+    schema: "#/definitions/Secret"
+    id_field: ID
+  - name: Config
+    tag: Config
+    schema: "#/definitions/Config"
+    id_field: ID
+  - name: Plugin
+    tag: Plugin
+    schema: "#/definitions/Plugin"
+    id_field: Id
+  - name: System
+    tag: System
+    schema: "#/definitions/SystemInfo"
+    notes: "Daemon-wide endpoints: /info, /version, /events, /df, /ping, /auth"

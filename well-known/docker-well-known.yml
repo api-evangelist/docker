@@ -1,0 +1,41 @@
+generated: '2026-06-20'
+method: searched
+source: live probes of Docker public hosts
+hosts:
+  - host: https://www.docker.com
+    documents:
+      - path: /.well-known/security.txt          # RFC 9116
+        status: 200
+        file: docker-security.txt
+      - path: /.well-known/openid-configuration   # OIDC discovery
+        status: 403
+      - path: /.well-known/oauth-authorization-server  # RFC 8414
+        status: 403
+      - path: /.well-known/api-catalog            # RFC 9727
+        status: 403
+      - path: /.well-known/ai-plugin.json
+        status: 403
+  - host: https://docs.docker.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://hub.docker.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403
+      - path: /.well-known/ai-plugin.json
+        status: 403

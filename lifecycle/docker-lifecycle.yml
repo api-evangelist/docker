@@ -1,0 +1,29 @@
+generated: '2026-06-20'
+method: searched
+source: https://docs.docker.com/reference/api/engine/version-history/
+versioning:
+  scheme: uri-path
+  current: "1.55"
+  spec_version_in_repo: "1.54"
+  format: "/v{MAJOR.MINOR}/... e.g. /v1.54/info"
+  docs: https://docs.docker.com/reference/api/engine/version-history/
+  notes: >-
+    The Engine API is versioned per Docker Engine release. Clients pin a version
+    via the URL prefix. Calling without a version prefix uses the daemon's
+    current version and is itself deprecated and slated for removal.
+deprecation:
+  policy_url: https://docs.docker.com/engine/deprecated/
+  sunset_header: false
+  notes: >-
+    Deprecations are announced per release in the version history and the
+    engine deprecated-features page; there is no RFC 8594 Sunset/Deprecation
+    HTTP header mechanism on the Engine API.
+sla:
+  url: https://www.docker.com/legal/docker-subscription-service-agreement/
+  uptime_target: null
+status_page: https://www.dockerstatus.com/
+deprecated_operations:
+  - note: "Unversioned (no /v{version} prefix) API calls are deprecated."
+  - note: "POST /session deprecated in API v1.53."
+  - note: "POST /grpc deprecated in API v1.53."
+  - note: "KernelMemoryTCP field removed in v1.52; NetworkSettings.Bridge deprecated in v1.51."

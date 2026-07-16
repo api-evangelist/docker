@@ -1,0 +1,34 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Docker Engine API
+  version: 1.0.0
+extends: openapi/docker-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: docker
+      x-apievangelist-aid: docker:docker
+      x-apievangelist-tags:
+        - Containers
+        - DevOps
+        - Infrastructure
+      x-apievangelist-error-envelope: "{ message: string }"
+      x-apievangelist-versioning: uri-path
+      x-apievangelist-status-page: https://www.dockerstatus.com/
+  - target: $.info
+    update:
+      x-apievangelist-artifacts:
+        packages: packages/docker-packages.yml
+        cli: cli/docker-cli.yml
+        mcp: mcp/docker-mcp.yml
+        llms: llms/docker-llms.txt
+        conformance: conformance/docker-conformance.yml
+        errors: errors/docker-problem-types.yml
+        lifecycle: lifecycle/docker-lifecycle.yml
+        conventions: conventions/docker-conventions.yml
+        changelog: changelog/docker-changelog.yml
+        data-model: data-model/docker-data-model.yml
+  - target: $.externalDocs
+    update:
+      description: Docker Engine API reference
+      url: https://docs.docker.com/reference/api/engine/

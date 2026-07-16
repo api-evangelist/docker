@@ -1,0 +1,35 @@
+generated: '2026-06-20'
+method: searched
+source: https://docs.docker.com/reference/api/engine/sdk/
+packages:
+  - language: python
+    registry: pypi
+    name: docker
+    url: https://pypi.org/project/docker/
+    install: pip install docker
+    repo: https://github.com/docker/docker-py
+    docs: https://docker-py.readthedocs.io/
+    official: true
+    description: >-
+      Official Docker SDK for Python (docker-py) — a client library for the
+      Docker Engine API to run and manage containers, images, networks,
+      volumes, and Swarm from Python.
+  - language: go
+    registry: pkg.go.dev
+    name: github.com/moby/moby/client
+    url: https://pkg.go.dev/github.com/moby/moby/client
+    install: go get github.com/moby/moby/client
+    repo: https://github.com/moby/moby
+    official: true
+    description: >-
+      Official Docker Engine Go SDK / client for the Docker Engine API,
+      maintained in the Moby project.
+  - language: shell
+    registry: docker
+    name: docker-ce-cli
+    url: https://docs.docker.com/engine/install/
+    install: "See https://docs.docker.com/engine/install/ (Docker Desktop or docker-ce-cli package)"
+    official: true
+    description: >-
+      The first-party Docker CLI binary. Distributed with Docker Desktop and via
+      the docker-ce-cli OS packages; command surface catalogued in cli/docker-cli.yml.

@@ -14,7 +14,7 @@ tags:
   - Microservices
 url: https://raw.githubusercontent.com/api-evangelist/docker/refs/heads/main/apis.yml
 created: '2025-06-05'
-modified: '2026-05-19'
+modified: '2026-06-20'
 position: Consumer
 specificationVersion: '0.19'
 apis:
@@ -71,6 +71,33 @@ common:
     type: MCPServer
   - type: LlmsText
     url: https://docs.docker.com/llms.txt
+  - type: Packages
+    url: packages/docker-packages.yml
+  - type: WellKnown
+    url: well-known/docker-well-known.yml
+  - type: SecurityTxt
+    url: well-known/docker-security.txt
+  - name: Docker MCP (artifact)
+    type: MCPServer
+    url: mcp/docker-mcp.yml
+  - type: LLMsTxt
+    url: llms/docker-llms.txt
+  - type: Overlay
+    url: overlays/docker-openapi-overlay.yaml
+  - type: Conformance
+    url: conformance/docker-conformance.yml
+  - type: ErrorCatalog
+    url: errors/docker-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/docker-lifecycle.yml
+  - type: Conventions
+    url: conventions/docker-conventions.yml
+  - type: ChangeLog
+    url: changelog/docker-changelog.yml
+  - type: CLI
+    url: cli/docker-cli.yml
+  - type: DataModel
+    url: data-model/docker-data-model.yml
 integrations:
   - name: Become a Docker Verified Publisher
 maintainers:

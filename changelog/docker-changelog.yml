@@ -1,0 +1,46 @@
+generated: '2026-06-20'
+method: searched
+source: https://docs.docker.com/reference/api/engine/version-history/
+scheme: uri-path-version
+current: "1.55"
+notes: >-
+  The Docker Engine API version history is the source of truth; each Engine
+  release bumps the API MINOR version. Recent window captured below.
+entries:
+  - version: "1.55"
+    additions:
+      - "GET /images/{name}/attestations returns in-toto attestation statements"
+      - "POST /containers/{id}/update accepts per-device blkio settings (BlkioWeightDevice, BlkioDeviceReadBps, ...)"
+    breaking: []
+  - version: "1.54"
+    additions:
+      - "GET /images/json supports an identity query parameter for manifest summaries"
+    breaking:
+      - "POST /networks/{id}/connect now correctly applies the MacAddress endpoint setting"
+  - version: "1.53"
+    additions:
+      - "GET /info includes NRI (Node Resource Interface) field"
+      - "GET /events supports application/jsonl format"
+    breaking:
+      - "POST /grpc and POST /session deprecated"
+  - version: "1.52"
+    additions:
+      - "Multiple platform query args for GET /images/{name}/get and POST /images/load"
+      - "Status field added to GET /networks/{id}"
+    breaking:
+      - "KernelMemoryTCP field removed; deprecated fields removed from GET /events"
+  - version: "1.51"
+    additions:
+      - "Image Containers count now reflects the real container count instead of -1"
+    breaking:
+      - "NetworkSettings.Bridge and KernelMemoryTCP deprecated"
+  - version: "1.50"
+    additions:
+      - "GET /info introduces DiscoveredDevices; DELETE /images/{name} supports platforms query param"
+    breaking:
+      - "BridgeNfIptables and BridgeNfIp6tables removed from GET /info"
+  - version: "1.49"
+    additions:
+      - "GET /images/{name}/json accepts platform param; GET /info returns FirewallBackend"
+    breaking:
+      - "Deprecated registry configuration fields omitted"

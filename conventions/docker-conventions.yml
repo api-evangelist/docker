@@ -1,0 +1,57 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/docker-openapi.yml
+docs: https://docs.docker.com/reference/api/engine/
+authentication:
+  style: transport
+  notes: >-
+    The Engine API declares no securityDefinitions. Access is controlled at the
+    transport layer: a local Unix socket (/var/run/docker.sock), a named pipe on
+    Windows, or a TLS-secured TCP socket with mutual client-certificate auth.
+    Registry operations (image pull/push) carry a per-request X-Registry-Auth
+    header carrying base64 registry credentials.
+versioning:
+  style: uri-path
+  current: "1.55"
+  example: /v1.54/containers/json
+  unversioned_deprecated: true
+  cross_ref: lifecycle/docker-lifecycle.yml
+error_envelope:
+  shape: "{ message: string }"
+  content_type: application/json
+  schema: "#/definitions/ErrorResponse"
+  status_carried_by: http-status-code
+  cross_ref: errors/docker-problem-types.yml
+pagination:
+  style: none
+  notes: >-
+    List endpoints (GET /containers/json, /images/json, ...) return full arrays
+    and are narrowed with a JSON-encoded `filters` query parameter plus flags
+    like `all`, `limit`, `since`, `before` rather than cursor/offset paging.
+filtering:
+  style: json-filters
+  param: filters
+  example: '{"status":["running"],"label":["com.example=1"]}'
+streaming:
+  supported: true
+  media_types:
+    - application/vnd.docker.raw-stream
+    - application/vnd.docker.multiplexed-stream
+    - application/jsonl
+  notes: >-
+    Attach, logs, events, build, and pull/push endpoints stream chunked output;
+    exec/attach use hijacked raw or multiplexed stdout/stderr framing.
+idempotency:
+  supported: false
+metadata:
+  style: labels
+  notes: "Arbitrary key/value labels attach to containers, images, networks, volumes, and swarm objects."
+rate_limiting:
+  engine_api: none
+  notes: >-
+    The local Engine API is not rate limited. Rate limits apply to Docker Hub
+    image pulls (see rate-limits/docker-rate-limits.yml), not the Engine API.
+  cross_ref: rate-limits/docker-rate-limits.yml
+content_negotiation:
+  produces: [application/json, "text/plain"]
+  consumes: [application/json, "text/plain"]

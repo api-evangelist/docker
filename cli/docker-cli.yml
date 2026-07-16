@@ -1,0 +1,73 @@
+generated: '2026-06-20'
+method: searched
+source: https://docs.docker.com/reference/cli/docker/
+name: docker
+description: >-
+  The first-party Docker CLI. Most commands map directly onto Docker Engine API
+  endpoints (e.g. `docker ps` -> GET /containers/json). The binary is
+  catalogued in packages/docker-packages.yml.
+install:
+  - method: docker-desktop
+    docs: https://docs.docker.com/desktop/
+  - method: package
+    name: docker-ce-cli
+    docs: https://docs.docker.com/engine/install/
+command_groups:
+  - group: container
+    command: docker container
+    covers: [run, start, stop, restart, rm, ps, exec, logs, inspect, stats, cp, attach]
+  - group: image
+    command: docker image
+    covers: [build, pull, push, tag, rm, ls, history, inspect, save, load, prune]
+  - group: builder
+    command: docker builder
+    covers: [build, prune]
+  - group: buildx
+    command: docker buildx
+    covers: [build, bake, create, use, imagetools]
+  - group: network
+    command: docker network
+    covers: [create, connect, disconnect, ls, inspect, rm, prune]
+  - group: volume
+    command: docker volume
+    covers: [create, ls, inspect, rm, prune]
+  - group: compose
+    command: docker compose
+    covers: [up, down, build, ps, logs, exec]
+  - group: swarm
+    command: docker swarm
+    covers: [init, join, leave, update, "join-token"]
+  - group: node
+    command: docker node
+    covers: [ls, inspect, ps, promote, demote, rm, update]
+  - group: service
+    command: docker service
+    covers: [create, ls, ps, inspect, scale, update, rm, logs]
+  - group: stack
+    command: docker stack
+    covers: [deploy, ls, ps, services, rm]
+  - group: config
+    command: docker config
+    covers: [create, ls, inspect, rm]
+  - group: secret
+    command: docker secret
+    covers: [create, ls, inspect, rm]
+  - group: context
+    command: docker context
+    covers: [create, ls, use, inspect, rm]
+  - group: scout
+    command: docker scout
+    covers: [cves, quickview, compare, recommendations]
+  - group: mcp
+    command: docker mcp
+    covers: [gateway, catalog, server, tools]
+key_flows:
+  - name: authenticate to a registry
+    command: docker login
+  - name: run a container
+    command: docker run -d -p 8080:80 nginx
+  - name: build and push an image
+    command: "docker build -t org/app . && docker push org/app"
+  - name: run MCP servers via the gateway
+    command: docker mcp gateway run
+standalone_commands: [run, ps, build, pull, push, exec, inspect, login, logout, version, search, info]

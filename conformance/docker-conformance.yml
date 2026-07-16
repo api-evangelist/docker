@@ -1,0 +1,32 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/docker-openapi.yml
+standards:
+  - id: openapi
+    conforms: true
+    evidence: "Published Swagger 2.0 (OpenAPI) definition of the Docker Engine API"
+  - id: rest
+    conforms: true
+    evidence: "Resource-oriented HTTP API over containers/images/networks/volumes/swarm"
+  - id: oauth2
+    conforms: false
+    evidence: "Engine API declares no securityDefinitions; access is via local socket or mutual-TLS transport, not OAuth2"
+  - id: oidc
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: "Errors use a simple { message: string } envelope (ErrorResponse), not application/problem+json"
+  - id: json-api
+    conforms: false
+  - id: uri-path-versioning
+    conforms: true
+    evidence: "API version is pinned in the path prefix, e.g. /v1.54/info; basePath /v1.54"
+  - id: pagination
+    conforms: false
+    evidence: "List endpoints use filters query params rather than cursor/offset pagination"
+  - id: idempotency
+    conforms: false
+    evidence: "No Idempotency-Key header defined in the spec"
+  - id: content-negotiation
+    conforms: true
+    evidence: "produces/consumes application/json and text/plain; some endpoints stream application/vnd.docker.raw-stream and application/jsonl"

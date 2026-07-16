@@ -1,0 +1,49 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/docker-openapi.yml
+format: message-envelope
+envelope:
+  schema: "#/definitions/ErrorResponse"
+  shape: "{ message: string }"
+  content_type: application/json
+  example:
+    message: "Something went wrong."
+notes: >-
+  The Docker Engine API does not use RFC 9457 problem+json. Every error response
+  returns the ErrorResponse schema — a JSON object with a single required
+  "message" string — and the meaning is carried by the HTTP status code. Codes
+  below are derived from the response objects that reference ErrorResponse
+  across the spec (occurrence counts in parentheses).
+problems:
+  - status: 304
+    title: Not modified
+    meaning: "Requested operation would produce no change (e.g. already started/stopped)."
+    occurrences: 2
+  - status: 400
+    title: Bad parameter
+    meaning: "Malformed request or invalid parameters; also returned when an unsupported API version prefix is used."
+    occurrences: 25
+  - status: 401
+    title: Unauthorized
+    meaning: "Authentication failed (e.g. registry auth for image pull/push)."
+    occurrences: 2
+  - status: 403
+    title: Forbidden
+    meaning: "Operation not permitted for the target resource."
+    occurrences: 6
+  - status: 404
+    title: No such resource
+    meaning: "Container, image, network, volume, node, service, task, secret, config, or plugin does not exist."
+    occurrences: 65
+  - status: 409
+    title: Conflict
+    meaning: "Resource is in a conflicting state (e.g. container already started, name in use, volume in use)."
+    occurrences: 12
+  - status: 500
+    title: Server error
+    meaning: "Internal Docker daemon error."
+    occurrences: 106
+  - status: 503
+    title: Node not part of a swarm
+    meaning: "Swarm operation attempted while the daemon is not a swarm manager/participant."
+    occurrences: 31
