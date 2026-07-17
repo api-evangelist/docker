@@ -1,0 +1,140 @@
+arazzo: 1.0.1
+info:
+  title: Docker Create a Network and Attach a Container
+  summary: Create a user-defined bridge network, create a container, connect it with an alias, start it, and verify the attachment.
+  description: >-
+    The flow behind multi-container service discovery. A user-defined network is
+    what gives containers DNS resolution of each other by name or alias, which the
+    default bridge does not provide. This workflow creates the network, creates a
+    container, connects it with a network alias, starts it, and then inspects the
+    network to confirm the container is really attached. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: provision-network-and-attach
+  summary: Create a user-defined network and attach a new container to it under an alias.
+  description: >-
+    Creates a named bridge network, creates a container from the supplied image,
+    connects the container to the network with a DNS alias, starts it, and
+    inspects the network to verify the container appears in its container list.
+  inputs:
+    type: object
+    required:
+    - networkName
+    - image
+    - containerName
+    properties:
+      networkName:
+        type: string
+        description: Name of the user-defined network to create (e.g. "app_net").
+      driver:
+        type: string
+        description: Network driver to use — "bridge" for single host, "overlay" for swarm.
+      image:
+        type: string
+        description: Image to create the container from. It must already be present locally.
+      containerName:
+        type: string
+        description: Name to assign to the created container.
+      networkAlias:
+        type: string
+        description: DNS alias other containers on the network will use to reach this one.
+      internal:
+        type: boolean
+        description: Restrict external access to the network.
+  steps:
+  - stepId: createNetwork
+    description: >-
+      Create the user-defined network. Unlike the default bridge, a user-defined
+      network gives attached containers automatic DNS resolution of each other by
+      name and alias.
+    operationId: NetworkCreate
+    requestBody:
+      contentType: application/json
+      payload:
+        Name: $inputs.networkName
+        Driver: $inputs.driver
+        Internal: $inputs.internal
+        Labels:
+          com.apievangelist.workflow: provision-network-and-attach
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      networkId: $response.body#/Id
+      warning: $response.body#/Warning
+  - stepId: createContainer
+    description: >-
+      Create the container that will join the network. It is created but not yet
+      started, so the network attachment can be made before the workload comes up.
+    operationId: ContainerCreate
+    parameters:
+    - name: name
+      in: query
+      value: $inputs.containerName
+    requestBody:
+      contentType: application/json
+      payload:
+        Image: $inputs.image
+        AttachStdout: true
+        AttachStderr: true
+        Tty: false
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      containerId: $response.body#/Id
+  - stepId: connectToNetwork
+    description: >-
+      Attach the container to the network under a DNS alias, so peers can resolve
+      it by that alias rather than by container name alone.
+    operationId: NetworkConnect
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createNetwork.outputs.networkId
+    requestBody:
+      contentType: application/json
+      payload:
+        Container: $steps.createContainer.outputs.containerId
+        EndpointConfig:
+          Aliases:
+          - $inputs.networkAlias
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: startContainer
+    description: >-
+      Start the container now that it is attached, so it comes up already
+      resolvable on the network.
+    operationId: ContainerStart
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createContainer.outputs.containerId
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: verifyAttachment
+    description: >-
+      Inspect the network in verbose mode to confirm the container appears in its
+      attached container list with an allocated IP address.
+    operationId: NetworkInspect
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createNetwork.outputs.networkId
+    - name: verbose
+      in: query
+      value: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      containers: $response.body#/Containers
+      ipam: $response.body#/IPAM
+      scope: $response.body#/Scope
+  outputs:
+    networkId: $steps.createNetwork.outputs.networkId
+    containerId: $steps.createContainer.outputs.containerId
+    containers: $steps.verifyAttachment.outputs.containers

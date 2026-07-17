@@ -1,0 +1,148 @@
+arazzo: 1.0.1
+info:
+  title: Docker Create a Volume and Mount It Into a Container
+  summary: Create a named volume, create a container that binds it to a mount path, start the container, and confirm the volume is in use.
+  description: >-
+    The persistence flow. A named volume is what survives a container being
+    recreated, so this is the pattern behind any stateful workload — databases,
+    uploads, caches. The workflow creates the volume, creates a container whose
+    HostConfig mounts it at a target path, starts it, and inspects the volume to
+    confirm the daemon has it mounted rather than dangling. Every step spells out
+    its request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: provision-volume-and-mount
+  summary: Create a named volume and bring up a container with it mounted.
+  description: >-
+    Creates a named volume with the local driver, creates a container that mounts
+    that volume at the supplied target path, starts the container, and reads the
+    volume back to confirm it exists and is in use.
+  inputs:
+    type: object
+    required:
+    - volumeName
+    - image
+    - containerName
+    - mountPath
+    properties:
+      volumeName:
+        type: string
+        description: Name for the volume to create (e.g. "pgdata").
+      driver:
+        type: string
+        description: Volume driver to use. Defaults to "local".
+      image:
+        type: string
+        description: Image to create the container from. It must already be present locally.
+      containerName:
+        type: string
+        description: Name to assign to the created container.
+      mountPath:
+        type: string
+        description: Path inside the container where the volume is mounted (e.g. "/var/lib/postgresql/data").
+      env:
+        type: array
+        description: Environment variables for the container, in "KEY=value" form.
+        items:
+          type: string
+  steps:
+  - stepId: createVolume
+    description: >-
+      Create the named volume. Naming it explicitly is what separates it from an
+      anonymous volume that would be swept away with the container.
+    operationId: VolumeCreate
+    requestBody:
+      contentType: application/json
+      payload:
+        Name: $inputs.volumeName
+        Driver: $inputs.driver
+        Labels:
+          com.apievangelist.workflow: provision-volume-and-mount
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      volumeName: $response.body#/Name
+      mountpoint: $response.body#/Mountpoint
+      createdAt: $response.body#/CreatedAt
+  - stepId: createContainer
+    description: >-
+      Create a container that mounts the named volume at the target path via a
+      HostConfig volume mount, so data written there outlives the container.
+    operationId: ContainerCreate
+    parameters:
+    - name: name
+      in: query
+      value: $inputs.containerName
+    requestBody:
+      contentType: application/json
+      payload:
+        Image: $inputs.image
+        Env: $inputs.env
+        AttachStdout: true
+        AttachStderr: true
+        Tty: false
+        HostConfig:
+          Mounts:
+          - Type: volume
+            Source: $inputs.volumeName
+            Target: $inputs.mountPath
+            ReadOnly: false
+          RestartPolicy:
+            Name: unless-stopped
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      containerId: $response.body#/Id
+      warnings: $response.body#/Warnings
+  - stepId: startContainer
+    description: >-
+      Start the container so the volume is actually mounted and the workload can
+      begin writing to it.
+    operationId: ContainerStart
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createContainer.outputs.containerId
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: verifyMount
+    description: >-
+      Inspect the container to confirm the daemon reports the named volume mounted
+      at the expected target path.
+    operationId: ContainerInspect
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createContainer.outputs.containerId
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.State.Running == true
+      type: jsonpath
+    outputs:
+      mounts: $response.body#/Mounts
+  - stepId: inspectVolume
+    description: >-
+      Read the volume back to capture its host mountpoint and usage data, which is
+      what tells you whether it is in use or dangling.
+    operationId: VolumeInspect
+    parameters:
+    - name: name
+      in: path
+      value: $inputs.volumeName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      mountpoint: $response.body#/Mountpoint
+      scope: $response.body#/Scope
+      usageData: $response.body#/UsageData
+  outputs:
+    volumeName: $steps.createVolume.outputs.volumeName
+    containerId: $steps.createContainer.outputs.containerId
+    mountpoint: $steps.inspectVolume.outputs.mountpoint
+    mounts: $steps.verifyMount.outputs.mounts

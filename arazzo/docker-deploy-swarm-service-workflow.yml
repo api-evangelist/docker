@@ -1,0 +1,164 @@
+arazzo: 1.0.1
+info:
+  title: Docker Deploy a Replicated Swarm Service with a Secret
+  summary: Confirm the node is in a swarm, create a secret, deploy a replicated service that mounts it, and watch the tasks converge.
+  description: >-
+    The orchestration flow. The workflow first confirms the daemon is actually part
+    of a swarm — every service and secret endpoint returns 503 on a non-swarm node,
+    which is the single most common surprise here. It then creates a secret,
+    deploys a replicated service whose task template mounts that secret at
+    /run/secrets, and lists the service's tasks so the caller can watch them
+    converge to running. Every step spells out its request inline so the flow can
+    be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: deploy-swarm-service
+  summary: Create a secret and deploy a replicated swarm service that consumes it.
+  description: >-
+    Verifies swarm membership, creates a named secret from base64 data, creates a
+    replicated service that mounts the secret into its tasks, and lists the tasks
+    scheduled for that service.
+  inputs:
+    type: object
+    required:
+    - secretName
+    - secretData
+    - serviceName
+    - image
+    - replicas
+    properties:
+      secretName:
+        type: string
+        description: Name of the secret to create (e.g. "app-db-password").
+      secretData:
+        type: string
+        description: Base64-encoded secret payload.
+      serviceName:
+        type: string
+        description: Name of the service to deploy.
+      image:
+        type: string
+        description: Image the service tasks run, ideally pinned by digest.
+      replicas:
+        type: integer
+        description: Number of replicas to run.
+      networkId:
+        type: string
+        description: Optional overlay network id or name to attach the service to.
+      publishedPort:
+        type: integer
+        description: Port to publish on the swarm ingress routing mesh.
+      targetPort:
+        type: integer
+        description: Container port the published port maps to.
+  steps:
+  - stepId: confirmSwarm
+    description: >-
+      Confirm this daemon is part of a swarm before touching any service or secret
+      endpoint. On a non-swarm node every subsequent call in this flow returns 503.
+    operationId: SwarmInspect
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      swarmId: $response.body#/ID
+      createdAt: $response.body#/CreatedAt
+      swarmSpec: $response.body#/Spec
+  - stepId: createSecret
+    description: >-
+      Create the secret in the swarm's raft store. Secrets are only ever delivered
+      to tasks that explicitly reference them, and only in memory.
+    operationId: SecretCreate
+    requestBody:
+      contentType: application/json
+      payload:
+        Name: $inputs.secretName
+        Data: $inputs.secretData
+        Labels:
+          com.apievangelist.workflow: deploy-swarm-service
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      secretId: $response.body#/Id
+  - stepId: createService
+    description: >-
+      Deploy the replicated service. The task template mounts the secret created
+      above at /run/secrets/<name>, sets a rolling update policy, and restarts
+      tasks on failure.
+    operationId: ServiceCreate
+    requestBody:
+      contentType: application/json
+      payload:
+        Name: $inputs.serviceName
+        TaskTemplate:
+          ContainerSpec:
+            Image: $inputs.image
+            Secrets:
+            - File:
+                Name: $inputs.secretName
+                UID: '0'
+                GID: '0'
+                Mode: 292
+              SecretID: $steps.createSecret.outputs.secretId
+              SecretName: $inputs.secretName
+          RestartPolicy:
+            Condition: on-failure
+            MaxAttempts: 3
+        Mode:
+          Replicated:
+            Replicas: $inputs.replicas
+        UpdateConfig:
+          Parallelism: 1
+          FailureAction: pause
+          Order: start-first
+        Networks:
+        - Target: $inputs.networkId
+        EndpointSpec:
+          Mode: vip
+          Ports:
+          - Protocol: tcp
+            PublishedPort: $inputs.publishedPort
+            TargetPort: $inputs.targetPort
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      serviceId: $response.body#/ID
+      warnings: $response.body#/Warnings
+  - stepId: inspectService
+    description: >-
+      Read the service back to capture its version index, which any later update
+      must supply to avoid a conflicting write.
+    operationId: ServiceInspect
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createService.outputs.serviceId
+    - name: insertDefaults
+      in: query
+      value: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      versionIndex: $response.body#/Version/Index
+      spec: $response.body#/Spec
+  - stepId: listTasks
+    description: >-
+      List the tasks the scheduler has placed for this service, filtered to those
+      desired to be running, so the caller can watch the service converge.
+    operationId: TaskList
+    parameters:
+    - name: filters
+      in: query
+      value: '{"service": ["$inputs.serviceName"], "desired-state": ["running"]}'
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tasks: $response.body
+  outputs:
+    serviceId: $steps.createService.outputs.serviceId
+    secretId: $steps.createSecret.outputs.secretId
+    versionIndex: $steps.inspectService.outputs.versionIndex
+    tasks: $steps.listTasks.outputs.tasks

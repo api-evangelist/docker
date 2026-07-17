@@ -1,0 +1,170 @@
+arazzo: 1.0.1
+info:
+  title: Docker Snapshot a Running Container as an Image
+  summary: Pause a running container, commit its filesystem to a new image, unpause it, and tag the snapshot for a registry.
+  description: >-
+    The forensic and debugging flow — capturing the exact state of a container that
+    is misbehaving so it can be reproduced elsewhere, without killing the evidence.
+    The container is paused so the filesystem is quiesced during the commit, then
+    unpaused immediately afterwards. The unpause is not optional: a flow that
+    pauses and fails to resume leaves a production container frozen. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: commit-container-to-image
+  summary: Pause a container, commit it to an image, resume it, and tag the result.
+  description: >-
+    Confirms the container is running, pauses it so its filesystem is quiesced,
+    commits it to a new repository and tag, unpauses the container, and applies a
+    registry-qualified tag to the resulting snapshot image.
+  inputs:
+    type: object
+    required:
+    - containerId
+    - repo
+    - tag
+    properties:
+      containerId:
+        type: string
+        description: ID or name of the running container to snapshot.
+      repo:
+        type: string
+        description: Repository name for the created image (e.g. "myteam/incident-snapshot").
+      tag:
+        type: string
+        description: Tag name for the created image (e.g. "2026-07-17").
+      comment:
+        type: string
+        description: Commit message recorded on the image.
+      author:
+        type: string
+        description: Author of the image, e.g. "Jane Doe <jane@example.com>".
+      registryRepo:
+        type: string
+        description: Registry-qualified repository to tag the snapshot into for pushing.
+      registryTag:
+        type: string
+        description: Tag to apply in the registry-qualified repository.
+  steps:
+  - stepId: confirmRunning
+    description: >-
+      Confirm the container is running and capture the image and config it was
+      started from, so the snapshot can be traced back to its origin.
+    operationId: ContainerInspect
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.containerId
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.State.Running == true
+      type: jsonpath
+    outputs:
+      resolvedId: $response.body#/Id
+      sourceImage: $response.body#/Image
+      config: $response.body#/Config
+  - stepId: pauseContainer
+    description: >-
+      Pause the container so its filesystem is quiesced while the commit reads it.
+      Committing a container under active write load risks capturing a torn state.
+    operationId: ContainerPause
+    parameters:
+    - name: id
+      in: path
+      value: $steps.confirmRunning.outputs.resolvedId
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: commitImage
+    description: >-
+      Commit the paused container's filesystem into a new image under the target
+      repository and tag. The pause query parameter is set false here because the
+      flow has already paused the container explicitly.
+    operationId: ImageCommit
+    parameters:
+    - name: container
+      in: query
+      value: $steps.confirmRunning.outputs.resolvedId
+    - name: repo
+      in: query
+      value: $inputs.repo
+    - name: tag
+      in: query
+      value: $inputs.tag
+    - name: comment
+      in: query
+      value: $inputs.comment
+    - name: author
+      in: query
+      value: $inputs.author
+    - name: pause
+      in: query
+      value: false
+    requestBody:
+      contentType: application/json
+      payload:
+        Image: $steps.confirmRunning.outputs.sourceImage
+        Labels:
+          com.apievangelist.workflow: commit-container-to-image
+          com.apievangelist.source-container: $steps.confirmRunning.outputs.resolvedId
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      committedImageId: $response.body#/Id
+  - stepId: unpauseContainer
+    description: >-
+      Resume the container immediately after the commit. This step is mandatory —
+      a flow that pauses a production container and does not resume it has taken an
+      outage to take a snapshot.
+    operationId: ContainerUnpause
+    parameters:
+    - name: id
+      in: path
+      value: $steps.confirmRunning.outputs.resolvedId
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: verifyResumed
+    description: >-
+      Confirm the container is running and no longer paused before the flow ends,
+      so a failed resume surfaces here rather than in an incident channel.
+    operationId: ContainerInspect
+    parameters:
+    - name: id
+      in: path
+      value: $steps.confirmRunning.outputs.resolvedId
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.State.Paused == false
+      type: jsonpath
+    - context: $response.body
+      condition: $.State.Running == true
+      type: jsonpath
+    outputs:
+      state: $response.body#/State
+  - stepId: tagSnapshot
+    description: >-
+      Apply a registry-qualified tag to the snapshot image so it can be pushed
+      somewhere durable rather than living only on the incident host.
+    operationId: ImageTag
+    parameters:
+    - name: name
+      in: path
+      value: $steps.commitImage.outputs.committedImageId
+    - name: repo
+      in: query
+      value: $inputs.registryRepo
+    - name: tag
+      in: query
+      value: $inputs.registryTag
+    successCriteria:
+    - condition: $statusCode == 201
+  outputs:
+    committedImageId: $steps.commitImage.outputs.committedImageId
+    sourceImage: $steps.confirmRunning.outputs.sourceImage
+    state: $steps.verifyResumed.outputs.state

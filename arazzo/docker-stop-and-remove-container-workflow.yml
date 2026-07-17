@@ -1,0 +1,110 @@
+arazzo: 1.0.1
+info:
+  title: Docker Stop and Remove a Container
+  summary: Find a container by name, stop it gracefully, wait for it to exit, and remove it with its anonymous volumes.
+  description: >-
+    The teardown half of the container lifecycle. The workflow locates the
+    container by name filter, issues a graceful stop with a timeout, blocks until
+    the daemon reports the container has actually exited, and then removes it
+    along with any anonymous volumes it created. Every step spells out its request
+    inline so the flow can be read and executed without opening the underlying
+    OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: stop-and-remove-container
+  summary: Gracefully stop a container found by name and remove it once it has exited.
+  description: >-
+    Resolves the container id from a name filter, stops the container with a
+    grace period, waits on the not-running condition so removal cannot race the
+    shutdown, and deletes the container.
+  inputs:
+    type: object
+    required:
+    - containerName
+    properties:
+      containerName:
+        type: string
+        description: Name of the container to stop and remove.
+      stopTimeout:
+        type: integer
+        description: Seconds to wait for a graceful stop before the daemon kills the container.
+      removeVolumes:
+        type: boolean
+        description: Remove anonymous volumes associated with the container.
+  steps:
+  - stepId: findContainer
+    description: >-
+      List containers including stopped ones, filtered to the supplied name, so
+      the flow resolves a concrete container id before acting on it.
+    operationId: ContainerList
+    parameters:
+    - name: all
+      in: query
+      value: true
+    - name: filters
+      in: query
+      value: '{"name": ["$inputs.containerName"]}'
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.length > 0
+      type: jsonpath
+    outputs:
+      containerId: $response.body#/0/Id
+      currentState: $response.body#/0/State
+  - stepId: stopContainer
+    description: >-
+      Send a graceful stop to the container. The daemon returns 204 when it
+      stopped the container and 304 when it was already stopped, so both are
+      acceptable outcomes for this step.
+    operationId: ContainerStop
+    parameters:
+    - name: id
+      in: path
+      value: $steps.findContainer.outputs.containerId
+    - name: t
+      in: query
+      value: $inputs.stopTimeout
+    successCriteria:
+    - condition: $statusCode == 204 || $statusCode == 304
+  - stepId: waitForExit
+    description: >-
+      Block until the container reaches the not-running condition and capture the
+      exit code, so removal cannot race a still-shutting-down container.
+    operationId: ContainerWait
+    parameters:
+    - name: id
+      in: path
+      value: $steps.findContainer.outputs.containerId
+    - name: condition
+      in: query
+      value: not-running
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      exitCode: $response.body#/StatusCode
+      error: $response.body#/Error
+  - stepId: removeContainer
+    description: >-
+      Remove the stopped container, optionally taking its anonymous volumes with
+      it so the host is not left with orphaned data.
+    operationId: ContainerDelete
+    parameters:
+    - name: id
+      in: path
+      value: $steps.findContainer.outputs.containerId
+    - name: v
+      in: query
+      value: $inputs.removeVolumes
+    - name: force
+      in: query
+      value: false
+    successCriteria:
+    - condition: $statusCode == 204
+  outputs:
+    containerId: $steps.findContainer.outputs.containerId
+    exitCode: $steps.waitForExit.outputs.exitCode

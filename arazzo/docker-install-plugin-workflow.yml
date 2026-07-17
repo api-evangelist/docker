@@ -1,0 +1,125 @@
+arazzo: 1.0.1
+info:
+  title: Docker Review Privileges and Install a Plugin
+  summary: Read the privileges a plugin demands, install it with those privileges acknowledged, enable it, and confirm it is running.
+  description: >-
+    Plugin installation is a privilege-granting act, and the Engine API models it
+    that way. A plugin can ask for host network access, host mount points, and raw
+    devices — so the first call in this flow exists purely to surface what the
+    plugin will be granted, and the install call must echo those privileges back as
+    an explicit acknowledgement. Installing does not enable: the plugin stays
+    inert until the enable call, which is what makes this a real four-step flow.
+    Every step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: install-plugin
+  summary: Inspect a plugin's requested privileges, install it, enable it, and verify.
+  description: >-
+    Fetches the privilege set a remote plugin requires, pulls and installs the
+    plugin while acknowledging those privileges, enables it, and inspects it to
+    confirm the daemon reports it enabled.
+  inputs:
+    type: object
+    required:
+    - remote
+    - localName
+    properties:
+      remote:
+        type: string
+        description: Remote reference for the plugin to install (e.g. "vieux/sshfs:latest").
+      localName:
+        type: string
+        description: Local name to give the installed plugin.
+      privileges:
+        type: array
+        description: >-
+          The privilege set to acknowledge on install. This should be the value read
+          back from the privileges step, reviewed by a human or a policy check before
+          being echoed here.
+        items:
+          type: object
+      enableTimeout:
+        type: integer
+        description: HTTP client timeout in seconds for the enable call.
+      registryAuth:
+        type: string
+        description: Base64url-encoded auth configuration for pulling from a private registry.
+  steps:
+  - stepId: readPrivileges
+    description: >-
+      Read what the plugin is asking for before installing anything. The response
+      enumerates each privilege — network mode, mount points, devices, capabilities
+      — and is the natural place to gate on policy or human review.
+    operationId: GetPluginPrivileges
+    parameters:
+    - name: remote
+      in: query
+      value: $inputs.remote
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      requestedPrivileges: $response.body
+  - stepId: installPlugin
+    description: >-
+      Pull and install the plugin, echoing the reviewed privilege set back in the
+      body as an explicit acknowledgement of what is being granted. The plugin is
+      installed but inert after this call.
+    operationId: PluginPull
+    parameters:
+    - name: remote
+      in: query
+      value: $inputs.remote
+    - name: name
+      in: query
+      value: $inputs.localName
+    - name: X-Registry-Auth
+      in: header
+      value: $inputs.registryAuth
+    requestBody:
+      contentType: application/json
+      payload: $inputs.privileges
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: enablePlugin
+    description: >-
+      Enable the installed plugin. Installation alone does not activate a plugin —
+      until this call it is present but does nothing.
+    operationId: PluginEnable
+    parameters:
+    - name: name
+      in: path
+      value: $inputs.localName
+    - name: timeout
+      in: query
+      value: $inputs.enableTimeout
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: verifyPlugin
+    description: >-
+      Inspect the plugin to confirm the daemon reports it enabled, and capture the
+      settings it was actually granted so they can be reconciled against what was
+      requested in the first step.
+    operationId: PluginInspect
+    parameters:
+    - name: name
+      in: path
+      value: $inputs.localName
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.Enabled == true
+      type: jsonpath
+    outputs:
+      pluginId: $response.body#/Id
+      enabled: $response.body#/Enabled
+      settings: $response.body#/Settings
+      config: $response.body#/Config
+  outputs:
+    pluginId: $steps.verifyPlugin.outputs.pluginId
+    requestedPrivileges: $steps.readPrivileges.outputs.requestedPrivileges
+    grantedSettings: $steps.verifyPlugin.outputs.settings

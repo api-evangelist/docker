@@ -1,0 +1,178 @@
+arazzo: 1.0.1
+info:
+  title: Docker Roll a Swarm Service Onto a New Image
+  summary: Read a service's current version, update it to a new image, watch the tasks reconverge, and tail the service logs.
+  description: >-
+    The deploy step of a swarm pipeline, and a textbook optimistic-concurrency
+    flow. ServiceUpdate requires the version index the service carried *before* the
+    update, so the read-back is mandatory rather than a nicety — skipping it is how
+    concurrent deploys clobber each other. The workflow inspects the service, sends
+    the updated spec with that version, lists the tasks to watch the rollout, and
+    tails the service logs. Every step spells out its request inline so the flow can
+    be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: rolling-update-service
+  summary: Update a running swarm service to a new image using its current version index.
+  description: >-
+    Inspects the service to obtain its current spec and version index, submits an
+    updated spec pinned to that version so a concurrent write is rejected rather
+    than lost, then lists tasks and tails logs to confirm the rollout.
+  inputs:
+    type: object
+    required:
+    - serviceName
+    - newImage
+    - replicas
+    properties:
+      serviceName:
+        type: string
+        description: ID or name of the service to update.
+      newImage:
+        type: string
+        description: New image to roll out, ideally pinned by digest.
+      replicas:
+        type: integer
+        description: Desired replica count after the update.
+      parallelism:
+        type: integer
+        description: How many tasks to update simultaneously.
+      updateDelay:
+        type: integer
+        description: Nanoseconds to wait between updating task batches.
+      registryAuth:
+        type: string
+        description: Base64url-encoded auth configuration for pulling from a private registry.
+      tail:
+        type: string
+        description: Number of log lines to return from the end of the service logs, or "all".
+  steps:
+  - stepId: inspectService
+    description: >-
+      Read the service's current spec and version index. The version index is
+      required by the update call — it is what makes the write conditional on
+      nobody else having changed the service in the meantime.
+    operationId: ServiceInspect
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.serviceName
+    - name: insertDefaults
+      in: query
+      value: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      serviceId: $response.body#/ID
+      versionIndex: $response.body#/Version/Index
+      currentSpec: $response.body#/Spec
+      currentImage: $response.body#/Spec/TaskTemplate/ContainerSpec/Image
+  - stepId: updateService
+    description: >-
+      Submit the updated spec pinned to the version index read above, rolling tasks
+      onto the new image start-first so capacity is never dipped below the target
+      during the update.
+    operationId: ServiceUpdate
+    parameters:
+    - name: id
+      in: path
+      value: $steps.inspectService.outputs.serviceId
+    - name: version
+      in: query
+      value: $steps.inspectService.outputs.versionIndex
+    - name: registryAuthFrom
+      in: query
+      value: spec
+    - name: X-Registry-Auth
+      in: header
+      value: $inputs.registryAuth
+    requestBody:
+      contentType: application/json
+      payload:
+        Name: $inputs.serviceName
+        TaskTemplate:
+          ContainerSpec:
+            Image: $inputs.newImage
+          RestartPolicy:
+            Condition: on-failure
+            MaxAttempts: 3
+        Mode:
+          Replicated:
+            Replicas: $inputs.replicas
+        UpdateConfig:
+          Parallelism: $inputs.parallelism
+          Delay: $inputs.updateDelay
+          FailureAction: rollback
+          Order: start-first
+          Monitor: 15000000000
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      warnings: $response.body#/Warnings
+  - stepId: watchRollout
+    description: >-
+      List the service's tasks desired to be running so the caller can watch the
+      new tasks come up and the old ones drain during the rolling update.
+    operationId: TaskList
+    parameters:
+    - name: filters
+      in: query
+      value: '{"service": ["$inputs.serviceName"], "desired-state": ["running"]}'
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tasks: $response.body
+  - stepId: confirmUpdateState
+    description: >-
+      Read the service back to check the update status the swarm reports. A state
+      of "completed" means the rollout landed; "paused" or "rolling_back" means it
+      tripped the failure action.
+    operationId: ServiceInspect
+    parameters:
+    - name: id
+      in: path
+      value: $steps.inspectService.outputs.serviceId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      updateStatus: $response.body#/UpdateStatus
+      newVersionIndex: $response.body#/Version/Index
+      runningImage: $response.body#/Spec/TaskTemplate/ContainerSpec/Image
+  - stepId: tailServiceLogs
+    description: >-
+      Tail the aggregated logs across the service's tasks with timestamps, so a
+      failed rollout can be diagnosed without hunting for individual containers.
+    operationId: ServiceLogs
+    parameters:
+    - name: id
+      in: path
+      value: $steps.inspectService.outputs.serviceId
+    - name: stdout
+      in: query
+      value: true
+    - name: stderr
+      in: query
+      value: true
+    - name: timestamps
+      in: query
+      value: true
+    - name: details
+      in: query
+      value: true
+    - name: follow
+      in: query
+      value: false
+    - name: tail
+      in: query
+      value: $inputs.tail
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    serviceId: $steps.inspectService.outputs.serviceId
+    previousImage: $steps.inspectService.outputs.currentImage
+    runningImage: $steps.confirmUpdateState.outputs.runningImage
+    updateStatus: $steps.confirmUpdateState.outputs.updateStatus

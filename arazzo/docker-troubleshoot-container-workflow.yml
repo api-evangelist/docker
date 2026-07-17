@@ -1,0 +1,149 @@
+arazzo: 1.0.1
+info:
+  title: Docker Troubleshoot a Failing Container
+  summary: Gather the full diagnostic picture for a container — state, logs, processes, resource stats, and filesystem drift.
+  description: >-
+    The read-only flow an operator or an agent runs when a container is
+    misbehaving. It collects the container's low-level state and exit code, the
+    tail of its stdout and stderr, the process table inside it, a one-shot
+    resource snapshot, and the list of files that have drifted from the image
+    layer. Nothing here mutates the container, so the workflow is safe to run
+    against production. Every step spells out its request inline so the flow can
+    be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: troubleshoot-container
+  summary: Collect state, logs, processes, stats, and filesystem changes for one container.
+  description: >-
+    Reads the container's inspect payload for state and exit code, tails its
+    logs, lists the processes running inside it, takes a single non-streaming
+    resource sample, and reports which files have changed relative to the image.
+  inputs:
+    type: object
+    required:
+    - containerId
+    properties:
+      containerId:
+        type: string
+        description: ID or name of the container to diagnose.
+      tail:
+        type: string
+        description: Number of log lines to return from the end of the logs, or "all".
+      since:
+        type: integer
+        description: Only return logs since this UNIX timestamp.
+  steps:
+  - stepId: inspectState
+    description: >-
+      Read the container's low-level state, including whether it is running, its
+      exit code, OOM-killed flag, restart count, and health status. This is the
+      anchor for the whole diagnosis.
+    operationId: ContainerInspect
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.containerId
+    - name: size
+      in: query
+      value: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      resolvedId: $response.body#/Id
+      state: $response.body#/State
+      restartCount: $response.body#/RestartCount
+      hostConfig: $response.body#/HostConfig
+      sizeRw: $response.body#/SizeRw
+  - stepId: readLogs
+    description: >-
+      Tail both stdout and stderr with timestamps so the failure can be placed on
+      a timeline against the state transitions above.
+    operationId: ContainerLogs
+    parameters:
+    - name: id
+      in: path
+      value: $steps.inspectState.outputs.resolvedId
+    - name: stdout
+      in: query
+      value: true
+    - name: stderr
+      in: query
+      value: true
+    - name: timestamps
+      in: query
+      value: true
+    - name: follow
+      in: query
+      value: false
+    - name: tail
+      in: query
+      value: $inputs.tail
+    - name: since
+      in: query
+      value: $inputs.since
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: listProcesses
+    description: >-
+      List the processes running inside the container. An empty or unexpected
+      process table often explains a container that is "running" but idle. This
+      endpoint is not supported on Windows containers.
+    operationId: ContainerTop
+    parameters:
+    - name: id
+      in: path
+      value: $steps.inspectState.outputs.resolvedId
+    - name: ps_args
+      in: query
+      value: aux
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      titles: $response.body#/Titles
+      processes: $response.body#/Processes
+  - stepId: sampleStats
+    description: >-
+      Take a single resource sample rather than opening the default stats stream,
+      so the workflow terminates. Memory and CPU here corroborate an OOM kill seen
+      in the inspect state.
+    operationId: ContainerStats
+    parameters:
+    - name: id
+      in: path
+      value: $steps.inspectState.outputs.resolvedId
+    - name: stream
+      in: query
+      value: false
+    - name: one-shot
+      in: query
+      value: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      memoryStats: $response.body#/memory_stats
+      cpuStats: $response.body#/cpu_stats
+      pidsStats: $response.body#/pids_stats
+  - stepId: listFilesystemChanges
+    description: >-
+      Report which files have been added, modified, or deleted relative to the
+      image layer. Unexpected writes here point at state that will be lost on
+      recreate, or at a container being used as a pet.
+    operationId: ContainerChanges
+    parameters:
+    - name: id
+      in: path
+      value: $steps.inspectState.outputs.resolvedId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      changes: $response.body
+  outputs:
+    containerId: $steps.inspectState.outputs.resolvedId
+    state: $steps.inspectState.outputs.state
+    processes: $steps.listProcesses.outputs.processes
+    memoryStats: $steps.sampleStats.outputs.memoryStats
+    changes: $steps.listFilesystemChanges.outputs.changes

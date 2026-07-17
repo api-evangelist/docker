@@ -1,0 +1,134 @@
+arazzo: 1.0.1
+info:
+  title: Docker Run a Command Inside a Running Container
+  summary: Confirm a container is running, create an exec instance, start it, and read back the command exit code.
+  description: >-
+    The API equivalent of `docker exec`. Exec is a three-call dance that trips up
+    most first-time integrators: creating an exec instance does not run anything,
+    starting it streams the output but returns no status, and only inspecting the
+    exec instance afterwards reveals the exit code. This workflow spells out all
+    three calls plus the running-state precondition, because exec against a paused
+    or stopped container fails with a 409. Every step spells out its request inline
+    so the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: exec-command-in-container
+  summary: Execute a command in a running container and capture its exit code.
+  description: >-
+    Verifies the target container is running, creates an exec instance with the
+    supplied command, starts it in attached mode, and inspects the exec instance
+    to recover the exit code that the start call does not return.
+  inputs:
+    type: object
+    required:
+    - containerId
+    - cmd
+    properties:
+      containerId:
+        type: string
+        description: ID or name of the running container to exec into.
+      cmd:
+        type: array
+        description: Command to execute, as an argv array (e.g. ["sh", "-c", "ls -la /"]).
+        items:
+          type: string
+      user:
+        type: string
+        description: User (and optionally group) to run the command as, e.g. "root" or "1000:1000".
+      workingDir:
+        type: string
+        description: Working directory for the command inside the container.
+      env:
+        type: array
+        description: Environment variables for the exec, in "KEY=value" form.
+        items:
+          type: string
+  steps:
+  - stepId: confirmRunning
+    description: >-
+      Confirm the container is running and not paused before creating the exec
+      instance. Exec against a stopped or paused container is rejected with a 409.
+    operationId: ContainerInspect
+    parameters:
+    - name: id
+      in: path
+      value: $inputs.containerId
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.State.Running == true
+      type: jsonpath
+    - context: $response.body
+      condition: $.State.Paused == false
+      type: jsonpath
+    outputs:
+      resolvedId: $response.body#/Id
+  - stepId: createExec
+    description: >-
+      Create the exec instance with the supplied command, attaching stdout and
+      stderr so the output is streamed back on start. This call only registers the
+      command; nothing runs yet.
+    operationId: ContainerExec
+    parameters:
+    - name: id
+      in: path
+      value: $steps.confirmRunning.outputs.resolvedId
+    requestBody:
+      contentType: application/json
+      payload:
+        Cmd: $inputs.cmd
+        User: $inputs.user
+        WorkingDir: $inputs.workingDir
+        Env: $inputs.env
+        AttachStdout: true
+        AttachStderr: true
+        AttachStdin: false
+        Tty: false
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      execId: $response.body#/Id
+  - stepId: startExec
+    description: >-
+      Run the exec instance in attached (non-detached) mode. The response streams
+      the command output but carries no exit status, which is why the flow inspects
+      the exec instance afterwards.
+    operationId: ExecStart
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createExec.outputs.execId
+    requestBody:
+      contentType: application/json
+      payload:
+        Detach: false
+        Tty: false
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: inspectExec
+    description: >-
+      Inspect the exec instance to recover the exit code and confirm the command
+      has finished running. This is the only way to learn whether the command
+      succeeded.
+    operationId: ExecInspect
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createExec.outputs.execId
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.Running == false
+      type: jsonpath
+    outputs:
+      exitCode: $response.body#/ExitCode
+      running: $response.body#/Running
+      processConfig: $response.body#/ProcessConfig
+  outputs:
+    execId: $steps.createExec.outputs.execId
+    exitCode: $steps.inspectExec.outputs.exitCode

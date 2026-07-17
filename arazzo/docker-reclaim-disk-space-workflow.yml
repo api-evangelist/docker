@@ -1,0 +1,173 @@
+arazzo: 1.0.1
+info:
+  title: Docker Reclaim Disk Space on a Host
+  summary: Measure disk usage, prune stopped containers, dangling images, unused volumes and networks, and the build cache, then measure again.
+  description: >-
+    The housekeeping flow that keeps CI hosts from filling their disks. It measures
+    usage first, prunes in dependency order — containers before images, because an
+    image referenced by a stopped container cannot be removed — and measures again
+    so the caller can report the bytes actually reclaimed. Every prune is filtered
+    by age and label rather than run bare, since an unfiltered volume prune is one
+    of the fastest ways to destroy data on a shared host. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: reclaim-disk-space
+  summary: Measure, prune in dependency order, and re-measure host disk usage.
+  description: >-
+    Takes a before reading of image, container, volume, and build-cache usage,
+    prunes stopped containers, then dangling images, then unused volumes and
+    networks, then the build cache, and takes an after reading to quantify what
+    was reclaimed.
+  inputs:
+    type: object
+    properties:
+      until:
+        type: string
+        description: 'Age filter applied to container, image, and network prunes, e.g. "24h" or "168h".'
+      pruneVolumes:
+        type: boolean
+        description: Whether to prune unused volumes. Off by default because volume prunes destroy data.
+      volumeFilters:
+        type: string
+        description: 'JSON-encoded volume prune filters, e.g. {"label":["ci-scratch"]}. Scope this narrowly.'
+      buildCacheReservedSpace:
+        type: integer
+        description: Bytes of build cache to keep when pruning the builder cache.
+  steps:
+  - stepId: measureBefore
+    description: >-
+      Take a before reading across all four object types so the reclaim can be
+      quantified rather than guessed at.
+    operationId: SystemDataUsage
+    parameters:
+    - name: type
+      in: query
+      value:
+      - container
+      - image
+      - volume
+      - build-cache
+    - name: verbose
+      in: query
+      value: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      imageUsageBefore: $response.body#/ImageUsage
+      containerUsageBefore: $response.body#/ContainerUsage
+      volumeUsageBefore: $response.body#/VolumeUsage
+      buildCacheUsageBefore: $response.body#/BuildCacheUsage
+  - stepId: pruneContainers
+    description: >-
+      Prune stopped containers older than the age filter first. This must precede
+      the image prune, because an image still referenced by a stopped container
+      cannot be removed.
+    operationId: ContainerPrune
+    parameters:
+    - name: filters
+      in: query
+      value: '{"until": ["$inputs.until"]}'
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      containersDeleted: $response.body#/ContainersDeleted
+      containerSpaceReclaimed: $response.body#/SpaceReclaimed
+  - stepId: pruneImages
+    description: >-
+      Prune only dangling — unused and untagged — images. Setting dangling to false
+      would remove every unused image, including tagged ones a pipeline expects to
+      still be cached.
+    operationId: ImagePrune
+    parameters:
+    - name: filters
+      in: query
+      value: '{"dangling": ["true"], "until": ["$inputs.until"]}'
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      imagesDeleted: $response.body#/ImagesDeleted
+      imageSpaceReclaimed: $response.body#/SpaceReclaimed
+  - stepId: pruneVolumes
+    description: >-
+      Prune unused volumes, scoped by the supplied label filter. This is the
+      destructive step in the flow — a volume prune without a filter will take any
+      unused named volume with it, data and all.
+    operationId: VolumePrune
+    parameters:
+    - name: filters
+      in: query
+      value: $inputs.volumeFilters
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      volumesDeleted: $response.body#/VolumesDeleted
+      volumeSpaceReclaimed: $response.body#/SpaceReclaimed
+  - stepId: pruneNetworks
+    description: >-
+      Prune user-defined networks with no attached containers, older than the age
+      filter. Pre-defined networks are never touched by this call.
+    operationId: NetworkPrune
+    parameters:
+    - name: filters
+      in: query
+      value: '{"until": ["$inputs.until"]}'
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      networksDeleted: $response.body#/NetworksDeleted
+  - stepId: pruneBuildCache
+    description: >-
+      Trim the BuildKit cache down to a reserved size rather than clearing it
+      outright, so subsequent builds keep most of their cache hits.
+    operationId: BuildPrune
+    parameters:
+    - name: reserved-space
+      in: query
+      value: $inputs.buildCacheReservedSpace
+    - name: all
+      in: query
+      value: false
+    - name: filters
+      in: query
+      value: '{"until": ["$inputs.until"]}'
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      cachesDeleted: $response.body#/CachesDeleted
+      buildCacheSpaceReclaimed: $response.body#/SpaceReclaimed
+  - stepId: measureAfter
+    description: >-
+      Take the after reading across the same four object types so the caller can
+      diff it against the before reading and report what was actually reclaimed.
+    operationId: SystemDataUsage
+    parameters:
+    - name: type
+      in: query
+      value:
+      - container
+      - image
+      - volume
+      - build-cache
+    - name: verbose
+      in: query
+      value: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      imageUsageAfter: $response.body#/ImageUsage
+      containerUsageAfter: $response.body#/ContainerUsage
+      volumeUsageAfter: $response.body#/VolumeUsage
+      buildCacheUsageAfter: $response.body#/BuildCacheUsage
+  outputs:
+    containerSpaceReclaimed: $steps.pruneContainers.outputs.containerSpaceReclaimed
+    imageSpaceReclaimed: $steps.pruneImages.outputs.imageSpaceReclaimed
+    volumeSpaceReclaimed: $steps.pruneVolumes.outputs.volumeSpaceReclaimed
+    buildCacheSpaceReclaimed: $steps.pruneBuildCache.outputs.buildCacheSpaceReclaimed
+    imageUsageBefore: $steps.measureBefore.outputs.imageUsageBefore
+    imageUsageAfter: $steps.measureAfter.outputs.imageUsageAfter

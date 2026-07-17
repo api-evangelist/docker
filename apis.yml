@@ -98,6 +98,45 @@ common:
     url: cli/docker-cli.yml
   - type: DataModel
     url: data-model/docker-data-model.yml
+  - type: Arazzo
+    url: arazzo/docker-run-container-workflow.yml
+    name: Docker Pull an Image and Run a Container
+  - type: Arazzo
+    url: arazzo/docker-stop-and-remove-container-workflow.yml
+    name: Docker Stop and Remove a Container
+  - type: Arazzo
+    url: arazzo/docker-build-and-push-image-workflow.yml
+    name: Docker Build, Tag, and Push an Image
+  - type: Arazzo
+    url: arazzo/docker-exec-command-in-container-workflow.yml
+    name: Docker Run a Command Inside a Running Container
+  - type: Arazzo
+    url: arazzo/docker-troubleshoot-container-workflow.yml
+    name: Docker Troubleshoot a Failing Container
+  - type: Arazzo
+    url: arazzo/docker-search-and-pull-image-workflow.yml
+    name: Docker Search, Pull, and Vet an Image
+  - type: Arazzo
+    url: arazzo/docker-provision-network-workflow.yml
+    name: Docker Create a Network and Attach a Container
+  - type: Arazzo
+    url: arazzo/docker-provision-volume-workflow.yml
+    name: Docker Create a Volume and Mount It Into a Container
+  - type: Arazzo
+    url: arazzo/docker-deploy-swarm-service-workflow.yml
+    name: Docker Deploy a Replicated Swarm Service with a Secret
+  - type: Arazzo
+    url: arazzo/docker-rolling-update-service-workflow.yml
+    name: Docker Roll a Swarm Service Onto a New Image
+  - type: Arazzo
+    url: arazzo/docker-reclaim-disk-space-workflow.yml
+    name: Docker Reclaim Disk Space on a Host
+  - type: Arazzo
+    url: arazzo/docker-commit-container-to-image-workflow.yml
+    name: Docker Snapshot a Running Container as an Image
+  - type: Arazzo
+    url: arazzo/docker-install-plugin-workflow.yml
+    name: Docker Review Privileges and Install a Plugin
 integrations:
   - name: Become a Docker Verified Publisher
 maintainers:

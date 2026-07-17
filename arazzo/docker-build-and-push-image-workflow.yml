@@ -1,0 +1,174 @@
+arazzo: 1.0.1
+info:
+  title: Docker Build, Tag, and Push an Image
+  summary: Check registry credentials, build an image from a build context, tag it for a registry, and push it.
+  description: >-
+    The CI pipeline flow expressed against the Engine API. The workflow validates
+    the registry credentials before doing any expensive work, builds an image from
+    a tar build context using BuildKit, inspects the result, applies the registry
+    tag, and pushes the tagged image. Checking auth first means a bad credential
+    fails in seconds rather than after a full build. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: build-and-push-image
+  summary: Build an image from a context, tag it for a registry, and push it.
+  description: >-
+    Validates credentials against the registry, builds the image from the
+    supplied tar context, tags the built image into the target repository, and
+    pushes that tag to the registry.
+  inputs:
+    type: object
+    required:
+    - username
+    - password
+    - serveraddress
+    - buildContext
+    - localTag
+    - repo
+    - tag
+    - registryAuth
+    properties:
+      username:
+        type: string
+        description: Registry username to validate before building.
+      password:
+        type: string
+        description: Registry password or token.
+      serveraddress:
+        type: string
+        description: Registry address (e.g. "https://index.docker.io/v1/").
+      buildContext:
+        type: string
+        description: The build context as a tar archive (identity, gzip, bzip2, or xz).
+      localTag:
+        type: string
+        description: Local name and tag to apply at build time, in "name:tag" form.
+      repo:
+        type: string
+        description: The repository to tag into for the push (e.g. "someuser/someimage").
+      tag:
+        type: string
+        description: The tag name to apply and push (e.g. "latest").
+      registryAuth:
+        type: string
+        description: Base64url-encoded auth configuration used for the push.
+      dockerfile:
+        type: string
+        description: Path to the Dockerfile within the build context.
+      buildargs:
+        type: string
+        description: JSON map of build-time variables, URI component encoded.
+      registryConfig:
+        type: string
+        description: Base64-encoded JSON of multi-registry auth configurations used during the build.
+  steps:
+  - stepId: checkCredentials
+    description: >-
+      Validate the registry credentials up front so an authentication problem
+      fails the flow in seconds rather than after a full image build.
+    operationId: SystemAuth
+    requestBody:
+      contentType: application/json
+      payload:
+        username: $inputs.username
+        password: $inputs.password
+        serveraddress: $inputs.serveraddress
+    successCriteria:
+    - condition: $statusCode == 200 || $statusCode == 204
+    outputs:
+      identityToken: $response.body#/IdentityToken
+      status: $response.body#/Status
+  - stepId: buildImage
+    description: >-
+      Build the image from the supplied tar context using the BuildKit backend,
+      removing intermediate containers and applying the local build tag.
+    operationId: ImageBuild
+    parameters:
+    - name: t
+      in: query
+      value: $inputs.localTag
+    - name: dockerfile
+      in: query
+      value: $inputs.dockerfile
+    - name: buildargs
+      in: query
+      value: $inputs.buildargs
+    - name: version
+      in: query
+      value: '2'
+    - name: rm
+      in: query
+      value: true
+    - name: pull
+      in: query
+      value: 'true'
+    - name: Content-type
+      in: header
+      value: application/x-tar
+    - name: X-Registry-Config
+      in: header
+      value: $inputs.registryConfig
+    requestBody:
+      contentType: application/octet-stream
+      payload: $inputs.buildContext
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: inspectBuiltImage
+    description: >-
+      Inspect the freshly built image to confirm it landed in the local store and
+      to capture its id and digests for the build record.
+    operationId: ImageInspect
+    parameters:
+    - name: name
+      in: path
+      value: $inputs.localTag
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      imageId: $response.body#/Id
+      repoDigests: $response.body#/RepoDigests
+      created: $response.body#/Created
+  - stepId: tagImage
+    description: >-
+      Create the registry-qualified tag that references the built image. The push
+      endpoint requires the image to already carry a name that points at the
+      target registry.
+    operationId: ImageTag
+    parameters:
+    - name: name
+      in: path
+      value: $inputs.localTag
+    - name: repo
+      in: query
+      value: $inputs.repo
+    - name: tag
+      in: query
+      value: $inputs.tag
+    successCriteria:
+    - condition: $statusCode == 201
+  - stepId: pushImage
+    description: >-
+      Push the tagged image to the registry using the supplied auth
+      configuration.
+    operationId: ImagePush
+    parameters:
+    - name: name
+      in: path
+      value: $inputs.repo
+    - name: tag
+      in: query
+      value: $inputs.tag
+    - name: X-Registry-Auth
+      in: header
+      value: $inputs.registryAuth
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    imageId: $steps.inspectBuiltImage.outputs.imageId
+    repoDigests: $steps.inspectBuiltImage.outputs.repoDigests

@@ -1,0 +1,145 @@
+arazzo: 1.0.1
+info:
+  title: Docker Pull an Image and Run a Container
+  summary: Pull an image from a registry, create a container from it, start it, and read back its running state.
+  description: >-
+    The canonical Docker Engine API flow, and the API equivalent of
+    `docker run`. The workflow pulls the requested image tag from the registry,
+    creates a container from that image with an inline configuration, starts the
+    container, and then inspects it to confirm the daemon reports it running.
+    Every step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: run-container
+  summary: Pull an image, create and start a container from it, and confirm it is running.
+  description: >-
+    Pulls the image tag, creates a named container with the supplied command and
+    environment, starts it, and inspects the result so the caller ends up with a
+    container id and a confirmed running state.
+  inputs:
+    type: object
+    required:
+    - image
+    - tag
+    - containerName
+    properties:
+      image:
+        type: string
+        description: Name of the image to pull (e.g. "nginx" or "registry.example.com/myimage").
+      tag:
+        type: string
+        description: Tag of the image to pull and run (e.g. "alpine" or "latest").
+      containerName:
+        type: string
+        description: Name to assign to the created container.
+      cmd:
+        type: array
+        description: Command to run in the container, as an argv array.
+        items:
+          type: string
+      env:
+        type: array
+        description: Environment variables in "KEY=value" form.
+        items:
+          type: string
+      registryAuth:
+        type: string
+        description: Base64url-encoded registry auth configuration, required only for private images.
+  steps:
+  - stepId: pullImage
+    description: >-
+      Pull the requested image and tag from the registry into the daemon's local
+      image store so the container can be created from it.
+    operationId: ImageCreate
+    parameters:
+    - name: fromImage
+      in: query
+      value: $inputs.image
+    - name: tag
+      in: query
+      value: $inputs.tag
+    - name: X-Registry-Auth
+      in: header
+      value: $inputs.registryAuth
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: inspectImage
+    description: >-
+      Confirm the pulled image is present in the local store and capture its id
+      before creating a container from it.
+    operationId: ImageInspect
+    parameters:
+    - name: name
+      in: path
+      value: $inputs.image
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      imageId: $response.body#/Id
+  - stepId: createContainer
+    description: >-
+      Create a container from the pulled image with the supplied name, command
+      and environment. The container is created but not yet started.
+    operationId: ContainerCreate
+    parameters:
+    - name: name
+      in: query
+      value: $inputs.containerName
+    requestBody:
+      contentType: application/json
+      payload:
+        Image: $inputs.image
+        Cmd: $inputs.cmd
+        Env: $inputs.env
+        AttachStdout: true
+        AttachStderr: true
+        Tty: false
+        HostConfig:
+          RestartPolicy:
+            Name: unless-stopped
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      containerId: $response.body#/Id
+      warnings: $response.body#/Warnings
+  - stepId: startContainer
+    description: >-
+      Start the newly created container. The daemon returns 204 on success and
+      304 if the container was already started.
+    operationId: ContainerStart
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createContainer.outputs.containerId
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: confirmRunning
+    description: >-
+      Read back the container's low-level state to confirm the daemon reports it
+      running, and capture the state and network settings for the caller.
+    operationId: ContainerInspect
+    parameters:
+    - name: id
+      in: path
+      value: $steps.createContainer.outputs.containerId
+    - name: size
+      in: query
+      value: false
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.State.Running == true
+      type: jsonpath
+    outputs:
+      state: $response.body#/State
+      name: $response.body#/Name
+      networkSettings: $response.body#/NetworkSettings
+  outputs:
+    containerId: $steps.createContainer.outputs.containerId
+    imageId: $steps.inspectImage.outputs.imageId
+    state: $steps.confirmRunning.outputs.state

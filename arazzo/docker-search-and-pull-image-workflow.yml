@@ -1,0 +1,153 @@
+arazzo: 1.0.1
+info:
+  title: Docker Search, Pull, and Vet an Image
+  summary: Search the registry for an official image, pull it, then inspect its metadata and layer history before use.
+  description: >-
+    A supply-chain-aware discovery flow. Rather than pulling a name someone typed,
+    this workflow searches the registry filtered to official images, pulls the top
+    match, and then vets what actually arrived by inspecting the image metadata and
+    walking its layer history. The history walk is what lets a reviewer or an agent
+    see how the image was assembled before anything is run from it. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: dockerEngineApi
+  url: ../openapi/docker-openapi.yml
+  type: openapi
+workflows:
+- workflowId: search-and-pull-image
+  summary: Search for an image, pull the best match, and vet its metadata and layers.
+  description: >-
+    Validates registry credentials, searches for images matching a term with a
+    star and official filter, pulls the requested image and tag, then inspects the
+    image and its layer history so the caller can vet it before running it.
+  inputs:
+    type: object
+    required:
+    - term
+    - image
+    - tag
+    properties:
+      term:
+        type: string
+        description: Term to search the registry for (e.g. "postgres").
+      image:
+        type: string
+        description: Name of the image to pull once the search has been reviewed.
+      tag:
+        type: string
+        description: Tag of the image to pull (e.g. "16-alpine").
+      searchLimit:
+        type: integer
+        description: Maximum number of search results to return.
+      searchFilters:
+        type: string
+        description: 'JSON-encoded search filters, e.g. {"is-official":["true"],"stars":["100"]}.'
+      username:
+        type: string
+        description: Registry username, when vetting against a private registry.
+      password:
+        type: string
+        description: Registry password or token.
+      serveraddress:
+        type: string
+        description: Registry address (e.g. "https://index.docker.io/v1/").
+      registryAuth:
+        type: string
+        description: Base64url-encoded auth configuration used for the pull.
+  steps:
+  - stepId: checkCredentials
+    description: >-
+      Validate credentials against the registry before pulling. Returns 200 with
+      an identity token or 204 when the credentials are good.
+    operationId: SystemAuth
+    requestBody:
+      contentType: application/json
+      payload:
+        username: $inputs.username
+        password: $inputs.password
+        serveraddress: $inputs.serveraddress
+    successCriteria:
+    - condition: $statusCode == 200 || $statusCode == 204
+    outputs:
+      status: $response.body#/Status
+  - stepId: searchImages
+    description: >-
+      Search the registry for the term, filtered so that only well-starred or
+      official repositories come back. This is the step that turns a guessed image
+      name into a vetted candidate.
+    operationId: ImageSearch
+    parameters:
+    - name: term
+      in: query
+      value: $inputs.term
+    - name: limit
+      in: query
+      value: $inputs.searchLimit
+    - name: filters
+      in: query
+      value: $inputs.searchFilters
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.length > 0
+      type: jsonpath
+    outputs:
+      topMatch: $response.body#/0/name
+      topMatchStars: $response.body#/0/star_count
+      topMatchOfficial: $response.body#/0/is_official
+      results: $response.body
+  - stepId: pullImage
+    description: >-
+      Pull the chosen image and tag into the local image store. Note that omitting
+      a tag pulls every tag for the repository, so the tag is always supplied here.
+    operationId: ImageCreate
+    parameters:
+    - name: fromImage
+      in: query
+      value: $inputs.image
+    - name: tag
+      in: query
+      value: $inputs.tag
+    - name: X-Registry-Auth
+      in: header
+      value: $inputs.registryAuth
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: inspectImage
+    description: >-
+      Inspect what actually arrived — the image id, repo digests, architecture,
+      and the config the image will run with by default.
+    operationId: ImageInspect
+    parameters:
+    - name: name
+      in: path
+      value: $inputs.image
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      imageId: $response.body#/Id
+      repoDigests: $response.body#/RepoDigests
+      architecture: $response.body#/Architecture
+      os: $response.body#/Os
+      config: $response.body#/Config
+  - stepId: readHistory
+    description: >-
+      Walk the image's parent layers to see how it was assembled. This is the
+      supply-chain check: each entry carries the command that created the layer and
+      its size.
+    operationId: ImageHistory
+    parameters:
+    - name: name
+      in: path
+      value: $inputs.image
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      layers: $response.body
+  outputs:
+    topMatch: $steps.searchImages.outputs.topMatch
+    imageId: $steps.inspectImage.outputs.imageId
+    repoDigests: $steps.inspectImage.outputs.repoDigests
+    layers: $steps.readHistory.outputs.layers
