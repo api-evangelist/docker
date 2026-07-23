@@ -1,0 +1,829 @@
+swagger: '2.0'
+info:
+  title: Docker Engine Config Plugin API
+  version: '1.54'
+  x-logo:
+    url: https://docs.docker.com/assets/images/logo-docker-main.png
+  description: "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n"
+basePath: /v1.54
+schemes:
+- http
+- https
+consumes:
+- application/json
+- text/plain
+produces:
+- application/json
+- text/plain
+tags:
+- name: Plugin
+  x-displayName: Plugins
+paths:
+  /plugins:
+    get:
+      summary: List plugins
+      operationId: PluginList
+      description: Returns information about installed plugins.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: No error
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Plugin'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: filters
+        in: query
+        type: string
+        description: 'A JSON encoded value of the filters (a `map[string][]string`) to
+
+          process on the plugin list.
+
+
+          Available filters:
+
+
+          - `capability=<capability name>`
+
+          - `enable=<true>|<false>`
+
+          '
+      tags:
+      - Plugin
+  /plugins/privileges:
+    get:
+      summary: Get plugin privileges
+      operationId: GetPluginPrivileges
+      responses:
+        200:
+          description: no error
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PluginPrivilege'
+            example:
+            - Name: network
+              Description: ''
+              Value:
+              - host
+            - Name: mount
+              Description: ''
+              Value:
+              - /data
+            - Name: device
+              Description: ''
+              Value:
+              - /dev/cpu_dma_latency
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: remote
+        in: query
+        description: 'The name of the plugin. The `:latest` tag is optional, and is the
+
+          default if omitted.
+
+          '
+        required: true
+        type: string
+      tags:
+      - Plugin
+  /plugins/pull:
+    post:
+      summary: Install a plugin
+      operationId: PluginPull
+      description: 'Pulls and installs a plugin. After the plugin is installed, it can be
+
+        enabled using the [`POST /plugins/{name}/enable` endpoint](#operation/PostPluginsEnable).
+
+        '
+      produces:
+      - application/json
+      responses:
+        204:
+          description: no error
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: remote
+        in: query
+        description: 'Remote reference for plugin to install.
+
+
+          The `:latest` tag is optional, and is used as the default if omitted.
+
+          '
+        required: true
+        type: string
+      - name: name
+        in: query
+        description: 'Local name for the pulled plugin.
+
+
+          The `:latest` tag is optional, and is used as the default if omitted.
+
+          '
+        required: false
+        type: string
+      - name: X-Registry-Auth
+        in: header
+        description: 'A base64url-encoded auth configuration to use when pulling a plugin
+
+          from a registry.
+
+
+          Refer to the [authentication section](#section/Authentication) for
+
+          details.
+
+          '
+        type: string
+      - name: body
+        in: body
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/PluginPrivilege'
+          example:
+          - Name: network
+            Description: ''
+            Value:
+            - host
+          - Name: mount
+            Description: ''
+            Value:
+            - /data
+          - Name: device
+            Description: ''
+            Value:
+            - /dev/cpu_dma_latency
+      tags:
+      - Plugin
+  /plugins/{name}/json:
+    get:
+      summary: Inspect a plugin
+      operationId: PluginInspect
+      responses:
+        200:
+          description: no error
+          schema:
+            $ref: '#/definitions/Plugin'
+        404:
+          description: plugin is not installed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: path
+        description: 'The name of the plugin. The `:latest` tag is optional, and is the
+
+          default if omitted.
+
+          '
+        required: true
+        type: string
+      tags:
+      - Plugin
+  /plugins/{name}:
+    delete:
+      summary: Remove a plugin
+      operationId: PluginDelete
+      responses:
+        200:
+          description: no error
+          schema:
+            $ref: '#/definitions/Plugin'
+        404:
+          description: plugin is not installed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: path
+        description: 'The name of the plugin. The `:latest` tag is optional, and is the
+
+          default if omitted.
+
+          '
+        required: true
+        type: string
+      - name: force
+        in: query
+        description: 'Disable the plugin before removing. This may result in issues if the
+
+          plugin is in use by a container.
+
+          '
+        type: boolean
+        default: false
+      tags:
+      - Plugin
+  /plugins/{name}/enable:
+    post:
+      summary: Enable a plugin
+      operationId: PluginEnable
+      responses:
+        200:
+          description: no error
+        404:
+          description: plugin is not installed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: path
+        description: 'The name of the plugin. The `:latest` tag is optional, and is the
+
+          default if omitted.
+
+          '
+        required: true
+        type: string
+      - name: timeout
+        in: query
+        description: Set the HTTP client timeout (in seconds)
+        type: integer
+        default: 0
+      tags:
+      - Plugin
+  /plugins/{name}/disable:
+    post:
+      summary: Disable a plugin
+      operationId: PluginDisable
+      responses:
+        200:
+          description: no error
+        404:
+          description: plugin is not installed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: path
+        description: 'The name of the plugin. The `:latest` tag is optional, and is the
+
+          default if omitted.
+
+          '
+        required: true
+        type: string
+      - name: force
+        in: query
+        description: 'Force disable a plugin even if still in use.
+
+          '
+        required: false
+        type: boolean
+      tags:
+      - Plugin
+  /plugins/{name}/upgrade:
+    post:
+      summary: Upgrade a plugin
+      operationId: PluginUpgrade
+      responses:
+        204:
+          description: no error
+        404:
+          description: plugin not installed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: path
+        description: 'The name of the plugin. The `:latest` tag is optional, and is the
+
+          default if omitted.
+
+          '
+        required: true
+        type: string
+      - name: remote
+        in: query
+        description: 'Remote reference to upgrade to.
+
+
+          The `:latest` tag is optional, and is used as the default if omitted.
+
+          '
+        required: true
+        type: string
+      - name: X-Registry-Auth
+        in: header
+        description: 'A base64url-encoded auth configuration to use when pulling a plugin
+
+          from a registry.
+
+
+          Refer to the [authentication section](#section/Authentication) for
+
+          details.
+
+          '
+        type: string
+      - name: body
+        in: body
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/PluginPrivilege'
+          example:
+          - Name: network
+            Description: ''
+            Value:
+            - host
+          - Name: mount
+            Description: ''
+            Value:
+            - /data
+          - Name: device
+            Description: ''
+            Value:
+            - /dev/cpu_dma_latency
+      tags:
+      - Plugin
+  /plugins/create:
+    post:
+      summary: Create a plugin
+      operationId: PluginCreate
+      consumes:
+      - application/x-tar
+      responses:
+        204:
+          description: no error
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: query
+        description: 'The name of the plugin. The `:latest` tag is optional, and is the
+
+          default if omitted.
+
+          '
+        required: true
+        type: string
+      - name: tarContext
+        in: body
+        description: Path to tar containing plugin rootfs and manifest
+        schema:
+          type: string
+          format: binary
+      tags:
+      - Plugin
+  /plugins/{name}/push:
+    post:
+      summary: Push a plugin
+      operationId: PluginPush
+      description: 'Push a plugin to the registry.
+
+        '
+      parameters:
+      - name: name
+        in: path
+        description: 'The name of the plugin. The `:latest` tag is optional, and is the
+
+          default if omitted.
+
+          '
+        required: true
+        type: string
+      responses:
+        200:
+          description: no error
+        404:
+          description: plugin not installed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Plugin
+  /plugins/{name}/set:
+    post:
+      summary: Configure a plugin
+      operationId: PluginSet
+      consumes:
+      - application/json
+      parameters:
+      - name: name
+        in: path
+        description: 'The name of the plugin. The `:latest` tag is optional, and is the
+
+          default if omitted.
+
+          '
+        required: true
+        type: string
+      - name: body
+        in: body
+        schema:
+          type: array
+          items:
+            type: string
+          example:
+          - DEBUG=1
+      responses:
+        204:
+          description: No error
+        404:
+          description: Plugin not installed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Plugin
+definitions:
+  PluginMount:
+    type: object
+    x-go-name: Mount
+    x-nullable: false
+    required:
+    - Name
+    - Description
+    - Settable
+    - Source
+    - Destination
+    - Type
+    - Options
+    properties:
+      Name:
+        type: string
+        x-nullable: false
+        example: some-mount
+      Description:
+        type: string
+        x-nullable: false
+        example: This is a mount that's used by the plugin.
+      Settable:
+        type: array
+        items:
+          type: string
+      Source:
+        type: string
+        example: /var/lib/docker/plugins/
+      Destination:
+        type: string
+        x-nullable: false
+        example: /mnt/state
+      Type:
+        type: string
+        x-nullable: false
+        example: bind
+      Options:
+        type: array
+        items:
+          type: string
+        example:
+        - rbind
+        - rw
+  PluginPrivilege:
+    description: 'Describes a permission the user has to accept upon installing
+
+      the plugin.
+
+      '
+    type: object
+    x-go-name: Privilege
+    properties:
+      Name:
+        type: string
+        example: network
+      Description:
+        type: string
+      Value:
+        type: array
+        items:
+          type: string
+        example:
+        - host
+  Plugin:
+    description: A plugin for the Engine API
+    type: object
+    x-go-name: Plugin
+    required:
+    - Settings
+    - Enabled
+    - Config
+    - Name
+    properties:
+      Id:
+        type: string
+        example: 5724e2c8652da337ab2eedd19fc6fc0ec908e4bd907c7421bf6a8dfc70c4c078
+      Name:
+        type: string
+        x-nullable: false
+        example: tiborvass/sample-volume-plugin
+      Enabled:
+        description: True if the plugin is running. False if the plugin is not running, only installed.
+        type: boolean
+        x-nullable: false
+        example: true
+      Settings:
+        description: user-configurable settings for the plugin.
+        type: object
+        x-go-name: Settings
+        x-nullable: false
+        required:
+        - Args
+        - Devices
+        - Env
+        - Mounts
+        properties:
+          Mounts:
+            type: array
+            items:
+              $ref: '#/definitions/PluginMount'
+          Env:
+            type: array
+            items:
+              type: string
+            example:
+            - DEBUG=0
+          Args:
+            type: array
+            items:
+              type: string
+          Devices:
+            type: array
+            items:
+              $ref: '#/definitions/PluginDevice'
+      PluginReference:
+        description: plugin remote reference used to push/pull the plugin
+        type: string
+        x-go-name: PluginReference
+        x-nullable: false
+        example: localhost:5000/tiborvass/sample-volume-plugin:latest
+      Config:
+        description: The config of a plugin.
+        type: object
+        x-go-name: Config
+        x-nullable: false
+        required:
+        - Description
+        - Documentation
+        - Interface
+        - Entrypoint
+        - WorkDir
+        - Network
+        - Linux
+        - PidHost
+        - PropagatedMount
+        - IpcHost
+        - Mounts
+        - Env
+        - Args
+        properties:
+          Description:
+            type: string
+            x-nullable: false
+            example: A sample volume plugin for Docker
+          Documentation:
+            type: string
+            x-nullable: false
+            example: https://docs.docker.com/engine/extend/plugins/
+          Interface:
+            description: The interface between Docker and the plugin
+            x-nullable: false
+            type: object
+            x-go-name: Interface
+            required:
+            - Types
+            - Socket
+            properties:
+              Types:
+                type: array
+                items:
+                  type: string
+                  x-go-type:
+                    type: CapabilityID
+                example:
+                - docker.volumedriver/1.0
+              Socket:
+                type: string
+                x-nullable: false
+                example: plugins.sock
+              ProtocolScheme:
+                type: string
+                example: some.protocol/v1.0
+                description: Protocol to use for clients connecting to the plugin.
+                enum:
+                - ''
+                - moby.plugins.http/v1
+          Entrypoint:
+            type: array
+            items:
+              type: string
+            example:
+            - /usr/bin/sample-volume-plugin
+            - /data
+          WorkDir:
+            type: string
+            x-nullable: false
+            example: /bin/
+          User:
+            type: object
+            x-go-name: User
+            x-nullable: false
+            properties:
+              UID:
+                type: integer
+                format: uint32
+                example: 1000
+              GID:
+                type: integer
+                format: uint32
+                example: 1000
+          Network:
+            type: object
+            x-go-name: NetworkConfig
+            x-nullable: false
+            required:
+            - Type
+            properties:
+              Type:
+                x-nullable: false
+                type: string
+                example: host
+          Linux:
+            type: object
+            x-go-name: LinuxConfig
+            x-nullable: false
+            required:
+            - Capabilities
+            - AllowAllDevices
+            - Devices
+            properties:
+              Capabilities:
+                type: array
+                items:
+                  type: string
+                example:
+                - CAP_SYS_ADMIN
+                - CAP_SYSLOG
+              AllowAllDevices:
+                type: boolean
+                x-nullable: false
+                example: false
+              Devices:
+                type: array
+                items:
+                  $ref: '#/definitions/PluginDevice'
+          PropagatedMount:
+            type: string
+            x-nullable: false
+            example: /mnt/volumes
+          IpcHost:
+            type: boolean
+            x-nullable: false
+            example: false
+          PidHost:
+            type: boolean
+            x-nullable: false
+            example: false
+          Mounts:
+            type: array
+            items:
+              $ref: '#/definitions/PluginMount'
+          Env:
+            type: array
+            items:
+              $ref: '#/definitions/PluginEnv'
+            example:
+            - Name: DEBUG
+              Description: If set, prints debug messages
+              Settable: null
+              Value: '0'
+          Args:
+            type: object
+            x-go-name: Args
+            x-nullable: false
+            required:
+            - Name
+            - Description
+            - Settable
+            - Value
+            properties:
+              Name:
+                x-nullable: false
+                type: string
+                example: args
+              Description:
+                x-nullable: false
+                type: string
+                example: command line arguments
+              Settable:
+                type: array
+                items:
+                  type: string
+              Value:
+                type: array
+                items:
+                  type: string
+          rootfs:
+            type: object
+            x-go-name: RootFS
+            properties:
+              type:
+                type: string
+                example: layers
+              diff_ids:
+                type: array
+                items:
+                  type: string
+                example:
+                - sha256:675532206fbf3030b8458f88d6e26d4eb1577688a25efec97154c94e8b6b4887
+                - sha256:e216a057b1cb1efc11f8a268f37ef62083e70b1b38323ba252e25ac88904a7e8
+  ErrorResponse:
+    description: Represents an error.
+    type: object
+    required:
+    - message
+    properties:
+      message:
+        description: The error message.
+        type: string
+        x-nullable: false
+    example:
+      message: Something went wrong.
+  PluginEnv:
+    type: object
+    x-go-name: Env
+    x-nullable: false
+    required:
+    - Name
+    - Description
+    - Settable
+    - Value
+    properties:
+      Name:
+        x-nullable: false
+        type: string
+      Description:
+        x-nullable: false
+        type: string
+      Settable:
+        type: array
+        items:
+          type: string
+      Value:
+        type: string
+  PluginDevice:
+    type: object
+    x-go-name: Device
+    required:
+    - Name
+    - Description
+    - Settable
+    - Path
+    x-nullable: false
+    properties:
+      Name:
+        type: string
+        x-nullable: false
+      Description:
+        type: string
+        x-nullable: false
+      Settable:
+        type: array
+        items:
+          type: string
+      Path:
+        type: string
+        example: /dev/fuse

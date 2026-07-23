@@ -1,0 +1,2090 @@
+swagger: '2.0'
+info:
+  title: Docker Engine Config Service API
+  version: '1.54'
+  x-logo:
+    url: https://docs.docker.com/assets/images/logo-docker-main.png
+  description: "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n"
+basePath: /v1.54
+schemes:
+- http
+- https
+consumes:
+- application/json
+- text/plain
+produces:
+- application/json
+- text/plain
+tags:
+- name: Service
+  x-displayName: Services
+  description: 'Services are the definitions of tasks to run on a swarm. Swarm mode must
+
+    be enabled for these endpoints to work.
+
+    '
+paths:
+  /services:
+    get:
+      summary: List services
+      operationId: ServiceList
+      responses:
+        200:
+          description: no error
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Service'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: filters
+        in: query
+        type: string
+        description: 'A JSON encoded value of the filters (a `map[string][]string`) to
+
+          process on the services list.
+
+
+          Available filters:
+
+
+          - `id=<service id>`
+
+          - `label=<service label>`
+
+          - `mode=["replicated"|"global"]`
+
+          - `name=<service name>`
+
+          '
+      - name: status
+        in: query
+        type: boolean
+        description: 'Include service status, with count of running and desired tasks.
+
+          '
+      tags:
+      - Service
+  /services/create:
+    post:
+      summary: Create a service
+      operationId: ServiceCreate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        201:
+          description: no error
+          schema:
+            $ref: '#/definitions/ServiceCreateResponse'
+        400:
+          description: bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: network is not eligible for services
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        409:
+          description: name conflicts with an existing service
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          allOf:
+          - $ref: '#/definitions/ServiceSpec'
+          - type: object
+            example:
+              Name: web
+              TaskTemplate:
+                ContainerSpec:
+                  Image: nginx:alpine
+                  Mounts:
+                  - ReadOnly: true
+                    Source: web-data
+                    Target: /usr/share/nginx/html
+                    Type: volume
+                    VolumeOptions:
+                      DriverConfig: {}
+                      Labels:
+                        com.example.something: something-value
+                  Hosts:
+                  - 10.10.10.10 host1
+                  - ABCD:EF01:2345:6789:ABCD:EF01:2345:6789 host2
+                  User: '33'
+                  DNSConfig:
+                    Nameservers:
+                    - 8.8.8.8
+                    Search:
+                    - example.org
+                    Options:
+                    - timeout:3
+                  Secrets:
+                  - File:
+                      Name: www.example.org.key
+                      UID: '33'
+                      GID: '33'
+                      Mode: 384
+                    SecretID: fpjqlhnwb19zds35k8wn80lq9
+                    SecretName: example_org_domain_key
+                  OomScoreAdj: 0
+                LogDriver:
+                  Name: json-file
+                  Options:
+                    max-file: '3'
+                    max-size: 10M
+                Placement: {}
+                Resources:
+                  Limits:
+                    MemoryBytes: 104857600
+                  Reservations: {}
+                RestartPolicy:
+                  Condition: on-failure
+                  Delay: 10000000000
+                  MaxAttempts: 10
+              Mode:
+                Replicated:
+                  Replicas: 4
+              UpdateConfig:
+                Parallelism: 2
+                Delay: 1000000000
+                FailureAction: pause
+                Monitor: 15000000000
+                MaxFailureRatio: 0.15
+              RollbackConfig:
+                Parallelism: 1
+                Delay: 1000000000
+                FailureAction: pause
+                Monitor: 15000000000
+                MaxFailureRatio: 0.15
+              EndpointSpec:
+                Ports:
+                - Protocol: tcp
+                  PublishedPort: 8080
+                  TargetPort: 80
+              Labels:
+                foo: bar
+      - name: X-Registry-Auth
+        in: header
+        description: 'A base64url-encoded auth configuration for pulling from private
+
+          registries.
+
+
+          Refer to the [authentication section](#section/Authentication) for
+
+          details.
+
+          '
+        type: string
+      tags:
+      - Service
+  /services/{id}:
+    get:
+      summary: Inspect a service
+      operationId: ServiceInspect
+      responses:
+        200:
+          description: no error
+          schema:
+            $ref: '#/definitions/Service'
+        404:
+          description: no such service
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: id
+        in: path
+        description: ID or name of service.
+        required: true
+        type: string
+      - name: insertDefaults
+        in: query
+        description: Fill empty fields with default values.
+        type: boolean
+        default: false
+      tags:
+      - Service
+    delete:
+      summary: Delete a service
+      operationId: ServiceDelete
+      responses:
+        200:
+          description: no error
+        404:
+          description: no such service
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: id
+        in: path
+        description: ID or name of service.
+        required: true
+        type: string
+      tags:
+      - Service
+  /services/{id}/update:
+    post:
+      summary: Update a service
+      operationId: ServiceUpdate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: no error
+          schema:
+            $ref: '#/definitions/ServiceUpdateResponse'
+        400:
+          description: bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        404:
+          description: no such service
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: id
+        in: path
+        description: ID or name of service.
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          allOf:
+          - $ref: '#/definitions/ServiceSpec'
+          - type: object
+            example:
+              Name: top
+              TaskTemplate:
+                ContainerSpec:
+                  Image: busybox
+                  Args:
+                  - top
+                  OomScoreAdj: 0
+                Resources:
+                  Limits: {}
+                  Reservations: {}
+                RestartPolicy:
+                  Condition: any
+                  MaxAttempts: 0
+                Placement: {}
+                ForceUpdate: 0
+              Mode:
+                Replicated:
+                  Replicas: 1
+              UpdateConfig:
+                Parallelism: 2
+                Delay: 1000000000
+                FailureAction: pause
+                Monitor: 15000000000
+                MaxFailureRatio: 0.15
+              RollbackConfig:
+                Parallelism: 1
+                Delay: 1000000000
+                FailureAction: pause
+                Monitor: 15000000000
+                MaxFailureRatio: 0.15
+              EndpointSpec:
+                Mode: vip
+      - name: version
+        in: query
+        description: 'The version number of the service object being updated. This is
+
+          required to avoid conflicting writes.
+
+          This version number should be the value as currently set on the
+
+          service *before* the update. You can find the current version by
+
+          calling `GET /services/{id}`
+
+          '
+        required: true
+        type: integer
+      - name: registryAuthFrom
+        in: query
+        description: 'If the `X-Registry-Auth` header is not specified, this parameter
+
+          indicates where to find registry authorization credentials.
+
+          '
+        type: string
+        enum:
+        - spec
+        - previous-spec
+        default: spec
+      - name: rollback
+        in: query
+        description: 'Set to this parameter to `previous` to cause a server-side rollback
+
+          to the previous service spec. The supplied spec will be ignored in
+
+          this case.
+
+          '
+        type: string
+      - name: X-Registry-Auth
+        in: header
+        description: 'A base64url-encoded auth configuration for pulling from private
+
+          registries.
+
+
+          Refer to the [authentication section](#section/Authentication) for
+
+          details.
+
+          '
+        type: string
+      tags:
+      - Service
+  /services/{id}/logs:
+    get:
+      summary: Get service logs
+      description: 'Get `stdout` and `stderr` logs from a service. See also
+
+        [`/containers/{id}/logs`](#operation/ContainerLogs).
+
+
+        **Note**: This endpoint works only for services with the `local`,
+
+        `json-file` or `journald` logging drivers.
+
+        '
+      produces:
+      - application/vnd.docker.raw-stream
+      - application/vnd.docker.multiplexed-stream
+      operationId: ServiceLogs
+      responses:
+        200:
+          description: logs returned as a stream in response body
+          schema:
+            type: string
+            format: binary
+        404:
+          description: no such service
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+          examples:
+            application/json:
+              message: 'No such service: c2ada9df5af8'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID or name of the service
+        type: string
+      - name: details
+        in: query
+        description: Show service context and extra details provided to logs.
+        type: boolean
+        default: false
+      - name: follow
+        in: query
+        description: Keep connection after returning logs.
+        type: boolean
+        default: false
+      - name: stdout
+        in: query
+        description: Return logs from `stdout`
+        type: boolean
+        default: false
+      - name: stderr
+        in: query
+        description: Return logs from `stderr`
+        type: boolean
+        default: false
+      - name: since
+        in: query
+        description: Only return logs since this time, as a UNIX timestamp
+        type: integer
+        default: 0
+      - name: timestamps
+        in: query
+        description: Add timestamps to every log line
+        type: boolean
+        default: false
+      - name: tail
+        in: query
+        description: 'Only return this number of log lines from the end of the logs.
+
+          Specify as an integer or `all` to output all log lines.
+
+          '
+        type: string
+        default: all
+      tags:
+      - Service
+definitions:
+  HealthConfig:
+    description: 'A test to perform to check that the container is healthy.
+
+      Healthcheck commands should be side-effect free.
+
+      '
+    type: object
+    properties:
+      Test:
+        description: 'The test to perform. Possible values are:
+
+
+          - `[]` inherit healthcheck from image or parent image
+
+          - `["NONE"]` disable healthcheck
+
+          - `["CMD", args...]` exec arguments directly
+
+          - `["CMD-SHELL", command]` run command with system''s default shell
+
+
+          A non-zero exit code indicates a failed healthcheck:
+
+          - `0` healthy
+
+          - `1` unhealthy
+
+          - `2` reserved (treated as unhealthy)
+
+          - other values: error running probe
+
+          '
+        type: array
+        items:
+          type: string
+      Interval:
+        description: 'The time to wait between checks in nanoseconds. It should be 0 or at
+
+          least 1000000 (1 ms). 0 means inherit.
+
+          '
+        type: integer
+        format: int64
+      Timeout:
+        description: 'The time to wait before considering the check to have hung. It should
+
+          be 0 or at least 1000000 (1 ms). 0 means inherit.
+
+
+          If the health check command does not complete within this timeout,
+
+          the check is considered failed and the health check process is
+
+          forcibly terminated without a graceful shutdown.
+
+          '
+        type: integer
+        format: int64
+      Retries:
+        description: 'The number of consecutive failures needed to consider a container as
+
+          unhealthy. 0 means inherit.
+
+          '
+        type: integer
+      StartPeriod:
+        description: 'Start period for the container to initialize before starting
+
+          health-retries countdown in nanoseconds. It should be 0 or at least
+
+          1000000 (1 ms). 0 means inherit.
+
+          '
+        type: integer
+        format: int64
+      StartInterval:
+        description: 'The time to wait between checks in nanoseconds during the start period.
+
+          It should be 0 or at least 1000000 (1 ms). 0 means inherit.
+
+          '
+        type: integer
+        format: int64
+  ServiceSpec:
+    description: User modifiable configuration for a service.
+    type: object
+    properties:
+      Name:
+        description: Name of the service.
+        type: string
+      Labels:
+        description: User-defined key/value metadata.
+        type: object
+        additionalProperties:
+          type: string
+      TaskTemplate:
+        $ref: '#/definitions/TaskSpec'
+      Mode:
+        description: Scheduling mode for the service.
+        type: object
+        properties:
+          Replicated:
+            type: object
+            properties:
+              Replicas:
+                type: integer
+                format: int64
+          Global:
+            type: object
+          ReplicatedJob:
+            description: 'The mode used for services with a finite number of tasks that run
+
+              to a completed state.
+
+              '
+            type: object
+            properties:
+              MaxConcurrent:
+                description: 'The maximum number of replicas to run simultaneously.
+
+                  '
+                type: integer
+                format: int64
+                default: 1
+              TotalCompletions:
+                description: 'The total number of replicas desired to reach the Completed
+
+                  state. If unset, will default to the value of `MaxConcurrent`
+
+                  '
+                type: integer
+                format: int64
+          GlobalJob:
+            description: 'The mode used for services which run a task to the completed state
+
+              on each valid node.
+
+              '
+            type: object
+      UpdateConfig:
+        description: Specification for the update strategy of the service.
+        type: object
+        properties:
+          Parallelism:
+            description: 'Maximum number of tasks to be updated in one iteration (0 means
+
+              unlimited parallelism).
+
+              '
+            type: integer
+            format: int64
+          Delay:
+            description: Amount of time between updates, in nanoseconds.
+            type: integer
+            format: int64
+          FailureAction:
+            description: 'Action to take if an updated task fails to run, or stops running
+
+              during the update.
+
+              '
+            type: string
+            enum:
+            - continue
+            - pause
+            - rollback
+          Monitor:
+            description: 'Amount of time to monitor each updated task for failures, in
+
+              nanoseconds.
+
+              '
+            type: integer
+            format: int64
+          MaxFailureRatio:
+            description: 'The fraction of tasks that may fail during an update before the
+
+              failure action is invoked, specified as a floating point number
+
+              between 0 and 1.
+
+              '
+            type: number
+            default: 0
+          Order:
+            description: 'The order of operations when rolling out an updated task. Either
+
+              the old task is shut down before the new task is started, or the
+
+              new task is started before the old task is shut down.
+
+              '
+            type: string
+            enum:
+            - stop-first
+            - start-first
+      RollbackConfig:
+        description: Specification for the rollback strategy of the service.
+        type: object
+        properties:
+          Parallelism:
+            description: 'Maximum number of tasks to be rolled back in one iteration (0 means
+
+              unlimited parallelism).
+
+              '
+            type: integer
+            format: int64
+          Delay:
+            description: 'Amount of time between rollback iterations, in nanoseconds.
+
+              '
+            type: integer
+            format: int64
+          FailureAction:
+            description: 'Action to take if an rolled back task fails to run, or stops
+
+              running during the rollback.
+
+              '
+            type: string
+            enum:
+            - continue
+            - pause
+          Monitor:
+            description: 'Amount of time to monitor each rolled back task for failures, in
+
+              nanoseconds.
+
+              '
+            type: integer
+            format: int64
+          MaxFailureRatio:
+            description: 'The fraction of tasks that may fail during a rollback before the
+
+              failure action is invoked, specified as a floating point number
+
+              between 0 and 1.
+
+              '
+            type: number
+            default: 0
+          Order:
+            description: 'The order of operations when rolling back a task. Either the old
+
+              task is shut down before the new task is started, or the new task
+
+              is started before the old task is shut down.
+
+              '
+            type: string
+            enum:
+            - stop-first
+            - start-first
+      Networks:
+        description: 'Specifies which networks the service should attach to.
+
+
+          Deprecated: This field is deprecated since v1.44. The Networks field in TaskSpec should be used instead.
+
+          '
+        type: array
+        items:
+          $ref: '#/definitions/NetworkAttachmentConfig'
+      EndpointSpec:
+        $ref: '#/definitions/EndpointSpec'
+  ServiceCreateResponse:
+    type: object
+    description: 'contains the information returned to a client on the
+
+      creation of a new service.
+
+      '
+    properties:
+      ID:
+        description: The ID of the created service.
+        type: string
+        x-nullable: false
+        example: ak7w3gjqoa3kuz8xcpnyy0pvl
+      Warnings:
+        description: 'Optional warning message.
+
+
+          FIXME(thaJeztah): this should have "omitempty" in the generated type.
+
+          '
+        type: array
+        x-nullable: true
+        items:
+          type: string
+        example:
+        - 'unable to pin image doesnotexist:latest to digest: image library/doesnotexist:latest not found'
+  ObjectVersion:
+    description: 'The version number of the object such as node, service, etc. This is needed
+
+      to avoid conflicting writes. The client must send the version number along
+
+      with the modified specification when updating these objects.
+
+
+      This approach ensures safe concurrency and determinism in that the change
+
+      on the object may not be applied if the version number has changed from the
+
+      last read. In other words, if two update requests specify the same base
+
+      version, only one of the requests can succeed. As a result, two separate
+
+      update requests that happen at the same time will not unintentionally
+
+      overwrite each other.
+
+      '
+    type: object
+    properties:
+      Index:
+        type: integer
+        format: uint64
+        example: 373531
+  GenericResources:
+    description: 'User-defined resources can be either Integer resources (e.g, `SSD=3`) or
+
+      String resources (e.g, `GPU=UUID1`).
+
+      '
+    type: array
+    items:
+      type: object
+      properties:
+        NamedResourceSpec:
+          type: object
+          properties:
+            Kind:
+              type: string
+            Value:
+              type: string
+        DiscreteResourceSpec:
+          type: object
+          properties:
+            Kind:
+              type: string
+            Value:
+              type: integer
+              format: int64
+    example:
+    - DiscreteResourceSpec:
+        Kind: SSD
+        Value: 3
+    - NamedResourceSpec:
+        Kind: GPU
+        Value: UUID1
+    - NamedResourceSpec:
+        Kind: GPU
+        Value: UUID2
+  TaskSpec:
+    description: User modifiable task configuration.
+    type: object
+    properties:
+      PluginSpec:
+        type: object
+        description: 'Plugin spec for the service.  *(Experimental release only.)*
+
+
+          <p><br /></p>
+
+
+          > **Note**: ContainerSpec, NetworkAttachmentSpec, and PluginSpec are
+
+          > mutually exclusive. PluginSpec is only used when the Runtime field
+
+          > is set to `plugin`. NetworkAttachmentSpec is used when the Runtime
+
+          > field is set to `attachment`.
+
+          '
+        properties:
+          Name:
+            description: The name or 'alias' to use for the plugin.
+            type: string
+          Remote:
+            description: The plugin image reference to use.
+            type: string
+          Disabled:
+            description: Disable the plugin once scheduled.
+            type: boolean
+          PluginPrivilege:
+            type: array
+            items:
+              $ref: '#/definitions/PluginPrivilege'
+      ContainerSpec:
+        type: object
+        description: 'Container spec for the service.
+
+
+          <p><br /></p>
+
+
+          > **Note**: ContainerSpec, NetworkAttachmentSpec, and PluginSpec are
+
+          > mutually exclusive. PluginSpec is only used when the Runtime field
+
+          > is set to `plugin`. NetworkAttachmentSpec is used when the Runtime
+
+          > field is set to `attachment`.
+
+          '
+        properties:
+          Image:
+            description: The image name to use for the container
+            type: string
+          Labels:
+            description: User-defined key/value data.
+            type: object
+            additionalProperties:
+              type: string
+          Command:
+            description: The command to be run in the image.
+            type: array
+            items:
+              type: string
+          Args:
+            description: Arguments to the command.
+            type: array
+            items:
+              type: string
+          Hostname:
+            description: 'The hostname to use for the container, as a valid
+
+              [RFC 1123](https://tools.ietf.org/html/rfc1123) hostname.
+
+              '
+            type: string
+          Env:
+            description: 'A list of environment variables in the form `VAR=value`.
+
+              '
+            type: array
+            items:
+              type: string
+          Dir:
+            description: The working directory for commands to run in.
+            type: string
+          User:
+            description: The user inside the container.
+            type: string
+          Groups:
+            type: array
+            description: 'A list of additional groups that the container process will run as.
+
+              '
+            items:
+              type: string
+          Privileges:
+            type: object
+            description: Security options for the container
+            properties:
+              CredentialSpec:
+                type: object
+                description: CredentialSpec for managed service account (Windows only)
+                properties:
+                  Config:
+                    type: string
+                    example: 0bt9dmxjvjiqermk6xrop3ekq
+                    description: 'Load credential spec from a Swarm Config with the given ID.
+
+                      The specified config must also be present in the Configs
+
+                      field with the Runtime property set.
+
+
+                      <p><br /></p>
+
+
+
+                      > **Note**: `CredentialSpec.File`, `CredentialSpec.Registry`,
+
+                      > and `CredentialSpec.Config` are mutually exclusive.
+
+                      '
+                  File:
+                    type: string
+                    example: spec.json
+                    description: 'Load credential spec from this file. The file is read by
+
+                      the daemon, and must be present in the `CredentialSpecs`
+
+                      subdirectory in the docker data directory, which defaults
+
+                      to `C:\ProgramData\Docker\` on Windows.
+
+
+                      For example, specifying `spec.json` loads
+
+                      `C:\ProgramData\Docker\CredentialSpecs\spec.json`.
+
+
+                      <p><br /></p>
+
+
+                      > **Note**: `CredentialSpec.File`, `CredentialSpec.Registry`,
+
+                      > and `CredentialSpec.Config` are mutually exclusive.
+
+                      '
+                  Registry:
+                    type: string
+                    description: 'Load credential spec from this value in the Windows
+
+                      registry. The specified registry value must be located in:
+
+
+                      `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization\Containers\CredentialSpecs`
+
+
+                      <p><br /></p>
+
+
+
+                      > **Note**: `CredentialSpec.File`, `CredentialSpec.Registry`,
+
+                      > and `CredentialSpec.Config` are mutually exclusive.
+
+                      '
+              SELinuxContext:
+                type: object
+                description: SELinux labels of the container
+                properties:
+                  Disable:
+                    type: boolean
+                    description: Disable SELinux
+                  User:
+                    type: string
+                    description: SELinux user label
+                  Role:
+                    type: string
+                    description: SELinux role label
+                  Type:
+                    type: string
+                    description: SELinux type label
+                  Level:
+                    type: string
+                    description: SELinux level label
+              Seccomp:
+                type: object
+                description: Options for configuring seccomp on the container
+                properties:
+                  Mode:
+                    type: string
+                    enum:
+                    - default
+                    - unconfined
+                    - custom
+                  Profile:
+                    description: The custom seccomp profile as a json object
+                    type: string
+              AppArmor:
+                type: object
+                description: Options for configuring AppArmor on the container
+                properties:
+                  Mode:
+                    type: string
+                    enum:
+                    - default
+                    - disabled
+              NoNewPrivileges:
+                type: boolean
+                description: Configuration of the no_new_privs bit in the container
+          TTY:
+            description: Whether a pseudo-TTY should be allocated.
+            type: boolean
+          OpenStdin:
+            description: Open `stdin`
+            type: boolean
+          ReadOnly:
+            description: Mount the container's root filesystem as read only.
+            type: boolean
+          Mounts:
+            description: 'Specification for mounts to be added to containers created as part
+
+              of the service.
+
+              '
+            type: array
+            items:
+              $ref: '#/definitions/Mount'
+          StopSignal:
+            description: Signal to stop the container.
+            type: string
+          StopGracePeriod:
+            description: 'Amount of time to wait for the container to terminate before
+
+              forcefully killing it.
+
+              '
+            type: integer
+            format: int64
+          HealthCheck:
+            $ref: '#/definitions/HealthConfig'
+          Hosts:
+            type: array
+            description: "A list of hostname/IP mappings to add to the container's `hosts`\nfile. The format of extra hosts is specified in the\n[hosts(5)](http://man7.org/linux/man-pages/man5/hosts.5.html)\nman page:\n\n    IP_address canonical_hostname [aliases...]\n"
+            items:
+              type: string
+          DNSConfig:
+            description: 'Specification for DNS related configurations in resolver configuration
+
+              file (`resolv.conf`).
+
+              '
+            type: object
+            properties:
+              Nameservers:
+                description: The IP addresses of the name servers.
+                type: array
+                items:
+                  type: string
+              Search:
+                description: A search list for host-name lookup.
+                type: array
+                items:
+                  type: string
+              Options:
+                description: 'A list of internal resolver variables to be modified (e.g.,
+
+                  `debug`, `ndots:3`, etc.).
+
+                  '
+                type: array
+                items:
+                  type: string
+          Secrets:
+            description: 'Secrets contains references to zero or more secrets that will be
+
+              exposed to the service.
+
+              '
+            type: array
+            items:
+              type: object
+              properties:
+                File:
+                  description: 'File represents a specific target that is backed by a file.
+
+                    '
+                  type: object
+                  properties:
+                    Name:
+                      description: 'Name represents the final filename in the filesystem.
+
+                        '
+                      type: string
+                    UID:
+                      description: UID represents the file UID.
+                      type: string
+                    GID:
+                      description: GID represents the file GID.
+                      type: string
+                    Mode:
+                      description: Mode represents the FileMode of the file.
+                      type: integer
+                      format: uint32
+                SecretID:
+                  description: 'SecretID represents the ID of the specific secret that we''re
+
+                    referencing.
+
+                    '
+                  type: string
+                SecretName:
+                  description: 'SecretName is the name of the secret that this references,
+
+                    but this is just provided for lookup/display purposes. The
+
+                    secret in the reference will be identified by its ID.
+
+                    '
+                  type: string
+          OomScoreAdj:
+            type: integer
+            format: int64
+            description: 'An integer value containing the score given to the container in
+
+              order to tune OOM killer preferences.
+
+              '
+            example: 0
+          Configs:
+            description: 'Configs contains references to zero or more configs that will be
+
+              exposed to the service.
+
+              '
+            type: array
+            items:
+              type: object
+              properties:
+                File:
+                  description: 'File represents a specific target that is backed by a file.
+
+
+                    <p><br /><p>
+
+
+                    > **Note**: `Configs.File` and `Configs.Runtime` are mutually exclusive
+
+                    '
+                  type: object
+                  properties:
+                    Name:
+                      description: 'Name represents the final filename in the filesystem.
+
+                        '
+                      type: string
+                    UID:
+                      description: UID represents the file UID.
+                      type: string
+                    GID:
+                      description: GID represents the file GID.
+                      type: string
+                    Mode:
+                      description: Mode represents the FileMode of the file.
+                      type: integer
+                      format: uint32
+                Runtime:
+                  description: 'Runtime represents a target that is not mounted into the
+
+                    container but is used by the task
+
+
+                    <p><br /><p>
+
+
+                    > **Note**: `Configs.File` and `Configs.Runtime` are mutually
+
+                    > exclusive
+
+                    '
+                  type: object
+                ConfigID:
+                  description: 'ConfigID represents the ID of the specific config that we''re
+
+                    referencing.
+
+                    '
+                  type: string
+                ConfigName:
+                  description: 'ConfigName is the name of the config that this references,
+
+                    but this is just provided for lookup/display purposes. The
+
+                    config in the reference will be identified by its ID.
+
+                    '
+                  type: string
+          Isolation:
+            type: string
+            description: 'Isolation technology of the containers running the service.
+
+              (Windows only)
+
+              '
+            enum:
+            - default
+            - process
+            - hyperv
+            - ''
+          Init:
+            description: 'Run an init inside the container that forwards signals and reaps
+
+              processes. This field is omitted if empty, and the default (as
+
+              configured on the daemon) is used.
+
+              '
+            type: boolean
+            x-nullable: true
+          Sysctls:
+            description: 'Set kernel namedspaced parameters (sysctls) in the container.
+
+              The Sysctls option on services accepts the same sysctls as the
+
+              are supported on containers. Note that while the same sysctls are
+
+              supported, no guarantees or checks are made about their
+
+              suitability for a clustered environment, and it''s up to the user
+
+              to determine whether a given sysctl will work properly in a
+
+              Service.
+
+              '
+            type: object
+            additionalProperties:
+              type: string
+          CapabilityAdd:
+            type: array
+            description: 'A list of kernel capabilities to add to the default set
+
+              for the container.
+
+              '
+            items:
+              type: string
+            example:
+            - CAP_NET_RAW
+            - CAP_SYS_ADMIN
+            - CAP_SYS_CHROOT
+            - CAP_SYSLOG
+          CapabilityDrop:
+            type: array
+            description: 'A list of kernel capabilities to drop from the default set
+
+              for the container.
+
+              '
+            items:
+              type: string
+            example:
+            - CAP_NET_RAW
+          Ulimits:
+            description: 'A list of resource limits to set in the container. For example: `{"Name": "nofile", "Soft": 1024, "Hard": 2048}`"
+
+              '
+            type: array
+            items:
+              type: object
+              properties:
+                Name:
+                  description: Name of ulimit
+                  type: string
+                Soft:
+                  description: Soft limit
+                  type: integer
+                Hard:
+                  description: Hard limit
+                  type: integer
+      NetworkAttachmentSpec:
+        description: 'Read-only spec type for non-swarm containers attached to swarm overlay
+
+          networks.
+
+
+          <p><br /></p>
+
+
+          > **Note**: ContainerSpec, NetworkAttachmentSpec, and PluginSpec are
+
+          > mutually exclusive. PluginSpec is only used when the Runtime field
+
+          > is set to `plugin`. NetworkAttachmentSpec is used when the Runtime
+
+          > field is set to `attachment`.
+
+          '
+        type: object
+        properties:
+          ContainerID:
+            description: ID of the container represented by this task
+            type: string
+      Resources:
+        description: 'Resource requirements which apply to each individual container created
+
+          as part of the service.
+
+          '
+        type: object
+        properties:
+          Limits:
+            description: Define resources limits.
+            $ref: '#/definitions/Limit'
+          Reservations:
+            description: Define resources reservation.
+            $ref: '#/definitions/ResourceObject'
+          SwapBytes:
+            description: 'Amount of swap in bytes - can only be used together with a memory limit.
+
+              If not specified, the default behaviour is to grant a swap space twice
+
+              as big as the memory limit.
+
+              Set to -1 to enable unlimited swap.
+
+              '
+            type: integer
+            format: int64
+            minimum: -1
+            x-nullable: true
+            x-omitempty: true
+          MemorySwappiness:
+            description: 'Tune the service''s containers'' memory swappiness (0 to 100).
+
+              If not specified, defaults to the containers'' OS'' default, generally 60,
+
+              or whatever value was predefined in the image.
+
+              Set to -1 to unset a previously set value.
+
+              '
+            type: integer
+            format: int64
+            minimum: -1
+            maximum: 100
+            x-nullable: true
+            x-omitempty: true
+      RestartPolicy:
+        description: 'Specification for the restart policy which applies to containers
+
+          created as part of this service.
+
+          '
+        type: object
+        properties:
+          Condition:
+            description: Condition for restart.
+            type: string
+            enum:
+            - none
+            - on-failure
+            - any
+          Delay:
+            description: Delay between restart attempts.
+            type: integer
+            format: int64
+          MaxAttempts:
+            description: 'Maximum attempts to restart a given container before giving up
+
+              (default value is 0, which is ignored).
+
+              '
+            type: integer
+            format: int64
+            default: 0
+          Window:
+            description: 'Windows is the time window used to evaluate the restart policy
+
+              (default value is 0, which is unbounded).
+
+              '
+            type: integer
+            format: int64
+            default: 0
+      Placement:
+        type: object
+        properties:
+          Constraints:
+            description: 'An array of constraint expressions to limit the set of nodes where
+
+              a task can be scheduled. Constraint expressions can either use a
+
+              _match_ (`==`) or _exclude_ (`!=`) rule. Multiple constraints find
+
+              nodes that satisfy every expression (AND match). Constraints can
+
+              match node or Docker Engine labels as follows:
+
+
+              node attribute       | matches                        | example
+
+              ---------------------|--------------------------------|-----------------------------------------------
+
+              `node.id`            | Node ID                        | `node.id==2ivku8v2gvtg4`
+
+              `node.hostname`      | Node hostname                  | `node.hostname!=node-2`
+
+              `node.role`          | Node role (`manager`/`worker`) | `node.role==manager`
+
+              `node.platform.os`   | Node operating system          | `node.platform.os==windows`
+
+              `node.platform.arch` | Node architecture              | `node.platform.arch==x86_64`
+
+              `node.labels`        | User-defined node labels       | `node.labels.security==high`
+
+              `engine.labels`      | Docker Engine''s labels         | `engine.labels.operatingsystem==ubuntu-24.04`
+
+
+              `engine.labels` apply to Docker Engine labels like operating system,
+
+              drivers, etc. Swarm administrators add `node.labels` for operational
+
+              purposes by using the [`node update endpoint`](#operation/NodeUpdate).
+
+              '
+            type: array
+            items:
+              type: string
+            example:
+            - node.hostname!=node3.corp.example.com
+            - node.role!=manager
+            - node.labels.type==production
+            - node.platform.os==linux
+            - node.platform.arch==x86_64
+          Preferences:
+            description: 'Preferences provide a way to make the scheduler aware of factors
+
+              such as topology. They are provided in order from highest to
+
+              lowest precedence.
+
+              '
+            type: array
+            items:
+              type: object
+              properties:
+                Spread:
+                  type: object
+                  properties:
+                    SpreadDescriptor:
+                      description: 'label descriptor, such as `engine.labels.az`.
+
+                        '
+                      type: string
+            example:
+            - Spread:
+                SpreadDescriptor: node.labels.datacenter
+            - Spread:
+                SpreadDescriptor: node.labels.rack
+          MaxReplicas:
+            description: 'Maximum number of replicas for per node (default value is 0, which
+
+              is unlimited)
+
+              '
+            type: integer
+            format: int64
+            default: 0
+          Platforms:
+            description: 'Platforms stores all the platforms that the service''s image can
+
+              run on. This field is used in the platform filter for scheduling.
+
+              If empty, then the platform filter is off, meaning there are no
+
+              scheduling restrictions.
+
+              '
+            type: array
+            items:
+              $ref: '#/definitions/Platform'
+      ForceUpdate:
+        description: 'A counter that triggers an update even if no relevant parameters have
+
+          been changed.
+
+          '
+        type: integer
+        format: uint64
+      Runtime:
+        description: 'Runtime is the type of runtime specified for the task executor.
+
+          '
+        type: string
+      Networks:
+        description: Specifies which networks the service should attach to.
+        type: array
+        items:
+          $ref: '#/definitions/NetworkAttachmentConfig'
+      LogDriver:
+        description: 'Specifies the log driver to use for tasks created from this spec. If
+
+          not present, the default one for the swarm will be used, finally
+
+          falling back to the engine default if not specified.
+
+          '
+        type: object
+        properties:
+          Name:
+            type: string
+          Options:
+            type: object
+            additionalProperties:
+              type: string
+  ResourceObject:
+    description: 'An object describing the resources which can be advertised by a node and
+
+      requested by a task.
+
+      '
+    type: object
+    properties:
+      NanoCPUs:
+        type: integer
+        format: int64
+        example: 4000000000
+      MemoryBytes:
+        type: integer
+        format: int64
+        example: 8272408576
+      GenericResources:
+        $ref: '#/definitions/GenericResources'
+  Platform:
+    description: 'Platform represents the platform (Arch/OS).
+
+      '
+    type: object
+    properties:
+      Architecture:
+        description: 'Architecture represents the hardware architecture (for example,
+
+          `x86_64`).
+
+          '
+        type: string
+        example: x86_64
+      OS:
+        description: 'OS represents the Operating System (for example, `linux` or `windows`).
+
+          '
+        type: string
+        example: linux
+  NetworkAttachmentConfig:
+    description: 'Specifies how a service should be attached to a particular network.
+
+      '
+    type: object
+    properties:
+      Target:
+        description: 'The target network for attachment. Must be a network name or ID.
+
+          '
+        type: string
+      Aliases:
+        description: 'Discoverable alternate names for the service on this network.
+
+          '
+        type: array
+        items:
+          type: string
+      DriverOpts:
+        description: 'Driver attachment options for the network target.
+
+          '
+        type: object
+        additionalProperties:
+          type: string
+  PluginPrivilege:
+    description: 'Describes a permission the user has to accept upon installing
+
+      the plugin.
+
+      '
+    type: object
+    x-go-name: Privilege
+    properties:
+      Name:
+        type: string
+        example: network
+      Description:
+        type: string
+      Value:
+        type: array
+        items:
+          type: string
+        example:
+        - host
+  EndpointSpec:
+    description: Properties that can be configured to access and load balance a service.
+    type: object
+    properties:
+      Mode:
+        description: 'The mode of resolution to use for internal load balancing between tasks.
+
+          '
+        type: string
+        enum:
+        - vip
+        - dnsrr
+        default: vip
+      Ports:
+        description: 'List of exposed ports that this service is accessible on from the
+
+          outside. Ports can only be provided if `vip` resolution mode is used.
+
+          '
+        type: array
+        items:
+          $ref: '#/definitions/EndpointPortConfig'
+  ErrorResponse:
+    description: Represents an error.
+    type: object
+    required:
+    - message
+    properties:
+      message:
+        description: The error message.
+        type: string
+        x-nullable: false
+    example:
+      message: Something went wrong.
+  Mount:
+    type: object
+    properties:
+      Target:
+        description: Container path.
+        type: string
+      Source:
+        description: 'Mount source (e.g. a volume name, a host path). The source cannot be
+
+          specified when using `Type=tmpfs`. For `Type=bind`, the source path
+
+          must either exist, or the `CreateMountpoint` must be set to `true` to
+
+          create the source path on the host if missing.
+
+
+          For `Type=npipe`, the pipe must exist prior to creating the container.'
+        type: string
+      Type:
+        description: 'The mount type. Available types:
+
+
+          - `bind` Mounts a file or directory from the host into the container. The `Source` must exist prior to creating the container.
+
+          - `cluster` a Swarm cluster volume
+
+          - `image` Mounts an image.
+
+          - `npipe` Mounts a named pipe from the host into the container. The `Source` must exist prior to creating the container.
+
+          - `tmpfs` Create a tmpfs with the given options. The mount `Source` cannot be specified for tmpfs.
+
+          - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed.
+
+          '
+        allOf:
+        - $ref: '#/definitions/MountType'
+      ReadOnly:
+        description: Whether the mount should be read-only.
+        type: boolean
+      Consistency:
+        description: 'The consistency requirement for the mount: `default`, `consistent`, `cached`, or `delegated`.'
+        type: string
+      BindOptions:
+        description: Optional configuration for the `bind` type.
+        type: object
+        properties:
+          Propagation:
+            description: A propagation mode with the value `[r]private`, `[r]shared`, or `[r]slave`.
+            type: string
+            enum:
+            - private
+            - rprivate
+            - shared
+            - rshared
+            - slave
+            - rslave
+          NonRecursive:
+            description: Disable recursive bind mount.
+            type: boolean
+            default: false
+          CreateMountpoint:
+            description: Create mount point on host if missing
+            type: boolean
+            default: false
+          ReadOnlyNonRecursive:
+            description: 'Make the mount non-recursively read-only, but still leave the mount recursive
+
+              (unless NonRecursive is set to `true` in conjunction).
+
+
+              Added in v1.44, before that version all read-only mounts were
+
+              non-recursive by default. To match the previous behaviour this
+
+              will default to `true` for clients on versions prior to v1.44.
+
+              '
+            type: boolean
+            default: false
+          ReadOnlyForceRecursive:
+            description: Raise an error if the mount cannot be made recursively read-only.
+            type: boolean
+            default: false
+      VolumeOptions:
+        description: Optional configuration for the `volume` type.
+        type: object
+        properties:
+          NoCopy:
+            description: Populate volume with data from the target.
+            type: boolean
+            default: false
+          Labels:
+            description: User-defined key/value metadata.
+            type: object
+            additionalProperties:
+              type: string
+          DriverConfig:
+            description: Map of driver specific options
+            type: object
+            properties:
+              Name:
+                description: Name of the driver to use to create the volume.
+                type: string
+              Options:
+                description: key/value map of driver specific options.
+                type: object
+                additionalProperties:
+                  type: string
+          Subpath:
+            description: Source path inside the volume. Must be relative without any back traversals.
+            type: string
+            example: dir-inside-volume/subdirectory
+      ImageOptions:
+        description: Optional configuration for the `image` type.
+        type: object
+        properties:
+          Subpath:
+            description: Source path inside the image. Must be relative without any back traversals.
+            type: string
+            example: dir-inside-image/subdirectory
+      TmpfsOptions:
+        description: Optional configuration for the `tmpfs` type.
+        type: object
+        properties:
+          SizeBytes:
+            description: The size for the tmpfs mount in bytes.
+            type: integer
+            format: int64
+          Mode:
+            description: 'The permission mode for the tmpfs mount in an integer.
+
+              The value must not be in octal format (e.g. 755) but rather
+
+              the decimal representation of the octal value (e.g. 493).
+
+              '
+            type: integer
+          Options:
+            description: 'The options to be passed to the tmpfs mount. An array of arrays.
+
+              Flag options should be provided as 1-length arrays. Other types
+
+              should be provided as as 2-length arrays, where the first item is
+
+              the key and the second the value.
+
+              '
+            type: array
+            items:
+              type: array
+              minItems: 1
+              maxItems: 2
+              items:
+                type: string
+            example:
+            - - noexec
+  Service:
+    type: object
+    properties:
+      ID:
+        type: string
+      Version:
+        $ref: '#/definitions/ObjectVersion'
+      CreatedAt:
+        type: string
+        format: dateTime
+      UpdatedAt:
+        type: string
+        format: dateTime
+      Spec:
+        $ref: '#/definitions/ServiceSpec'
+      Endpoint:
+        type: object
+        properties:
+          Spec:
+            $ref: '#/definitions/EndpointSpec'
+          Ports:
+            type: array
+            items:
+              $ref: '#/definitions/EndpointPortConfig'
+          VirtualIPs:
+            type: array
+            items:
+              type: object
+              properties:
+                NetworkID:
+                  type: string
+                Addr:
+                  type: string
+      UpdateStatus:
+        description: The status of a service update.
+        type: object
+        properties:
+          State:
+            type: string
+            enum:
+            - updating
+            - paused
+            - completed
+          StartedAt:
+            type: string
+            format: dateTime
+          CompletedAt:
+            type: string
+            format: dateTime
+          Message:
+            type: string
+      ServiceStatus:
+        description: 'The status of the service''s tasks. Provided only when requested as
+
+          part of a ServiceList operation.
+
+          '
+        type: object
+        properties:
+          RunningTasks:
+            description: 'The number of tasks for the service currently in the Running state.
+
+              '
+            type: integer
+            format: uint64
+            example: 7
+          DesiredTasks:
+            description: 'The number of tasks for the service desired to be running.
+
+              For replicated services, this is the replica count from the
+
+              service spec. For global services, this is computed by taking
+
+              count of all tasks for the service with a Desired State other
+
+              than Shutdown.
+
+              '
+            type: integer
+            format: uint64
+            example: 10
+          CompletedTasks:
+            description: 'The number of tasks for a job that are in the Completed state.
+
+              This field must be cross-referenced with the service type, as the
+
+              value of 0 may mean the service is not in a job mode, or it may
+
+              mean the job-mode service has no tasks yet Completed.
+
+              '
+            type: integer
+            format: uint64
+      JobStatus:
+        description: 'The status of the service when it is in one of ReplicatedJob or
+
+          GlobalJob modes. Absent on Replicated and Global mode services. The
+
+          JobIteration is an ObjectVersion, but unlike the Service''s version,
+
+          does not need to be sent with an update request.
+
+          '
+        type: object
+        properties:
+          JobIteration:
+            description: 'JobIteration is a value increased each time a Job is executed,
+
+              successfully or otherwise. "Executed", in this case, means the
+
+              job as a whole has been started, not that an individual Task has
+
+              been launched. A job is "Executed" when its ServiceSpec is
+
+              updated. JobIteration can be used to disambiguate Tasks belonging
+
+              to different executions of a job.  Though JobIteration will
+
+              increase with each subsequent execution, it may not necessarily
+
+              increase by 1, and so JobIteration should not be used to
+
+              '
+            $ref: '#/definitions/ObjectVersion'
+          LastExecution:
+            description: 'The last time, as observed by the server, that this job was
+
+              started.
+
+              '
+            type: string
+            format: dateTime
+    example:
+      ID: 9mnpnzenvg8p8tdbtq4wvbkcz
+      Version:
+        Index: 19
+      CreatedAt: '2016-06-07T21:05:51.880065305Z'
+      UpdatedAt: '2016-06-07T21:07:29.962229872Z'
+      Spec:
+        Name: hopeful_cori
+        TaskTemplate:
+          ContainerSpec:
+            Image: redis
+          Resources:
+            Limits: {}
+            Reservations: {}
+          RestartPolicy:
+            Condition: any
+            MaxAttempts: 0
+          Placement: {}
+          ForceUpdate: 0
+        Mode:
+          Replicated:
+            Replicas: 1
+        UpdateConfig:
+          Parallelism: 1
+          Delay: 1000000000
+          FailureAction: pause
+          Monitor: 15000000000
+          MaxFailureRatio: 0.15
+        RollbackConfig:
+          Parallelism: 1
+          Delay: 1000000000
+          FailureAction: pause
+          Monitor: 15000000000
+          MaxFailureRatio: 0.15
+        EndpointSpec:
+          Mode: vip
+          Ports:
+          - Protocol: tcp
+            TargetPort: 6379
+            PublishedPort: 30001
+      Endpoint:
+        Spec:
+          Mode: vip
+          Ports:
+          - Protocol: tcp
+            TargetPort: 6379
+            PublishedPort: 30001
+        Ports:
+        - Protocol: tcp
+          TargetPort: 6379
+          PublishedPort: 30001
+        VirtualIPs:
+        - NetworkID: 4qvuz4ko70xaltuqbt8956gd1
+          Addr: 10.255.0.2/16
+        - NetworkID: 4qvuz4ko70xaltuqbt8956gd1
+          Addr: 10.255.0.3/16
+  ServiceUpdateResponse:
+    type: object
+    properties:
+      Warnings:
+        description: Optional warning messages
+        type: array
+        items:
+          type: string
+    example:
+      Warnings:
+      - 'unable to pin image doesnotexist:latest to digest: image library/doesnotexist:latest not found'
+  MountType:
+    description: 'The mount type. Available types:
+
+
+      - `bind` a mount of a file or directory from the host into the container.
+
+      - `cluster` a Swarm cluster volume.
+
+      - `image` an OCI image.
+
+      - `npipe` a named pipe from the host into the container.
+
+      - `tmpfs` a `tmpfs`.
+
+      - `volume` a docker volume with the given `Name`.'
+    type: string
+    enum:
+    - bind
+    - cluster
+    - image
+    - npipe
+    - tmpfs
+    - volume
+    example: volume
+  Limit:
+    description: 'An object describing a limit on resources which can be requested by a task.
+
+      '
+    type: object
+    properties:
+      NanoCPUs:
+        type: integer
+        format: int64
+        example: 4000000000
+      MemoryBytes:
+        type: integer
+        format: int64
+        example: 8272408576
+      Pids:
+        description: 'Limits the maximum number of PIDs in the container. Set `0` for unlimited.
+
+          '
+        type: integer
+        format: int64
+        default: 0
+        example: 100
+  EndpointPortConfig:
+    type: object
+    properties:
+      Name:
+        type: string
+      Protocol:
+        type: string
+        enum:
+        - tcp
+        - udp
+        - sctp
+      TargetPort:
+        description: The port inside the container.
+        type: integer
+      PublishedPort:
+        description: The port on the swarm hosts.
+        type: integer
+      PublishMode:
+        description: "The mode in which port is published.\n\n<p><br /></p>\n\n- \"ingress\" makes the target port accessible on every node,\n  regardless of whether there is a task for the service running on\n  that node or not.\n- \"host\" bypasses the routing mesh and publish the port directly on\n  the swarm node where that service is running.\n"
+        type: string
+        enum:
+        - ingress
+        - host
+        default: ingress
+        example: ingress

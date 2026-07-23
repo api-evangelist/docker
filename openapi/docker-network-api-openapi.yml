@@ -1,0 +1,1047 @@
+swagger: '2.0'
+info:
+  title: Docker Engine Config Network API
+  version: '1.54'
+  x-logo:
+    url: https://docs.docker.com/assets/images/logo-docker-main.png
+  description: "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n"
+basePath: /v1.54
+schemes:
+- http
+- https
+consumes:
+- application/json
+- text/plain
+produces:
+- application/json
+- text/plain
+tags:
+- name: Network
+  x-displayName: Networks
+  description: 'Networks are user-defined networks that containers can be attached to.
+
+    See the [networking documentation](https://docs.docker.com/network/)
+
+    for more information.
+
+    '
+paths:
+  /networks:
+    get:
+      summary: List networks
+      description: 'Returns a list of networks. For details on the format, see the
+
+        [network inspect endpoint](#operation/NetworkInspect).
+
+
+        Note that it uses a different, smaller representation of a network than
+
+        inspecting a single network. For example, the list of containers attached
+
+        to the network is not propagated in API versions 1.28 and up.
+
+        '
+      operationId: NetworkList
+      produces:
+      - application/json
+      responses:
+        200:
+          description: No error
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NetworkSummary'
+          examples:
+            application/json:
+            - Name: bridge
+              Id: f2de39df4171b0dc801e8002d1d999b77256983dfc63041c0f34030aa3977566
+              Created: '2016-10-19T06:21:00.416543526Z'
+              Scope: local
+              Driver: bridge
+              EnableIPv4: true
+              EnableIPv6: false
+              Internal: false
+              Attachable: false
+              Ingress: false
+              IPAM:
+                Driver: default
+                Config:
+                - Subnet: 172.17.0.0/16
+              Options:
+                com.docker.network.bridge.default_bridge: 'true'
+                com.docker.network.bridge.enable_icc: 'true'
+                com.docker.network.bridge.enable_ip_masquerade: 'true'
+                com.docker.network.bridge.host_binding_ipv4: 0.0.0.0
+                com.docker.network.bridge.name: docker0
+                com.docker.network.driver.mtu: '1500'
+            - Name: none
+              Id: e086a3893b05ab69242d3c44e49483a3bbbd3a26b46baa8f61ab797c1088d794
+              Created: '0001-01-01T00:00:00Z'
+              Scope: local
+              Driver: 'null'
+              EnableIPv4: false
+              EnableIPv6: false
+              Internal: false
+              Attachable: false
+              Ingress: false
+              IPAM:
+                Driver: default
+                Config: []
+              Containers: {}
+              Options: {}
+            - Name: host
+              Id: 13e871235c677f196c4e1ecebb9dc733b9b2d2ab589e30c539efeda84a24215e
+              Created: '0001-01-01T00:00:00Z'
+              Scope: local
+              Driver: host
+              EnableIPv4: false
+              EnableIPv6: false
+              Internal: false
+              Attachable: false
+              Ingress: false
+              IPAM:
+                Driver: default
+                Config: []
+              Containers: {}
+              Options: {}
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: filters
+        in: query
+        description: "JSON encoded value of the filters (a `map[string][]string`) to process\non the networks list.\n\nAvailable filters:\n\n- `dangling=<boolean>` When set to `true` (or `1`), returns all\n   networks that are not in use by a container. When set to `false`\n   (or `0`), only networks that are in use by one or more\n   containers are returned.\n- `driver=<driver-name>` Matches a network's driver.\n- `id=<network-id>` Matches all or part of a network ID.\n- `label=<key>` or `label=<key>=<value>` of a network label.\n- `name=<network-name>` Matches all or part of a network name.\n- `scope=[\"swarm\"|\"global\"|\"local\"]` Filters networks by scope (`swarm`, `global`, or `local`).\n- `type=[\"custom\"|\"builtin\"]` Filters networks by type. The `custom` keyword returns all user-defined networks.\n"
+        type: string
+      tags:
+      - Network
+  /networks/{id}:
+    get:
+      summary: Inspect a network
+      operationId: NetworkInspect
+      produces:
+      - application/json
+      responses:
+        200:
+          description: No error
+          schema:
+            $ref: '#/definitions/NetworkInspect'
+        404:
+          description: Network not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: id
+        in: path
+        description: Network ID or name
+        required: true
+        type: string
+      - name: verbose
+        in: query
+        description: Detailed inspect output for troubleshooting
+        type: boolean
+        default: false
+      - name: scope
+        in: query
+        description: Filter the network by scope (swarm, global, or local)
+        type: string
+      tags:
+      - Network
+    delete:
+      summary: Remove a network
+      operationId: NetworkDelete
+      responses:
+        204:
+          description: No error
+        403:
+          description: operation not supported for pre-defined networks
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        404:
+          description: no such network
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: id
+        in: path
+        description: Network ID or name
+        required: true
+        type: string
+      tags:
+      - Network
+  /networks/create:
+    post:
+      summary: Create a network
+      operationId: NetworkCreate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        201:
+          description: Network created successfully
+          schema:
+            $ref: '#/definitions/NetworkCreateResponse'
+        400:
+          description: bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: 'Forbidden operation. This happens when trying to create a network named after a pre-defined network,
+
+            or when trying to create an overlay network on a daemon which is not part of a Swarm cluster.
+
+            '
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        404:
+          description: plugin not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: networkConfig
+        in: body
+        description: Network configuration
+        required: true
+        schema:
+          type: object
+          title: NetworkCreateRequest
+          required:
+          - Name
+          properties:
+            Name:
+              description: The network's name.
+              type: string
+              example: my_network
+            Driver:
+              description: Name of the network driver plugin to use.
+              type: string
+              default: bridge
+              example: bridge
+            Scope:
+              description: 'The level at which the network exists (e.g. `swarm` for cluster-wide
+
+                or `local` for machine level).
+
+                '
+              type: string
+            Internal:
+              description: Restrict external access to the network.
+              type: boolean
+            Attachable:
+              description: 'Globally scoped network is manually attachable by regular
+
+                containers from workers in swarm mode.
+
+                '
+              type: boolean
+              example: true
+            Ingress:
+              description: 'Ingress network is the network which provides the routing-mesh
+
+                in swarm mode.
+
+                '
+              type: boolean
+              example: false
+            ConfigOnly:
+              description: 'Creates a config-only network. Config-only networks are placeholder
+
+                networks for network configurations to be used by other networks.
+
+                Config-only networks cannot be used directly to run containers
+
+                or services.
+
+                '
+              type: boolean
+              default: false
+              example: false
+            ConfigFrom:
+              description: 'Specifies the source which will provide the configuration for
+
+                this network. The specified network must be an existing
+
+                config-only network; see ConfigOnly.
+
+                '
+              $ref: '#/definitions/ConfigReference'
+            IPAM:
+              description: Optional custom IP scheme for the network.
+              $ref: '#/definitions/IPAM'
+            EnableIPv4:
+              description: Enable IPv4 on the network.
+              type: boolean
+              example: true
+            EnableIPv6:
+              description: Enable IPv6 on the network.
+              type: boolean
+              example: true
+            Options:
+              description: Network specific options to be used by the drivers.
+              type: object
+              additionalProperties:
+                type: string
+              example:
+                com.docker.network.bridge.default_bridge: 'true'
+                com.docker.network.bridge.enable_icc: 'true'
+                com.docker.network.bridge.enable_ip_masquerade: 'true'
+                com.docker.network.bridge.host_binding_ipv4: 0.0.0.0
+                com.docker.network.bridge.name: docker0
+                com.docker.network.driver.mtu: '1500'
+            Labels:
+              description: User-defined key/value metadata.
+              type: object
+              additionalProperties:
+                type: string
+              example:
+                com.example.some-label: some-value
+                com.example.some-other-label: some-other-value
+      tags:
+      - Network
+  /networks/{id}/connect:
+    post:
+      summary: Connect a container to a network
+      description: The network must be either a local-scoped network or a swarm-scoped network with the `attachable` option set. A network cannot be re-attached to a running container
+      operationId: NetworkConnect
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: No error
+        400:
+          description: bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        403:
+          description: Operation forbidden
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        404:
+          description: Network or container not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: id
+        in: path
+        description: Network ID or name
+        required: true
+        type: string
+      - name: container
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/NetworkConnectRequest'
+      tags:
+      - Network
+  /networks/{id}/disconnect:
+    post:
+      summary: Disconnect a container from a network
+      operationId: NetworkDisconnect
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: No error
+        403:
+          description: Operation not supported for swarm scoped networks
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        404:
+          description: Network or container not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: id
+        in: path
+        description: Network ID or name
+        required: true
+        type: string
+      - name: container
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/NetworkDisconnectRequest'
+      tags:
+      - Network
+  /networks/prune:
+    post:
+      summary: Delete unused networks
+      produces:
+      - application/json
+      operationId: NetworkPrune
+      parameters:
+      - name: filters
+        in: query
+        description: 'Filters to process on the prune list, encoded as JSON (a `map[string][]string`).
+
+
+          Available filters:
+
+          - `until=<timestamp>` Prune networks created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time.
+
+          - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune networks with (or without, in case `label!=...` is used) the specified labels.
+
+          '
+        type: string
+      responses:
+        200:
+          description: No error
+          schema:
+            type: object
+            title: NetworkPruneResponse
+            properties:
+              NetworksDeleted:
+                description: Networks that were deleted
+                type: array
+                items:
+                  type: string
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Network
+definitions:
+  NetworkCreateResponse:
+    description: OK response to NetworkCreate operation
+    type: object
+    title: NetworkCreateResponse
+    x-go-name: CreateResponse
+    required:
+    - Id
+    - Warning
+    properties:
+      Id:
+        description: The ID of the created network.
+        type: string
+        x-nullable: false
+        example: b5c4fc71e8022147cd25de22b22173de4e3b170134117172eb595cb91b4e7e5d
+      Warning:
+        description: Warnings encountered when creating the container
+        type: string
+        x-nullable: false
+        example: ''
+  NetworkSummary:
+    description: Network list response item
+    x-go-name: Summary
+    type: object
+    allOf:
+    - $ref: '#/definitions/Network'
+  PeerInfo:
+    description: 'represents one peer of an overlay network.
+
+      '
+    type: object
+    x-nullable: false
+    properties:
+      Name:
+        description: ID of the peer-node in the Swarm cluster.
+        type: string
+        x-omitempty: false
+        example: 6869d7c1732b
+      IP:
+        description: IP-address of the peer-node in the Swarm cluster.
+        type: string
+        x-omitempty: false
+        example: 10.133.77.91
+        x-go-type:
+          type: Addr
+          import:
+            package: net/netip
+  IPAMStatus:
+    type: object
+    x-nullable: false
+    x-omitempty: false
+    properties:
+      Subnets:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/SubnetStatus'
+        example:
+          172.16.0.0/16:
+            IPsInUse: 3
+            DynamicIPsAvailable: 65533
+          2001:db8:abcd:0012::0/96:
+            IPsInUse: 5
+            DynamicIPsAvailable: 4294967291
+        x-go-type:
+          type: SubnetStatuses
+          kind: map
+  NetworkDisconnectRequest:
+    description: 'NetworkDisconnectRequest represents the data to be used to disconnect a container from a network.
+
+      '
+    type: object
+    x-go-name: DisconnectRequest
+    required:
+    - Container
+    properties:
+      Container:
+        type: string
+        description: The ID or name of the container to disconnect from the network.
+        x-nullable: false
+        example: 3613f73ba0e4
+      Force:
+        type: boolean
+        description: Force the container to disconnect from the network.
+        default: false
+        x-nullable: false
+        x-omitempty: false
+        example: false
+  EndpointResource:
+    type: object
+    description: 'contains network resources allocated and used for a container in a network.
+
+      '
+    properties:
+      Name:
+        type: string
+        x-omitempty: false
+        example: container_1
+      EndpointID:
+        type: string
+        x-omitempty: false
+        example: 628cadb8bcb92de107b2a1e516cbffe463e321f548feb37697cce00ad694f21a
+      MacAddress:
+        type: string
+        x-omitempty: false
+        example: 02:42:ac:13:00:02
+        x-go-type:
+          type: HardwareAddr
+      IPv4Address:
+        type: string
+        x-omitempty: false
+        example: 172.19.0.2/16
+        x-go-type:
+          type: Prefix
+          import:
+            package: net/netip
+      IPv6Address:
+        type: string
+        x-omitempty: false
+        example: ''
+        x-go-type:
+          type: Prefix
+          import:
+            package: net/netip
+  NetworkStatus:
+    description: 'provides runtime information about the network such as the number of allocated IPs.
+
+      '
+    type: object
+    x-go-name: Status
+    properties:
+      IPAM:
+        $ref: '#/definitions/IPAMStatus'
+  EndpointIPAMConfig:
+    description: 'EndpointIPAMConfig represents an endpoint''s IPAM configuration.
+
+      '
+    type: object
+    x-nullable: true
+    properties:
+      IPv4Address:
+        type: string
+        example: 172.20.30.33
+        x-go-type:
+          type: Addr
+          import:
+            package: net/netip
+      IPv6Address:
+        type: string
+        example: 2001:db8:abcd::3033
+        x-go-type:
+          type: Addr
+          import:
+            package: net/netip
+      LinkLocalIPs:
+        type: array
+        items:
+          type: string
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        example:
+        - 169.254.34.68
+        - fe80::3468
+  SubnetStatus:
+    type: object
+    x-nullable: false
+    x-omitempty: false
+    properties:
+      IPsInUse:
+        description: 'Number of IP addresses in the subnet that are in use or reserved and are therefore unavailable for allocation, saturating at 2<sup>64</sup> - 1.
+
+          '
+        type: integer
+        format: uint64
+        x-omitempty: false
+      DynamicIPsAvailable:
+        description: 'Number of IP addresses within the network''s IPRange for the subnet that are available for allocation, saturating at 2<sup>64</sup> - 1.
+
+          '
+        type: integer
+        format: uint64
+        x-omitempty: false
+  Network:
+    type: object
+    properties:
+      Name:
+        description: 'Name of the network.
+
+          '
+        type: string
+        example: my_network
+        x-omitempty: false
+      Id:
+        description: 'ID that uniquely identifies a network on a single machine.
+
+          '
+        type: string
+        x-go-name: ID
+        x-omitempty: false
+        example: 7d86d31b1478e7cca9ebed7e73aa0fdeec46c5ca29497431d3007d2d9e15ed99
+      Created:
+        description: 'Date and time at which the network was created in
+
+          [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+
+          '
+        type: string
+        format: dateTime
+        x-omitempty: false
+        x-go-type:
+          type: Time
+          import:
+            package: time
+          hints:
+            nullable: false
+        example: '2016-10-19T04:33:30.360899459Z'
+      Scope:
+        description: 'The level at which the network exists (e.g. `swarm` for cluster-wide
+
+          or `local` for machine level)
+
+          '
+        type: string
+        x-omitempty: false
+        example: local
+      Driver:
+        description: 'The name of the driver used to create the network (e.g. `bridge`,
+
+          `overlay`).
+
+          '
+        type: string
+        x-omitempty: false
+        example: overlay
+      EnableIPv4:
+        description: 'Whether the network was created with IPv4 enabled.
+
+          '
+        type: boolean
+        x-omitempty: false
+        example: true
+      EnableIPv6:
+        description: 'Whether the network was created with IPv6 enabled.
+
+          '
+        type: boolean
+        x-omitempty: false
+        example: false
+      IPAM:
+        description: 'The network''s IP Address Management.
+
+          '
+        $ref: '#/definitions/IPAM'
+        x-nullable: false
+        x-omitempty: false
+      Internal:
+        description: 'Whether the network is created to only allow internal networking
+
+          connectivity.
+
+          '
+        type: boolean
+        x-nullable: false
+        x-omitempty: false
+        default: false
+        example: false
+      Attachable:
+        description: 'Whether a global / swarm scope network is manually attachable by regular
+
+          containers from workers in swarm mode.
+
+          '
+        type: boolean
+        x-nullable: false
+        x-omitempty: false
+        default: false
+        example: false
+      Ingress:
+        description: 'Whether the network is providing the routing-mesh for the swarm cluster.
+
+          '
+        type: boolean
+        x-nullable: false
+        x-omitempty: false
+        default: false
+        example: false
+      ConfigFrom:
+        $ref: '#/definitions/ConfigReference'
+        x-nullable: false
+        x-omitempty: false
+      ConfigOnly:
+        description: 'Whether the network is a config-only network. Config-only networks are
+
+          placeholder networks for network configurations to be used by other
+
+          networks. Config-only networks cannot be used directly to run containers
+
+          or services.
+
+          '
+        type: boolean
+        x-omitempty: false
+        x-nullable: false
+        default: false
+      Options:
+        description: 'Network-specific options uses when creating the network.
+
+          '
+        type: object
+        x-omitempty: false
+        additionalProperties:
+          type: string
+        example:
+          com.docker.network.bridge.default_bridge: 'true'
+          com.docker.network.bridge.enable_icc: 'true'
+          com.docker.network.bridge.enable_ip_masquerade: 'true'
+          com.docker.network.bridge.host_binding_ipv4: 0.0.0.0
+          com.docker.network.bridge.name: docker0
+          com.docker.network.driver.mtu: '1500'
+      Labels:
+        description: 'Metadata specific to the network being created.
+
+          '
+        type: object
+        x-omitempty: false
+        additionalProperties:
+          type: string
+        example:
+          com.example.some-label: some-value
+          com.example.some-other-label: some-other-value
+      Peers:
+        description: 'List of peer nodes for an overlay network. This field is only present
+
+          for overlay networks, and omitted for other network types.
+
+          '
+        type: array
+        x-omitempty: true
+        items:
+          $ref: '#/definitions/PeerInfo'
+  IPAM:
+    type: object
+    x-nullable: false
+    x-omitempty: false
+    properties:
+      Driver:
+        description: Name of the IPAM driver to use.
+        type: string
+        default: default
+        example: default
+      Config:
+        description: 'List of IPAM configuration options, specified as a map:
+
+
+          ```
+
+          {"Subnet": <CIDR>, "IPRange": <CIDR>, "Gateway": <IP address>, "AuxAddress": <device_name:IP address>}
+
+          ```
+
+          '
+        type: array
+        items:
+          $ref: '#/definitions/IPAMConfig'
+      Options:
+        description: Driver-specific options, specified as a map.
+        type: object
+        additionalProperties:
+          type: string
+        example:
+          foo: bar
+  ConfigReference:
+    x-nullable: false
+    x-omitempty: false
+    description: 'The config-only network source to provide the configuration for
+
+      this network.
+
+      '
+    type: object
+    properties:
+      Network:
+        description: 'The name of the config-only network that provides the network''s
+
+          configuration. The specified network must be an existing config-only
+
+          network. Only network names are allowed, not network IDs.
+
+          '
+        type: string
+        x-omitempty: false
+        example: config_only_network_01
+  NetworkConnectRequest:
+    description: 'NetworkConnectRequest represents the data to be used to connect a container to a network.
+
+      '
+    type: object
+    x-go-name: ConnectRequest
+    required:
+    - Container
+    properties:
+      Container:
+        type: string
+        description: The ID or name of the container to connect to the network.
+        x-nullable: false
+        example: 3613f73ba0e4
+      EndpointConfig:
+        $ref: '#/definitions/EndpointSettings'
+        x-nullable: true
+  IPAMConfig:
+    type: object
+    properties:
+      Subnet:
+        type: string
+        example: 172.20.0.0/16
+      IPRange:
+        type: string
+        example: 172.20.10.0/24
+      Gateway:
+        type: string
+        example: 172.20.10.11
+      AuxiliaryAddresses:
+        type: object
+        additionalProperties:
+          type: string
+  EndpointSettings:
+    description: Configuration for a network endpoint.
+    type: object
+    properties:
+      IPAMConfig:
+        $ref: '#/definitions/EndpointIPAMConfig'
+      Links:
+        type: array
+        items:
+          type: string
+        example:
+        - container_1
+        - container_2
+      MacAddress:
+        description: 'MAC address for the endpoint on this network. The network driver might ignore this parameter.
+
+          '
+        type: string
+        example: 02:42:ac:11:00:04
+        x-go-type:
+          type: HardwareAddr
+      Aliases:
+        type: array
+        items:
+          type: string
+        example:
+        - server_x
+        - server_y
+      DriverOpts:
+        description: 'DriverOpts is a mapping of driver options and values. These options
+
+          are passed directly to the driver and are driver specific.
+
+          '
+        type: object
+        x-nullable: true
+        additionalProperties:
+          type: string
+        example:
+          com.example.some-label: some-value
+          com.example.some-other-label: some-other-value
+      GwPriority:
+        description: 'This property determines which endpoint will provide the default
+
+          gateway for a container. The endpoint with the highest priority will
+
+          be used. If multiple endpoints have the same priority, endpoints are
+
+          lexicographically sorted based on their network name, and the one
+
+          that sorts first is picked.
+
+          '
+        type: integer
+        format: int64
+        example:
+        - 10
+      NetworkID:
+        description: 'Unique ID of the network.
+
+          '
+        type: string
+        example: 08754567f1f40222263eab4102e1c733ae697e8e354aa9cd6e18d7402835292a
+      EndpointID:
+        description: 'Unique ID for the service endpoint in a Sandbox.
+
+          '
+        type: string
+        example: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
+      Gateway:
+        description: 'Gateway address for this network.
+
+          '
+        type: string
+        example: 172.17.0.1
+      IPAddress:
+        description: 'IPv4 address.
+
+          '
+        type: string
+        example: 172.17.0.4
+        x-go-type:
+          type: Addr
+          import:
+            package: net/netip
+      IPPrefixLen:
+        description: 'Mask length of the IPv4 address.
+
+          '
+        type: integer
+        example: 16
+      IPv6Gateway:
+        description: 'IPv6 gateway address.
+
+          '
+        type: string
+        example: 2001:db8:2::100
+        x-go-type:
+          type: Addr
+          import:
+            package: net/netip
+      GlobalIPv6Address:
+        description: 'Global IPv6 address.
+
+          '
+        type: string
+        example: 2001:db8::5689
+        x-go-type:
+          type: Addr
+          import:
+            package: net/netip
+      GlobalIPv6PrefixLen:
+        description: 'Mask length of the global IPv6 address.
+
+          '
+        type: integer
+        format: int64
+        example: 64
+      DNSNames:
+        description: 'List of all DNS names an endpoint has on a specific network. This
+
+          list is based on the container name, network aliases, container short
+
+          ID, and hostname.
+
+
+          These DNS names are non-fully qualified but can contain several dots.
+
+          You can get fully qualified DNS names by appending `.<network-name>`.
+
+          For instance, if container name is `my.ctr` and the network is named
+
+          `testnet`, `DNSNames` will contain `my.ctr` and the FQDN will be
+
+          `my.ctr.testnet`.
+
+          '
+        type: array
+        items:
+          type: string
+        example:
+        - foobar
+        - server_x
+        - server_y
+        - my.ctr
+  NetworkInspect:
+    description: The body of the "get network" http response message.
+    x-go-name: Inspect
+    type: object
+    allOf:
+    - $ref: '#/definitions/Network'
+    properties:
+      Containers:
+        description: 'Contains endpoints attached to the network.
+
+          '
+        type: object
+        x-omitempty: false
+        additionalProperties:
+          $ref: '#/definitions/EndpointResource'
+        example:
+          19a4d5d687db25203351ed79d478946f861258f018fe384f229f2efa4b23513c:
+            Name: test
+            EndpointID: 628cadb8bcb92de107b2a1e516cbffe463e321f548feb37697cce00ad694f21a
+            MacAddress: 02:42:ac:13:00:02
+            IPv4Address: 172.19.0.2/16
+            IPv6Address: ''
+      Services:
+        description: 'List of services using the network. This field is only present for
+
+          swarm scope networks, and omitted for local scope networks.
+
+          '
+        type: object
+        x-omitempty: true
+        additionalProperties:
+          x-go-type:
+            type: ServiceInfo
+            hints:
+              nullable: false
+      Status:
+        description: 'provides runtime information about the network such as the number of allocated IPs.
+
+          '
+        $ref: '#/definitions/NetworkStatus'
+  ErrorResponse:
+    description: Represents an error.
+    type: object
+    required:
+    - message
+    properties:
+      message:
+        description: The error message.
+        type: string
+        x-nullable: false
+    example:
+      message: Something went wrong.

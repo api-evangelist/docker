@@ -1,0 +1,748 @@
+swagger: '2.0'
+info:
+  title: Docker Engine Config Volume API
+  version: '1.54'
+  x-logo:
+    url: https://docs.docker.com/assets/images/logo-docker-main.png
+  description: "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n"
+basePath: /v1.54
+schemes:
+- http
+- https
+consumes:
+- application/json
+- text/plain
+produces:
+- application/json
+- text/plain
+tags:
+- name: Volume
+  x-displayName: Volumes
+  description: 'Create and manage persistent storage that can be attached to containers.
+
+    '
+paths:
+  /volumes:
+    get:
+      summary: List volumes
+      operationId: VolumeList
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Summary volume data that matches the query
+          schema:
+            $ref: '#/definitions/VolumeListResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: filters
+        in: query
+        description: "JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the volumes list. Available filters:\n\n- `dangling=<boolean>` When set to `true` (or `1`), returns all\n   volumes that are not in use by a container. When set to `false`\n   (or `0`), only volumes that are in use by one or more\n   containers are returned.\n- `driver=<volume-driver-name>` Matches volumes based on their driver.\n- `label=<key>` or `label=<key>:<value>` Matches volumes based on\n   the presence of a `label` alone or a `label` and a value.\n- `name=<volume-name>` Matches all or part of a volume name.\n"
+        type: string
+        format: json
+      tags:
+      - Volume
+  /volumes/create:
+    post:
+      summary: Create a volume
+      operationId: VolumeCreate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        201:
+          description: The volume was created successfully
+          schema:
+            $ref: '#/definitions/Volume'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: volumeConfig
+        in: body
+        required: true
+        description: Volume configuration
+        schema:
+          $ref: '#/definitions/VolumeCreateRequest'
+      tags:
+      - Volume
+  /volumes/{name}:
+    get:
+      summary: Inspect a volume
+      operationId: VolumeInspect
+      produces:
+      - application/json
+      responses:
+        200:
+          description: No error
+          schema:
+            $ref: '#/definitions/Volume'
+        404:
+          description: No such volume
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: path
+        required: true
+        description: Volume name or ID
+        type: string
+      tags:
+      - Volume
+    put:
+      summary: '"Update a volume. Valid only for Swarm cluster volumes"
+
+        '
+      operationId: VolumeUpdate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: no error
+        400:
+          description: bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        404:
+          description: no such volume
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: path
+        description: The name or ID of the volume
+        type: string
+        required: true
+      - name: body
+        in: body
+        schema:
+          type: object
+          description: Volume configuration
+          properties:
+            Spec:
+              $ref: '#/definitions/ClusterVolumeSpec'
+        description: 'The spec of the volume to update. Currently, only Availability may
+
+          change. All other fields must remain unchanged.
+
+          '
+      - name: version
+        in: query
+        description: 'The version number of the volume being updated. This is required to
+
+          avoid conflicting writes. Found in the volume''s `ClusterVolume`
+
+          field.
+
+          '
+        type: integer
+        format: int64
+        required: true
+      tags:
+      - Volume
+    delete:
+      summary: Remove a volume
+      description: Instruct the driver to remove the volume.
+      operationId: VolumeDelete
+      responses:
+        204:
+          description: The volume was removed
+        404:
+          description: No such volume or volume driver
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        409:
+          description: Volume is in use and cannot be removed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: path
+        required: true
+        description: Volume name or ID
+        type: string
+      - name: force
+        in: query
+        description: Force the removal of the volume
+        type: boolean
+        default: false
+      tags:
+      - Volume
+  /volumes/prune:
+    post:
+      summary: Delete unused volumes
+      produces:
+      - application/json
+      operationId: VolumePrune
+      parameters:
+      - name: filters
+        in: query
+        description: 'Filters to process on the prune list, encoded as JSON (a `map[string][]string`).
+
+
+          Available filters:
+
+          - `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune volumes with (or without, in case `label!=...` is used) the specified labels.
+
+          - `all` (`all=true`) - Consider all (local) volumes for pruning and not just anonymous volumes.
+
+          '
+        type: string
+      responses:
+        200:
+          description: No error
+          schema:
+            type: object
+            title: VolumePruneResponse
+            properties:
+              VolumesDeleted:
+                description: Volumes that were deleted
+                type: array
+                items:
+                  type: string
+              SpaceReclaimed:
+                description: Disk space reclaimed in bytes
+                type: integer
+                format: int64
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Volume
+definitions:
+  ObjectVersion:
+    description: 'The version number of the object such as node, service, etc. This is needed
+
+      to avoid conflicting writes. The client must send the version number along
+
+      with the modified specification when updating these objects.
+
+
+      This approach ensures safe concurrency and determinism in that the change
+
+      on the object may not be applied if the version number has changed from the
+
+      last read. In other words, if two update requests specify the same base
+
+      version, only one of the requests can succeed. As a result, two separate
+
+      update requests that happen at the same time will not unintentionally
+
+      overwrite each other.
+
+      '
+    type: object
+    properties:
+      Index:
+        type: integer
+        format: uint64
+        example: 373531
+  ClusterVolumeSpec:
+    type: object
+    description: 'Cluster-specific options used to create the volume.
+
+      '
+    properties:
+      Group:
+        type: string
+        description: 'Group defines the volume group of this volume. Volumes belonging to
+
+          the same group can be referred to by group name when creating
+
+          Services.  Referring to a volume by group instructs Swarm to treat
+
+          volumes in that group interchangeably for the purpose of scheduling.
+
+          Volumes with an empty string for a group technically all belong to
+
+          the same, emptystring group.
+
+          '
+      AccessMode:
+        type: object
+        description: 'Defines how the volume is used by tasks.
+
+          '
+        properties:
+          Scope:
+            type: string
+            description: 'The set of nodes this volume can be used on at one time.
+
+              - `single` The volume may only be scheduled to one node at a time.
+
+              - `multi` the volume may be scheduled to any supported number of nodes at a time.
+
+              '
+            default: single
+            enum:
+            - single
+            - multi
+            x-nullable: false
+          Sharing:
+            type: string
+            description: 'The number and way that different tasks can use this volume
+
+              at one time.
+
+              - `none` The volume may only be used by one task at a time.
+
+              - `readonly` The volume may be used by any number of tasks, but they all must mount the volume as readonly
+
+              - `onewriter` The volume may be used by any number of tasks, but only one may mount it as read/write.
+
+              - `all` The volume may have any number of readers and writers.
+
+              '
+            default: none
+            enum:
+            - none
+            - readonly
+            - onewriter
+            - all
+            x-nullable: false
+          MountVolume:
+            type: object
+            description: "Options for using this volume as a Mount-type volume.\n\n    Either MountVolume or BlockVolume, but not both, must be\n    present.\n  properties:\n    FsType:\n      type: \"string\"\n      description: |\n        Specifies the filesystem type for the mount volume.\n        Optional.\n    MountFlags:\n      type: \"array\"\n      description: |\n        Flags to pass when mounting the volume. Optional.\n      items:\n        type: \"string\"\nBlockVolume:\n  type: \"object\"\n  description: |\n    Options for using this volume as a Block-type volume.\n    Intentionally empty.\n"
+          Secrets:
+            type: array
+            description: 'Swarm Secrets that are passed to the CSI storage plugin when
+
+              operating on this volume.
+
+              '
+            items:
+              type: object
+              description: 'One cluster volume secret entry. Defines a key-value pair that
+
+                is passed to the plugin.
+
+                '
+              properties:
+                Key:
+                  type: string
+                  description: 'Key is the name of the key of the key-value pair passed to
+
+                    the plugin.
+
+                    '
+                Secret:
+                  type: string
+                  description: 'Secret is the swarm Secret object from which to read data.
+
+                    This can be a Secret name or ID. The Secret data is
+
+                    retrieved by swarm and used as the value of the key-value
+
+                    pair passed to the plugin.
+
+                    '
+          AccessibilityRequirements:
+            type: object
+            description: 'Requirements for the accessible topology of the volume. These
+
+              fields are optional. For an in-depth description of what these
+
+              fields mean, see the CSI specification.
+
+              '
+            properties:
+              Requisite:
+                type: array
+                description: 'A list of required topologies, at least one of which the
+
+                  volume must be accessible from.
+
+                  '
+                items:
+                  $ref: '#/definitions/Topology'
+              Preferred:
+                type: array
+                description: 'A list of topologies that the volume should attempt to be
+
+                  provisioned in.
+
+                  '
+                items:
+                  $ref: '#/definitions/Topology'
+          CapacityRange:
+            type: object
+            description: 'The desired capacity that the volume should be created with. If
+
+              empty, the plugin will decide the capacity.
+
+              '
+            properties:
+              RequiredBytes:
+                type: integer
+                format: int64
+                description: 'The volume must be at least this big. The value of 0
+
+                  indicates an unspecified minimum
+
+                  '
+              LimitBytes:
+                type: integer
+                format: int64
+                description: 'The volume must not be bigger than this. The value of 0
+
+                  indicates an unspecified maximum.
+
+                  '
+          Availability:
+            type: string
+            description: 'The availability of the volume for use in tasks.
+
+              - `active` The volume is fully available for scheduling on the cluster
+
+              - `pause` No new workloads should use the volume, but existing workloads are not stopped.
+
+              - `drain` All workloads using this volume should be stopped and rescheduled, and no new ones should be started.
+
+              '
+            default: active
+            x-nullable: false
+            enum:
+            - active
+            - pause
+            - drain
+  VolumeListResponse:
+    type: object
+    title: VolumeListResponse
+    x-go-name: ListResponse
+    description: Volume list response
+    properties:
+      Volumes:
+        type: array
+        description: List of volumes
+        items:
+          $ref: '#/definitions/Volume'
+      Warnings:
+        type: array
+        description: 'Warnings that occurred when fetching the list of volumes.
+
+          '
+        items:
+          type: string
+        example: []
+  Volume:
+    type: object
+    required:
+    - Name
+    - Driver
+    - Mountpoint
+    - Labels
+    - Scope
+    - Options
+    x-nullable: false
+    properties:
+      Name:
+        type: string
+        description: Name of the volume.
+        x-nullable: false
+        example: tardis
+      Driver:
+        type: string
+        description: Name of the volume driver used by the volume.
+        x-nullable: false
+        example: custom
+      Mountpoint:
+        type: string
+        description: Mount path of the volume on the host.
+        x-nullable: false
+        example: /var/lib/docker/volumes/tardis
+      CreatedAt:
+        type: string
+        format: dateTime
+        description: Date/Time the volume was created.
+        example: '2016-06-07T20:31:11.853781916Z'
+      Status:
+        type: object
+        description: 'Low-level details about the volume, provided by the volume driver.
+
+          Details are returned as a map with key/value pairs:
+
+          `{"key":"value","key2":"value2"}`.
+
+
+          The `Status` field is optional, and is omitted if the volume driver
+
+          does not support this feature.
+
+          '
+        additionalProperties:
+          type: object
+        example:
+          hello: world
+      Labels:
+        type: object
+        description: User-defined key/value metadata.
+        x-nullable: false
+        additionalProperties:
+          type: string
+        example:
+          com.example.some-label: some-value
+          com.example.some-other-label: some-other-value
+      Scope:
+        type: string
+        description: 'The level at which the volume exists. Either `global` for cluster-wide,
+
+          or `local` for machine level.
+
+          '
+        default: local
+        x-nullable: false
+        enum:
+        - local
+        - global
+        example: local
+      ClusterVolume:
+        $ref: '#/definitions/ClusterVolume'
+      Options:
+        type: object
+        description: 'The driver specific options used when creating the volume.
+
+          '
+        additionalProperties:
+          type: string
+        example:
+          device: tmpfs
+          o: size=100m,uid=1000
+          type: tmpfs
+      UsageData:
+        type: object
+        x-nullable: true
+        x-go-name: UsageData
+        required:
+        - Size
+        - RefCount
+        description: 'Usage details about the volume. This information is used by the
+
+          `GET /system/df` endpoint, and omitted in other endpoints.
+
+          '
+        properties:
+          Size:
+            type: integer
+            format: int64
+            default: -1
+            description: 'Amount of disk space used by the volume (in bytes). This information
+
+              is only available for volumes created with the `"local"` volume
+
+              driver. For volumes created with other volume drivers, this field
+
+              is set to `-1` ("not available")
+
+              '
+            x-nullable: false
+          RefCount:
+            type: integer
+            format: int64
+            default: -1
+            description: 'The number of containers referencing this volume. This field
+
+              is set to `-1` if the reference-count is not available.
+
+              '
+            x-nullable: false
+  ErrorResponse:
+    description: Represents an error.
+    type: object
+    required:
+    - message
+    properties:
+      message:
+        description: The error message.
+        type: string
+        x-nullable: false
+    example:
+      message: Something went wrong.
+  ClusterVolume:
+    type: object
+    description: 'Options and information specific to, and only present on, Swarm CSI
+
+      cluster volumes.
+
+      '
+    properties:
+      ID:
+        type: string
+        description: 'The Swarm ID of this volume. Because cluster volumes are Swarm
+
+          objects, they have an ID, unlike non-cluster volumes. This ID can
+
+          be used to refer to the Volume instead of the name.
+
+          '
+      Version:
+        $ref: '#/definitions/ObjectVersion'
+      CreatedAt:
+        type: string
+        format: dateTime
+      UpdatedAt:
+        type: string
+        format: dateTime
+      Spec:
+        $ref: '#/definitions/ClusterVolumeSpec'
+      Info:
+        type: object
+        description: 'Information about the global status of the volume.
+
+          '
+        properties:
+          CapacityBytes:
+            type: integer
+            format: int64
+            description: 'The capacity of the volume in bytes. A value of 0 indicates that
+
+              the capacity is unknown.
+
+              '
+          VolumeContext:
+            type: object
+            description: 'A map of strings to strings returned from the storage plugin when
+
+              the volume is created.
+
+              '
+            additionalProperties:
+              type: string
+          VolumeID:
+            type: string
+            description: 'The ID of the volume as returned by the CSI storage plugin. This
+
+              is distinct from the volume''s ID as provided by Docker. This ID
+
+              is never used by the user when communicating with Docker to refer
+
+              to this volume. If the ID is blank, then the Volume has not been
+
+              successfully created in the plugin yet.
+
+              '
+          AccessibleTopology:
+            type: array
+            description: 'The topology this volume is actually accessible from.
+
+              '
+            items:
+              $ref: '#/definitions/Topology'
+      PublishStatus:
+        type: array
+        description: 'The status of the volume as it pertains to its publishing and use on
+
+          specific nodes
+
+          '
+        items:
+          type: object
+          properties:
+            NodeID:
+              type: string
+              description: 'The ID of the Swarm node the volume is published on.
+
+                '
+            State:
+              type: string
+              description: 'The published state of the volume.
+
+                * `pending-publish` The volume should be published to this node, but the call to the controller plugin to do so has not yet been successfully completed.
+
+                * `published` The volume is published successfully to the node.
+
+                * `pending-node-unpublish` The volume should be unpublished from the node, and the manager is awaiting confirmation from the worker that it has done so.
+
+                * `pending-controller-unpublish` The volume is successfully unpublished from the node, but has not yet been successfully unpublished on the controller.
+
+                '
+              enum:
+              - pending-publish
+              - published
+              - pending-node-unpublish
+              - pending-controller-unpublish
+            PublishContext:
+              type: object
+              description: 'A map of strings to strings returned by the CSI controller
+
+                plugin when a volume is published.
+
+                '
+              additionalProperties:
+                type: string
+  VolumeCreateRequest:
+    description: Volume configuration
+    type: object
+    title: VolumeConfig
+    x-go-name: CreateRequest
+    properties:
+      Name:
+        description: 'The new volume''s name. If not specified, Docker generates a name.
+
+          '
+        type: string
+        x-nullable: false
+        example: tardis
+      Driver:
+        description: Name of the volume driver to use.
+        type: string
+        default: local
+        x-nullable: false
+        example: custom
+      DriverOpts:
+        description: 'A mapping of driver options and values. These options are
+
+          passed directly to the driver and are driver specific.
+
+          '
+        type: object
+        additionalProperties:
+          type: string
+        example:
+          device: tmpfs
+          o: size=100m,uid=1000
+          type: tmpfs
+      Labels:
+        description: User-defined key/value metadata.
+        type: object
+        additionalProperties:
+          type: string
+        example:
+          com.example.some-label: some-value
+          com.example.some-other-label: some-other-value
+      ClusterVolumeSpec:
+        $ref: '#/definitions/ClusterVolumeSpec'
+  Topology:
+    description: 'A map of topological domains to topological segments. For in depth
+
+      details, see documentation for the Topology object in the CSI
+
+      specification.
+
+      '
+    type: object
+    additionalProperties:
+      type: string

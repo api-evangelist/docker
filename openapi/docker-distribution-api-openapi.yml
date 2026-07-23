@@ -1,0 +1,203 @@
+swagger: '2.0'
+info:
+  title: Docker Engine Config Distribution API
+  version: '1.54'
+  x-logo:
+    url: https://docs.docker.com/assets/images/logo-docker-main.png
+  description: "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n"
+basePath: /v1.54
+schemes:
+- http
+- https
+consumes:
+- application/json
+- text/plain
+produces:
+- application/json
+- text/plain
+tags:
+- name: Distribution
+paths:
+  /distribution/{name}/json:
+    get:
+      summary: Get image information from the registry
+      description: 'Return image digest and platform information by contacting the registry.
+
+        '
+      operationId: DistributionInspect
+      produces:
+      - application/json
+      responses:
+        200:
+          description: descriptor and platform information
+          schema:
+            $ref: '#/definitions/DistributionInspect'
+        401:
+          description: Failed authentication or no image found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+          examples:
+            application/json:
+              message: 'No such image: someimage (tag: latest)'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: name
+        in: path
+        description: Image name or id
+        type: string
+        required: true
+      tags:
+      - Distribution
+definitions:
+  ErrorResponse:
+    description: Represents an error.
+    type: object
+    required:
+    - message
+    properties:
+      message:
+        description: The error message.
+        type: string
+        x-nullable: false
+    example:
+      message: Something went wrong.
+  OCIDescriptor:
+    type: object
+    x-go-name: Descriptor
+    description: 'A descriptor struct containing digest, media type, and size, as defined in
+
+      the [OCI Content Descriptors Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/descriptor.md).
+
+      '
+    properties:
+      mediaType:
+        description: 'The media type of the object this schema refers to.
+
+          '
+        type: string
+        example: application/vnd.oci.image.manifest.v1+json
+      digest:
+        description: 'The digest of the targeted content.
+
+          '
+        type: string
+        example: sha256:c0537ff6a5218ef531ece93d4984efc99bbf3f7497c0a7726c88e2bb7584dc96
+      size:
+        description: 'The size in bytes of the blob.
+
+          '
+        type: integer
+        format: int64
+        example: 424
+      urls:
+        description: List of URLs from which this object MAY be downloaded.
+        type: array
+        items:
+          type: string
+          format: uri
+        x-nullable: true
+      annotations:
+        description: Arbitrary metadata relating to the targeted content.
+        type: object
+        x-nullable: true
+        additionalProperties:
+          type: string
+        example:
+          com.docker.official-images.bashbrew.arch: amd64
+          org.opencontainers.image.base.digest: sha256:0d0ef5c914d3ea700147da1bd050c59edb8bb12ca312f3800b29d7c8087eabd8
+          org.opencontainers.image.base.name: scratch
+          org.opencontainers.image.created: '2025-01-27T00:00:00Z'
+          org.opencontainers.image.revision: 9fabb4bad5138435b01857e2fe9363e2dc5f6a79
+          org.opencontainers.image.source: https://git.launchpad.net/cloud-images/+oci/ubuntu-base
+          org.opencontainers.image.url: https://hub.docker.com/_/ubuntu
+          org.opencontainers.image.version: '24.04'
+      data:
+        type: string
+        x-nullable: true
+        description: 'Data is an embedding of the targeted content. This is encoded as a base64
+
+          string when marshalled to JSON (automatically, by encoding/json). If
+
+          present, Data can be used directly to avoid fetching the targeted content.'
+        example: null
+      platform:
+        $ref: '#/definitions/OCIPlatform'
+      artifactType:
+        description: ArtifactType is the IANA media type of this artifact.
+        type: string
+        x-nullable: true
+        example: null
+  DistributionInspect:
+    type: object
+    x-go-name: DistributionInspect
+    title: DistributionInspectResponse
+    required:
+    - Descriptor
+    - Platforms
+    description: 'Describes the result obtained from contacting the registry to retrieve
+
+      image metadata.
+
+      '
+    properties:
+      Descriptor:
+        $ref: '#/definitions/OCIDescriptor'
+      Platforms:
+        type: array
+        description: 'An array containing all platforms supported by the image.
+
+          '
+        items:
+          $ref: '#/definitions/OCIPlatform'
+  OCIPlatform:
+    type: object
+    x-go-name: Platform
+    x-nullable: true
+    description: 'Describes the platform which the image in the manifest runs on, as defined
+
+      in the [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/image-index.md).
+
+      '
+    properties:
+      architecture:
+        description: 'The CPU architecture, for example `amd64` or `ppc64`.
+
+          '
+        type: string
+        example: arm
+      os:
+        description: 'The operating system, for example `linux` or `windows`.
+
+          '
+        type: string
+        example: windows
+      os.version:
+        description: 'Optional field specifying the operating system version, for example on
+
+          Windows `10.0.19041.1165`.
+
+          '
+        type: string
+        example: 10.0.19041.1165
+      os.features:
+        description: 'Optional field specifying an array of strings, each listing a required
+
+          OS feature (for example on Windows `win32k`).
+
+          '
+        type: array
+        items:
+          type: string
+        example:
+        - win32k
+      variant:
+        description: 'Optional field specifying a variant of the CPU, for example `v7` to
+
+          specify ARMv7 when architecture is `arm`.
+
+          '
+        type: string
+        example: v7

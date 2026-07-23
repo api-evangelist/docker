@@ -1,0 +1,833 @@
+swagger: '2.0'
+info:
+  title: Docker Engine Config Swarm API
+  version: '1.54'
+  x-logo:
+    url: https://docs.docker.com/assets/images/logo-docker-main.png
+  description: "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n"
+basePath: /v1.54
+schemes:
+- http
+- https
+consumes:
+- application/json
+- text/plain
+produces:
+- application/json
+- text/plain
+tags:
+- name: Swarm
+  x-displayName: Swarm
+  description: 'Engines can be clustered together in a swarm. Refer to the
+
+    [swarm mode documentation](https://docs.docker.com/engine/swarm/)
+
+    for more information.
+
+    '
+paths:
+  /swarm:
+    get:
+      summary: Inspect swarm
+      operationId: SwarmInspect
+      responses:
+        200:
+          description: no error
+          schema:
+            $ref: '#/definitions/Swarm'
+        404:
+          description: no such swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Swarm
+  /swarm/init:
+    post:
+      summary: Initialize a new swarm
+      operationId: SwarmInit
+      produces:
+      - application/json
+      - text/plain
+      responses:
+        200:
+          description: no error
+          schema:
+            description: The node ID
+            type: string
+            example: 7v2t30z9blmxuhnyo6s4cpenp
+        400:
+          description: bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is already part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          title: SwarmInitRequest
+          properties:
+            ListenAddr:
+              description: 'Listen address used for inter-manager communication, as well
+
+                as determining the networking interface used for the VXLAN
+
+                Tunnel Endpoint (VTEP). This can either be an address/port
+
+                combination in the form `192.168.1.1:4567`, or an interface
+
+                followed by a port number, like `eth0:4567`. If the port number
+
+                is omitted, the default swarm listening port is used.
+
+                '
+              type: string
+            AdvertiseAddr:
+              description: 'Externally reachable address advertised to other nodes. This
+
+                can either be an address/port combination in the form
+
+                `192.168.1.1:4567`, or an interface followed by a port number,
+
+                like `eth0:4567`. If the port number is omitted, the port
+
+                number from the listen address is used. If `AdvertiseAddr` is
+
+                not specified, it will be automatically detected when possible.
+
+                '
+              type: string
+            DataPathAddr:
+              description: 'Address or interface to use for data path traffic (format:
+
+                `<ip|interface>`), for example,  `192.168.1.1`, or an interface,
+
+                like `eth0`. If `DataPathAddr` is unspecified, the same address
+
+                as `AdvertiseAddr` is used.
+
+
+                The `DataPathAddr` specifies the address that global scope
+
+                network drivers will publish towards other  nodes in order to
+
+                reach the containers running on this node. Using this parameter
+
+                it is possible to separate the container data traffic from the
+
+                management traffic of the cluster.
+
+                '
+              type: string
+            DataPathPort:
+              description: 'DataPathPort specifies the data path port number for data traffic.
+
+                Acceptable port range is 1024 to 49151.
+
+                if no port is set or is set to 0, default port 4789 will be used.
+
+                '
+              type: integer
+              format: uint32
+            DefaultAddrPool:
+              description: 'Default Address Pool specifies default subnet pools for global
+
+                scope networks.
+
+                '
+              type: array
+              items:
+                type: string
+                example:
+                - 10.10.0.0/16
+                - 20.20.0.0/16
+            ForceNewCluster:
+              description: Force creation of a new swarm.
+              type: boolean
+            SubnetSize:
+              description: 'SubnetSize specifies the subnet size of the networks created
+
+                from the default subnet pool.
+
+                '
+              type: integer
+              format: uint32
+            Spec:
+              $ref: '#/definitions/SwarmSpec'
+          example:
+            ListenAddr: 0.0.0.0:2377
+            AdvertiseAddr: 192.168.1.1:2377
+            DataPathPort: 4789
+            DefaultAddrPool:
+            - 10.10.0.0/8
+            - 20.20.0.0/8
+            SubnetSize: 24
+            ForceNewCluster: false
+            Spec:
+              Orchestration: {}
+              Raft: {}
+              Dispatcher: {}
+              CAConfig: {}
+              EncryptionConfig:
+                AutoLockManagers: false
+      tags:
+      - Swarm
+  /swarm/join:
+    post:
+      summary: Join an existing swarm
+      operationId: SwarmJoin
+      responses:
+        200:
+          description: no error
+        400:
+          description: bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is already part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          title: SwarmJoinRequest
+          properties:
+            ListenAddr:
+              description: 'Listen address used for inter-manager communication if the node
+
+                gets promoted to manager, as well as determining the networking
+
+                interface used for the VXLAN Tunnel Endpoint (VTEP).
+
+                '
+              type: string
+            AdvertiseAddr:
+              description: 'Externally reachable address advertised to other nodes. This
+
+                can either be an address/port combination in the form
+
+                `192.168.1.1:4567`, or an interface followed by a port number,
+
+                like `eth0:4567`. If the port number is omitted, the port
+
+                number from the listen address is used. If `AdvertiseAddr` is
+
+                not specified, it will be automatically detected when possible.
+
+                '
+              type: string
+            DataPathAddr:
+              description: 'Address or interface to use for data path traffic (format:
+
+                `<ip|interface>`), for example,  `192.168.1.1`, or an interface,
+
+                like `eth0`. If `DataPathAddr` is unspecified, the same address
+
+                as `AdvertiseAddr` is used.
+
+
+                The `DataPathAddr` specifies the address that global scope
+
+                network drivers will publish towards other nodes in order to
+
+                reach the containers running on this node. Using this parameter
+
+                it is possible to separate the container data traffic from the
+
+                management traffic of the cluster.
+
+                '
+              type: string
+            RemoteAddrs:
+              description: 'Addresses of manager nodes already participating in the swarm.
+
+                '
+              type: array
+              items:
+                type: string
+            JoinToken:
+              description: Secret token for joining this swarm.
+              type: string
+          example:
+            ListenAddr: 0.0.0.0:2377
+            AdvertiseAddr: 192.168.1.1:2377
+            DataPathAddr: 192.168.1.1
+            RemoteAddrs:
+            - node1:2377
+            JoinToken: SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-7p73s1dx5in4tatdymyhg9hu2
+      tags:
+      - Swarm
+  /swarm/leave:
+    post:
+      summary: Leave a swarm
+      operationId: SwarmLeave
+      responses:
+        200:
+          description: no error
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: force
+        description: 'Force leave swarm, even if this is the last manager or that it will
+
+          break the cluster.
+
+          '
+        in: query
+        type: boolean
+        default: false
+      tags:
+      - Swarm
+  /swarm/update:
+    post:
+      summary: Update a swarm
+      operationId: SwarmUpdate
+      responses:
+        200:
+          description: no error
+        400:
+          description: bad parameter
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/SwarmSpec'
+      - name: version
+        in: query
+        description: 'The version number of the swarm object being updated. This is
+
+          required to avoid conflicting writes.
+
+          '
+        type: integer
+        format: int64
+        required: true
+      - name: rotateWorkerToken
+        in: query
+        description: Rotate the worker join token.
+        type: boolean
+        default: false
+      - name: rotateManagerToken
+        in: query
+        description: Rotate the manager join token.
+        type: boolean
+        default: false
+      - name: rotateManagerUnlockKey
+        in: query
+        description: Rotate the manager unlock key.
+        type: boolean
+        default: false
+      tags:
+      - Swarm
+  /swarm/unlockkey:
+    get:
+      summary: Get the unlock key
+      operationId: SwarmUnlockkey
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: no error
+          schema:
+            type: object
+            title: UnlockKeyResponse
+            properties:
+              UnlockKey:
+                description: The swarm's unlock key.
+                type: string
+            example:
+              UnlockKey: SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Swarm
+  /swarm/unlock:
+    post:
+      summary: Unlock a locked manager
+      operationId: SwarmUnlock
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          title: SwarmUnlockRequest
+          properties:
+            UnlockKey:
+              description: The swarm's unlock key.
+              type: string
+          example:
+            UnlockKey: SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8
+      responses:
+        200:
+          description: no error
+        500:
+          description: server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        503:
+          description: node is not part of a swarm
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      tags:
+      - Swarm
+definitions:
+  ObjectVersion:
+    description: 'The version number of the object such as node, service, etc. This is needed
+
+      to avoid conflicting writes. The client must send the version number along
+
+      with the modified specification when updating these objects.
+
+
+      This approach ensures safe concurrency and determinism in that the change
+
+      on the object may not be applied if the version number has changed from the
+
+      last read. In other words, if two update requests specify the same base
+
+      version, only one of the requests can succeed. As a result, two separate
+
+      update requests that happen at the same time will not unintentionally
+
+      overwrite each other.
+
+      '
+    type: object
+    properties:
+      Index:
+        type: integer
+        format: uint64
+        example: 373531
+  JoinTokens:
+    description: 'JoinTokens contains the tokens workers and managers need to join the swarm.
+
+      '
+    type: object
+    properties:
+      Worker:
+        description: 'The token workers can use to join the swarm.
+
+          '
+        type: string
+        example: SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-1awxwuwd3z9j1z3puu7rcgdbx
+      Manager:
+        description: 'The token managers can use to join the swarm.
+
+          '
+        type: string
+        example: SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-7p73s1dx5in4tatdymyhg9hu2
+  Swarm:
+    type: object
+    allOf:
+    - $ref: '#/definitions/ClusterInfo'
+    - type: object
+      properties:
+        JoinTokens:
+          $ref: '#/definitions/JoinTokens'
+  TLSInfo:
+    description: 'Information about the issuer of leaf TLS certificates and the trusted root
+
+      CA certificate.
+
+      '
+    type: object
+    properties:
+      TrustRoot:
+        description: 'The root CA certificate(s) that are used to validate leaf TLS
+
+          certificates.
+
+          '
+        type: string
+      CertIssuerSubject:
+        description: The base64-url-safe-encoded raw subject bytes of the issuer.
+        type: string
+      CertIssuerPublicKey:
+        description: 'The base64-url-safe-encoded raw public key bytes of the issuer.
+
+          '
+        type: string
+    example:
+      TrustRoot: '-----BEGIN CERTIFICATE-----
+
+        MIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw
+
+        EzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0
+
+        MzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH
+
+        A0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf
+
+        3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB
+
+        Af8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO
+
+        PQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz
+
+        pxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H
+
+        -----END CERTIFICATE-----
+
+        '
+      CertIssuerSubject: MBMxETAPBgNVBAMTCHN3YXJtLWNh
+      CertIssuerPublicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==
+  ErrorResponse:
+    description: Represents an error.
+    type: object
+    required:
+    - message
+    properties:
+      message:
+        description: The error message.
+        type: string
+        x-nullable: false
+    example:
+      message: Something went wrong.
+  ClusterInfo:
+    description: 'ClusterInfo represents information about the swarm as is returned by the
+
+      "/info" endpoint. Join-tokens are not included.
+
+      '
+    x-nullable: true
+    type: object
+    properties:
+      ID:
+        description: The ID of the swarm.
+        type: string
+        example: abajmipo7b4xz5ip2nrla6b11
+      Version:
+        $ref: '#/definitions/ObjectVersion'
+      CreatedAt:
+        description: 'Date and time at which the swarm was initialised in
+
+          [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+
+          '
+        type: string
+        format: dateTime
+        example: '2016-08-18T10:44:24.496525531Z'
+      UpdatedAt:
+        description: 'Date and time at which the swarm was last updated in
+
+          [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+
+          '
+        type: string
+        format: dateTime
+        example: '2017-08-09T07:09:37.632105588Z'
+      Spec:
+        $ref: '#/definitions/SwarmSpec'
+      TLSInfo:
+        $ref: '#/definitions/TLSInfo'
+      RootRotationInProgress:
+        description: 'Whether there is currently a root CA rotation in progress for the swarm
+
+          '
+        type: boolean
+        example: false
+      DataPathPort:
+        description: 'DataPathPort specifies the data path port number for data traffic.
+
+          Acceptable port range is 1024 to 49151.
+
+          If no port is set or is set to 0, the default port (4789) is used.
+
+          '
+        type: integer
+        format: uint32
+        default: 4789
+        example: 4789
+      DefaultAddrPool:
+        description: 'Default Address Pool specifies default subnet pools for global scope
+
+          networks.
+
+          '
+        type: array
+        items:
+          type: string
+          format: CIDR
+          example:
+          - 10.10.0.0/16
+          - 20.20.0.0/16
+      SubnetSize:
+        description: 'SubnetSize specifies the subnet size of the networks created from the
+
+          default subnet pool.
+
+          '
+        type: integer
+        format: uint32
+        maximum: 29
+        default: 24
+        example: 24
+  SwarmSpec:
+    description: User modifiable swarm configuration.
+    type: object
+    properties:
+      Name:
+        description: Name of the swarm.
+        type: string
+        example: default
+      Labels:
+        description: User-defined key/value metadata.
+        type: object
+        additionalProperties:
+          type: string
+        example:
+          com.example.corp.type: production
+          com.example.corp.department: engineering
+      Orchestration:
+        description: Orchestration configuration.
+        type: object
+        x-nullable: true
+        properties:
+          TaskHistoryRetentionLimit:
+            description: 'The number of historic tasks to keep per instance or node. If
+
+              negative, never remove completed or failed tasks.
+
+              '
+            type: integer
+            format: int64
+            example: 10
+      Raft:
+        description: Raft configuration.
+        type: object
+        properties:
+          SnapshotInterval:
+            description: The number of log entries between snapshots.
+            type: integer
+            format: uint64
+            example: 10000
+          KeepOldSnapshots:
+            description: 'The number of snapshots to keep beyond the current snapshot.
+
+              '
+            type: integer
+            format: uint64
+          LogEntriesForSlowFollowers:
+            description: 'The number of log entries to keep around to sync up slow followers
+
+              after a snapshot is created.
+
+              '
+            type: integer
+            format: uint64
+            example: 500
+          ElectionTick:
+            description: 'The number of ticks that a follower will wait for a message from
+
+              the leader before becoming a candidate and starting an election.
+
+              `ElectionTick` must be greater than `HeartbeatTick`.
+
+
+              A tick currently defaults to one second, so these translate
+
+              directly to seconds currently, but this is NOT guaranteed.
+
+              '
+            type: integer
+            example: 3
+          HeartbeatTick:
+            description: 'The number of ticks between heartbeats. Every HeartbeatTick ticks,
+
+              the leader will send a heartbeat to the followers.
+
+
+              A tick currently defaults to one second, so these translate
+
+              directly to seconds currently, but this is NOT guaranteed.
+
+              '
+            type: integer
+            example: 1
+      Dispatcher:
+        description: Dispatcher configuration.
+        type: object
+        x-nullable: true
+        properties:
+          HeartbeatPeriod:
+            description: 'The delay for an agent to send a heartbeat to the dispatcher.
+
+              '
+            type: integer
+            format: int64
+            example: 5000000000
+      CAConfig:
+        description: CA configuration.
+        type: object
+        x-nullable: true
+        properties:
+          NodeCertExpiry:
+            description: The duration node certificates are issued for.
+            type: integer
+            format: int64
+            example: 7776000000000000
+          ExternalCAs:
+            description: 'Configuration for forwarding signing requests to an external
+
+              certificate authority.
+
+              '
+            type: array
+            items:
+              type: object
+              properties:
+                Protocol:
+                  description: 'Protocol for communication with the external CA (currently
+
+                    only `cfssl` is supported).
+
+                    '
+                  type: string
+                  enum:
+                  - cfssl
+                  default: cfssl
+                URL:
+                  description: 'URL where certificate signing requests should be sent.
+
+                    '
+                  type: string
+                Options:
+                  description: 'An object with key/value pairs that are interpreted as
+
+                    protocol-specific options for the external CA driver.
+
+                    '
+                  type: object
+                  additionalProperties:
+                    type: string
+                CACert:
+                  description: 'The root CA certificate (in PEM format) this external CA uses
+
+                    to issue TLS certificates (assumed to be to the current swarm
+
+                    root CA certificate if not provided).
+
+                    '
+                  type: string
+          SigningCACert:
+            description: 'The desired signing CA certificate for all swarm node TLS leaf
+
+              certificates, in PEM format.
+
+              '
+            type: string
+          SigningCAKey:
+            description: 'The desired signing CA key for all swarm node TLS leaf certificates,
+
+              in PEM format.
+
+              '
+            type: string
+          ForceRotate:
+            description: 'An integer whose purpose is to force swarm to generate a new
+
+              signing CA certificate and key, if none have been specified in
+
+              `SigningCACert` and `SigningCAKey`
+
+              '
+            format: uint64
+            type: integer
+      EncryptionConfig:
+        description: Parameters related to encryption-at-rest.
+        type: object
+        properties:
+          AutoLockManagers:
+            description: 'If set, generate a key and use it to lock data stored on the
+
+              managers.
+
+              '
+            type: boolean
+            example: false
+      TaskDefaults:
+        description: Defaults for creating tasks in this cluster.
+        type: object
+        properties:
+          LogDriver:
+            description: 'The log driver to use for tasks created in the orchestrator if
+
+              unspecified by a service.
+
+
+              Updating this value only affects new tasks. Existing tasks continue
+
+              to use their previously configured log driver until recreated.
+
+              '
+            type: object
+            properties:
+              Name:
+                description: 'The log driver to use as a default for new tasks.
+
+                  '
+                type: string
+                example: json-file
+              Options:
+                description: 'Driver-specific options for the selected log driver, specified
+
+                  as key/value pairs.
+
+                  '
+                type: object
+                additionalProperties:
+                  type: string
+                example:
+                  max-file: '10'
+                  max-size: 100m
