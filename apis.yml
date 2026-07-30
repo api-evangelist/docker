@@ -4,6 +4,18 @@ description: >-
   Docker is a platform for developers and sysadmins to build, share, and run applications in containers, packaging code
   and dependencies together for consistent deployment across environments.
 type: Index
+accessModel:
+  pricing: freemium
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Freemium
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
 image: https://www.docker.com/sites/default/files/d8/2019-07/docker-logo-blue.png
 access: 3rd-Party
 tags:
@@ -18,23 +30,238 @@ modified: '2026-06-20'
 position: Consumer
 specificationVersion: '0.19'
 apis:
-  - aid: docker:docker
-    name: Docker
-    description: >-
-      Docker is a platform that lets developers package applications and all their dependencies into standardized units
-      called containers. These containers bundle everything needed to run the software—code, runtime, system tools, and
-      libraries—so the application runs consistently across different computing environments.
-    humanURL: https://www.docker.com/
-    tags:
-      - Containers
-      - DevOps
-    properties:
-      - type: Documentation
-        url: https://docs.docker.com/
-      - type: OpenAPI
-        url: openapi/docker-openapi.yml
-      - type: GettingStarted
-        url: https://docs.docker.com/get-started/
+- aid: docker:docker-config-api
+  name: Docker Config API
+  description: >-
+    Configs are application configurations that can be used by services. Swarm
+
+    mode must be enabled for these endpoints to work.
+  humanURL: https://www.docker.com/
+  tags:
+  - Config
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-config-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-container-api
+  name: Docker Container API
+  description: Create and manage containers.
+  humanURL: https://www.docker.com/
+  tags:
+  - Container
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-container-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-distribution-api
+  name: Docker Distribution API
+  description: The Distribution API from Docker — 1 operation(s) for distribution.
+  humanURL: https://www.docker.com/
+  tags:
+  - Distribution
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-distribution-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-exec-api
+  name: Docker Exec API
+  description: >-
+    Run new commands inside running containers. Refer to the
+
+    [command-line reference](https://docs.docker.com/engine/reference/commandline/exec/)
+
+    for more information.
+
+
+    To exec a command in a container, you first need to create an exec instance,
+
+    then start it. These two API endpoints are wrapped up in a single command-line
+
+    command, `docker exec`.
+  humanURL: https://www.docker.com/
+  tags:
+  - Exec
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-exec-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-image-api
+  name: Docker Image API
+  description: The Image API from Docker — 15 operation(s) for image.
+  humanURL: https://www.docker.com/
+  tags:
+  - Image
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-image-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-network-api
+  name: Docker Network API
+  description: >-
+    Networks are user-defined networks that containers can be attached to.
+
+    See the [networking documentation](https://docs.docker.com/network/)
+
+    for more information.
+  humanURL: https://www.docker.com/
+  tags:
+  - Network
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-network-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-node-api
+  name: Docker Node API
+  description: >-
+    Nodes are instances of the Engine participating in a swarm. Swarm mode
+
+    must be enabled for these endpoints to work.
+  humanURL: https://www.docker.com/
+  tags:
+  - Node
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-node-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-plugin-api
+  name: Docker Plugin API
+  description: The Plugin API from Docker — 11 operation(s) for plugin.
+  humanURL: https://www.docker.com/
+  tags:
+  - Plugin
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-plugin-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-secret-api
+  name: Docker Secret API
+  description: >-
+    Secrets are sensitive data that can be used by services. Swarm mode must
+
+    be enabled for these endpoints to work.
+  humanURL: https://www.docker.com/
+  tags:
+  - Secret
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-secret-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-service-api
+  name: Docker Service API
+  description: >-
+    Services are the definitions of tasks to run on a swarm. Swarm mode must
+
+    be enabled for these endpoints to work.
+  humanURL: https://www.docker.com/
+  tags:
+  - Service
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-service-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-session-api
+  name: Docker Session API
+  description: The Session API from Docker — 1 operation(s) for session.
+  humanURL: https://www.docker.com/
+  tags:
+  - Session
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-session-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-swarm-api
+  name: Docker Swarm API
+  description: >-
+    Engines can be clustered together in a swarm. Refer to the
+
+    [swarm mode documentation](https://docs.docker.com/engine/swarm/)
+
+    for more information.
+  humanURL: https://www.docker.com/
+  tags:
+  - Swarm
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-swarm-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-system-api
+  name: Docker System API
+  description: The System API from Docker — 6 operation(s) for system.
+  humanURL: https://www.docker.com/
+  tags:
+  - System
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-system-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-task-api
+  name: Docker Task API
+  description: >-
+    A task is a container running on a swarm. It is the atomic scheduling unit
+
+    of swarm. Swarm mode must be enabled for these endpoints to work.
+  humanURL: https://www.docker.com/
+  tags:
+  - Task
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-task-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
+- aid: docker:docker-volume-api
+  name: Docker Volume API
+  description: Create and manage persistent storage that can be attached to containers.
+  humanURL: https://www.docker.com/
+  tags:
+  - Volume
+  properties:
+  - type: OpenAPI
+    url: openapi/docker-volume-api-openapi.yml
+  - type: Documentation
+    url: https://docs.docker.com/
+  - type: GettingStarted
+    url: https://docs.docker.com/get-started/
 common:
   - type: AgenticAccess
     url: agentic-access/docker-agentic-access.yml
