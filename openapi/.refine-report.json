@@ -1,0 +1,42 @@
+{
+  "provider": "docker",
+  "sources": [
+    "docker-config-api-openapi.yml",
+    "docker-container-api-openapi.yml",
+    "docker-distribution-api-openapi.yml",
+    "docker-exec-api-openapi.yml",
+    "docker-image-api-openapi.yml",
+    "docker-network-api-openapi.yml",
+    "docker-node-api-openapi.yml",
+    "docker-plugin-api-openapi.yml",
+    "docker-secret-api-openapi.yml",
+    "docker-service-api-openapi.yml",
+    "docker-session-api-openapi.yml",
+    "docker-swarm-api-openapi.yml",
+    "docker-system-api-openapi.yml",
+    "docker-task-api-openapi.yml",
+    "docker-volume-api-openapi.yml"
+  ],
+  "outputs": [
+    "docker-config-api-openapi.yml",
+    "docker-container-api-openapi.yml",
+    "docker-distribution-api-openapi.yml",
+    "docker-exec-api-openapi.yml",
+    "docker-image-api-openapi.yml",
+    "docker-network-api-openapi.yml",
+    "docker-node-api-openapi.yml",
+    "docker-plugin-api-openapi.yml",
+    "docker-secret-api-openapi.yml",
+    "docker-service-api-openapi.yml",
+    "docker-session-api-openapi.yml",
+    "docker-swarm-api-openapi.yml",
+    "docker-system-api-openapi.yml",
+    "docker-task-api-openapi.yml",
+    "docker-volume-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
