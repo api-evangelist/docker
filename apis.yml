@@ -28,7 +28,7 @@ url: https://raw.githubusercontent.com/api-evangelist/docker/refs/heads/main/api
 created: '2025-06-05'
 modified: '2026-06-20'
 position: Consumer
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: docker:docker-config-api
   name: Docker Config API
