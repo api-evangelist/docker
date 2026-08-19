@@ -1,0 +1,1840 @@
+{
+  "item": [
+    {
+      "id": "fa84a57a-da12-41e0-b39e-9b0edc2bb59a",
+      "name": "Service",
+      "description": {
+        "content": "Services are the definitions of tasks to run on a swarm. Swarm mode must\nbe enabled for these endpoints to work.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "521b5532-73ff-4b51-8dd8-7e6be616f77f",
+          "name": "List services",
+          "request": {
+            "name": "List services",
+            "description": {},
+            "url": {
+              "path": [
+                "services"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the services list.\n\nAvailable filters:\n\n- `id=<service id>`\n- `label=<service label>`\n- `mode=[\"replicated\"|\"global\"]`\n- `name=<service name>`\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<boolean>",
+                  "description": "Include service status, with count of running and desired tasks.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cffdc8cd-f7f3-4bb2-ad20-5f328f7cb628",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"ID\": \"string\",\n    \"Version\": {\n      \"Index\": 373531\n    },\n    \"CreatedAt\": \"string\",\n    \"UpdatedAt\": \"string\",\n    \"Spec\": {\n      \"Name\": \"string\",\n      \"Labels\": {\n        \"key_0\": \"string\"\n      },\n      \"TaskTemplate\": {\n        \"PluginSpec\": {\n          \"Name\": \"string\",\n          \"Remote\": \"string\",\n          \"Disabled\": true,\n          \"PluginPrivilege\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"ContainerSpec\": {\n          \"Image\": \"string\",\n          \"Labels\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\"\n          },\n          \"Command\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Hostname\": \"string\",\n          \"Env\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Dir\": \"string\",\n          \"User\": \"string\",\n          \"Groups\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Privileges\": {\n            \"CredentialSpec\": {\n              \"Config\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Registry\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"SELinuxContext\": {\n              \"Disable\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"User\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Role\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Level\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"Seccomp\": {\n              \"Mode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Profile\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"AppArmor\": {\n              \"Mode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"NoNewPrivileges\": false\n          },\n          \"TTY\": false,\n          \"OpenStdin\": true,\n          \"ReadOnly\": true,\n          \"Mounts\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"StopSignal\": \"string\",\n          \"StopGracePeriod\": 8414,\n          \"HealthCheck\": {\n            \"Test\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Interval\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Timeout\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Retries\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"StartPeriod\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"StartInterval\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Hosts\": [\n            \"string\",\n            \"string\"\n          ],\n          \"DNSConfig\": {\n            \"Nameservers\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Search\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Options\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          \"Secrets\": [\n            {\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"SecretID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"SecretName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"SecretID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"SecretName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"OomScoreAdj\": 0,\n          \"Configs\": [\n            {\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Runtime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ConfigID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ConfigName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Runtime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ConfigID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ConfigName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"Isolation\": \"hyperv\",\n          \"Init\": true,\n          \"Sysctls\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\"\n          },\n          \"CapabilityAdd\": [\n            \"CAP_NET_RAW\",\n            \"CAP_SYS_ADMIN\",\n            \"CAP_SYS_CHROOT\",\n            \"CAP_SYSLOG\"\n          ],\n          \"CapabilityDrop\": [\n            \"CAP_NET_RAW\"\n          ],\n          \"Ulimits\": [\n            {\n              \"Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Soft\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Hard\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Soft\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Hard\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"NetworkAttachmentSpec\": {\n          \"ContainerID\": \"string\"\n        },\n        \"Resources\": {\n          \"Limits\": {\n            \"NanoCPUs\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"MemoryBytes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Pids\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Reservations\": {\n            \"NanoCPUs\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"MemoryBytes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"GenericResources\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"SwapBytes\": 640,\n          \"MemorySwappiness\": 82\n        },\n        \"RestartPolicy\": {\n          \"Condition\": \"on-failure\",\n          \"Delay\": 7474,\n          \"MaxAttempts\": 0,\n          \"Window\": 0\n        },\n        \"Placement\": {\n          \"Constraints\": [\n            \"node.hostname!=node3.corp.example.com\",\n            \"node.role!=manager\",\n            \"node.labels.type==production\",\n            \"node.platform.os==linux\",\n            \"node.platform.arch==x86_64\"\n          ],\n          \"Preferences\": [\n            {\n              \"Spread\": {\n                \"SpreadDescriptor\": \"node.labels.datacenter\"\n              }\n            },\n            {\n              \"Spread\": {\n                \"SpreadDescriptor\": \"node.labels.rack\"\n              }\n            }\n          ],\n          \"MaxReplicas\": 0,\n          \"Platforms\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"ForceUpdate\": 9736,\n        \"Runtime\": \"string\",\n        \"Networks\": [\n          {\n            \"Target\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Aliases\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"DriverOpts\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"Target\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Aliases\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"DriverOpts\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"LogDriver\": {\n          \"Name\": \"string\",\n          \"Options\": {\n            \"key_0\": \"string\"\n          }\n        }\n      },\n      \"Mode\": {\n        \"Replicated\": {\n          \"Replicas\": 2504\n        },\n        \"Global\": {},\n        \"ReplicatedJob\": {\n          \"MaxConcurrent\": 1,\n          \"TotalCompletions\": 810\n        },\n        \"GlobalJob\": {}\n      },\n      \"UpdateConfig\": {\n        \"Parallelism\": 5057,\n        \"Delay\": 6163,\n        \"FailureAction\": \"pause\",\n        \"Monitor\": 6037,\n        \"MaxFailureRatio\": 0,\n        \"Order\": \"start-first\"\n      },\n      \"RollbackConfig\": {\n        \"Parallelism\": 3071,\n        \"Delay\": 243,\n        \"FailureAction\": \"pause\",\n        \"Monitor\": 5675,\n        \"MaxFailureRatio\": 0,\n        \"Order\": \"stop-first\"\n      },\n      \"Networks\": [\n        {\n          \"Target\": \"string\",\n          \"Aliases\": [\n            \"string\",\n            \"string\"\n          ],\n          \"DriverOpts\": {\n            \"key_0\": \"string\"\n          }\n        },\n        {\n          \"Target\": \"string\",\n          \"Aliases\": [\n            \"string\",\n            \"string\"\n          ],\n          \"DriverOpts\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\"\n          }\n        }\n      ],\n      \"EndpointSpec\": {\n        \"Mode\": \"vip\",\n        \"Ports\": [\n          {\n            \"Name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Protocol\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"TargetPort\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PublishedPort\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PublishMode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"Name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Protocol\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"TargetPort\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PublishedPort\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PublishMode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    },\n    \"Endpoint\": {\n      \"Spec\": {\n        \"Mode\": \"vip\",\n        \"Ports\": [\n          {\n            \"Name\": \"string\",\n            \"Protocol\": \"udp\",\n            \"TargetPort\": 1470,\n            \"PublishedPort\": 5245,\n            \"PublishMode\": \"ingress\"\n          },\n          {\n            \"Name\": \"string\",\n            \"Protocol\": \"udp\",\n            \"TargetPort\": 2056,\n            \"PublishedPort\": 7590,\n            \"PublishMode\": \"ingress\"\n          }\n        ]\n      },\n      \"Ports\": [\n        {\n          \"Name\": \"string\",\n          \"Protocol\": \"tcp\",\n          \"TargetPort\": 4019,\n          \"PublishedPort\": 2318,\n          \"PublishMode\": \"ingress\"\n        },\n        {\n          \"Name\": \"string\",\n          \"Protocol\": \"udp\",\n          \"TargetPort\": 449,\n          \"PublishedPort\": 1970,\n          \"PublishMode\": \"ingress\"\n        }\n      ],\n      \"VirtualIPs\": [\n        {\n          \"NetworkID\": \"string\",\n          \"Addr\": \"string\"\n        },\n        {\n          \"NetworkID\": \"string\",\n          \"Addr\": \"string\"\n        }\n      ]\n    },\n    \"UpdateStatus\": {\n      \"State\": \"completed\",\n      \"StartedAt\": \"string\",\n      \"CompletedAt\": \"string\",\n      \"Message\": \"string\"\n    },\n    \"ServiceStatus\": {\n      \"RunningTasks\": 7,\n      \"DesiredTasks\": 10,\n      \"CompletedTasks\": 8075\n    },\n    \"JobStatus\": {\n      \"JobIteration\": {\n        \"Index\": 373531\n      },\n      \"LastExecution\": \"string\"\n    }\n  },\n  {\n    \"ID\": \"string\",\n    \"Version\": {\n      \"Index\": 373531\n    },\n    \"CreatedAt\": \"string\",\n    \"UpdatedAt\": \"string\",\n    \"Spec\": {\n      \"Name\": \"string\",\n      \"Labels\": {\n        \"key_0\": \"string\"\n      },\n      \"TaskTemplate\": {\n        \"PluginSpec\": {\n          \"Name\": \"string\",\n          \"Remote\": \"string\",\n          \"Disabled\": false,\n          \"PluginPrivilege\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"ContainerSpec\": {\n          \"Image\": \"string\",\n          \"Labels\": {\n            \"key_0\": \"string\"\n          },\n          \"Command\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Args\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Hostname\": \"string\",\n          \"Env\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Dir\": \"string\",\n          \"User\": \"string\",\n          \"Groups\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Privileges\": {\n            \"CredentialSpec\": {\n              \"Config\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Registry\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"SELinuxContext\": {\n              \"Disable\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"User\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Role\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Type\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Level\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"Seccomp\": {\n              \"Mode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Profile\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"AppArmor\": {\n              \"Mode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"NoNewPrivileges\": false\n          },\n          \"TTY\": false,\n          \"OpenStdin\": false,\n          \"ReadOnly\": true,\n          \"Mounts\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"StopSignal\": \"string\",\n          \"StopGracePeriod\": 2873,\n          \"HealthCheck\": {\n            \"Test\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Interval\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Timeout\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Retries\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"StartPeriod\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"StartInterval\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Hosts\": [\n            \"string\",\n            \"string\"\n          ],\n          \"DNSConfig\": {\n            \"Nameservers\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Search\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Options\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          \"Secrets\": [\n            {\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"SecretID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"SecretName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"SecretID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"SecretName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"OomScoreAdj\": 0,\n          \"Configs\": [\n            {\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Runtime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ConfigID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ConfigName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"File\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Runtime\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ConfigID\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ConfigName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"Isolation\": \"hyperv\",\n          \"Init\": false,\n          \"Sysctls\": {\n            \"key_0\": \"string\"\n          },\n          \"CapabilityAdd\": [\n            \"CAP_NET_RAW\",\n            \"CAP_SYS_ADMIN\",\n            \"CAP_SYS_CHROOT\",\n            \"CAP_SYSLOG\"\n          ],\n          \"CapabilityDrop\": [\n            \"CAP_NET_RAW\"\n          ],\n          \"Ulimits\": [\n            {\n              \"Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Soft\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Hard\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Soft\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Hard\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"NetworkAttachmentSpec\": {\n          \"ContainerID\": \"string\"\n        },\n        \"Resources\": {\n          \"Limits\": {\n            \"NanoCPUs\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"MemoryBytes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Pids\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Reservations\": {\n            \"NanoCPUs\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"MemoryBytes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"GenericResources\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"SwapBytes\": 6628,\n          \"MemorySwappiness\": 71\n        },\n        \"RestartPolicy\": {\n          \"Condition\": \"none\",\n          \"Delay\": 109,\n          \"MaxAttempts\": 0,\n          \"Window\": 0\n        },\n        \"Placement\": {\n          \"Constraints\": [\n            \"node.hostname!=node3.corp.example.com\",\n            \"node.role!=manager\",\n            \"node.labels.type==production\",\n            \"node.platform.os==linux\",\n            \"node.platform.arch==x86_64\"\n          ],\n          \"Preferences\": [\n            {\n              \"Spread\": {\n                \"SpreadDescriptor\": \"node.labels.datacenter\"\n              }\n            },\n            {\n              \"Spread\": {\n                \"SpreadDescriptor\": \"node.labels.rack\"\n              }\n            }\n          ],\n          \"MaxReplicas\": 0,\n          \"Platforms\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"ForceUpdate\": 1708,\n        \"Runtime\": \"string\",\n        \"Networks\": [\n          {\n            \"Target\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Aliases\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"DriverOpts\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"Target\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Aliases\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"DriverOpts\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"LogDriver\": {\n          \"Name\": \"string\",\n          \"Options\": {\n            \"key_0\": \"string\"\n          }\n        }\n      },\n      \"Mode\": {\n        \"Replicated\": {\n          \"Replicas\": 5308\n        },\n        \"Global\": {},\n        \"ReplicatedJob\": {\n          \"MaxConcurrent\": 1,\n          \"TotalCompletions\": 5321\n        },\n        \"GlobalJob\": {}\n      },\n      \"UpdateConfig\": {\n        \"Parallelism\": 5520,\n        \"Delay\": 3708,\n        \"FailureAction\": \"continue\",\n        \"Monitor\": 9120,\n        \"MaxFailureRatio\": 0,\n        \"Order\": \"start-first\"\n      },\n      \"RollbackConfig\": {\n        \"Parallelism\": 6347,\n        \"Delay\": 4544,\n        \"FailureAction\": \"pause\",\n        \"Monitor\": 949,\n        \"MaxFailureRatio\": 0,\n        \"Order\": \"start-first\"\n      },\n      \"Networks\": [\n        {\n          \"Target\": \"string\",\n          \"Aliases\": [\n            \"string\",\n            \"string\"\n          ],\n          \"DriverOpts\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\",\n            \"key_3\": \"string\"\n          }\n        },\n        {\n          \"Target\": \"string\",\n          \"Aliases\": [\n            \"string\",\n            \"string\"\n          ],\n          \"DriverOpts\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\",\n            \"key_3\": \"string\"\n          }\n        }\n      ],\n      \"EndpointSpec\": {\n        \"Mode\": \"vip\",\n        \"Ports\": [\n          {\n            \"Name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Protocol\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"TargetPort\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PublishedPort\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PublishMode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"Name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Protocol\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"TargetPort\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PublishedPort\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PublishMode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    },\n    \"Endpoint\": {\n      \"Spec\": {\n        \"Mode\": \"vip\",\n        \"Ports\": [\n          {\n            \"Name\": \"string\",\n            \"Protocol\": \"udp\",\n            \"TargetPort\": 849,\n            \"PublishedPort\": 2986,\n            \"PublishMode\": \"ingress\"\n          },\n          {\n            \"Name\": \"string\",\n            \"Protocol\": \"udp\",\n            \"TargetPort\": 2103,\n            \"PublishedPort\": 8040,\n            \"PublishMode\": \"ingress\"\n          }\n        ]\n      },\n      \"Ports\": [\n        {\n          \"Name\": \"string\",\n          \"Protocol\": \"sctp\",\n          \"TargetPort\": 9159,\n          \"PublishedPort\": 3613,\n          \"PublishMode\": \"ingress\"\n        },\n        {\n          \"Name\": \"string\",\n          \"Protocol\": \"sctp\",\n          \"TargetPort\": 8037,\n          \"PublishedPort\": 6802,\n          \"PublishMode\": \"ingress\"\n        }\n      ],\n      \"VirtualIPs\": [\n        {\n          \"NetworkID\": \"string\",\n          \"Addr\": \"string\"\n        },\n        {\n          \"NetworkID\": \"string\",\n          \"Addr\": \"string\"\n        }\n      ]\n    },\n    \"UpdateStatus\": {\n      \"State\": \"updating\",\n      \"StartedAt\": \"string\",\n      \"CompletedAt\": \"string\",\n      \"Message\": \"string\"\n    },\n    \"ServiceStatus\": {\n      \"RunningTasks\": 7,\n      \"DesiredTasks\": 10,\n      \"CompletedTasks\": 7933\n    },\n    \"JobStatus\": {\n      \"JobIteration\": {\n        \"Index\": 373531\n      },\n      \"LastExecution\": \"string\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47e72864-501f-4918-af4d-3f02f3b1f28b",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "960bee6b-2ae6-47ef-8c9a-667cdc9f2fca",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ec6134e3-588c-4d09-85bd-48c1b9e5041c",
+          "name": "Create a service",
+          "request": {
+            "name": "Create a service",
+            "description": {},
+            "url": {
+              "path": [
+                "services",
+                "create"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                "key": "X-Registry-Auth",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d97e29b2-3ee9-4061-87ca-a486f3af8cf3",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ID\": \"ak7w3gjqoa3kuz8xcpnyy0pvl\",\n  \"Warnings\": [\n    \"unable to pin image doesnotexist:latest to digest: image library/doesnotexist:latest not found\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0ffe140-d4b8-4701-928c-92f084c83410",
+              "name": "bad parameter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "174625ca-bdda-4106-9dd3-6e5619bf7b81",
+              "name": "network is not eligible for services",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4aafc0f-f7a4-4ef2-b405-eb63586d610e",
+              "name": "name conflicts with an existing service",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4caf2ae1-e745-4ff3-9f5e-d66e9cd88761",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e7d440a6-8c13-4460-bddd-eee2b746de9e",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "29a9ab54-8894-482e-a451-842f808d6160",
+          "name": "Inspect a service",
+          "request": {
+            "name": "Inspect a service",
+            "description": {},
+            "url": {
+              "path": [
+                "services",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "insertDefaults",
+                  "value": "false",
+                  "description": "Fill empty fields with default values."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID or name of service."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4e64da97-2040-4881-8bff-954d02b8b54e",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "insertDefaults",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ID\": \"string\",\n  \"Version\": {\n    \"Index\": 373531\n  },\n  \"CreatedAt\": \"string\",\n  \"UpdatedAt\": \"string\",\n  \"Spec\": {\n    \"Name\": \"<string>\",\n    \"Labels\": {\n      \"key_0\": \"<string>\"\n    },\n    \"TaskTemplate\": {\n      \"PluginSpec\": {\n        \"Name\": \"<string>\",\n        \"Remote\": \"<string>\",\n        \"Disabled\": \"<boolean>\",\n        \"PluginPrivilege\": [\n          {\n            \"Name\": \"network\",\n            \"Description\": \"<string>\",\n            \"Value\": [\n              \"host\"\n            ]\n          },\n          {\n            \"Name\": \"network\",\n            \"Description\": \"<string>\",\n            \"Value\": [\n              \"host\"\n            ]\n          }\n        ]\n      },\n      \"ContainerSpec\": {\n        \"Image\": \"<string>\",\n        \"Labels\": {\n          \"key_0\": \"<string>\"\n        },\n        \"Command\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"Args\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"Hostname\": \"<string>\",\n        \"Env\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"Dir\": \"<string>\",\n        \"User\": \"<string>\",\n        \"Groups\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"Privileges\": {\n          \"CredentialSpec\": {\n            \"Config\": \"0bt9dmxjvjiqermk6xrop3ekq\",\n            \"File\": \"spec.json\",\n            \"Registry\": \"<string>\"\n          },\n          \"SELinuxContext\": {\n            \"Disable\": \"<boolean>\",\n            \"User\": \"<string>\",\n            \"Role\": \"<string>\",\n            \"Type\": \"<string>\",\n            \"Level\": \"<string>\"\n          },\n          \"Seccomp\": {\n            \"Mode\": \"<string>\",\n            \"Profile\": \"<string>\"\n          },\n          \"AppArmor\": {\n            \"Mode\": \"<string>\"\n          },\n          \"NoNewPrivileges\": \"<boolean>\"\n        },\n        \"TTY\": \"<boolean>\",\n        \"OpenStdin\": \"<boolean>\",\n        \"ReadOnly\": \"<boolean>\",\n        \"Mounts\": [\n          {\n            \"Target\": \"<string>\",\n            \"Source\": \"<string>\",\n            \"Type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ReadOnly\": \"<boolean>\",\n            \"Consistency\": \"<string>\",\n            \"BindOptions\": {\n              \"Propagation\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"NonRecursive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"CreateMountpoint\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ReadOnlyNonRecursive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ReadOnlyForceRecursive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"VolumeOptions\": {\n              \"NoCopy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Labels\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"DriverConfig\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Subpath\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"ImageOptions\": {\n              \"Subpath\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"TmpfsOptions\": {\n              \"SizeBytes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Mode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Options\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          },\n          {\n            \"Target\": \"<string>\",\n            \"Source\": \"<string>\",\n            \"Type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ReadOnly\": \"<boolean>\",\n            \"Consistency\": \"<string>\",\n            \"BindOptions\": {\n              \"Propagation\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"NonRecursive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"CreateMountpoint\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ReadOnlyNonRecursive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"ReadOnlyForceRecursive\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"VolumeOptions\": {\n              \"NoCopy\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Labels\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"DriverConfig\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Subpath\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"ImageOptions\": {\n              \"Subpath\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"TmpfsOptions\": {\n              \"SizeBytes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Mode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Options\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"StopSignal\": \"<string>\",\n        \"StopGracePeriod\": \"<long>\",\n        \"HealthCheck\": {\n          \"Test\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"Interval\": \"<long>\",\n          \"Timeout\": \"<long>\",\n          \"Retries\": \"<integer>\",\n          \"StartPeriod\": \"<long>\",\n          \"StartInterval\": \"<long>\"\n        },\n        \"Hosts\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"DNSConfig\": {\n          \"Nameservers\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"Search\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"Options\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        \"Secrets\": [\n          {\n            \"File\": {\n              \"Name\": \"<string>\",\n              \"UID\": \"<string>\",\n              \"GID\": \"<string>\",\n              \"Mode\": \"<uint32>\"\n            },\n            \"SecretID\": \"<string>\",\n            \"SecretName\": \"<string>\"\n          },\n          {\n            \"File\": {\n              \"Name\": \"<string>\",\n              \"UID\": \"<string>\",\n              \"GID\": \"<string>\",\n              \"Mode\": \"<uint32>\"\n            },\n            \"SecretID\": \"<string>\",\n            \"SecretName\": \"<string>\"\n          }\n        ],\n        \"OomScoreAdj\": 0,\n        \"Configs\": [\n          {\n            \"File\": {\n              \"Name\": \"<string>\",\n              \"UID\": \"<string>\",\n              \"GID\": \"<string>\",\n              \"Mode\": \"<uint32>\"\n            },\n            \"Runtime\": \"<object>\",\n            \"ConfigID\": \"<string>\",\n            \"ConfigName\": \"<string>\"\n          },\n          {\n            \"File\": {\n              \"Name\": \"<string>\",\n              \"UID\": \"<string>\",\n              \"GID\": \"<string>\",\n              \"Mode\": \"<uint32>\"\n            },\n            \"Runtime\": \"<object>\",\n            \"ConfigID\": \"<string>\",\n            \"ConfigName\": \"<string>\"\n          }\n        ],\n        \"Isolation\": \"<string>\",\n        \"Init\": \"<boolean>\",\n        \"Sysctls\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CapabilityAdd\": [\n          \"CAP_NET_RAW\",\n          \"CAP_SYS_ADMIN\",\n          \"CAP_SYS_CHROOT\",\n          \"CAP_SYSLOG\"\n        ],\n        \"CapabilityDrop\": [\n          \"CAP_NET_RAW\"\n        ],\n        \"Ulimits\": [\n          {\n            \"Name\": \"<string>\",\n            \"Soft\": \"<integer>\",\n            \"Hard\": \"<integer>\"\n          },\n          {\n            \"Name\": \"<string>\",\n            \"Soft\": \"<integer>\",\n            \"Hard\": \"<integer>\"\n          }\n        ]\n      },\n      \"NetworkAttachmentSpec\": {\n        \"ContainerID\": \"<string>\"\n      },\n      \"Resources\": {\n        \"Limits\": {\n          \"NanoCPUs\": 4000000000,\n          \"MemoryBytes\": 8272408576,\n          \"Pids\": 100\n        },\n        \"Reservations\": {\n          \"NanoCPUs\": 4000000000,\n          \"MemoryBytes\": 8272408576,\n          \"GenericResources\": [\n            {\n              \"DiscreteResourceSpec\": {\n                \"Kind\": \"SSD\",\n                \"Value\": 3\n              }\n            },\n            {\n              \"NamedResourceSpec\": {\n                \"Kind\": \"GPU\",\n                \"Value\": \"UUID1\"\n              }\n            },\n            {\n              \"NamedResourceSpec\": {\n                \"Kind\": \"GPU\",\n                \"Value\": \"UUID2\"\n              }\n            }\n          ]\n        },\n        \"SwapBytes\": \"<long>\",\n        \"MemorySwappiness\": \"<long>\"\n      },\n      \"RestartPolicy\": {\n        \"Condition\": \"<string>\",\n        \"Delay\": \"<long>\",\n        \"MaxAttempts\": 0,\n        \"Window\": 0\n      },\n      \"Placement\": {\n        \"Constraints\": [\n          \"node.hostname!=node3.corp.example.com\",\n          \"node.role!=manager\",\n          \"node.labels.type==production\",\n          \"node.platform.os==linux\",\n          \"node.platform.arch==x86_64\"\n        ],\n        \"Preferences\": [\n          {\n            \"Spread\": {\n              \"SpreadDescriptor\": \"node.labels.datacenter\"\n            }\n          },\n          {\n            \"Spread\": {\n              \"SpreadDescriptor\": \"node.labels.rack\"\n            }\n          }\n        ],\n        \"MaxReplicas\": 0,\n        \"Platforms\": [\n          {\n            \"Architecture\": \"x86_64\",\n            \"OS\": \"linux\"\n          },\n          {\n            \"Architecture\": \"x86_64\",\n            \"OS\": \"linux\"\n          }\n        ]\n      },\n      \"ForceUpdate\": \"<uint64>\",\n      \"Runtime\": \"<string>\",\n      \"Networks\": [\n        {\n          \"Target\": \"<string>\",\n          \"Aliases\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"DriverOpts\": {\n            \"key_0\": \"<string>\"\n          }\n        },\n        {\n          \"Target\": \"<string>\",\n          \"Aliases\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"DriverOpts\": {\n            \"key_0\": \"<string>\"\n          }\n        }\n      ],\n      \"LogDriver\": {\n        \"Name\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\",\n          \"key_1\": \"<string>\"\n        }\n      }\n    },\n    \"Mode\": {\n      \"Replicated\": {\n        \"Replicas\": \"<long>\"\n      },\n      \"Global\": \"<object>\",\n      \"ReplicatedJob\": {\n        \"MaxConcurrent\": 1,\n        \"TotalCompletions\": \"<long>\"\n      },\n      \"GlobalJob\": \"<object>\"\n    },\n    \"UpdateConfig\": {\n      \"Parallelism\": \"<long>\",\n      \"Delay\": \"<long>\",\n      \"FailureAction\": \"<string>\",\n      \"Monitor\": \"<long>\",\n      \"MaxFailureRatio\": 0,\n      \"Order\": \"<string>\"\n    },\n    \"RollbackConfig\": {\n      \"Parallelism\": \"<long>\",\n      \"Delay\": \"<long>\",\n      \"FailureAction\": \"<string>\",\n      \"Monitor\": \"<long>\",\n      \"MaxFailureRatio\": 0,\n      \"Order\": \"<string>\"\n    },\n    \"Networks\": [\n      {\n        \"Target\": \"<string>\",\n        \"Aliases\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"DriverOpts\": {\n          \"key_0\": \"<string>\",\n          \"key_1\": \"<string>\",\n          \"key_2\": \"<string>\"\n        }\n      },\n      {\n        \"Target\": \"<string>\",\n        \"Aliases\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"DriverOpts\": {\n          \"key_0\": \"<string>\"\n        }\n      }\n    ],\n    \"EndpointSpec\": {\n      \"Mode\": \"vip\",\n      \"Ports\": [\n        {\n          \"Name\": \"<string>\",\n          \"Protocol\": \"<string>\",\n          \"TargetPort\": \"<integer>\",\n          \"PublishedPort\": \"<integer>\",\n          \"PublishMode\": \"ingress\"\n        },\n        {\n          \"Name\": \"<string>\",\n          \"Protocol\": \"<string>\",\n          \"TargetPort\": \"<integer>\",\n          \"PublishedPort\": \"<integer>\",\n          \"PublishMode\": \"ingress\"\n        }\n      ]\n    }\n  },\n  \"Endpoint\": {\n    \"Spec\": {\n      \"Mode\": \"vip\",\n      \"Ports\": [\n        {\n          \"Name\": \"<string>\",\n          \"Protocol\": \"<string>\",\n          \"TargetPort\": \"<integer>\",\n          \"PublishedPort\": \"<integer>\",\n          \"PublishMode\": \"ingress\"\n        },\n        {\n          \"Name\": \"<string>\",\n          \"Protocol\": \"<string>\",\n          \"TargetPort\": \"<integer>\",\n          \"PublishedPort\": \"<integer>\",\n          \"PublishMode\": \"ingress\"\n        }\n      ]\n    },\n    \"Ports\": [\n      {\n        \"Name\": \"<string>\",\n        \"Protocol\": \"<string>\",\n        \"TargetPort\": \"<integer>\",\n        \"PublishedPort\": \"<integer>\",\n        \"PublishMode\": \"ingress\"\n      },\n      {\n        \"Name\": \"<string>\",\n        \"Protocol\": \"<string>\",\n        \"TargetPort\": \"<integer>\",\n        \"PublishedPort\": \"<integer>\",\n        \"PublishMode\": \"ingress\"\n      }\n    ],\n    \"VirtualIPs\": [\n      {\n        \"NetworkID\": \"string\",\n        \"Addr\": \"string\"\n      },\n      {\n        \"NetworkID\": \"string\",\n        \"Addr\": \"string\"\n      }\n    ]\n  },\n  \"UpdateStatus\": {\n    \"State\": \"updating\",\n    \"StartedAt\": \"string\",\n    \"CompletedAt\": \"string\",\n    \"Message\": \"string\"\n  },\n  \"ServiceStatus\": {\n    \"RunningTasks\": 7,\n    \"DesiredTasks\": 10,\n    \"CompletedTasks\": 2601\n  },\n  \"JobStatus\": {\n    \"JobIteration\": {\n      \"Index\": 373531\n    },\n    \"LastExecution\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ea867550-be53-4e10-93fd-88b821a00e69",
+              "name": "no such service",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "insertDefaults",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "03903c04-ee5c-4d02-9cb7-ade77fe9b017",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "insertDefaults",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "121d243e-8550-46a6-ba23-39e89a6a8cce",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "insertDefaults",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fa9e2827-5f67-4d87-818f-b29aacc79348",
+          "name": "Delete a service",
+          "request": {
+            "name": "Delete a service",
+            "description": {},
+            "url": {
+              "path": [
+                "services",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID or name of service."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d339bca0-092d-42a7-8cce-cfa588b811f5",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f0485f60-2a09-41e0-adfc-c607749eac61",
+              "name": "no such service",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a695983a-3090-4475-9584-958248c5e075",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d1ab08d-34aa-4f45-9499-4896614954bf",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae6d6a54-b368-459b-b2a9-97963e282128",
+          "name": "Update a service",
+          "request": {
+            "name": "Update a service",
+            "description": {},
+            "url": {
+              "path": [
+                "services",
+                ":id",
+                "update"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "version",
+                  "value": "<integer>",
+                  "description": "(Required) The version number of the service object being updated. This is\nrequired to avoid conflicting writes.\nThis version number should be the value as currently set on the\nservice *before* the update. You can find the current version by\ncalling `GET /services/{id}`\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "registryAuthFrom",
+                  "value": "spec",
+                  "description": "If the `X-Registry-Auth` header is not specified, this parameter\nindicates where to find registry authorization credentials.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "rollback",
+                  "value": "<string>",
+                  "description": "Set to this parameter to `previous` to cause a server-side rollback\nto the previous service spec. The supplied spec will be ignored in\nthis case.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID or name of service."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                "key": "X-Registry-Auth",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6305101c-b59a-4f05-ae81-774d5fbcb367",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "registryAuthFrom",
+                      "value": "spec"
+                    },
+                    {
+                      "key": "rollback",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Warnings\": [\n    \"unable to pin image doesnotexist:latest to digest: image library/doesnotexist:latest not found\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a24896bc-1fe7-494b-b375-d33c7d4a4fd7",
+              "name": "bad parameter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "registryAuthFrom",
+                      "value": "spec"
+                    },
+                    {
+                      "key": "rollback",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5373a27d-490a-4469-8ae9-6c271ccd6df3",
+              "name": "no such service",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "registryAuthFrom",
+                      "value": "spec"
+                    },
+                    {
+                      "key": "rollback",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8b314ec-9f75-421e-a055-45a2b0105057",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "registryAuthFrom",
+                      "value": "spec"
+                    },
+                    {
+                      "key": "rollback",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08a7b2b3-843a-4fdd-a77a-52aca704ef12",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "registryAuthFrom",
+                      "value": "spec"
+                    },
+                    {
+                      "key": "rollback",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of service."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration for pulling from private\nregistries.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<object>",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0693d6d4-e5ec-47cf-b62f-2a1d161e03fa",
+          "name": "Get service logs",
+          "request": {
+            "name": "Get service logs",
+            "description": {
+              "content": "Get `stdout` and `stderr` logs from a service. See also\n[`/containers/{id}/logs`](#operation/ContainerLogs).\n\n**Note**: This endpoint works only for services with the `local`,\n`json-file` or `journald` logging drivers.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "services",
+                ":id",
+                "logs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "details",
+                  "value": "false",
+                  "description": "Show service context and extra details provided to logs."
+                },
+                {
+                  "disabled": false,
+                  "key": "follow",
+                  "value": "false",
+                  "description": "Keep connection after returning logs."
+                },
+                {
+                  "disabled": false,
+                  "key": "stdout",
+                  "value": "false",
+                  "description": "Return logs from `stdout`"
+                },
+                {
+                  "disabled": false,
+                  "key": "stderr",
+                  "value": "false",
+                  "description": "Return logs from `stderr`"
+                },
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "0",
+                  "description": "Only return logs since this time, as a UNIX timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "timestamps",
+                  "value": "false",
+                  "description": "Add timestamps to every log line"
+                },
+                {
+                  "disabled": false,
+                  "key": "tail",
+                  "value": "all",
+                  "description": "Only return this number of log lines from the end of the logs.\nSpecify as an integer or `all` to output all log lines.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID or name of the service"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.docker.raw-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8e96ddec-98f6-4ed0-97f8-62667b32bb0c",
+              "name": "logs returned as a stream in response body",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "details",
+                      "value": "false"
+                    },
+                    {
+                      "key": "follow",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stdout",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stderr",
+                      "value": "false"
+                    },
+                    {
+                      "key": "since",
+                      "value": "0"
+                    },
+                    {
+                      "key": "timestamps",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tail",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of the service"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.docker.raw-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.docker.raw-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dea87d32-724b-4390-91f7-a37b02d45614",
+              "name": "no such service",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "details",
+                      "value": "false"
+                    },
+                    {
+                      "key": "follow",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stdout",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stderr",
+                      "value": "false"
+                    },
+                    {
+                      "key": "since",
+                      "value": "0"
+                    },
+                    {
+                      "key": "timestamps",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tail",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of the service"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.docker.raw-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"No such service: c2ada9df5af8\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11288135-c294-4da8-a73e-2e6d5a7b8e12",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "details",
+                      "value": "false"
+                    },
+                    {
+                      "key": "follow",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stdout",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stderr",
+                      "value": "false"
+                    },
+                    {
+                      "key": "since",
+                      "value": "0"
+                    },
+                    {
+                      "key": "timestamps",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tail",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of the service"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.docker.raw-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.docker.raw-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2407e025-a19d-4d8e-b77a-5c0eb3ac549c",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "services",
+                    ":id",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "details",
+                      "value": "false"
+                    },
+                    {
+                      "key": "follow",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stdout",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stderr",
+                      "value": "false"
+                    },
+                    {
+                      "key": "since",
+                      "value": "0"
+                    },
+                    {
+                      "key": "timestamps",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tail",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID or name of the service"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.docker.raw-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.docker.raw-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v1.54",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "98350640-deea-4bc5-b8a4-56c9f88d511f",
+    "name": "Docker Engine Config Service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

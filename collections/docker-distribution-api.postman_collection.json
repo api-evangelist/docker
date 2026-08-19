@@ -1,0 +1,212 @@
+{
+  "item": [
+    {
+      "id": "a8f9506f-4ee2-46ec-acc0-ec69e2db68c1",
+      "name": "Distribution",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e5354b25-f116-4b73-9867-90ebf7352910",
+          "name": "Get image information from the registry",
+          "request": {
+            "name": "Get image information from the registry",
+            "description": {
+              "content": "Return image digest and platform information by contacting the registry.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "distribution",
+                ":name",
+                "json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) Image name or id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1a7b1013-c183-46e1-a5b1-ed2add35c5cf",
+              "name": "descriptor and platform information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "distribution",
+                    ":name",
+                    "json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Image name or id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Descriptor\": {\n    \"mediaType\": \"application/vnd.oci.image.manifest.v1+json\",\n    \"digest\": \"sha256:c0537ff6a5218ef531ece93d4984efc99bbf3f7497c0a7726c88e2bb7584dc96\",\n    \"size\": 424,\n    \"urls\": [\n      \"http://sTOylyWJgrFVWqu.yrG9.Cja+t-XRwdpNmL2\",\n      \"http://BUBuBdIYXfidiY.awzhlK-K7m0tp\"\n    ],\n    \"annotations\": {\n      \"com.docker.official-images.bashbrew.arch\": \"amd64\",\n      \"org.opencontainers.image.base.digest\": \"sha256:0d0ef5c914d3ea700147da1bd050c59edb8bb12ca312f3800b29d7c8087eabd8\",\n      \"org.opencontainers.image.base.name\": \"scratch\",\n      \"org.opencontainers.image.created\": \"2025-01-27T00:00:00Z\",\n      \"org.opencontainers.image.revision\": \"9fabb4bad5138435b01857e2fe9363e2dc5f6a79\",\n      \"org.opencontainers.image.source\": \"https://git.launchpad.net/cloud-images/+oci/ubuntu-base\",\n      \"org.opencontainers.image.url\": \"https://hub.docker.com/_/ubuntu\",\n      \"org.opencontainers.image.version\": \"24.04\"\n    },\n    \"data\": null,\n    \"platform\": {\n      \"architecture\": \"arm\",\n      \"os\": \"windows\",\n      \"os.version\": \"10.0.19041.1165\",\n      \"os.features\": [\n        \"win32k\"\n      ],\n      \"variant\": \"v7\"\n    },\n    \"artifactType\": null\n  },\n  \"Platforms\": [\n    {\n      \"architecture\": \"arm\",\n      \"os\": \"windows\",\n      \"os.version\": \"10.0.19041.1165\",\n      \"os.features\": [\n        \"win32k\"\n      ],\n      \"variant\": \"v7\"\n    },\n    {\n      \"architecture\": \"arm\",\n      \"os\": \"windows\",\n      \"os.version\": \"10.0.19041.1165\",\n      \"os.features\": [\n        \"win32k\"\n      ],\n      \"variant\": \"v7\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c0ca5156-a5ea-4322-a60e-354f05b2f563",
+              "name": "Failed authentication or no image found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "distribution",
+                    ":name",
+                    "json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Image name or id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"No such image: someimage (tag: latest)\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7349f265-e4c5-43bb-b378-dbe5616a285f",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "distribution",
+                    ":name",
+                    "json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Image name or id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v1.54",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c31eeeb8-4c41-4138-be3e-59f11bc3871e",
+    "name": "Docker Engine Config Distribution API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

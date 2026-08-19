@@ -1,0 +1,1161 @@
+{
+  "item": [
+    {
+      "id": "3b3f329e-710f-48f9-a7cf-d6cffb066d0f",
+      "name": "Volume",
+      "description": {
+        "content": "Create and manage persistent storage that can be attached to containers.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "349e43ac-ebf0-4d92-9bd9-fdd90eb294c3",
+          "name": "List volumes",
+          "request": {
+            "name": "List volumes",
+            "description": {},
+            "url": {
+              "path": [
+                "volumes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<json>",
+                  "description": "JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the volumes list. Available filters:\n\n- `dangling=<boolean>` When set to `true` (or `1`), returns all\n   volumes that are not in use by a container. When set to `false`\n   (or `0`), only volumes that are in use by one or more\n   containers are returned.\n- `driver=<volume-driver-name>` Matches volumes based on their driver.\n- `label=<key>` or `label=<key>:<value>` Matches volumes based on\n   the presence of a `label` alone or a `label` and a value.\n- `name=<volume-name>` Matches all or part of a volume name.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "60078a1e-4461-4fc6-b4d3-8e800a25cfc7",
+              "name": "Summary volume data that matches the query",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<json>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Volumes\": [\n    {\n      \"Name\": \"tardis\",\n      \"Driver\": \"custom\",\n      \"Mountpoint\": \"/var/lib/docker/volumes/tardis\",\n      \"Labels\": {\n        \"com.example.some-label\": \"some-value\",\n        \"com.example.some-other-label\": \"some-other-value\"\n      },\n      \"Scope\": \"local\",\n      \"Options\": {\n        \"device\": \"tmpfs\",\n        \"o\": \"size=100m,uid=1000\",\n        \"type\": \"tmpfs\"\n      },\n      \"CreatedAt\": \"2016-06-07T20:31:11.853781916Z\",\n      \"Status\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      },\n      \"ClusterVolume\": {\n        \"ID\": \"string\",\n        \"Version\": {\n          \"Index\": 373531\n        },\n        \"CreatedAt\": \"string\",\n        \"UpdatedAt\": \"string\",\n        \"Spec\": {\n          \"Group\": \"string\",\n          \"AccessMode\": {\n            \"Scope\": \"single\",\n            \"Sharing\": \"none\",\n            \"MountVolume\": {},\n            \"Secrets\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"AccessibilityRequirements\": {\n              \"Requisite\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Preferred\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"CapacityRange\": {\n              \"RequiredBytes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"LimitBytes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"Availability\": \"active\"\n          }\n        },\n        \"Info\": {\n          \"CapacityBytes\": 9713,\n          \"VolumeContext\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\"\n          },\n          \"VolumeID\": \"string\",\n          \"AccessibleTopology\": [\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"PublishStatus\": [\n          {\n            \"NodeID\": \"string\",\n            \"State\": \"pending-publish\",\n            \"PublishContext\": {\n              \"key_0\": \"string\"\n            }\n          },\n          {\n            \"NodeID\": \"string\",\n            \"State\": \"published\",\n            \"PublishContext\": {\n              \"key_0\": \"string\",\n              \"key_1\": \"string\"\n            }\n          }\n        ]\n      },\n      \"UsageData\": {\n        \"Size\": -1,\n        \"RefCount\": -1\n      }\n    },\n    {\n      \"Name\": \"tardis\",\n      \"Driver\": \"custom\",\n      \"Mountpoint\": \"/var/lib/docker/volumes/tardis\",\n      \"Labels\": {\n        \"com.example.some-label\": \"some-value\",\n        \"com.example.some-other-label\": \"some-other-value\"\n      },\n      \"Scope\": \"local\",\n      \"Options\": {\n        \"device\": \"tmpfs\",\n        \"o\": \"size=100m,uid=1000\",\n        \"type\": \"tmpfs\"\n      },\n      \"CreatedAt\": \"2016-06-07T20:31:11.853781916Z\",\n      \"Status\": {\n        \"key_0\": {},\n        \"key_1\": {},\n        \"key_2\": {}\n      },\n      \"ClusterVolume\": {\n        \"ID\": \"string\",\n        \"Version\": {\n          \"Index\": 373531\n        },\n        \"CreatedAt\": \"string\",\n        \"UpdatedAt\": \"string\",\n        \"Spec\": {\n          \"Group\": \"string\",\n          \"AccessMode\": {\n            \"Scope\": \"single\",\n            \"Sharing\": \"none\",\n            \"MountVolume\": {},\n            \"Secrets\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"AccessibilityRequirements\": {\n              \"Requisite\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Preferred\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"CapacityRange\": {\n              \"RequiredBytes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"LimitBytes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"Availability\": \"active\"\n          }\n        },\n        \"Info\": {\n          \"CapacityBytes\": 2437,\n          \"VolumeContext\": {\n            \"key_0\": \"string\"\n          },\n          \"VolumeID\": \"string\",\n          \"AccessibleTopology\": [\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"PublishStatus\": [\n          {\n            \"NodeID\": \"string\",\n            \"State\": \"published\",\n            \"PublishContext\": {\n              \"key_0\": \"string\",\n              \"key_1\": \"string\"\n            }\n          },\n          {\n            \"NodeID\": \"string\",\n            \"State\": \"published\",\n            \"PublishContext\": {\n              \"key_0\": \"string\",\n              \"key_1\": \"string\",\n              \"key_2\": \"string\"\n            }\n          }\n        ]\n      },\n      \"UsageData\": {\n        \"Size\": -1,\n        \"RefCount\": -1\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3f3a28b8-814a-43e2-b5f8-8d3e2902933c",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<json>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce2ff92a-5241-4f8f-b00f-cc7641aa6cbe",
+          "name": "Create a volume",
+          "request": {
+            "name": "Create a volume",
+            "description": {},
+            "url": {
+              "path": [
+                "volumes",
+                "create"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Name\": \"<string>\",\n  \"Driver\": \"local\",\n  \"DriverOpts\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\"\n  },\n  \"Labels\": {\n    \"key_0\": \"<string>\"\n  },\n  \"ClusterVolumeSpec\": {\n    \"Group\": \"<string>\",\n    \"AccessMode\": {\n      \"Scope\": \"single\",\n      \"Sharing\": \"none\",\n      \"MountVolume\": \"<object>\",\n      \"Secrets\": [\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        },\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        }\n      ],\n      \"AccessibilityRequirements\": {\n        \"Requisite\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ],\n        \"Preferred\": [\n          {\n            \"key_0\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          }\n        ]\n      },\n      \"CapacityRange\": {\n        \"RequiredBytes\": \"<long>\",\n        \"LimitBytes\": \"<long>\"\n      },\n      \"Availability\": \"active\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d13e1637-748b-4580-bcc0-b0d43fce0bc9",
+              "name": "The volume was created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Name\": \"tardis\",\n  \"Driver\": \"custom\",\n  \"DriverOpts\": {\n    \"device\": \"tmpfs\",\n    \"o\": \"size=100m,uid=1000\",\n    \"type\": \"tmpfs\"\n  },\n  \"Labels\": {\n    \"com.example.some-label\": \"some-value\",\n    \"com.example.some-other-label\": \"some-other-value\"\n  },\n  \"ClusterVolumeSpec\": {\n    \"Group\": \"<string>\",\n    \"AccessMode\": {\n      \"Scope\": \"single\",\n      \"Sharing\": \"none\",\n      \"MountVolume\": \"<object>\",\n      \"Secrets\": [\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        },\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        }\n      ],\n      \"AccessibilityRequirements\": {\n        \"Requisite\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\",\n            \"key_2\": \"<string>\",\n            \"key_3\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ],\n        \"Preferred\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\",\n            \"key_2\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\",\n            \"key_2\": \"<string>\"\n          }\n        ]\n      },\n      \"CapacityRange\": {\n        \"RequiredBytes\": \"<long>\",\n        \"LimitBytes\": \"<long>\"\n      },\n      \"Availability\": \"active\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Name\": \"tardis\",\n  \"Driver\": \"custom\",\n  \"Mountpoint\": \"/var/lib/docker/volumes/tardis\",\n  \"Labels\": {\n    \"com.example.some-label\": \"some-value\",\n    \"com.example.some-other-label\": \"some-other-value\"\n  },\n  \"Scope\": \"local\",\n  \"Options\": {\n    \"device\": \"tmpfs\",\n    \"o\": \"size=100m,uid=1000\",\n    \"type\": \"tmpfs\"\n  },\n  \"CreatedAt\": \"2016-06-07T20:31:11.853781916Z\",\n  \"Status\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  },\n  \"ClusterVolume\": {\n    \"ID\": \"string\",\n    \"Version\": {\n      \"Index\": 373531\n    },\n    \"CreatedAt\": \"string\",\n    \"UpdatedAt\": \"string\",\n    \"Spec\": {\n      \"Group\": \"<string>\",\n      \"AccessMode\": {\n        \"Scope\": \"single\",\n        \"Sharing\": \"none\",\n        \"MountVolume\": \"<object>\",\n        \"Secrets\": [\n          {\n            \"Key\": \"<string>\",\n            \"Secret\": \"<string>\"\n          },\n          {\n            \"Key\": \"<string>\",\n            \"Secret\": \"<string>\"\n          }\n        ],\n        \"AccessibilityRequirements\": {\n          \"Requisite\": [\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"Preferred\": [\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_2\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"CapacityRange\": {\n          \"RequiredBytes\": \"<long>\",\n          \"LimitBytes\": \"<long>\"\n        },\n        \"Availability\": \"active\"\n      }\n    },\n    \"Info\": {\n      \"CapacityBytes\": 4143,\n      \"VolumeContext\": {\n        \"key_0\": \"string\"\n      },\n      \"VolumeID\": \"string\",\n      \"AccessibleTopology\": [\n        {\n          \"key_0\": \"<string>\",\n          \"key_1\": \"<string>\",\n          \"key_2\": \"<string>\",\n          \"key_3\": \"<string>\"\n        },\n        {\n          \"key_0\": \"<string>\",\n          \"key_1\": \"<string>\",\n          \"key_2\": \"<string>\",\n          \"key_3\": \"<string>\",\n          \"key_4\": \"<string>\"\n        }\n      ]\n    },\n    \"PublishStatus\": [\n      {\n        \"NodeID\": \"string\",\n        \"State\": \"pending-node-unpublish\",\n        \"PublishContext\": {\n          \"key_0\": \"string\"\n        }\n      },\n      {\n        \"NodeID\": \"string\",\n        \"State\": \"published\",\n        \"PublishContext\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        }\n      }\n    ]\n  },\n  \"UsageData\": {\n    \"Size\": -1,\n    \"RefCount\": -1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1530d92-cf89-43f7-a8e9-90bb40244733",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Name\": \"tardis\",\n  \"Driver\": \"custom\",\n  \"DriverOpts\": {\n    \"device\": \"tmpfs\",\n    \"o\": \"size=100m,uid=1000\",\n    \"type\": \"tmpfs\"\n  },\n  \"Labels\": {\n    \"com.example.some-label\": \"some-value\",\n    \"com.example.some-other-label\": \"some-other-value\"\n  },\n  \"ClusterVolumeSpec\": {\n    \"Group\": \"<string>\",\n    \"AccessMode\": {\n      \"Scope\": \"single\",\n      \"Sharing\": \"none\",\n      \"MountVolume\": \"<object>\",\n      \"Secrets\": [\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        },\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        }\n      ],\n      \"AccessibilityRequirements\": {\n        \"Requisite\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\",\n            \"key_2\": \"<string>\",\n            \"key_3\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ],\n        \"Preferred\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\",\n            \"key_2\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\",\n            \"key_2\": \"<string>\"\n          }\n        ]\n      },\n      \"CapacityRange\": {\n        \"RequiredBytes\": \"<long>\",\n        \"LimitBytes\": \"<long>\"\n      },\n      \"Availability\": \"active\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cc04770c-0162-410b-976b-eac3d55ced8a",
+          "name": "Inspect a volume",
+          "request": {
+            "name": "Inspect a volume",
+            "description": {},
+            "url": {
+              "path": [
+                "volumes",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) Volume name or ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c19b8653-f387-4039-addd-5e057ee515e6",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Volume name or ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Name\": \"tardis\",\n  \"Driver\": \"custom\",\n  \"Mountpoint\": \"/var/lib/docker/volumes/tardis\",\n  \"Labels\": {\n    \"com.example.some-label\": \"some-value\",\n    \"com.example.some-other-label\": \"some-other-value\"\n  },\n  \"Scope\": \"local\",\n  \"Options\": {\n    \"device\": \"tmpfs\",\n    \"o\": \"size=100m,uid=1000\",\n    \"type\": \"tmpfs\"\n  },\n  \"CreatedAt\": \"2016-06-07T20:31:11.853781916Z\",\n  \"Status\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  },\n  \"ClusterVolume\": {\n    \"ID\": \"string\",\n    \"Version\": {\n      \"Index\": 373531\n    },\n    \"CreatedAt\": \"string\",\n    \"UpdatedAt\": \"string\",\n    \"Spec\": {\n      \"Group\": \"<string>\",\n      \"AccessMode\": {\n        \"Scope\": \"single\",\n        \"Sharing\": \"none\",\n        \"MountVolume\": \"<object>\",\n        \"Secrets\": [\n          {\n            \"Key\": \"<string>\",\n            \"Secret\": \"<string>\"\n          },\n          {\n            \"Key\": \"<string>\",\n            \"Secret\": \"<string>\"\n          }\n        ],\n        \"AccessibilityRequirements\": {\n          \"Requisite\": [\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"Preferred\": [\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_2\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"CapacityRange\": {\n          \"RequiredBytes\": \"<long>\",\n          \"LimitBytes\": \"<long>\"\n        },\n        \"Availability\": \"active\"\n      }\n    },\n    \"Info\": {\n      \"CapacityBytes\": 4143,\n      \"VolumeContext\": {\n        \"key_0\": \"string\"\n      },\n      \"VolumeID\": \"string\",\n      \"AccessibleTopology\": [\n        {\n          \"key_0\": \"<string>\",\n          \"key_1\": \"<string>\",\n          \"key_2\": \"<string>\",\n          \"key_3\": \"<string>\"\n        },\n        {\n          \"key_0\": \"<string>\",\n          \"key_1\": \"<string>\",\n          \"key_2\": \"<string>\",\n          \"key_3\": \"<string>\",\n          \"key_4\": \"<string>\"\n        }\n      ]\n    },\n    \"PublishStatus\": [\n      {\n        \"NodeID\": \"string\",\n        \"State\": \"pending-node-unpublish\",\n        \"PublishContext\": {\n          \"key_0\": \"string\"\n        }\n      },\n      {\n        \"NodeID\": \"string\",\n        \"State\": \"published\",\n        \"PublishContext\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        }\n      }\n    ]\n  },\n  \"UsageData\": {\n    \"Size\": -1,\n    \"RefCount\": -1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e994ca91-e4d7-4384-99bf-82cd9ceb4612",
+              "name": "No such volume",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Volume name or ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da48d110-4c56-430e-919d-42dd217075f6",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Volume name or ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84ff7487-32d4-4107-ad19-9d9527e0c7cf",
+          "name": "\"Update a volume. Valid only for Swarm cluster volumes\"\n",
+          "request": {
+            "name": "\"Update a volume. Valid only for Swarm cluster volumes\"\n",
+            "description": {},
+            "url": {
+              "path": [
+                "volumes",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "version",
+                  "value": "<long>",
+                  "description": "(Required) The version number of the volume being updated. This is required to\navoid conflicting writes. Found in the volume's `ClusterVolume`\nfield.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) The name or ID of the volume"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Spec\": {\n    \"Group\": \"<string>\",\n    \"AccessMode\": {\n      \"Scope\": \"single\",\n      \"Sharing\": \"none\",\n      \"MountVolume\": \"<object>\",\n      \"Secrets\": [\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        },\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        }\n      ],\n      \"AccessibilityRequirements\": {\n        \"Requisite\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\",\n            \"key_2\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ],\n        \"Preferred\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\",\n            \"key_2\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ]\n      },\n      \"CapacityRange\": {\n        \"RequiredBytes\": \"<long>\",\n        \"LimitBytes\": \"<long>\"\n      },\n      \"Availability\": \"active\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "10ca47ec-0344-48c0-bfee-065593d7e201",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name or ID of the volume"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Spec\": {\n    \"Group\": \"<string>\",\n    \"AccessMode\": {\n      \"Scope\": \"single\",\n      \"Sharing\": \"none\",\n      \"MountVolume\": \"<object>\",\n      \"Secrets\": [\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        },\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        }\n      ],\n      \"AccessibilityRequirements\": {\n        \"Requisite\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ],\n        \"Preferred\": [\n          {\n            \"key_0\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          }\n        ]\n      },\n      \"CapacityRange\": {\n        \"RequiredBytes\": \"<long>\",\n        \"LimitBytes\": \"<long>\"\n      },\n      \"Availability\": \"active\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bf5a91a0-2592-413c-8b0f-076a5d28b2ec",
+              "name": "bad parameter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name or ID of the volume"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Spec\": {\n    \"Group\": \"<string>\",\n    \"AccessMode\": {\n      \"Scope\": \"single\",\n      \"Sharing\": \"none\",\n      \"MountVolume\": \"<object>\",\n      \"Secrets\": [\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        },\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        }\n      ],\n      \"AccessibilityRequirements\": {\n        \"Requisite\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ],\n        \"Preferred\": [\n          {\n            \"key_0\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          }\n        ]\n      },\n      \"CapacityRange\": {\n        \"RequiredBytes\": \"<long>\",\n        \"LimitBytes\": \"<long>\"\n      },\n      \"Availability\": \"active\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68b86d0b-8ed5-4409-a7f5-902993541762",
+              "name": "no such volume",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name or ID of the volume"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Spec\": {\n    \"Group\": \"<string>\",\n    \"AccessMode\": {\n      \"Scope\": \"single\",\n      \"Sharing\": \"none\",\n      \"MountVolume\": \"<object>\",\n      \"Secrets\": [\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        },\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        }\n      ],\n      \"AccessibilityRequirements\": {\n        \"Requisite\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ],\n        \"Preferred\": [\n          {\n            \"key_0\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          }\n        ]\n      },\n      \"CapacityRange\": {\n        \"RequiredBytes\": \"<long>\",\n        \"LimitBytes\": \"<long>\"\n      },\n      \"Availability\": \"active\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c605def1-6293-4361-a129-e34f1975bb47",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name or ID of the volume"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Spec\": {\n    \"Group\": \"<string>\",\n    \"AccessMode\": {\n      \"Scope\": \"single\",\n      \"Sharing\": \"none\",\n      \"MountVolume\": \"<object>\",\n      \"Secrets\": [\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        },\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        }\n      ],\n      \"AccessibilityRequirements\": {\n        \"Requisite\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ],\n        \"Preferred\": [\n          {\n            \"key_0\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          }\n        ]\n      },\n      \"CapacityRange\": {\n        \"RequiredBytes\": \"<long>\",\n        \"LimitBytes\": \"<long>\"\n      },\n      \"Availability\": \"active\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2b485d9d-fde0-4a65-995e-a3281869f98f",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name or ID of the volume"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Spec\": {\n    \"Group\": \"<string>\",\n    \"AccessMode\": {\n      \"Scope\": \"single\",\n      \"Sharing\": \"none\",\n      \"MountVolume\": \"<object>\",\n      \"Secrets\": [\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        },\n        {\n          \"Key\": \"<string>\",\n          \"Secret\": \"<string>\"\n        }\n      ],\n      \"AccessibilityRequirements\": {\n        \"Requisite\": [\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\"\n          }\n        ],\n        \"Preferred\": [\n          {\n            \"key_0\": \"<string>\"\n          },\n          {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          }\n        ]\n      },\n      \"CapacityRange\": {\n        \"RequiredBytes\": \"<long>\",\n        \"LimitBytes\": \"<long>\"\n      },\n      \"Availability\": \"active\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "72c4514c-9b98-4b3f-837e-4a52ac715ad8",
+          "name": "Remove a volume",
+          "request": {
+            "name": "Remove a volume",
+            "description": {
+              "content": "Instruct the driver to remove the volume.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "volumes",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "force",
+                  "value": "false",
+                  "description": "Force the removal of the volume"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) Volume name or ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f2fae37c-1270-4f38-8c1d-9eb8f24aabdb",
+              "name": "The volume was removed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Volume name or ID"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cb7f9145-9273-4cb2-ac3b-7233cc21550a",
+              "name": "No such volume or volume driver",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Volume name or ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cda1631d-f0f2-4620-99b6-bd68ee60a594",
+              "name": "Volume is in use and cannot be removed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Volume name or ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88b986e1-11c6-4731-99be-c6602752a331",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Volume name or ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0e633ac9-90fb-4ba2-be7b-f16229e3e763",
+          "name": "Delete unused volumes",
+          "request": {
+            "name": "Delete unused volumes",
+            "description": {},
+            "url": {
+              "path": [
+                "volumes",
+                "prune"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "Filters to process on the prune list, encoded as JSON (a `map[string][]string`).\n\nAvailable filters:\n- `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune volumes with (or without, in case `label!=...` is used) the specified labels.\n- `all` (`all=true`) - Consider all (local) volumes for pruning and not just anonymous volumes.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bead905e-ea36-43c0-a19b-d7fe8e81e13c",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    "prune"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"VolumesDeleted\": [\n    \"string\",\n    \"string\"\n  ],\n  \"SpaceReclaimed\": 8973\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc75441a-a083-41e2-bafb-cb8fb7e59011",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "volumes",
+                    "prune"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v1.54",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "460e9909-c056-4f94-8e8f-d0404fce6ea3",
+    "name": "Docker Engine Config Volume API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

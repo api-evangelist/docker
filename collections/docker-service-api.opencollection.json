@@ -1,0 +1,208 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Docker Engine Config Service API",
+    "version": "1.54"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Service",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/services",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the services list.\n\nAvailable filters:\n\n- `id=<service id>`\n- `label=<service label>`\n- `mode=[\"replicated\"|\"global\"]`\n- `name=<service name>`\n"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Include service status, with count of running and desired tasks.\n"
+              }
+            ]
+          },
+          "docs": "List services"
+        },
+        {
+          "info": {
+            "name": "Create a service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/services/create",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Create a service"
+        },
+        {
+          "info": {
+            "name": "Inspect a service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/services/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of service."
+              },
+              {
+                "name": "insertDefaults",
+                "value": "",
+                "type": "query",
+                "description": "Fill empty fields with default values."
+              }
+            ]
+          },
+          "docs": "Inspect a service"
+        },
+        {
+          "info": {
+            "name": "Delete a service",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/services/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of service."
+              }
+            ]
+          },
+          "docs": "Delete a service"
+        },
+        {
+          "info": {
+            "name": "Update a service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/services/:id/update",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of service."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the service object being updated. This is\nrequired to avoid conflicting writes.\nThis version number should be the value as currently set on the\nservice *before* the update. You can find the current version by\ncalling `GET /services/{id}`\n"
+              },
+              {
+                "name": "registryAuthFrom",
+                "value": "",
+                "type": "query",
+                "description": "If the `X-Registry-Auth` header is not specified, this parameter\nindicates where to find registry authorization credentials.\n"
+              },
+              {
+                "name": "rollback",
+                "value": "",
+                "type": "query",
+                "description": "Set to this parameter to `previous` to cause a server-side rollback\nto the previous service spec. The supplied spec will be ignored in\nthis case.\n"
+              }
+            ]
+          },
+          "docs": "Update a service"
+        },
+        {
+          "info": {
+            "name": "Get service logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/services/:id/logs",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the service"
+              },
+              {
+                "name": "details",
+                "value": "",
+                "type": "query",
+                "description": "Show service context and extra details provided to logs."
+              },
+              {
+                "name": "follow",
+                "value": "",
+                "type": "query",
+                "description": "Keep connection after returning logs."
+              },
+              {
+                "name": "stdout",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stdout`"
+              },
+              {
+                "name": "stderr",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stderr`"
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only return logs since this time, as a UNIX timestamp"
+              },
+              {
+                "name": "timestamps",
+                "value": "",
+                "type": "query",
+                "description": "Add timestamps to every log line"
+              },
+              {
+                "name": "tail",
+                "value": "",
+                "type": "query",
+                "description": "Only return this number of log lines from the end of the logs.\nSpecify as an integer or `all` to output all log lines.\n"
+              }
+            ]
+          },
+          "docs": "Get `stdout` and `stderr` logs from a service. See also\n[`/containers/{id}/logs`](#operation/ContainerLogs).\n\n**Note**: This endpoint works only for services with the `local`,\n`json-file` or `journald` logging drivers.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

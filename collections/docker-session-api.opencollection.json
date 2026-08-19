@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Docker Engine Config Session API",
+    "version": "1.54"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Session",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initialize interactive session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/session"
+          },
+          "docs": "Start a new interactive session with a server. Session allows server to\ncall back to the client for advanced capabilities.\n\n> **Deprecated**: This endpoint is deprecated and will be removed in a future version.\n> Server should support gRPC directly on the listening socket.\n\n### Hijacking\n\nThis endpoint hijacks the HTTP connection to HTTP2 transport that allows\nthe client to expose gPRC services on that connection.\n\nFor example, the client sends this request to upgrade the connection:\n\n```\nPOST /"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

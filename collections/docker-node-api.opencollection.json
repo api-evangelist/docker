@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Docker Engine Config Node API",
+    "version": "1.54"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Node",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List nodes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/nodes",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the nodes list, encoded as JSON (a `map[string][]string`).\n\nAvailable filters:\n- `id=<node id>`\n- `label=<engine label>`\n- `membership=`(`accepted`|`pending`)`\n- `name=<node name>`\n- `node.label=<node label>`\n- `role=`(`manager`|`worker`)`\n"
+              }
+            ]
+          },
+          "docs": "List nodes"
+        },
+        {
+          "info": {
+            "name": "Inspect a node",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/nodes/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID or name of the node"
+              }
+            ]
+          },
+          "docs": "Inspect a node"
+        },
+        {
+          "info": {
+            "name": "Delete a node",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/nodes/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID or name of the node"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Force remove a node from the swarm"
+              }
+            ]
+          },
+          "docs": "Delete a node"
+        },
+        {
+          "info": {
+            "name": "Update a node",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/nodes/:id/update",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the node"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the node object being updated. This is required\nto avoid conflicting writes.\n"
+              }
+            ]
+          },
+          "docs": "Update a node"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

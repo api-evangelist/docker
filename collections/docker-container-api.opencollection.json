@@ -1,0 +1,763 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Docker Engine Config Container API",
+    "version": "1.54"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Container",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List containers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/json",
+            "params": [
+              {
+                "name": "all",
+                "value": "",
+                "type": "query",
+                "description": "Return all containers. By default, only running containers are shown.\n"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Return this number of most recently created containers, including\nnon-running ones.\n"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Return the size of container as fields `SizeRw` and `SizeRootFs`.\n"
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the container list, encoded as JSON (a\n`map[string][]string`). For example, `{\"status\": [\"paused\"]}` will\nonly return paused containers.\n\nAvailable filters:\n\n- `ancestor`=(`<image-name>[:<tag>]`, `<image id>`, or `<image@digest>`)\n- `before`=(`<container id>` or `<container name>`)\n- `expose`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`)\n- `exited=<int>` containers with exit code of `<int>`\n- `health`=(`starting`|`healthy`|`unhealthy`|`none`)\n- `id=<ID>` a container's ID\n- `isolation=`(`default`|`process`|`hyperv`) (Windows daemon only)\n- `is-task=`(`true`|`false`)\n- `label=key` or `label=\"key=value\"` of a container label\n- `name=<name>` a container's name\n- `network`=(`<network id>` or `<network name>`)\n- `publish`=(`<port>[/<proto>]`|`<startport-endport>/[<proto>]`)\n- `since`=(`<container id>` or `<container name>`)\n- `status=`(`created`|`restarting`|`running`|`removing`|`paused`|`exited`|`dead`)\n- `volume`=(`<volume name>` or `<mount point destination>`)\n"
+              }
+            ]
+          },
+          "docs": "Returns a list of containers. For details on the format, see the\n[inspect endpoint](#operation/ContainerInspect).\n\nNote that it uses a different, smaller representation of a container\nthan inspecting a single container. For example, the list of linked\ncontainers is not propagated .\n"
+        },
+        {
+          "info": {
+            "name": "Create a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/create",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Assign the specified name to the container. Must match\n`/?[a-zA-Z0-9][a-zA-Z0-9_.-]+`.\n"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Platform in the format `os[/arch[/variant]]` used for image lookup.\n\nWhen specified, the daemon checks if the requested image is present\nin the local image cache with the given OS and Architecture, and\notherwise returns a `404` status.\n\nIf the option is not set, the host's native OS and Architecture are\nused to look up the image in the image cache. However, if no platform\nis passed and the given image does exist in the local image cache,\nbut its OS or architecture does not match, the container is created\nwith the available image, and a warning is added to the `Warnings`\nfield in the response, for example;\n\n    WARNING: The requested image's platform (linux/arm64/v8) does not\n             match the detected host platform (linux/amd64) and no\n             specific platform was requested\n"
+              }
+            ]
+          },
+          "docs": "Create a container"
+        },
+        {
+          "info": {
+            "name": "Inspect a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/json",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Return the size of container as fields `SizeRw` and `SizeRootFs`"
+              }
+            ]
+          },
+          "docs": "Return low-level information about a container."
+        },
+        {
+          "info": {
+            "name": "List processes running inside a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/top",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "ps_args",
+                "value": "",
+                "type": "query",
+                "description": "The arguments to pass to `ps`. For example, `aux`"
+              }
+            ]
+          },
+          "docs": "On Unix systems, this is done by running the `ps` command. This endpoint\nis not supported on Windows.\n"
+        },
+        {
+          "info": {
+            "name": "Get container logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/logs",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "follow",
+                "value": "",
+                "type": "query",
+                "description": "Keep connection after returning logs."
+              },
+              {
+                "name": "stdout",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stdout`"
+              },
+              {
+                "name": "stderr",
+                "value": "",
+                "type": "query",
+                "description": "Return logs from `stderr`"
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only return logs since this time, as a UNIX timestamp"
+              },
+              {
+                "name": "until",
+                "value": "",
+                "type": "query",
+                "description": "Only return logs before this time, as a UNIX timestamp"
+              },
+              {
+                "name": "timestamps",
+                "value": "",
+                "type": "query",
+                "description": "Add timestamps to every log line"
+              },
+              {
+                "name": "tail",
+                "value": "",
+                "type": "query",
+                "description": "Only return this number of log lines from the end of the logs.\nSpecify as an integer or `all` to output all log lines.\n"
+              }
+            ]
+          },
+          "docs": "Get `stdout` and `stderr` logs from a container.\n\nNote: This endpoint works only for containers with the `json-file` or\n`journald` logging driver.\n"
+        },
+        {
+          "info": {
+            "name": "Get changes on a container’s filesystem",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/changes",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Returns which files in a container's filesystem have been added, deleted,\nor modified. The `Kind` of modification can be one of:\n\n- `0`: Modified (\"C\")\n- `1`: Added (\"A\")\n- `2`: Deleted (\"D\")\n"
+        },
+        {
+          "info": {
+            "name": "Export a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/export",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Export the contents of a container as a tarball."
+        },
+        {
+          "info": {
+            "name": "Get container stats based on resource usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/stats",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "stream",
+                "value": "",
+                "type": "query",
+                "description": "Stream the output. If false, the stats will be output once and then\nit will disconnect.\n"
+              },
+              {
+                "name": "one-shot",
+                "value": "",
+                "type": "query",
+                "description": "Only get a single stat instead of waiting for 2 cycles. Must be used\nwith `stream=false`.\n"
+              }
+            ]
+          },
+          "docs": "This endpoint returns a live stream of a container’s resource usage\nstatistics.\n\nThe `precpu_stats` is the CPU statistic of the *previous* read, and is\nused to calculate the CPU usage percentage. It is not an exact copy\nof the `cpu_stats` field.\n\nIf either `precpu_stats.online_cpus` or `cpu_stats.online_cpus` is\nnil then for compatibility with older daemons the length of the\ncorresponding `cpu_usage.percpu_usage` array should be used.\n\nOn a cgroup v2 host, the following fields are not set\n* `blk"
+        },
+        {
+          "info": {
+            "name": "Resize a container TTY",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/resize",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "h",
+                "value": "",
+                "type": "query",
+                "description": "Height of the TTY session in characters"
+              },
+              {
+                "name": "w",
+                "value": "",
+                "type": "query",
+                "description": "Width of the TTY session in characters"
+              }
+            ]
+          },
+          "docs": "Resize the TTY for a container."
+        },
+        {
+          "info": {
+            "name": "Start a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/start",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "detachKeys",
+                "value": "",
+                "type": "query",
+                "description": "Override the key sequence for detaching a container. Format is a\nsingle character `[a-Z]` or `ctrl-<value>` where `<value>` is one\nof: `a-z`, `@`, `^`, `[`, `,` or `_`.\n"
+              }
+            ]
+          },
+          "docs": "Start a container"
+        },
+        {
+          "info": {
+            "name": "Stop a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/stop",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "signal",
+                "value": "",
+                "type": "query",
+                "description": "Signal to send to the container as an integer or string (e.g. `SIGINT`).\n"
+              },
+              {
+                "name": "t",
+                "value": "",
+                "type": "query",
+                "description": "Number of seconds to wait before killing the container"
+              }
+            ]
+          },
+          "docs": "Stop a container"
+        },
+        {
+          "info": {
+            "name": "Restart a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/restart",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "signal",
+                "value": "",
+                "type": "query",
+                "description": "Signal to send to the container as an integer or string (e.g. `SIGINT`).\n"
+              },
+              {
+                "name": "t",
+                "value": "",
+                "type": "query",
+                "description": "Number of seconds to wait before killing the container"
+              }
+            ]
+          },
+          "docs": "Restart a container"
+        },
+        {
+          "info": {
+            "name": "Kill a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/kill",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "signal",
+                "value": "",
+                "type": "query",
+                "description": "Signal to send to the container as an integer or string (e.g. `SIGINT`).\n"
+              }
+            ]
+          },
+          "docs": "Send a POSIX signal to a container, defaulting to killing to the\ncontainer.\n"
+        },
+        {
+          "info": {
+            "name": "Update a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/update",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Change various configuration options of a container without having to\nrecreate it.\n"
+        },
+        {
+          "info": {
+            "name": "Rename a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/rename",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "New name for the container"
+              }
+            ]
+          },
+          "docs": "Rename a container"
+        },
+        {
+          "info": {
+            "name": "Pause a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/pause",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Use the freezer cgroup to suspend all processes in a container.\n\nTraditionally, when suspending a process the `SIGSTOP` signal is used,\nwhich is observable by the process being suspended. With the freezer\ncgroup the process is unaware, and unable to capture, that it is being\nsuspended, and subsequently resumed.\n"
+        },
+        {
+          "info": {
+            "name": "Unpause a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/unpause",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              }
+            ]
+          },
+          "docs": "Resume a container which has been paused."
+        },
+        {
+          "info": {
+            "name": "Attach to a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/attach",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "detachKeys",
+                "value": "",
+                "type": "query",
+                "description": "Override the key sequence for detaching a container.Format is a single\ncharacter `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`,\n`@`, `^`, `[`, `,` or `_`.\n"
+              },
+              {
+                "name": "logs",
+                "value": "",
+                "type": "query",
+                "description": "Replay previous logs from the container.\n\nThis is useful for attaching to a container that has started and you\nwant to output everything since the container started.\n\nIf `stream` is also enabled, once all the previous output has been\nreturned, it will seamlessly transition into streaming current\noutput.\n"
+              },
+              {
+                "name": "stream",
+                "value": "",
+                "type": "query",
+                "description": "Stream attached streams from the time the request was made onwards.\n"
+              },
+              {
+                "name": "stdin",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stdin`"
+              },
+              {
+                "name": "stdout",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stdout`"
+              },
+              {
+                "name": "stderr",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stderr`"
+              }
+            ]
+          },
+          "docs": "Attach to a container to read its output or send it input. You can attach\nto the same container multiple times and you can reattach to containers\nthat have been detached.\n\nEither the `stream` or `logs` parameter must be `true` for this endpoint\nto do anything.\n\nSee the [documentation for the `docker attach` command](https://docs.docker.com/engine/reference/commandline/attach/)\nfor more details.\n\n### Hijacking\n\nThis endpoint hijacks the HTTP connection to transport `stdin`, `stdout`,\nand `stderr`"
+        },
+        {
+          "info": {
+            "name": "Attach to a container via a websocket",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/attach/ws",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "detachKeys",
+                "value": "",
+                "type": "query",
+                "description": "Override the key sequence for detaching a container.Format is a single\ncharacter `[a-Z]` or `ctrl-<value>` where `<value>` is one of: `a-z`,\n`@`, `^`, `[`, `,`, or `_`.\n"
+              },
+              {
+                "name": "logs",
+                "value": "",
+                "type": "query",
+                "description": "Return logs"
+              },
+              {
+                "name": "stream",
+                "value": "",
+                "type": "query",
+                "description": "Return stream"
+              },
+              {
+                "name": "stdin",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stdin`"
+              },
+              {
+                "name": "stdout",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stdout`"
+              },
+              {
+                "name": "stderr",
+                "value": "",
+                "type": "query",
+                "description": "Attach to `stderr`"
+              }
+            ]
+          },
+          "docs": "Attach to a container via a websocket"
+        },
+        {
+          "info": {
+            "name": "Wait for a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/:id/wait",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "condition",
+                "value": "",
+                "type": "query",
+                "description": "Wait until a container state reaches the given condition.\n\nDefaults to `not-running` if omitted or empty.\n"
+              }
+            ]
+          },
+          "docs": "Block until a container stops, then returns the exit code."
+        },
+        {
+          "info": {
+            "name": "Remove a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/containers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "v",
+                "value": "",
+                "type": "query",
+                "description": "Remove anonymous volumes associated with the container."
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "If the container is running, kill it before removing it."
+              },
+              {
+                "name": "link",
+                "value": "",
+                "type": "query",
+                "description": "Remove the specified link associated with the container."
+              }
+            ]
+          },
+          "docs": "Remove a container"
+        },
+        {
+          "info": {
+            "name": "Get an archive of a filesystem resource in a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/containers/:id/archive",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Resource in the container’s filesystem to archive."
+              }
+            ]
+          },
+          "docs": "Get a tar archive of a resource in the filesystem of container id."
+        },
+        {
+          "info": {
+            "name": "Extract an archive of files or folders to a directory in a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/containers/:id/archive",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Path to a directory in the container to extract the archive’s contents into. "
+              },
+              {
+                "name": "noOverwriteDirNonDir",
+                "value": "",
+                "type": "query",
+                "description": "If `1`, `true`, or `True` then it will be an error if unpacking the\ngiven content would cause an existing directory to be replaced with\na non-directory and vice versa.\n"
+              },
+              {
+                "name": "copyUIDGID",
+                "value": "",
+                "type": "query",
+                "description": "If `1`, `true`, then it will copy UID/GID maps to the dest file or\ndir\n"
+              }
+            ]
+          },
+          "docs": "Upload a tar archive to be extracted to a path in the filesystem of container id.\n`path` parameter is asserted to be a directory. If it exists as a file, 400 error\nwill be returned with message \"not a directory\".\n"
+        },
+        {
+          "info": {
+            "name": "Get information about files in a container",
+            "type": "http"
+          },
+          "http": {
+            "method": "HEAD",
+            "url": "{{baseUrl}}/containers/:id/archive",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID or name of the container"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Resource in the container’s filesystem to archive."
+              }
+            ]
+          },
+          "docs": "A response header `X-Docker-Container-Path-Stat` is returned, containing\na base64 - encoded JSON object with some filesystem header information\nabout the path.\n"
+        },
+        {
+          "info": {
+            "name": "Delete stopped containers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/containers/prune",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the prune list, encoded as JSON (a `map[string][]string`).\n\nAvailable filters:\n- `until=<timestamp>` Prune containers created before this timestamp. The `<timestamp>` can be Unix timestamps, date formatted timestamps, or Go duration strings (e.g. `10m`, `1h30m`) computed relative to the daemon machine’s time.\n- `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune containers with (or without, in case `label!=...` is used) the specified labels.\n"
+              }
+            ]
+          },
+          "docs": "Delete stopped containers"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

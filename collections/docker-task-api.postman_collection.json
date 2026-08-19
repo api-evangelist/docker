@@ -1,0 +1,792 @@
+{
+  "item": [
+    {
+      "id": "752ad3e8-9550-4ac0-aa63-a24cda3c40c7",
+      "name": "Task",
+      "description": {
+        "content": "A task is a container running on a swarm. It is the atomic scheduling unit\nof swarm. Swarm mode must be enabled for these endpoints to work.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ee480f44-d5cd-4d24-862f-3f37ef460632",
+          "name": "List tasks",
+          "request": {
+            "name": "List tasks",
+            "description": {},
+            "url": {
+              "path": [
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the tasks list.\n\nAvailable filters:\n\n- `desired-state=(running | shutdown | accepted)`\n- `id=<task id>`\n- `label=key` or `label=\"key=value\"`\n- `name=<task name>`\n- `node=<node id or name>`\n- `service=<service name>`\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ddd3370e-617a-4d03-bf2e-0702ad506ece",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"ID\": \"0kzzo1i0y4jz6027t0k7aezc7\",\n    \"Version\": {\n      \"Index\": 71\n    },\n    \"CreatedAt\": \"2016-06-07T21:07:31.171892745Z\",\n    \"UpdatedAt\": \"2016-06-07T21:07:31.376370513Z\",\n    \"Spec\": {\n      \"ContainerSpec\": {\n        \"Image\": \"redis\"\n      },\n      \"Resources\": {\n        \"Limits\": {},\n        \"Reservations\": {}\n      },\n      \"RestartPolicy\": {\n        \"Condition\": \"any\",\n        \"MaxAttempts\": 0\n      },\n      \"Placement\": {}\n    },\n    \"ServiceID\": \"9mnpnzenvg8p8tdbtq4wvbkcz\",\n    \"Slot\": 1,\n    \"NodeID\": \"60gvrl6tm78dmak4yl7srz94v\",\n    \"Status\": {\n      \"Timestamp\": \"2016-06-07T21:07:31.290032978Z\",\n      \"State\": \"running\",\n      \"Message\": \"started\",\n      \"ContainerStatus\": {\n        \"ContainerID\": \"e5d62702a1b48d01c3e02ca1e0212a250801fa8d67caca0b6f35919ebc12f035\",\n        \"PID\": 677\n      }\n    },\n    \"DesiredState\": \"running\",\n    \"NetworksAttachments\": [\n      {\n        \"Network\": {\n          \"ID\": \"4qvuz4ko70xaltuqbt8956gd1\",\n          \"Version\": {\n            \"Index\": 18\n          },\n          \"CreatedAt\": \"2016-06-07T20:31:11.912919752Z\",\n          \"UpdatedAt\": \"2016-06-07T21:07:29.955277358Z\",\n          \"Spec\": {\n            \"Name\": \"ingress\",\n            \"Labels\": {\n              \"com.docker.swarm.internal\": \"true\"\n            },\n            \"DriverConfiguration\": {},\n            \"IPAMOptions\": {\n              \"Driver\": {},\n              \"Configs\": [\n                {\n                  \"Subnet\": \"10.255.0.0/16\",\n                  \"Gateway\": \"10.255.0.1\"\n                }\n              ]\n            }\n          },\n          \"DriverState\": {\n            \"Name\": \"overlay\",\n            \"Options\": {\n              \"com.docker.network.driver.overlay.vxlanid_list\": \"256\"\n            }\n          },\n          \"IPAMOptions\": {\n            \"Driver\": {\n              \"Name\": \"default\"\n            },\n            \"Configs\": [\n              {\n                \"Subnet\": \"10.255.0.0/16\",\n                \"Gateway\": \"10.255.0.1\"\n              }\n            ]\n          }\n        },\n        \"Addresses\": [\n          \"10.255.0.10/16\"\n        ]\n      }\n    ]\n  },\n  {\n    \"ID\": \"1yljwbmlr8er2waf8orvqpwms\",\n    \"Version\": {\n      \"Index\": 30\n    },\n    \"CreatedAt\": \"2016-06-07T21:07:30.019104782Z\",\n    \"UpdatedAt\": \"2016-06-07T21:07:30.231958098Z\",\n    \"Name\": \"hopeful_cori\",\n    \"Spec\": {\n      \"ContainerSpec\": {\n        \"Image\": \"redis\"\n      },\n      \"Resources\": {\n        \"Limits\": {},\n        \"Reservations\": {}\n      },\n      \"RestartPolicy\": {\n        \"Condition\": \"any\",\n        \"MaxAttempts\": 0\n      },\n      \"Placement\": {}\n    },\n    \"ServiceID\": \"9mnpnzenvg8p8tdbtq4wvbkcz\",\n    \"Slot\": 1,\n    \"NodeID\": \"60gvrl6tm78dmak4yl7srz94v\",\n    \"Status\": {\n      \"Timestamp\": \"2016-06-07T21:07:30.202183143Z\",\n      \"State\": \"shutdown\",\n      \"Message\": \"shutdown\",\n      \"ContainerStatus\": {\n        \"ContainerID\": \"1cf8d63d18e79668b0004a4be4c6ee58cddfad2dae29506d8781581d0688a213\"\n      }\n    },\n    \"DesiredState\": \"shutdown\",\n    \"NetworksAttachments\": [\n      {\n        \"Network\": {\n          \"ID\": \"4qvuz4ko70xaltuqbt8956gd1\",\n          \"Version\": {\n            \"Index\": 18\n          },\n          \"CreatedAt\": \"2016-06-07T20:31:11.912919752Z\",\n          \"UpdatedAt\": \"2016-06-07T21:07:29.955277358Z\",\n          \"Spec\": {\n            \"Name\": \"ingress\",\n            \"Labels\": {\n              \"com.docker.swarm.internal\": \"true\"\n            },\n            \"DriverConfiguration\": {},\n            \"IPAMOptions\": {\n              \"Driver\": {},\n              \"Configs\": [\n                {\n                  \"Subnet\": \"10.255.0.0/16\",\n                  \"Gateway\": \"10.255.0.1\"\n                }\n              ]\n            }\n          },\n          \"DriverState\": {\n            \"Name\": \"overlay\",\n            \"Options\": {\n              \"com.docker.network.driver.overlay.vxlanid_list\": \"256\"\n            }\n          },\n          \"IPAMOptions\": {\n            \"Driver\": {\n              \"Name\": \"default\"\n            },\n            \"Configs\": [\n              {\n                \"Subnet\": \"10.255.0.0/16\",\n                \"Gateway\": \"10.255.0.1\"\n              }\n            ]\n          }\n        },\n        \"Addresses\": [\n          \"10.255.0.5/16\"\n        ]\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46cc8d7e-4ae3-4ac9-8d04-aebae3ce683d",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e999dda-b760-48e2-a434-6c0829113d8c",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "49c1b2c4-a703-4f8f-ace0-59d15bbdac89",
+          "name": "Inspect a task",
+          "request": {
+            "name": "Inspect a task",
+            "description": {},
+            "url": {
+              "path": [
+                "tasks",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the task"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8b136a98-70ae-443c-918e-5df380484bc9",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the task"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ID\": \"string\",\n  \"Version\": {\n    \"Index\": 373531\n  },\n  \"CreatedAt\": \"string\",\n  \"UpdatedAt\": \"string\",\n  \"Name\": \"string\",\n  \"Labels\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"Spec\": {\n    \"PluginSpec\": {\n      \"Name\": \"string\",\n      \"Remote\": \"string\",\n      \"Disabled\": true,\n      \"PluginPrivilege\": [\n        {\n          \"Name\": \"network\",\n          \"Description\": \"string\",\n          \"Value\": [\n            \"host\"\n          ]\n        },\n        {\n          \"Name\": \"network\",\n          \"Description\": \"string\",\n          \"Value\": [\n            \"host\"\n          ]\n        }\n      ]\n    },\n    \"ContainerSpec\": {\n      \"Image\": \"string\",\n      \"Labels\": {\n        \"key_0\": \"string\"\n      },\n      \"Command\": [\n        \"string\",\n        \"string\"\n      ],\n      \"Args\": [\n        \"string\",\n        \"string\"\n      ],\n      \"Hostname\": \"string\",\n      \"Env\": [\n        \"string\",\n        \"string\"\n      ],\n      \"Dir\": \"string\",\n      \"User\": \"string\",\n      \"Groups\": [\n        \"string\",\n        \"string\"\n      ],\n      \"Privileges\": {\n        \"CredentialSpec\": {\n          \"Config\": \"0bt9dmxjvjiqermk6xrop3ekq\",\n          \"File\": \"spec.json\",\n          \"Registry\": \"string\"\n        },\n        \"SELinuxContext\": {\n          \"Disable\": false,\n          \"User\": \"string\",\n          \"Role\": \"string\",\n          \"Type\": \"string\",\n          \"Level\": \"string\"\n        },\n        \"Seccomp\": {\n          \"Mode\": \"unconfined\",\n          \"Profile\": \"string\"\n        },\n        \"AppArmor\": {\n          \"Mode\": \"disabled\"\n        },\n        \"NoNewPrivileges\": false\n      },\n      \"TTY\": true,\n      \"OpenStdin\": true,\n      \"ReadOnly\": true,\n      \"Mounts\": [\n        {\n          \"Target\": \"string\",\n          \"Source\": \"string\",\n          \"Type\": \"volume\",\n          \"ReadOnly\": false,\n          \"Consistency\": \"string\",\n          \"BindOptions\": {\n            \"Propagation\": \"private\",\n            \"NonRecursive\": false,\n            \"CreateMountpoint\": false,\n            \"ReadOnlyNonRecursive\": false,\n            \"ReadOnlyForceRecursive\": false\n          },\n          \"VolumeOptions\": {\n            \"NoCopy\": false,\n            \"Labels\": {\n              \"key_0\": \"string\",\n              \"key_1\": \"string\"\n            },\n            \"DriverConfig\": {\n              \"Name\": \"string\",\n              \"Options\": {\n                \"key_0\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"key_1\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"key_2\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            },\n            \"Subpath\": \"dir-inside-volume/subdirectory\"\n          },\n          \"ImageOptions\": {\n            \"Subpath\": \"dir-inside-image/subdirectory\"\n          },\n          \"TmpfsOptions\": {\n            \"SizeBytes\": 2130,\n            \"Mode\": 5499,\n            \"Options\": [\n              [\n                \"noexec\"\n              ]\n            ]\n          }\n        },\n        {\n          \"Target\": \"string\",\n          \"Source\": \"string\",\n          \"Type\": \"volume\",\n          \"ReadOnly\": true,\n          \"Consistency\": \"string\",\n          \"BindOptions\": {\n            \"Propagation\": \"private\",\n            \"NonRecursive\": false,\n            \"CreateMountpoint\": false,\n            \"ReadOnlyNonRecursive\": false,\n            \"ReadOnlyForceRecursive\": false\n          },\n          \"VolumeOptions\": {\n            \"NoCopy\": false,\n            \"Labels\": {\n              \"key_0\": \"string\",\n              \"key_1\": \"string\"\n            },\n            \"DriverConfig\": {\n              \"Name\": \"string\",\n              \"Options\": {\n                \"key_0\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            },\n            \"Subpath\": \"dir-inside-volume/subdirectory\"\n          },\n          \"ImageOptions\": {\n            \"Subpath\": \"dir-inside-image/subdirectory\"\n          },\n          \"TmpfsOptions\": {\n            \"SizeBytes\": 4027,\n            \"Mode\": 9178,\n            \"Options\": [\n              [\n                \"noexec\"\n              ]\n            ]\n          }\n        }\n      ],\n      \"StopSignal\": \"string\",\n      \"StopGracePeriod\": 2305,\n      \"HealthCheck\": {\n        \"Test\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Interval\": 2166,\n        \"Timeout\": 5579,\n        \"Retries\": 3318,\n        \"StartPeriod\": 1219,\n        \"StartInterval\": 6051\n      },\n      \"Hosts\": [\n        \"string\",\n        \"string\"\n      ],\n      \"DNSConfig\": {\n        \"Nameservers\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Search\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Options\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"Secrets\": [\n        {\n          \"File\": {\n            \"Name\": \"string\",\n            \"UID\": \"string\",\n            \"GID\": \"string\",\n            \"Mode\": 9002\n          },\n          \"SecretID\": \"string\",\n          \"SecretName\": \"string\"\n        },\n        {\n          \"File\": {\n            \"Name\": \"string\",\n            \"UID\": \"string\",\n            \"GID\": \"string\",\n            \"Mode\": 6251\n          },\n          \"SecretID\": \"string\",\n          \"SecretName\": \"string\"\n        }\n      ],\n      \"OomScoreAdj\": 0,\n      \"Configs\": [\n        {\n          \"File\": {\n            \"Name\": \"string\",\n            \"UID\": \"string\",\n            \"GID\": \"string\",\n            \"Mode\": 7450\n          },\n          \"Runtime\": {},\n          \"ConfigID\": \"string\",\n          \"ConfigName\": \"string\"\n        },\n        {\n          \"File\": {\n            \"Name\": \"string\",\n            \"UID\": \"string\",\n            \"GID\": \"string\",\n            \"Mode\": 3808\n          },\n          \"Runtime\": {},\n          \"ConfigID\": \"string\",\n          \"ConfigName\": \"string\"\n        }\n      ],\n      \"Isolation\": \"\",\n      \"Init\": false,\n      \"Sysctls\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"CapabilityAdd\": [\n        \"CAP_NET_RAW\",\n        \"CAP_SYS_ADMIN\",\n        \"CAP_SYS_CHROOT\",\n        \"CAP_SYSLOG\"\n      ],\n      \"CapabilityDrop\": [\n        \"CAP_NET_RAW\"\n      ],\n      \"Ulimits\": [\n        {\n          \"Name\": \"string\",\n          \"Soft\": 7697,\n          \"Hard\": 7053\n        },\n        {\n          \"Name\": \"string\",\n          \"Soft\": 7833,\n          \"Hard\": 5904\n        }\n      ]\n    },\n    \"NetworkAttachmentSpec\": {\n      \"ContainerID\": \"string\"\n    },\n    \"Resources\": {\n      \"Limits\": {\n        \"NanoCPUs\": 4000000000,\n        \"MemoryBytes\": 8272408576,\n        \"Pids\": 100\n      },\n      \"Reservations\": {\n        \"NanoCPUs\": 4000000000,\n        \"MemoryBytes\": 8272408576,\n        \"GenericResources\": [\n          {\n            \"DiscreteResourceSpec\": {\n              \"Kind\": \"SSD\",\n              \"Value\": 3\n            }\n          },\n          {\n            \"NamedResourceSpec\": {\n              \"Kind\": \"GPU\",\n              \"Value\": \"UUID1\"\n            }\n          },\n          {\n            \"NamedResourceSpec\": {\n              \"Kind\": \"GPU\",\n              \"Value\": \"UUID2\"\n            }\n          }\n        ]\n      },\n      \"SwapBytes\": 484,\n      \"MemorySwappiness\": 74\n    },\n    \"RestartPolicy\": {\n      \"Condition\": \"none\",\n      \"Delay\": 3128,\n      \"MaxAttempts\": 0,\n      \"Window\": 0\n    },\n    \"Placement\": {\n      \"Constraints\": [\n        \"node.hostname!=node3.corp.example.com\",\n        \"node.role!=manager\",\n        \"node.labels.type==production\",\n        \"node.platform.os==linux\",\n        \"node.platform.arch==x86_64\"\n      ],\n      \"Preferences\": [\n        {\n          \"Spread\": {\n            \"SpreadDescriptor\": \"node.labels.datacenter\"\n          }\n        },\n        {\n          \"Spread\": {\n            \"SpreadDescriptor\": \"node.labels.rack\"\n          }\n        }\n      ],\n      \"MaxReplicas\": 0,\n      \"Platforms\": [\n        {\n          \"Architecture\": \"x86_64\",\n          \"OS\": \"linux\"\n        },\n        {\n          \"Architecture\": \"x86_64\",\n          \"OS\": \"linux\"\n        }\n      ]\n    },\n    \"ForceUpdate\": 3842,\n    \"Runtime\": \"string\",\n    \"Networks\": [\n      {\n        \"Target\": \"string\",\n        \"Aliases\": [\n          \"string\",\n          \"string\"\n        ],\n        \"DriverOpts\": {\n          \"key_0\": \"string\"\n        }\n      },\n      {\n        \"Target\": \"string\",\n        \"Aliases\": [\n          \"string\",\n          \"string\"\n        ],\n        \"DriverOpts\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        }\n      }\n    ],\n    \"LogDriver\": {\n      \"Name\": \"string\",\n      \"Options\": {\n        \"key_0\": \"string\"\n      }\n    }\n  },\n  \"ServiceID\": \"string\",\n  \"Slot\": 115,\n  \"NodeID\": \"string\",\n  \"AssignedGenericResources\": [\n    {\n      \"DiscreteResourceSpec\": {\n        \"Kind\": \"SSD\",\n        \"Value\": 3\n      }\n    },\n    {\n      \"NamedResourceSpec\": {\n        \"Kind\": \"GPU\",\n        \"Value\": \"UUID1\"\n      }\n    },\n    {\n      \"NamedResourceSpec\": {\n        \"Kind\": \"GPU\",\n        \"Value\": \"UUID2\"\n      }\n    }\n  ],\n  \"Status\": {\n    \"Timestamp\": \"string\",\n    \"State\": \"complete\",\n    \"Message\": \"string\",\n    \"Err\": \"string\",\n    \"ContainerStatus\": {\n      \"ContainerID\": \"string\",\n      \"PID\": 8930,\n      \"ExitCode\": 9966\n    },\n    \"PortStatus\": {\n      \"Ports\": [\n        {\n          \"Name\": \"string\",\n          \"Protocol\": \"udp\",\n          \"TargetPort\": 3198,\n          \"PublishedPort\": 516,\n          \"PublishMode\": \"ingress\"\n        },\n        {\n          \"Name\": \"string\",\n          \"Protocol\": \"sctp\",\n          \"TargetPort\": 5538,\n          \"PublishedPort\": 6330,\n          \"PublishMode\": \"ingress\"\n        }\n      ]\n    }\n  },\n  \"DesiredState\": \"shutdown\",\n  \"JobIteration\": {\n    \"Index\": 373531\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2347aea3-1ac6-47b2-a7a9-881e2501f90f",
+              "name": "no such task",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the task"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ae2ec67-158c-4f36-8d74-b7e9eb4f4f75",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the task"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c4e7c25-da31-4bed-a150-f68a04cee13f",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the task"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "985a2dc5-8a89-4fe8-9dc3-dada025499f4",
+          "name": "Get task logs",
+          "request": {
+            "name": "Get task logs",
+            "description": {
+              "content": "Get `stdout` and `stderr` logs from a task.\nSee also [`/containers/{id}/logs`](#operation/ContainerLogs).\n\n**Note**: This endpoint works only for services with the `local`,\n`json-file` or `journald` logging drivers.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tasks",
+                ":id",
+                "logs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "details",
+                  "value": "false",
+                  "description": "Show task context and extra details provided to logs."
+                },
+                {
+                  "disabled": false,
+                  "key": "follow",
+                  "value": "false",
+                  "description": "Keep connection after returning logs."
+                },
+                {
+                  "disabled": false,
+                  "key": "stdout",
+                  "value": "false",
+                  "description": "Return logs from `stdout`"
+                },
+                {
+                  "disabled": false,
+                  "key": "stderr",
+                  "value": "false",
+                  "description": "Return logs from `stderr`"
+                },
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "0",
+                  "description": "Only return logs since this time, as a UNIX timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "timestamps",
+                  "value": "false",
+                  "description": "Add timestamps to every log line"
+                },
+                {
+                  "disabled": false,
+                  "key": "tail",
+                  "value": "all",
+                  "description": "Only return this number of log lines from the end of the logs.\nSpecify as an integer or `all` to output all log lines.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the task"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.docker.raw-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b57058b9-37f9-4ddf-97b2-3e45d355b843",
+              "name": "logs returned as a stream in response body",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":id",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "details",
+                      "value": "false"
+                    },
+                    {
+                      "key": "follow",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stdout",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stderr",
+                      "value": "false"
+                    },
+                    {
+                      "key": "since",
+                      "value": "0"
+                    },
+                    {
+                      "key": "timestamps",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tail",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the task"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.docker.raw-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.docker.raw-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "67cb9caa-2957-4205-818a-d487e960b9e6",
+              "name": "no such task",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":id",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "details",
+                      "value": "false"
+                    },
+                    {
+                      "key": "follow",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stdout",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stderr",
+                      "value": "false"
+                    },
+                    {
+                      "key": "since",
+                      "value": "0"
+                    },
+                    {
+                      "key": "timestamps",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tail",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the task"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.docker.raw-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"No such task: c2ada9df5af8\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d49082a5-8bcb-4547-9020-41c058b2b49a",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":id",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "details",
+                      "value": "false"
+                    },
+                    {
+                      "key": "follow",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stdout",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stderr",
+                      "value": "false"
+                    },
+                    {
+                      "key": "since",
+                      "value": "0"
+                    },
+                    {
+                      "key": "timestamps",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tail",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the task"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.docker.raw-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.docker.raw-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "61b45f98-ca12-4786-ab1d-6ee8e96647fe",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":id",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "details",
+                      "value": "false"
+                    },
+                    {
+                      "key": "follow",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stdout",
+                      "value": "false"
+                    },
+                    {
+                      "key": "stderr",
+                      "value": "false"
+                    },
+                    {
+                      "key": "since",
+                      "value": "0"
+                    },
+                    {
+                      "key": "timestamps",
+                      "value": "false"
+                    },
+                    {
+                      "key": "tail",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the task"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.docker.raw-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.docker.raw-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v1.54",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "2d97ec6d-9e28-48f7-a4fb-a4b9ee966139",
+    "name": "Docker Engine Config Task API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

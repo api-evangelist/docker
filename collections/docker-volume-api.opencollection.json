@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Docker Engine Config Volume API",
+    "version": "1.54"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Volume",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List volumes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/volumes",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the volumes list. Available filters:\n\n- `dangling=<boolean>` When set to `true` (or `1`), returns all\n   volumes that are not in use by a container. When set to `false`\n   (or `0`), only volumes that are in use by one or more\n   containers are returned.\n- `driver=<volume-driver-name>` Matches volumes based on their driver.\n- `label=<key>` or `label=<key>:<value>` Matches volumes based on\n   the presence of a `label` alone or a `label` and a value.\n- `name=<volume-name>` Matches all or part of a volume name.\n"
+              }
+            ]
+          },
+          "docs": "List volumes"
+        },
+        {
+          "info": {
+            "name": "Create a volume",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/volumes/create"
+          },
+          "docs": "Create a volume"
+        },
+        {
+          "info": {
+            "name": "Inspect a volume",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/volumes/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Volume name or ID"
+              }
+            ]
+          },
+          "docs": "Inspect a volume"
+        },
+        {
+          "info": {
+            "name": "\"Update a volume. Valid only for Swarm cluster volumes\"\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/volumes/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name or ID of the volume"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the volume being updated. This is required to\navoid conflicting writes. Found in the volume's `ClusterVolume`\nfield.\n"
+              }
+            ]
+          },
+          "docs": "\"Update a volume. Valid only for Swarm cluster volumes\"\n"
+        },
+        {
+          "info": {
+            "name": "Remove a volume",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/volumes/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Volume name or ID"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Force the removal of the volume"
+              }
+            ]
+          },
+          "docs": "Instruct the driver to remove the volume."
+        },
+        {
+          "info": {
+            "name": "Delete unused volumes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/volumes/prune",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters to process on the prune list, encoded as JSON (a `map[string][]string`).\n\nAvailable filters:\n- `label` (`label=<key>`, `label=<key>=<value>`, `label!=<key>`, or `label!=<key>=<value>`) Prune volumes with (or without, in case `label!=...` is used) the specified labels.\n- `all` (`all=true`) - Consider all (local) volumes for pruning and not just anonymous volumes.\n"
+              }
+            ]
+          },
+          "docs": "Delete unused volumes"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

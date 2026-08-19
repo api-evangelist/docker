@@ -2,37 +2,39 @@ generated: '2026-06-20'
 method: searched
 status: published
 source: https://docs.docker.com/ai/mcp-catalog-and-toolkit/
-description: >-
-  Docker publishes first-party MCP infrastructure: the Docker MCP Gateway (a
-  `docker mcp` CLI plugin that runs, secures, and orchestrates MCP servers as
-  containers), the Docker MCP Catalog (200+ verified, versioned MCP servers on
-  Docker Hub), the Docker MCP Toolkit in Docker Desktop, and a hosted MCP
-  endpoint for the Docker documentation itself.
+description: 'Docker publishes first-party MCP infrastructure: the Docker MCP Gateway (a `docker mcp`
+  CLI plugin that runs, secures, and orchestrates MCP servers as containers), the Docker MCP Catalog (200+
+  verified, versioned MCP servers on Docker Hub), the Docker MCP Toolkit in Docker Desktop, and a hosted
+  MCP endpoint for the Docker documentation itself.'
 servers:
-  - name: docker-mcp-gateway
-    kind: gateway
-    transport: stdio
-    repo: https://github.com/docker/mcp-gateway
-    docs: https://docs.docker.com/ai/mcp-catalog-and-toolkit/mcp-gateway/
-    install: docker mcp gateway run
-    description: >-
-      CLI plugin that centrally runs and secures MCP servers as Docker
-      containers, with secrets management, OAuth flows, dynamic tool/prompt/
-      resource discovery, and call tracing. Clients (Claude Code, Cursor, Zed,
-      etc.) connect through the gateway.
-  - name: docker-docs-mcp
-    kind: hosted
-    transport: http
-    url: https://mcp-docs.docker.com/mcp
-    source: https://docs.docker.com/llms.txt
-    description: >-
-      Hosted MCP endpoint advertised in docs.docker.com/llms.txt for structured
-      agent access to the Docker documentation corpus.
-  - name: docker-mcp-catalog
-    kind: catalog
-    docs: https://docs.docker.com/ai/mcp-catalog-and-toolkit/catalog/
-    registry: https://hub.docker.com/mcp
-    description: >-
-      Centralized registry of 200+ verified, versioned, curated MCP servers
-      packaged as Docker images, integrated with Docker Hub and consumable via
-      the MCP Toolkit in Docker Desktop.
+- name: docker-mcp-gateway
+  kind: gateway
+  transport: stdio
+  repo: https://github.com/docker/mcp-gateway
+  docs: https://docs.docker.com/ai/mcp-catalog-and-toolkit/mcp-gateway/
+  install: docker mcp gateway run
+  description: CLI plugin that centrally runs and secures MCP servers as Docker containers, with secrets
+    management, OAuth flows, dynamic tool/prompt/ resource discovery, and call tracing. Clients (Claude
+    Code, Cursor, Zed, etc.) connect through the gateway.
+- name: docker-docs-mcp
+  kind: hosted
+  transport: http
+  url: https://mcp-docs.docker.com/mcp
+  source: https://docs.docker.com/llms.txt
+  description: Hosted MCP endpoint advertised in docs.docker.com/llms.txt for structured agent access
+    to the Docker documentation corpus.
+- name: docker-mcp-catalog
+  kind: catalog
+  docs: https://docs.docker.com/ai/mcp-catalog-and-toolkit/catalog/
+  registry: https://hub.docker.com/mcp
+  description: Centralized registry of 200+ verified, versioned, curated MCP servers packaged as Docker
+    images, integrated with Docker Hub and consumable via the MCP Toolkit in Docker Desktop.
+deployment:
+  mode: none
+  endpoint: https://hub.docker.com/mcp
+  verified: probed
+  probe: dead
+  note: the endpoint this manifest claimed did not answer; recorded as none rather than deleted so the
+    claim stays auditable
+  checked: '2026-08-12'
+  source: catalog MCP census

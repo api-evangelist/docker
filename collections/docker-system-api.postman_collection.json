@@ -1,0 +1,1095 @@
+{
+  "item": [
+    {
+      "id": "563c0768-69f2-4201-bafe-35c31da8476b",
+      "name": "System",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "40e0b2fb-9962-44ac-9043-c4caef4a93b7",
+          "name": "Check auth configuration",
+          "request": {
+            "name": "Check auth configuration",
+            "description": {
+              "content": "Validate credentials for a registry and, if available, get an identity\ntoken for accessing the registry without password.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"<string>\",\n  \"password\": \"<string>\",\n  \"serveraddress\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3a2c8331-a9ae-418c-a083-d637c27e4260",
+              "name": "An identity token was generated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"hannibal\",\n  \"password\": \"xxxx\",\n  \"serveraddress\": \"https://index.docker.io/v1/\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Status\": \"Login Succeeded\",\n  \"IdentityToken\": \"9cbaf023786cd7...\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b711b32b-e55b-4dfa-950d-15e8c9a72281",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"hannibal\",\n  \"password\": \"xxxx\",\n  \"serveraddress\": \"https://index.docker.io/v1/\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8228e62c-1336-4258-9e7b-12916fcb52b4",
+              "name": "Auth error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"hannibal\",\n  \"password\": \"xxxx\",\n  \"serveraddress\": \"https://index.docker.io/v1/\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c8b1a1d-0426-4bf3-bb71-63166de5bee8",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"hannibal\",\n  \"password\": \"xxxx\",\n  \"serveraddress\": \"https://index.docker.io/v1/\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "44ef09c8-a13f-41ad-b271-1dd5f86673e7",
+          "name": "Get system information",
+          "request": {
+            "name": "Get system information",
+            "description": {},
+            "url": {
+              "path": [
+                "info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d591dd0c-03da-4a1b-98b4-0d3127b04d9f",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ID\": \"7TRN:IPZB:QYBB:VPBQ:UMPP:KARE:6ZNR:XE6T:7EWV:PKF4:ZOJD:TPYS\",\n  \"Containers\": 14,\n  \"ContainersRunning\": 3,\n  \"ContainersPaused\": 1,\n  \"ContainersStopped\": 10,\n  \"Images\": 508,\n  \"Driver\": \"overlay2\",\n  \"DriverStatus\": [\n    [\n      \"Backing Filesystem\",\n      \"extfs\"\n    ],\n    [\n      \"Supports d_type\",\n      \"true\"\n    ],\n    [\n      \"Native Overlay Diff\",\n      \"true\"\n    ]\n  ],\n  \"DockerRootDir\": \"/var/lib/docker\",\n  \"Plugins\": {\n    \"Volume\": [\n      \"local\"\n    ],\n    \"Network\": [\n      \"bridge\",\n      \"host\",\n      \"ipvlan\",\n      \"macvlan\",\n      \"null\",\n      \"overlay\"\n    ],\n    \"Authorization\": [\n      \"img-authz-plugin\",\n      \"hbm\"\n    ],\n    \"Log\": [\n      \"awslogs\",\n      \"fluentd\",\n      \"gcplogs\",\n      \"gelf\",\n      \"journald\",\n      \"json-file\",\n      \"splunk\",\n      \"syslog\"\n    ]\n  },\n  \"MemoryLimit\": true,\n  \"SwapLimit\": true,\n  \"CpuCfsPeriod\": true,\n  \"CpuCfsQuota\": true,\n  \"CPUShares\": true,\n  \"CPUSet\": true,\n  \"PidsLimit\": true,\n  \"OomKillDisable\": true,\n  \"IPv4Forwarding\": true,\n  \"Debug\": true,\n  \"NFd\": 64,\n  \"NGoroutines\": 174,\n  \"SystemTime\": \"2017-08-08T20:28:29.06202363Z\",\n  \"LoggingDriver\": \"string\",\n  \"CgroupDriver\": \"cgroupfs\",\n  \"CgroupVersion\": \"1\",\n  \"NEventsListener\": 30,\n  \"KernelVersion\": \"6.8.0-31-generic\",\n  \"OperatingSystem\": \"Ubuntu 24.04 LTS\",\n  \"OSVersion\": \"24.04\",\n  \"OSType\": \"linux\",\n  \"Architecture\": \"x86_64\",\n  \"NCPU\": 4,\n  \"MemTotal\": 2095882240,\n  \"IndexServerAddress\": \"https://index.docker.io/v1/\",\n  \"RegistryConfig\": {\n    \"InsecureRegistryCIDRs\": [\n      \"::1/128\",\n      \"127.0.0.0/8\"\n    ],\n    \"IndexConfigs\": {\n      \"127.0.0.1:5000\": {\n        \"Name\": \"127.0.0.1:5000\",\n        \"Mirrors\": [],\n        \"Secure\": false,\n        \"Official\": false\n      },\n      \"[2001:db8:a0b:12f0::1]:80\": {\n        \"Name\": \"[2001:db8:a0b:12f0::1]:80\",\n        \"Mirrors\": [],\n        \"Secure\": false,\n        \"Official\": false\n      },\n      \"docker.io\": {\n        \"Name\": \"docker.io\",\n        \"Mirrors\": [\n          \"https://hub-mirror.corp.example.com:5000/\"\n        ],\n        \"Secure\": true,\n        \"Official\": true\n      },\n      \"registry.internal.corp.example.com:3000\": {\n        \"Name\": \"registry.internal.corp.example.com:3000\",\n        \"Mirrors\": [],\n        \"Secure\": false,\n        \"Official\": false\n      }\n    },\n    \"Mirrors\": [\n      \"https://hub-mirror.corp.example.com:5000/\",\n      \"https://[2001:db8:a0b:12f0::1]/\"\n    ]\n  },\n  \"GenericResources\": [\n    {\n      \"DiscreteResourceSpec\": {\n        \"Kind\": \"SSD\",\n        \"Value\": 3\n      }\n    },\n    {\n      \"NamedResourceSpec\": {\n        \"Kind\": \"GPU\",\n        \"Value\": \"UUID1\"\n      }\n    },\n    {\n      \"NamedResourceSpec\": {\n        \"Kind\": \"GPU\",\n        \"Value\": \"UUID2\"\n      }\n    }\n  ],\n  \"HttpProxy\": \"http://xxxxx:xxxxx@proxy.corp.example.com:8080\",\n  \"HttpsProxy\": \"https://xxxxx:xxxxx@proxy.corp.example.com:4443\",\n  \"NoProxy\": \"*.local, 169.254/16\",\n  \"Name\": \"node5.corp.example.com\",\n  \"Labels\": [\n    \"storage=ssd\",\n    \"production\"\n  ],\n  \"ExperimentalBuild\": true,\n  \"ServerVersion\": \"27.0.1\",\n  \"Runtimes\": {\n    \"runc\": {\n      \"path\": \"runc\"\n    },\n    \"runc-master\": {\n      \"path\": \"/go/bin/runc\"\n    },\n    \"custom\": {\n      \"path\": \"/usr/local/bin/my-oci-runtime\",\n      \"runtimeArgs\": [\n        \"--debug\",\n        \"--systemd-cgroup=false\"\n      ]\n    }\n  },\n  \"DefaultRuntime\": \"runc\",\n  \"Swarm\": {\n    \"NodeID\": \"k67qz4598weg5unwwffg6z1m1\",\n    \"NodeAddr\": \"10.0.0.46\",\n    \"LocalNodeState\": \"active\",\n    \"ControlAvailable\": true,\n    \"Error\": \"\",\n    \"RemoteManagers\": [\n      {\n        \"NodeID\": \"71izy0goik036k48jg985xnds\",\n        \"Addr\": \"10.0.0.158:2377\"\n      },\n      {\n        \"NodeID\": \"79y6h1o4gv8n120drcprv5nmc\",\n        \"Addr\": \"10.0.0.159:2377\"\n      },\n      {\n        \"NodeID\": \"k67qz4598weg5unwwffg6z1m1\",\n        \"Addr\": \"10.0.0.46:2377\"\n      }\n    ],\n    \"Nodes\": 4,\n    \"Managers\": 3,\n    \"Cluster\": {\n      \"ID\": \"abajmipo7b4xz5ip2nrla6b11\",\n      \"Version\": {\n        \"Index\": 373531\n      },\n      \"CreatedAt\": \"2016-08-18T10:44:24.496525531Z\",\n      \"UpdatedAt\": \"2017-08-09T07:09:37.632105588Z\",\n      \"Spec\": {\n        \"Name\": \"default\",\n        \"Labels\": {\n          \"com.example.corp.type\": \"production\",\n          \"com.example.corp.department\": \"engineering\"\n        },\n        \"Orchestration\": {\n          \"TaskHistoryRetentionLimit\": 10\n        },\n        \"Raft\": {\n          \"SnapshotInterval\": 10000,\n          \"KeepOldSnapshots\": 6596,\n          \"LogEntriesForSlowFollowers\": 500,\n          \"ElectionTick\": 3,\n          \"HeartbeatTick\": 1\n        },\n        \"Dispatcher\": {\n          \"HeartbeatPeriod\": 5000000000\n        },\n        \"CAConfig\": {\n          \"NodeCertExpiry\": 7776000000000000,\n          \"ExternalCAs\": [\n            {\n              \"Protocol\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"URL\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Options\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"CACert\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"Protocol\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"URL\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"Options\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"CACert\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"SigningCACert\": \"string\",\n          \"SigningCAKey\": \"string\",\n          \"ForceRotate\": 9004\n        },\n        \"EncryptionConfig\": {\n          \"AutoLockManagers\": false\n        },\n        \"TaskDefaults\": {\n          \"LogDriver\": {\n            \"Name\": \"json-file\",\n            \"Options\": {\n              \"max-file\": \"10\",\n              \"max-size\": \"100m\"\n            }\n          }\n        }\n      },\n      \"TLSInfo\": {\n        \"TrustRoot\": \"-----BEGIN CERTIFICATE-----\\nMIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw\\nEzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0\\nMzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH\\nA0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf\\n3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB\\nAf8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO\\nPQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz\\npxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H\\n-----END CERTIFICATE-----\\n\",\n        \"CertIssuerSubject\": \"MBMxETAPBgNVBAMTCHN3YXJtLWNh\",\n        \"CertIssuerPublicKey\": \"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==\"\n      },\n      \"RootRotationInProgress\": false,\n      \"DataPathPort\": 4789,\n      \"DefaultAddrPool\": [\n        \"string\",\n        \"string\"\n      ],\n      \"SubnetSize\": 24\n    }\n  },\n  \"LiveRestoreEnabled\": false,\n  \"Isolation\": \"default\",\n  \"InitBinary\": \"docker-init\",\n  \"ContainerdCommit\": {\n    \"ID\": \"cfb82a876ecc11b5ca0977d1733adbe58599088a\"\n  },\n  \"RuncCommit\": {\n    \"ID\": \"cfb82a876ecc11b5ca0977d1733adbe58599088a\"\n  },\n  \"InitCommit\": {\n    \"ID\": \"cfb82a876ecc11b5ca0977d1733adbe58599088a\"\n  },\n  \"SecurityOptions\": [\n    \"name=apparmor\",\n    \"name=seccomp,profile=default\",\n    \"name=selinux\",\n    \"name=userns\",\n    \"name=rootless\"\n  ],\n  \"ProductLicense\": \"Community Engine\",\n  \"DefaultAddressPools\": [\n    {\n      \"Base\": \"10.10.0.0/16\",\n      \"Size\": 4703\n    },\n    {\n      \"Base\": \"10.10.0.0/16\",\n      \"Size\": 9542\n    }\n  ],\n  \"FirewallBackend\": {\n    \"Driver\": \"nftables\",\n    \"Info\": [\n      [\n        \"ReloadedAt\",\n        \"2025-01-01T00:00:00Z\"\n      ]\n    ]\n  },\n  \"DiscoveredDevices\": [\n    {\n      \"Source\": \"cdi\",\n      \"ID\": \"vendor.com/gpu=0\"\n    },\n    {\n      \"Source\": \"cdi\",\n      \"ID\": \"vendor.com/gpu=0\"\n    }\n  ],\n  \"NRI\": {\n    \"Info\": [\n      [\n        \"plugin-path\",\n        \"/opt/docker/nri/plugins\"\n      ]\n    ]\n  },\n  \"Warnings\": [\n    \"WARNING: No memory limit support\"\n  ],\n  \"CDISpecDirs\": [\n    \"/etc/cdi\",\n    \"/var/run/cdi\"\n  ],\n  \"Containerd\": {\n    \"Address\": \"/run/containerd/containerd.sock\",\n    \"Namespaces\": {\n      \"Containers\": \"moby\",\n      \"Plugins\": \"plugins.moby\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1256dfe1-2f1b-4ec5-be96-4ec6f9217a48",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4c10d5d2-8f77-4e1a-b8ff-a390d3e94355",
+          "name": "Get version",
+          "request": {
+            "name": "Get version",
+            "description": {
+              "content": "Returns the version of Docker that is running and various information about the system that Docker is running on.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "version"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8aa8de79-5efe-4ec1-8a30-b2c73497135f",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Platform\": {\n    \"Name\": \"string\"\n  },\n  \"Components\": [\n    {\n      \"Name\": \"Engine\",\n      \"Version\": \"27.0.1\",\n      \"Details\": {}\n    },\n    {\n      \"Name\": \"Engine\",\n      \"Version\": \"27.0.1\",\n      \"Details\": {}\n    }\n  ],\n  \"Version\": \"27.0.1\",\n  \"ApiVersion\": \"1.47\",\n  \"MinAPIVersion\": \"1.24\",\n  \"GitCommit\": \"48a66213fe\",\n  \"GoVersion\": \"go1.22.7\",\n  \"Os\": \"linux\",\n  \"Arch\": \"amd64\",\n  \"KernelVersion\": \"6.8.0-31-generic\",\n  \"Experimental\": true,\n  \"BuildTime\": \"2020-06-22T15:49:27.000000000+00:00\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd28e3cd-7f76-4ff9-a7b3-77e8c9a616d6",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9c64617a-0b44-40f9-bb24-088c368a0b4d",
+          "name": "Ping",
+          "request": {
+            "name": "Ping",
+            "description": {
+              "content": "This is a dummy endpoint you can use to test if the server is accessible.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "_ping"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "87149319-05a5-4363-b7ee-3a6b28f41112",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "_ping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Max API Version the server supports",
+                  "key": "Api-Version",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "Default version of docker image builder\n\nThe default on Linux is version \"2\" (BuildKit), but the daemon\ncan be configured to recommend version \"1\" (classic Builder).\nWindows does not yet support BuildKit for native Windows images,\nand uses \"1\" (classic builder) as a default.\n\nThis value is a recommendation as advertised by the daemon, and\nit is up to the client to choose which builder to use.\n",
+                  "key": "Builder-Version",
+                  "value": "2"
+                },
+                {
+                  "disabled": false,
+                  "description": "If the server is running with experimental mode enabled",
+                  "key": "Docker-Experimental",
+                  "value": "true"
+                },
+                {
+                  "disabled": false,
+                  "description": "Contains information about Swarm status of the daemon,\nand if the daemon is acting as a manager or worker node.\n",
+                  "key": "Swarm",
+                  "value": "inactive"
+                },
+                {
+                  "disabled": false,
+                  "key": "Cache-Control",
+                  "value": "no-cache, no-store, must-revalidate",
+                  "description": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "Pragma",
+                  "value": "no-cache",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "OK",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cd813782-65c7-4176-a489-f8c720c2f3e0",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "_ping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Cache-Control",
+                  "value": "no-cache, no-store, must-revalidate",
+                  "description": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "Pragma",
+                  "value": "no-cache",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d57169fe-80c8-463b-8f2c-72854a05a079",
+          "name": "Ping",
+          "request": {
+            "name": "Ping",
+            "description": {
+              "content": "This is a dummy endpoint you can use to test if the server is accessible.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "_ping"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "HEAD",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bdb7f35d-135a-4e6d-9fda-2f5440442999",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "_ping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "HEAD",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Max API Version the server supports",
+                  "key": "Api-Version",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "Default version of docker image builder",
+                  "key": "Builder-Version",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "If the server is running with experimental mode enabled",
+                  "key": "Docker-Experimental",
+                  "value": "true"
+                },
+                {
+                  "disabled": false,
+                  "description": "Contains information about Swarm status of the daemon,\nand if the daemon is acting as a manager or worker node.\n",
+                  "key": "Swarm",
+                  "value": "inactive"
+                },
+                {
+                  "disabled": false,
+                  "key": "Cache-Control",
+                  "value": "no-cache, no-store, must-revalidate",
+                  "description": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "Pragma",
+                  "value": "no-cache",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "(empty)",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "721b9d6d-f5fd-499f-b16f-819c42437cef",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "_ping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "HEAD",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c629da94-5a99-41d4-b440-56b43bb83939",
+          "name": "Monitor events",
+          "request": {
+            "name": "Monitor events",
+            "description": {
+              "content": "Stream real-time events from the server.\n\nVarious objects within Docker report events when something happens to them.\n\nContainers report these events: `attach`, `commit`, `copy`, `create`, `destroy`, `detach`, `die`, `exec_create`, `exec_detach`, `exec_start`, `exec_die`, `export`, `health_status`, `kill`, `oom`, `pause`, `rename`, `resize`, `restart`, `start`, `stop`, `top`, `unpause`, `update`, and `prune`\n\nImages report these events: `create`, `delete`, `import`, `load`, `pull`, `push`, `save`, `tag`, `untag`, and `prune`\n\nVolumes report these events: `create`, `mount`, `unmount`, `destroy`, and `prune`\n\nNetworks report these events: `create`, `connect`, `disconnect`, `destroy`, `update`, `remove`, and `prune`\n\nThe Docker daemon reports these events: `reload`\n\nServices report these events: `create`, `update`, and `remove`\n\nNodes report these events: `create`, `update`, and `remove`\n\nSecrets report these events: `create`, `update`, and `remove`\n\nConfigs report these events: `create`, `update`, and `remove`\n\nThe Builder reports `prune` events\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "<string>",
+                  "description": "Show events created since this timestamp then stream new events."
+                },
+                {
+                  "disabled": false,
+                  "key": "until",
+                  "value": "<string>",
+                  "description": "Show events created until this timestamp then stop streaming."
+                },
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "A JSON encoded value of filters (a `map[string][]string`) to process on the event list. Available filters:\n\n- `config=<string>` config name or ID\n- `container=<string>` container name or ID\n- `daemon=<string>` daemon name or ID\n- `event=<string>` event type\n- `image=<string>` image name or ID\n- `label=<string>` image or container label\n- `network=<string>` network name or ID\n- `node=<string>` node ID\n- `plugin`=<string> plugin name or ID\n- `scope`=<string> local or swarm\n- `secret=<string>` secret name or ID\n- `service=<string>` service name or ID\n- `type=<string>` object to filter by, one of `container`, `image`, `volume`, `network`, `daemon`, `plugin`, `node`, `service`, `secret` or `config`\n- `volume=<string>` volume name\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/jsonl"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f3a6b484-6a04-4be2-be23-273c8fe4997b",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/jsonl"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/jsonl"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8eabd2da-62f2-493f-8d6d-1917e68cd97a",
+              "name": "bad parameter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/jsonl"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/jsonl"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "beb92d59-2246-44dc-a289-68d1d07cb301",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/jsonl"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/jsonl"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2154e251-2bf6-418e-8971-4bb46c06faa2",
+          "name": "Get data usage information",
+          "request": {
+            "name": "Get data usage information",
+            "description": {},
+            "url": {
+              "path": [
+                "system",
+                "df"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Object types, for which to compute and return data.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Object types, for which to compute and return data.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "verbose",
+                  "value": "false",
+                  "description": "Show detailed information on space usage.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "439191b7-4301-4f61-9f79-ba8fa36f6393",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "system",
+                    "df"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "verbose",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ImageUsage\": {\n    \"ActiveCount\": 1,\n    \"TotalCount\": 4,\n    \"Reclaimable\": 12345678,\n    \"TotalSize\": 98765432\n  },\n  \"ContainerUsage\": {\n    \"ActiveCount\": 1,\n    \"TotalCount\": 4,\n    \"Reclaimable\": 12345678,\n    \"TotalSize\": 98765432\n  },\n  \"VolumeUsage\": {\n    \"ActiveCount\": 1,\n    \"TotalCount\": 4,\n    \"Reclaimable\": 12345678,\n    \"TotalSize\": 98765432\n  },\n  \"BuildCacheUsage\": {\n    \"ActiveCount\": 1,\n    \"TotalCount\": 4,\n    \"Reclaimable\": 12345678,\n    \"TotalSize\": 98765432\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f088e4f9-1921-4c1a-b485-5252804a5fcf",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "system",
+                    "df"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "verbose",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v1.54",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "9538a1f4-3954-476d-a0be-2fa0d4b2f855",
+    "name": "Docker Engine Config System API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

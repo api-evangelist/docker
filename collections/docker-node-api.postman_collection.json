@@ -1,0 +1,992 @@
+{
+  "item": [
+    {
+      "id": "765c5407-572c-4236-b1dc-259dedf331ce",
+      "name": "Node",
+      "description": {
+        "content": "Nodes are instances of the Engine participating in a swarm. Swarm mode\nmust be enabled for these endpoints to work.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "57d3f574-f46e-49fb-ba36-ebdb1c8b13b4",
+          "name": "List nodes",
+          "request": {
+            "name": "List nodes",
+            "description": {},
+            "url": {
+              "path": [
+                "nodes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "Filters to process on the nodes list, encoded as JSON (a `map[string][]string`).\n\nAvailable filters:\n- `id=<node id>`\n- `label=<engine label>`\n- `membership=`(`accepted`|`pending`)`\n- `name=<node name>`\n- `node.label=<node label>`\n- `role=`(`manager`|`worker`)`\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f409745c-c378-47c8-8964-b7e46a39acc5",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"ID\": \"24ifsmvkjbyhk\",\n    \"Version\": {\n      \"Index\": 373531\n    },\n    \"CreatedAt\": \"2016-08-18T10:44:24.496525531Z\",\n    \"UpdatedAt\": \"2017-08-09T07:09:37.632105588Z\",\n    \"Spec\": {\n      \"Availability\": \"active\",\n      \"Name\": \"node-name\",\n      \"Role\": \"manager\",\n      \"Labels\": {\n        \"foo\": \"bar\"\n      }\n    },\n    \"Description\": {\n      \"Hostname\": \"bf3067039e47\",\n      \"Platform\": {\n        \"Architecture\": \"x86_64\",\n        \"OS\": \"linux\"\n      },\n      \"Resources\": {\n        \"NanoCPUs\": 4000000000,\n        \"MemoryBytes\": 8272408576,\n        \"GenericResources\": [\n          {\n            \"DiscreteResourceSpec\": {\n              \"Kind\": \"SSD\",\n              \"Value\": 3\n            }\n          },\n          {\n            \"NamedResourceSpec\": {\n              \"Kind\": \"GPU\",\n              \"Value\": \"UUID1\"\n            }\n          },\n          {\n            \"NamedResourceSpec\": {\n              \"Kind\": \"GPU\",\n              \"Value\": \"UUID2\"\n            }\n          }\n        ]\n      },\n      \"Engine\": {\n        \"EngineVersion\": \"17.06.0\",\n        \"Labels\": {\n          \"foo\": \"bar\"\n        },\n        \"Plugins\": [\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"awslogs\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"fluentd\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"gcplogs\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"gelf\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"journald\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"json-file\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"splunk\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"syslog\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"bridge\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"host\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"ipvlan\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"macvlan\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"null\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"overlay\"\n          },\n          {\n            \"Type\": \"Volume\",\n            \"Name\": \"local\"\n          },\n          {\n            \"Type\": \"Volume\",\n            \"Name\": \"localhost:5000/vieux/sshfs:latest\"\n          },\n          {\n            \"Type\": \"Volume\",\n            \"Name\": \"vieux/sshfs:latest\"\n          }\n        ]\n      },\n      \"TLSInfo\": {\n        \"TrustRoot\": \"-----BEGIN CERTIFICATE-----\\nMIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw\\nEzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0\\nMzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH\\nA0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf\\n3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB\\nAf8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO\\nPQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz\\npxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H\\n-----END CERTIFICATE-----\\n\",\n        \"CertIssuerSubject\": \"MBMxETAPBgNVBAMTCHN3YXJtLWNh\",\n        \"CertIssuerPublicKey\": \"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==\"\n      }\n    },\n    \"Status\": {\n      \"State\": \"ready\",\n      \"Message\": \"\",\n      \"Addr\": \"172.17.0.2\"\n    },\n    \"ManagerStatus\": {\n      \"Leader\": true,\n      \"Reachability\": \"reachable\",\n      \"Addr\": \"10.0.0.46:2377\"\n    }\n  },\n  {\n    \"ID\": \"24ifsmvkjbyhk\",\n    \"Version\": {\n      \"Index\": 373531\n    },\n    \"CreatedAt\": \"2016-08-18T10:44:24.496525531Z\",\n    \"UpdatedAt\": \"2017-08-09T07:09:37.632105588Z\",\n    \"Spec\": {\n      \"Availability\": \"active\",\n      \"Name\": \"node-name\",\n      \"Role\": \"manager\",\n      \"Labels\": {\n        \"foo\": \"bar\"\n      }\n    },\n    \"Description\": {\n      \"Hostname\": \"bf3067039e47\",\n      \"Platform\": {\n        \"Architecture\": \"x86_64\",\n        \"OS\": \"linux\"\n      },\n      \"Resources\": {\n        \"NanoCPUs\": 4000000000,\n        \"MemoryBytes\": 8272408576,\n        \"GenericResources\": [\n          {\n            \"DiscreteResourceSpec\": {\n              \"Kind\": \"SSD\",\n              \"Value\": 3\n            }\n          },\n          {\n            \"NamedResourceSpec\": {\n              \"Kind\": \"GPU\",\n              \"Value\": \"UUID1\"\n            }\n          },\n          {\n            \"NamedResourceSpec\": {\n              \"Kind\": \"GPU\",\n              \"Value\": \"UUID2\"\n            }\n          }\n        ]\n      },\n      \"Engine\": {\n        \"EngineVersion\": \"17.06.0\",\n        \"Labels\": {\n          \"foo\": \"bar\"\n        },\n        \"Plugins\": [\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"awslogs\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"fluentd\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"gcplogs\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"gelf\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"journald\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"json-file\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"splunk\"\n          },\n          {\n            \"Type\": \"Log\",\n            \"Name\": \"syslog\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"bridge\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"host\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"ipvlan\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"macvlan\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"null\"\n          },\n          {\n            \"Type\": \"Network\",\n            \"Name\": \"overlay\"\n          },\n          {\n            \"Type\": \"Volume\",\n            \"Name\": \"local\"\n          },\n          {\n            \"Type\": \"Volume\",\n            \"Name\": \"localhost:5000/vieux/sshfs:latest\"\n          },\n          {\n            \"Type\": \"Volume\",\n            \"Name\": \"vieux/sshfs:latest\"\n          }\n        ]\n      },\n      \"TLSInfo\": {\n        \"TrustRoot\": \"-----BEGIN CERTIFICATE-----\\nMIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw\\nEzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0\\nMzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH\\nA0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf\\n3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB\\nAf8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO\\nPQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz\\npxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H\\n-----END CERTIFICATE-----\\n\",\n        \"CertIssuerSubject\": \"MBMxETAPBgNVBAMTCHN3YXJtLWNh\",\n        \"CertIssuerPublicKey\": \"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==\"\n      }\n    },\n    \"Status\": {\n      \"State\": \"ready\",\n      \"Message\": \"\",\n      \"Addr\": \"172.17.0.2\"\n    },\n    \"ManagerStatus\": {\n      \"Leader\": true,\n      \"Reachability\": \"reachable\",\n      \"Addr\": \"10.0.0.46:2377\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62dcf530-8e48-4b43-a50a-b524c3547a7c",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "02bea44e-cb9f-4097-8f98-44c284f13537",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4cb624e6-1350-4e18-9523-3784efdaee47",
+          "name": "Inspect a node",
+          "request": {
+            "name": "Inspect a node",
+            "description": {},
+            "url": {
+              "path": [
+                "nodes",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID or name of the node"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "91ee91a8-d43b-405b-b29f-de6c89a183ae",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID or name of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ID\": \"24ifsmvkjbyhk\",\n  \"Version\": {\n    \"Index\": 373531\n  },\n  \"CreatedAt\": \"2016-08-18T10:44:24.496525531Z\",\n  \"UpdatedAt\": \"2017-08-09T07:09:37.632105588Z\",\n  \"Spec\": {\n    \"Availability\": \"active\",\n    \"Name\": \"node-name\",\n    \"Role\": \"manager\",\n    \"Labels\": {\n      \"foo\": \"bar\"\n    }\n  },\n  \"Description\": {\n    \"Hostname\": \"bf3067039e47\",\n    \"Platform\": {\n      \"Architecture\": \"x86_64\",\n      \"OS\": \"linux\"\n    },\n    \"Resources\": {\n      \"NanoCPUs\": 4000000000,\n      \"MemoryBytes\": 8272408576,\n      \"GenericResources\": [\n        {\n          \"DiscreteResourceSpec\": {\n            \"Kind\": \"SSD\",\n            \"Value\": 3\n          }\n        },\n        {\n          \"NamedResourceSpec\": {\n            \"Kind\": \"GPU\",\n            \"Value\": \"UUID1\"\n          }\n        },\n        {\n          \"NamedResourceSpec\": {\n            \"Kind\": \"GPU\",\n            \"Value\": \"UUID2\"\n          }\n        }\n      ]\n    },\n    \"Engine\": {\n      \"EngineVersion\": \"17.06.0\",\n      \"Labels\": {\n        \"foo\": \"bar\"\n      },\n      \"Plugins\": [\n        {\n          \"Type\": \"Log\",\n          \"Name\": \"awslogs\"\n        },\n        {\n          \"Type\": \"Log\",\n          \"Name\": \"fluentd\"\n        },\n        {\n          \"Type\": \"Log\",\n          \"Name\": \"gcplogs\"\n        },\n        {\n          \"Type\": \"Log\",\n          \"Name\": \"gelf\"\n        },\n        {\n          \"Type\": \"Log\",\n          \"Name\": \"journald\"\n        },\n        {\n          \"Type\": \"Log\",\n          \"Name\": \"json-file\"\n        },\n        {\n          \"Type\": \"Log\",\n          \"Name\": \"splunk\"\n        },\n        {\n          \"Type\": \"Log\",\n          \"Name\": \"syslog\"\n        },\n        {\n          \"Type\": \"Network\",\n          \"Name\": \"bridge\"\n        },\n        {\n          \"Type\": \"Network\",\n          \"Name\": \"host\"\n        },\n        {\n          \"Type\": \"Network\",\n          \"Name\": \"ipvlan\"\n        },\n        {\n          \"Type\": \"Network\",\n          \"Name\": \"macvlan\"\n        },\n        {\n          \"Type\": \"Network\",\n          \"Name\": \"null\"\n        },\n        {\n          \"Type\": \"Network\",\n          \"Name\": \"overlay\"\n        },\n        {\n          \"Type\": \"Volume\",\n          \"Name\": \"local\"\n        },\n        {\n          \"Type\": \"Volume\",\n          \"Name\": \"localhost:5000/vieux/sshfs:latest\"\n        },\n        {\n          \"Type\": \"Volume\",\n          \"Name\": \"vieux/sshfs:latest\"\n        }\n      ]\n    },\n    \"TLSInfo\": {\n      \"TrustRoot\": \"-----BEGIN CERTIFICATE-----\\nMIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw\\nEzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0\\nMzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH\\nA0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf\\n3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB\\nAf8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO\\nPQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz\\npxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H\\n-----END CERTIFICATE-----\\n\",\n      \"CertIssuerSubject\": \"MBMxETAPBgNVBAMTCHN3YXJtLWNh\",\n      \"CertIssuerPublicKey\": \"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==\"\n    }\n  },\n  \"Status\": {\n    \"State\": \"ready\",\n    \"Message\": \"\",\n    \"Addr\": \"172.17.0.2\"\n  },\n  \"ManagerStatus\": {\n    \"Leader\": true,\n    \"Reachability\": \"reachable\",\n    \"Addr\": \"10.0.0.46:2377\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cf853dff-0fa6-4249-882b-1d286ee74a46",
+              "name": "no such node",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID or name of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01df1ae0-c1ed-4b49-a5e2-5ec46798a2f3",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID or name of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b003cd15-9d3c-46b1-9ba2-f07e6141b61d",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID or name of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ba921026-16bb-4e86-9b9b-b85566bacdfa",
+          "name": "Delete a node",
+          "request": {
+            "name": "Delete a node",
+            "description": {},
+            "url": {
+              "path": [
+                "nodes",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "force",
+                  "value": "false",
+                  "description": "Force remove a node from the swarm"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID or name of the node"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bad466e2-bf4a-4872-8b87-9eaeebc23756",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID or name of the node"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dbd398f4-25f4-455b-bf8f-95dc32b40bf3",
+              "name": "no such node",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID or name of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "edd79069-9db5-4971-b419-4c889250b090",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID or name of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7d1f7529-50a7-4e42-bf12-a3239c9da16c",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID or name of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "590d3d30-e43c-49d3-ba60-589ce7dc6ed5",
+          "name": "Update a node",
+          "request": {
+            "name": "Update a node",
+            "description": {},
+            "url": {
+              "path": [
+                "nodes",
+                ":id",
+                "update"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "version",
+                  "value": "<long>",
+                  "description": "(Required) The version number of the node object being updated. This is required\nto avoid conflicting writes.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the node"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Name\": \"<string>\",\n  \"Labels\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\"\n  },\n  \"Role\": \"<string>\",\n  \"Availability\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "37be1d8e-aa4d-4d2c-a790-7ae940499f0e",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the node"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Availability\": \"active\",\n  \"Name\": \"node-name\",\n  \"Role\": \"manager\",\n  \"Labels\": {\n    \"foo\": \"bar\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dd9297b0-3cbe-4acd-9dec-b1d5829b65e7",
+              "name": "bad parameter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Availability\": \"active\",\n  \"Name\": \"node-name\",\n  \"Role\": \"manager\",\n  \"Labels\": {\n    \"foo\": \"bar\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e08eec1d-f09a-4f03-9ae5-aa85cf4ed8ce",
+              "name": "no such node",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Availability\": \"active\",\n  \"Name\": \"node-name\",\n  \"Role\": \"manager\",\n  \"Labels\": {\n    \"foo\": \"bar\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd31b7b3-11b7-4310-8e2e-f944fea054ce",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Availability\": \"active\",\n  \"Name\": \"node-name\",\n  \"Role\": \"manager\",\n  \"Labels\": {\n    \"foo\": \"bar\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d89643e9-182d-4e2f-8275-a443e08efe8e",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "nodes",
+                    ":id",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the node"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Availability\": \"active\",\n  \"Name\": \"node-name\",\n  \"Role\": \"manager\",\n  \"Labels\": {\n    \"foo\": \"bar\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v1.54",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5b442d93-2c2f-42dd-85c3-92bb740c7028",
+    "name": "Docker Engine Config Node API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

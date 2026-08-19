@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Docker Engine Config API",
+    "version": "1.54"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Config",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List configs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/configs",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the configs list.\n\nAvailable filters:\n\n- `id=<config id>`\n- `label=<key> or label=<key>=value`\n- `name=<config name>`\n- `names=<config name>`\n"
+              }
+            ]
+          },
+          "docs": "List configs"
+        },
+        {
+          "info": {
+            "name": "Create a config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/configs/create"
+          },
+          "docs": "Create a config"
+        },
+        {
+          "info": {
+            "name": "Inspect a config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the config"
+              }
+            ]
+          },
+          "docs": "Inspect a config"
+        },
+        {
+          "info": {
+            "name": "Delete a config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/configs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the config"
+              }
+            ]
+          },
+          "docs": "Delete a config"
+        },
+        {
+          "info": {
+            "name": "Update a Config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/configs/:id/update",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID or name of the config"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the config object being updated. This is\nrequired to avoid conflicting writes.\n"
+              }
+            ]
+          },
+          "docs": "Update a Config"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

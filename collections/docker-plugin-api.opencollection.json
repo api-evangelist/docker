@@ -1,0 +1,269 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Docker Engine Config Plugin API",
+    "version": "1.54"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Plugin",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List plugins",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plugins",
+            "params": [
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the plugin list.\n\nAvailable filters:\n\n- `capability=<capability name>`\n- `enable=<true>|<false>`\n"
+              }
+            ]
+          },
+          "docs": "Returns information about installed plugins."
+        },
+        {
+          "info": {
+            "name": "Get plugin privileges",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plugins/privileges",
+            "params": [
+              {
+                "name": "remote",
+                "value": "",
+                "type": "query",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Get plugin privileges"
+        },
+        {
+          "info": {
+            "name": "Install a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/pull",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "remote",
+                "value": "",
+                "type": "query",
+                "description": "Remote reference for plugin to install.\n\nThe `:latest` tag is optional, and is used as the default if omitted.\n"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Local name for the pulled plugin.\n\nThe `:latest` tag is optional, and is used as the default if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Pulls and installs a plugin. After the plugin is installed, it can be\nenabled using the [`POST /plugins/{name}/enable` endpoint](#operation/PostPluginsEnable).\n"
+        },
+        {
+          "info": {
+            "name": "Inspect a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plugins/:name/json",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Inspect a plugin"
+        },
+        {
+          "info": {
+            "name": "Remove a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/plugins/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Disable the plugin before removing. This may result in issues if the\nplugin is in use by a container.\n"
+              }
+            ]
+          },
+          "docs": "Remove a plugin"
+        },
+        {
+          "info": {
+            "name": "Enable a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/enable",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query",
+                "description": "Set the HTTP client timeout (in seconds)"
+              }
+            ]
+          },
+          "docs": "Enable a plugin"
+        },
+        {
+          "info": {
+            "name": "Disable a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/disable",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Force disable a plugin even if still in use.\n"
+              }
+            ]
+          },
+          "docs": "Disable a plugin"
+        },
+        {
+          "info": {
+            "name": "Upgrade a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/upgrade",
+            "headers": [
+              {
+                "name": "X-Registry-Auth",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              },
+              {
+                "name": "remote",
+                "value": "",
+                "type": "query",
+                "description": "Remote reference to upgrade to.\n\nThe `:latest` tag is optional, and is used as the default if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Upgrade a plugin"
+        },
+        {
+          "info": {
+            "name": "Create a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/create",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Create a plugin"
+        },
+        {
+          "info": {
+            "name": "Push a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/push",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Push a plugin to the registry.\n"
+        },
+        {
+          "info": {
+            "name": "Configure a plugin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/plugins/:name/set",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+              }
+            ]
+          },
+          "docs": "Configure a plugin"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

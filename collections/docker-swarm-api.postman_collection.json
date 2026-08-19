@@ -1,0 +1,1421 @@
+{
+  "item": [
+    {
+      "id": "c2540571-8b88-4bed-ac09-e007122104f0",
+      "name": "Swarm",
+      "description": {
+        "content": "Engines can be clustered together in a swarm. Refer to the\n[swarm mode documentation](https://docs.docker.com/engine/swarm/)\nfor more information.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f85ef17b-5343-4563-82e1-d7b19017f76b",
+          "name": "Inspect swarm",
+          "request": {
+            "name": "Inspect swarm",
+            "description": {},
+            "url": {
+              "path": [
+                "swarm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7e05ff85-b720-492b-921d-2a4fa07e7369",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ID\": \"abajmipo7b4xz5ip2nrla6b11\",\n  \"Version\": {\n    \"Index\": 373531\n  },\n  \"CreatedAt\": \"2016-08-18T10:44:24.496525531Z\",\n  \"UpdatedAt\": \"2017-08-09T07:09:37.632105588Z\",\n  \"Spec\": {\n    \"Name\": \"default\",\n    \"Labels\": {\n      \"com.example.corp.type\": \"production\",\n      \"com.example.corp.department\": \"engineering\"\n    },\n    \"Orchestration\": {\n      \"TaskHistoryRetentionLimit\": 10\n    },\n    \"Raft\": {\n      \"SnapshotInterval\": 10000,\n      \"KeepOldSnapshots\": 3946,\n      \"LogEntriesForSlowFollowers\": 500,\n      \"ElectionTick\": 3,\n      \"HeartbeatTick\": 1\n    },\n    \"Dispatcher\": {\n      \"HeartbeatPeriod\": 5000000000\n    },\n    \"CAConfig\": {\n      \"NodeCertExpiry\": 7776000000000000,\n      \"ExternalCAs\": [\n        {\n          \"Protocol\": \"cfssl\",\n          \"URL\": \"string\",\n          \"Options\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\"\n          },\n          \"CACert\": \"string\"\n        },\n        {\n          \"Protocol\": \"cfssl\",\n          \"URL\": \"string\",\n          \"Options\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\",\n            \"key_3\": \"string\"\n          },\n          \"CACert\": \"string\"\n        }\n      ],\n      \"SigningCACert\": \"string\",\n      \"SigningCAKey\": \"string\",\n      \"ForceRotate\": 5437\n    },\n    \"EncryptionConfig\": {\n      \"AutoLockManagers\": false\n    },\n    \"TaskDefaults\": {\n      \"LogDriver\": {\n        \"Name\": \"json-file\",\n        \"Options\": {\n          \"max-file\": \"10\",\n          \"max-size\": \"100m\"\n        }\n      }\n    }\n  },\n  \"TLSInfo\": {\n    \"TrustRoot\": \"-----BEGIN CERTIFICATE-----\\nMIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw\\nEzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0\\nMzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH\\nA0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf\\n3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB\\nAf8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO\\nPQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz\\npxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H\\n-----END CERTIFICATE-----\\n\",\n    \"CertIssuerSubject\": \"MBMxETAPBgNVBAMTCHN3YXJtLWNh\",\n    \"CertIssuerPublicKey\": \"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==\"\n  },\n  \"RootRotationInProgress\": false,\n  \"DataPathPort\": 4789,\n  \"DefaultAddrPool\": [\n    \"string\",\n    \"string\"\n  ],\n  \"SubnetSize\": 24,\n  \"JoinTokens\": {\n    \"Worker\": \"SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-1awxwuwd3z9j1z3puu7rcgdbx\",\n    \"Manager\": \"SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-7p73s1dx5in4tatdymyhg9hu2\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a4429ad-c46e-4a4c-bdfb-5fbc73599c73",
+              "name": "no such swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c915302b-8a8e-4869-bd65-85baa6bf90c7",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0a599ead-3d29-456d-b7fe-cfccd838f6a9",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "24ec7876-1d72-454d-ab6b-de4643aa4a6e",
+          "name": "Initialize a new swarm",
+          "request": {
+            "name": "Initialize a new swarm",
+            "description": {},
+            "url": {
+              "path": [
+                "swarm",
+                "init"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ListenAddr\": \"<string>\",\n  \"AdvertiseAddr\": \"<string>\",\n  \"DataPathAddr\": \"<string>\",\n  \"DataPathPort\": \"<uint32>\",\n  \"DefaultAddrPool\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"ForceNewCluster\": \"<boolean>\",\n  \"SubnetSize\": \"<uint32>\",\n  \"Spec\": {\n    \"Name\": \"<string>\",\n    \"Labels\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\",\n      \"key_2\": \"<string>\"\n    },\n    \"Orchestration\": {\n      \"TaskHistoryRetentionLimit\": \"<long>\"\n    },\n    \"Raft\": {\n      \"SnapshotInterval\": \"<uint64>\",\n      \"KeepOldSnapshots\": \"<uint64>\",\n      \"LogEntriesForSlowFollowers\": \"<uint64>\",\n      \"ElectionTick\": \"<integer>\",\n      \"HeartbeatTick\": \"<integer>\"\n    },\n    \"Dispatcher\": {\n      \"HeartbeatPeriod\": \"<long>\"\n    },\n    \"CAConfig\": {\n      \"NodeCertExpiry\": \"<long>\",\n      \"ExternalCAs\": [\n        {\n          \"Protocol\": \"cfssl\",\n          \"URL\": \"<string>\",\n          \"Options\": {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\"\n          },\n          \"CACert\": \"<string>\"\n        },\n        {\n          \"Protocol\": \"cfssl\",\n          \"URL\": \"<string>\",\n          \"Options\": {\n            \"key_0\": \"<string>\",\n            \"key_1\": \"<string>\",\n            \"key_2\": \"<string>\"\n          },\n          \"CACert\": \"<string>\"\n        }\n      ],\n      \"SigningCACert\": \"<string>\",\n      \"SigningCAKey\": \"<string>\",\n      \"ForceRotate\": \"<uint64>\"\n    },\n    \"EncryptionConfig\": {\n      \"AutoLockManagers\": \"<boolean>\"\n    },\n    \"TaskDefaults\": {\n      \"LogDriver\": {\n        \"Name\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "199c030b-b1ff-40d3-b1f5-e558798e4c9f",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "init"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ListenAddr\": \"0.0.0.0:2377\",\n  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n  \"DataPathPort\": 4789,\n  \"DefaultAddrPool\": [\n    \"10.10.0.0/8\",\n    \"20.20.0.0/8\"\n  ],\n  \"SubnetSize\": 24,\n  \"ForceNewCluster\": false,\n  \"Spec\": {\n    \"Orchestration\": {},\n    \"Raft\": {},\n    \"Dispatcher\": {},\n    \"CAConfig\": {},\n    \"EncryptionConfig\": {\n      \"AutoLockManagers\": false\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"7v2t30z9blmxuhnyo6s4cpenp\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cae2ad23-2cf8-4692-b8a2-45e9146355fb",
+              "name": "bad parameter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "init"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ListenAddr\": \"0.0.0.0:2377\",\n  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n  \"DataPathPort\": 4789,\n  \"DefaultAddrPool\": [\n    \"10.10.0.0/8\",\n    \"20.20.0.0/8\"\n  ],\n  \"SubnetSize\": 24,\n  \"ForceNewCluster\": false,\n  \"Spec\": {\n    \"Orchestration\": {},\n    \"Raft\": {},\n    \"Dispatcher\": {},\n    \"CAConfig\": {},\n    \"EncryptionConfig\": {\n      \"AutoLockManagers\": false\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "27bae900-7b56-4523-96c0-03e946dc41fa",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "init"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ListenAddr\": \"0.0.0.0:2377\",\n  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n  \"DataPathPort\": 4789,\n  \"DefaultAddrPool\": [\n    \"10.10.0.0/8\",\n    \"20.20.0.0/8\"\n  ],\n  \"SubnetSize\": 24,\n  \"ForceNewCluster\": false,\n  \"Spec\": {\n    \"Orchestration\": {},\n    \"Raft\": {},\n    \"Dispatcher\": {},\n    \"CAConfig\": {},\n    \"EncryptionConfig\": {\n      \"AutoLockManagers\": false\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1539a157-188a-4ad8-9ec0-c2da02ef1351",
+              "name": "node is already part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "init"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ListenAddr\": \"0.0.0.0:2377\",\n  \"AdvertiseAddr\": \"192.168.1.1:2377\",\n  \"DataPathPort\": 4789,\n  \"DefaultAddrPool\": [\n    \"10.10.0.0/8\",\n    \"20.20.0.0/8\"\n  ],\n  \"SubnetSize\": 24,\n  \"ForceNewCluster\": false,\n  \"Spec\": {\n    \"Orchestration\": {},\n    \"Raft\": {},\n    \"Dispatcher\": {},\n    \"CAConfig\": {},\n    \"EncryptionConfig\": {\n      \"AutoLockManagers\": false\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce519afb-1584-47bb-a9e9-fe45bbda7d3a",
+          "name": "Join an existing swarm",
+          "request": {
+            "name": "Join an existing swarm",
+            "description": {},
+            "url": {
+              "path": [
+                "swarm",
+                "join"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ListenAddr\": \"<string>\",\n  \"AdvertiseAddr\": \"<string>\",\n  \"DataPathAddr\": \"<string>\",\n  \"RemoteAddrs\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"JoinToken\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a8734e96-52fd-4077-91fb-227702e8c3e2",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "join"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ListenAddr\": \"<string>\",\n  \"AdvertiseAddr\": \"<string>\",\n  \"DataPathAddr\": \"<string>\",\n  \"RemoteAddrs\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"JoinToken\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "38e5c6f3-6429-49ca-b6a1-07b4c7d834b0",
+              "name": "bad parameter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "join"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ListenAddr\": \"<string>\",\n  \"AdvertiseAddr\": \"<string>\",\n  \"DataPathAddr\": \"<string>\",\n  \"RemoteAddrs\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"JoinToken\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad19c5ac-6a85-433d-88fb-376869e1d41e",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "join"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ListenAddr\": \"<string>\",\n  \"AdvertiseAddr\": \"<string>\",\n  \"DataPathAddr\": \"<string>\",\n  \"RemoteAddrs\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"JoinToken\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f4ae73e-5bea-4710-a22f-2f9302e2add1",
+              "name": "node is already part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "join"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ListenAddr\": \"<string>\",\n  \"AdvertiseAddr\": \"<string>\",\n  \"DataPathAddr\": \"<string>\",\n  \"RemoteAddrs\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"JoinToken\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6ecf1dd6-dc4f-4c73-8ba1-43b06ae54cba",
+          "name": "Leave a swarm",
+          "request": {
+            "name": "Leave a swarm",
+            "description": {},
+            "url": {
+              "path": [
+                "swarm",
+                "leave"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "force",
+                  "value": "false",
+                  "description": "Force leave swarm, even if this is the last manager or that it will\nbreak the cluster.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f9d4a7ba-cbc9-41da-b743-22b7076f7a13",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "leave"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0215ccdd-b04a-494a-8bfb-fcc5d3f7188d",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "leave"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "66ace65e-9c9d-4c31-b3eb-bca46f95bae3",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "leave"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3deb200b-63db-45e4-b34e-e9d327cb9e8a",
+          "name": "Update a swarm",
+          "request": {
+            "name": "Update a swarm",
+            "description": {},
+            "url": {
+              "path": [
+                "swarm",
+                "update"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "version",
+                  "value": "<long>",
+                  "description": "(Required) The version number of the swarm object being updated. This is\nrequired to avoid conflicting writes.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "rotateWorkerToken",
+                  "value": "false",
+                  "description": "Rotate the worker join token."
+                },
+                {
+                  "disabled": false,
+                  "key": "rotateManagerToken",
+                  "value": "false",
+                  "description": "Rotate the manager join token."
+                },
+                {
+                  "disabled": false,
+                  "key": "rotateManagerUnlockKey",
+                  "value": "false",
+                  "description": "Rotate the manager unlock key."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Name\": \"<string>\",\n  \"Labels\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\",\n    \"key_3\": \"<string>\",\n    \"key_4\": \"<string>\"\n  },\n  \"Orchestration\": {\n    \"TaskHistoryRetentionLimit\": \"<long>\"\n  },\n  \"Raft\": {\n    \"SnapshotInterval\": \"<uint64>\",\n    \"KeepOldSnapshots\": \"<uint64>\",\n    \"LogEntriesForSlowFollowers\": \"<uint64>\",\n    \"ElectionTick\": \"<integer>\",\n    \"HeartbeatTick\": \"<integer>\"\n  },\n  \"Dispatcher\": {\n    \"HeartbeatPeriod\": \"<long>\"\n  },\n  \"CAConfig\": {\n    \"NodeCertExpiry\": \"<long>\",\n    \"ExternalCAs\": [\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      },\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\",\n          \"key_1\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      }\n    ],\n    \"SigningCACert\": \"<string>\",\n    \"SigningCAKey\": \"<string>\",\n    \"ForceRotate\": \"<uint64>\"\n  },\n  \"EncryptionConfig\": {\n    \"AutoLockManagers\": \"<boolean>\"\n  },\n  \"TaskDefaults\": {\n    \"LogDriver\": {\n      \"Name\": \"<string>\",\n      \"Options\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6c4e5fc4-d827-44ae-8a2f-b60a03e95285",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "rotateWorkerToken",
+                      "value": "false"
+                    },
+                    {
+                      "key": "rotateManagerToken",
+                      "value": "false"
+                    },
+                    {
+                      "key": "rotateManagerUnlockKey",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Name\": \"default\",\n  \"Labels\": {\n    \"com.example.corp.type\": \"production\",\n    \"com.example.corp.department\": \"engineering\"\n  },\n  \"Orchestration\": {\n    \"TaskHistoryRetentionLimit\": 10\n  },\n  \"Raft\": {\n    \"SnapshotInterval\": 10000,\n    \"KeepOldSnapshots\": \"<uint64>\",\n    \"LogEntriesForSlowFollowers\": 500,\n    \"ElectionTick\": 3,\n    \"HeartbeatTick\": 1\n  },\n  \"Dispatcher\": {\n    \"HeartbeatPeriod\": 5000000000\n  },\n  \"CAConfig\": {\n    \"NodeCertExpiry\": 7776000000000000,\n    \"ExternalCAs\": [\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      },\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      }\n    ],\n    \"SigningCACert\": \"<string>\",\n    \"SigningCAKey\": \"<string>\",\n    \"ForceRotate\": \"<uint64>\"\n  },\n  \"EncryptionConfig\": {\n    \"AutoLockManagers\": false\n  },\n  \"TaskDefaults\": {\n    \"LogDriver\": {\n      \"Name\": \"json-file\",\n      \"Options\": {\n        \"max-file\": \"10\",\n        \"max-size\": \"100m\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ab03fb52-dca5-489b-b7e6-f8b801e0e948",
+              "name": "bad parameter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "rotateWorkerToken",
+                      "value": "false"
+                    },
+                    {
+                      "key": "rotateManagerToken",
+                      "value": "false"
+                    },
+                    {
+                      "key": "rotateManagerUnlockKey",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Name\": \"default\",\n  \"Labels\": {\n    \"com.example.corp.type\": \"production\",\n    \"com.example.corp.department\": \"engineering\"\n  },\n  \"Orchestration\": {\n    \"TaskHistoryRetentionLimit\": 10\n  },\n  \"Raft\": {\n    \"SnapshotInterval\": 10000,\n    \"KeepOldSnapshots\": \"<uint64>\",\n    \"LogEntriesForSlowFollowers\": 500,\n    \"ElectionTick\": 3,\n    \"HeartbeatTick\": 1\n  },\n  \"Dispatcher\": {\n    \"HeartbeatPeriod\": 5000000000\n  },\n  \"CAConfig\": {\n    \"NodeCertExpiry\": 7776000000000000,\n    \"ExternalCAs\": [\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      },\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      }\n    ],\n    \"SigningCACert\": \"<string>\",\n    \"SigningCAKey\": \"<string>\",\n    \"ForceRotate\": \"<uint64>\"\n  },\n  \"EncryptionConfig\": {\n    \"AutoLockManagers\": false\n  },\n  \"TaskDefaults\": {\n    \"LogDriver\": {\n      \"Name\": \"json-file\",\n      \"Options\": {\n        \"max-file\": \"10\",\n        \"max-size\": \"100m\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3699e2ec-104b-45e3-afb6-2b2580a962d1",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "rotateWorkerToken",
+                      "value": "false"
+                    },
+                    {
+                      "key": "rotateManagerToken",
+                      "value": "false"
+                    },
+                    {
+                      "key": "rotateManagerUnlockKey",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Name\": \"default\",\n  \"Labels\": {\n    \"com.example.corp.type\": \"production\",\n    \"com.example.corp.department\": \"engineering\"\n  },\n  \"Orchestration\": {\n    \"TaskHistoryRetentionLimit\": 10\n  },\n  \"Raft\": {\n    \"SnapshotInterval\": 10000,\n    \"KeepOldSnapshots\": \"<uint64>\",\n    \"LogEntriesForSlowFollowers\": 500,\n    \"ElectionTick\": 3,\n    \"HeartbeatTick\": 1\n  },\n  \"Dispatcher\": {\n    \"HeartbeatPeriod\": 5000000000\n  },\n  \"CAConfig\": {\n    \"NodeCertExpiry\": 7776000000000000,\n    \"ExternalCAs\": [\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      },\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      }\n    ],\n    \"SigningCACert\": \"<string>\",\n    \"SigningCAKey\": \"<string>\",\n    \"ForceRotate\": \"<uint64>\"\n  },\n  \"EncryptionConfig\": {\n    \"AutoLockManagers\": false\n  },\n  \"TaskDefaults\": {\n    \"LogDriver\": {\n      \"Name\": \"json-file\",\n      \"Options\": {\n        \"max-file\": \"10\",\n        \"max-size\": \"100m\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be0c821b-c3c9-4d71-8f7b-b3974c36759a",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "update"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "version",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "rotateWorkerToken",
+                      "value": "false"
+                    },
+                    {
+                      "key": "rotateManagerToken",
+                      "value": "false"
+                    },
+                    {
+                      "key": "rotateManagerUnlockKey",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Name\": \"default\",\n  \"Labels\": {\n    \"com.example.corp.type\": \"production\",\n    \"com.example.corp.department\": \"engineering\"\n  },\n  \"Orchestration\": {\n    \"TaskHistoryRetentionLimit\": 10\n  },\n  \"Raft\": {\n    \"SnapshotInterval\": 10000,\n    \"KeepOldSnapshots\": \"<uint64>\",\n    \"LogEntriesForSlowFollowers\": 500,\n    \"ElectionTick\": 3,\n    \"HeartbeatTick\": 1\n  },\n  \"Dispatcher\": {\n    \"HeartbeatPeriod\": 5000000000\n  },\n  \"CAConfig\": {\n    \"NodeCertExpiry\": 7776000000000000,\n    \"ExternalCAs\": [\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      },\n      {\n        \"Protocol\": \"cfssl\",\n        \"URL\": \"<string>\",\n        \"Options\": {\n          \"key_0\": \"<string>\"\n        },\n        \"CACert\": \"<string>\"\n      }\n    ],\n    \"SigningCACert\": \"<string>\",\n    \"SigningCAKey\": \"<string>\",\n    \"ForceRotate\": \"<uint64>\"\n  },\n  \"EncryptionConfig\": {\n    \"AutoLockManagers\": false\n  },\n  \"TaskDefaults\": {\n    \"LogDriver\": {\n      \"Name\": \"json-file\",\n      \"Options\": {\n        \"max-file\": \"10\",\n        \"max-size\": \"100m\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e44c732d-62b1-4f73-86df-064cc4715e8a",
+          "name": "Get the unlock key",
+          "request": {
+            "name": "Get the unlock key",
+            "description": {},
+            "url": {
+              "path": [
+                "swarm",
+                "unlockkey"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "40ee2e03-998e-4ead-88a8-53d2fc425059",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "unlockkey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"UnlockKey\": \"SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8e9475f-94ba-489f-a4e2-d24e69b02c98",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "unlockkey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8721ea53-fe46-4557-ae3a-d4e5b41e1d6f",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "unlockkey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "da22c856-af49-406a-aeeb-634259f42a05",
+          "name": "Unlock a locked manager",
+          "request": {
+            "name": "Unlock a locked manager",
+            "description": {},
+            "url": {
+              "path": [
+                "swarm",
+                "unlock"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"UnlockKey\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0c34df9a-e033-4e29-b674-3d7f5fc1ba96",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "unlock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UnlockKey\": \"SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "96ebd8f3-f396-4a6e-8ef9-08af06ea8093",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "unlock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UnlockKey\": \"SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5657917f-20c7-46a3-8e63-e7b90d88e40f",
+              "name": "node is not part of a swarm",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "swarm",
+                    "unlock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UnlockKey\": \"SWMKEY-1-7c37Cc8654o6p38HnroywCi19pllOnGtbdZEgtKxZu8\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v1.54",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "b7d9e6ec-65c6-4a50-af6e-d03e3c28a813",
+    "name": "Docker Engine Config Swarm API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

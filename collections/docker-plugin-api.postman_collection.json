@@ -1,0 +1,1941 @@
+{
+  "item": [
+    {
+      "id": "4096957a-25a7-4bf5-b60a-677b1e9a6a80",
+      "name": "Plugin",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9a1bdbb7-30e5-48e7-b0f8-0460425de7b5",
+          "name": "List plugins",
+          "request": {
+            "name": "List plugins",
+            "description": {
+              "content": "Returns information about installed plugins.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "plugins"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "A JSON encoded value of the filters (a `map[string][]string`) to\nprocess on the plugin list.\n\nAvailable filters:\n\n- `capability=<capability name>`\n- `enable=<true>|<false>`\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "980b7c9a-6a3d-45e1-9339-11664a0b11f5",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"Settings\": {\n      \"Args\": [\n        \"string\",\n        \"string\"\n      ],\n      \"Devices\": [\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Path\": \"/dev/fuse\"\n        },\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Path\": \"/dev/fuse\"\n        }\n      ],\n      \"Env\": [\n        \"DEBUG=0\"\n      ],\n      \"Mounts\": [\n        {\n          \"Name\": \"some-mount\",\n          \"Description\": \"This is a mount that's used by the plugin.\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Source\": \"/var/lib/docker/plugins/\",\n          \"Destination\": \"/mnt/state\",\n          \"Type\": \"bind\",\n          \"Options\": [\n            \"rbind\",\n            \"rw\"\n          ]\n        },\n        {\n          \"Name\": \"some-mount\",\n          \"Description\": \"This is a mount that's used by the plugin.\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Source\": \"/var/lib/docker/plugins/\",\n          \"Destination\": \"/mnt/state\",\n          \"Type\": \"bind\",\n          \"Options\": [\n            \"rbind\",\n            \"rw\"\n          ]\n        }\n      ]\n    },\n    \"Enabled\": true,\n    \"Config\": {\n      \"Description\": \"A sample volume plugin for Docker\",\n      \"Documentation\": \"https://docs.docker.com/engine/extend/plugins/\",\n      \"Interface\": {\n        \"Types\": [\n          \"docker.volumedriver/1.0\"\n        ],\n        \"Socket\": \"plugins.sock\",\n        \"ProtocolScheme\": \"moby.plugins.http/v1\"\n      },\n      \"Entrypoint\": [\n        \"/usr/bin/sample-volume-plugin\",\n        \"/data\"\n      ],\n      \"WorkDir\": \"/bin/\",\n      \"Network\": {\n        \"Type\": \"host\"\n      },\n      \"Linux\": {\n        \"Capabilities\": [\n          \"CAP_SYS_ADMIN\",\n          \"CAP_SYSLOG\"\n        ],\n        \"AllowAllDevices\": false,\n        \"Devices\": [\n          {\n            \"Name\": \"string\",\n            \"Description\": \"string\",\n            \"Settable\": [\n              \"string\",\n              \"string\"\n            ],\n            \"Path\": \"/dev/fuse\"\n          },\n          {\n            \"Name\": \"string\",\n            \"Description\": \"string\",\n            \"Settable\": [\n              \"string\",\n              \"string\"\n            ],\n            \"Path\": \"/dev/fuse\"\n          }\n        ]\n      },\n      \"PidHost\": false,\n      \"PropagatedMount\": \"/mnt/volumes\",\n      \"IpcHost\": false,\n      \"Mounts\": [\n        {\n          \"Name\": \"some-mount\",\n          \"Description\": \"This is a mount that's used by the plugin.\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Source\": \"/var/lib/docker/plugins/\",\n          \"Destination\": \"/mnt/state\",\n          \"Type\": \"bind\",\n          \"Options\": [\n            \"rbind\",\n            \"rw\"\n          ]\n        },\n        {\n          \"Name\": \"some-mount\",\n          \"Description\": \"This is a mount that's used by the plugin.\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Source\": \"/var/lib/docker/plugins/\",\n          \"Destination\": \"/mnt/state\",\n          \"Type\": \"bind\",\n          \"Options\": [\n            \"rbind\",\n            \"rw\"\n          ]\n        }\n      ],\n      \"Env\": [\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Value\": \"string\"\n        },\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Value\": \"string\"\n        }\n      ],\n      \"Args\": {\n        \"Name\": \"args\",\n        \"Description\": \"command line arguments\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Value\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"User\": {\n        \"UID\": 1000,\n        \"GID\": 1000\n      },\n      \"rootfs\": {\n        \"type\": \"layers\",\n        \"diff_ids\": [\n          \"sha256:675532206fbf3030b8458f88d6e26d4eb1577688a25efec97154c94e8b6b4887\",\n          \"sha256:e216a057b1cb1efc11f8a268f37ef62083e70b1b38323ba252e25ac88904a7e8\"\n        ]\n      }\n    },\n    \"Name\": \"tiborvass/sample-volume-plugin\",\n    \"Id\": \"5724e2c8652da337ab2eedd19fc6fc0ec908e4bd907c7421bf6a8dfc70c4c078\",\n    \"PluginReference\": \"localhost:5000/tiborvass/sample-volume-plugin:latest\"\n  },\n  {\n    \"Settings\": {\n      \"Args\": [\n        \"string\",\n        \"string\"\n      ],\n      \"Devices\": [\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Path\": \"/dev/fuse\"\n        },\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Path\": \"/dev/fuse\"\n        }\n      ],\n      \"Env\": [\n        \"DEBUG=0\"\n      ],\n      \"Mounts\": [\n        {\n          \"Name\": \"some-mount\",\n          \"Description\": \"This is a mount that's used by the plugin.\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Source\": \"/var/lib/docker/plugins/\",\n          \"Destination\": \"/mnt/state\",\n          \"Type\": \"bind\",\n          \"Options\": [\n            \"rbind\",\n            \"rw\"\n          ]\n        },\n        {\n          \"Name\": \"some-mount\",\n          \"Description\": \"This is a mount that's used by the plugin.\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Source\": \"/var/lib/docker/plugins/\",\n          \"Destination\": \"/mnt/state\",\n          \"Type\": \"bind\",\n          \"Options\": [\n            \"rbind\",\n            \"rw\"\n          ]\n        }\n      ]\n    },\n    \"Enabled\": true,\n    \"Config\": {\n      \"Description\": \"A sample volume plugin for Docker\",\n      \"Documentation\": \"https://docs.docker.com/engine/extend/plugins/\",\n      \"Interface\": {\n        \"Types\": [\n          \"docker.volumedriver/1.0\"\n        ],\n        \"Socket\": \"plugins.sock\",\n        \"ProtocolScheme\": \"\"\n      },\n      \"Entrypoint\": [\n        \"/usr/bin/sample-volume-plugin\",\n        \"/data\"\n      ],\n      \"WorkDir\": \"/bin/\",\n      \"Network\": {\n        \"Type\": \"host\"\n      },\n      \"Linux\": {\n        \"Capabilities\": [\n          \"CAP_SYS_ADMIN\",\n          \"CAP_SYSLOG\"\n        ],\n        \"AllowAllDevices\": false,\n        \"Devices\": [\n          {\n            \"Name\": \"string\",\n            \"Description\": \"string\",\n            \"Settable\": [\n              \"string\",\n              \"string\"\n            ],\n            \"Path\": \"/dev/fuse\"\n          },\n          {\n            \"Name\": \"string\",\n            \"Description\": \"string\",\n            \"Settable\": [\n              \"string\",\n              \"string\"\n            ],\n            \"Path\": \"/dev/fuse\"\n          }\n        ]\n      },\n      \"PidHost\": false,\n      \"PropagatedMount\": \"/mnt/volumes\",\n      \"IpcHost\": false,\n      \"Mounts\": [\n        {\n          \"Name\": \"some-mount\",\n          \"Description\": \"This is a mount that's used by the plugin.\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Source\": \"/var/lib/docker/plugins/\",\n          \"Destination\": \"/mnt/state\",\n          \"Type\": \"bind\",\n          \"Options\": [\n            \"rbind\",\n            \"rw\"\n          ]\n        },\n        {\n          \"Name\": \"some-mount\",\n          \"Description\": \"This is a mount that's used by the plugin.\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Source\": \"/var/lib/docker/plugins/\",\n          \"Destination\": \"/mnt/state\",\n          \"Type\": \"bind\",\n          \"Options\": [\n            \"rbind\",\n            \"rw\"\n          ]\n        }\n      ],\n      \"Env\": [\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Value\": \"string\"\n        },\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Value\": \"string\"\n        }\n      ],\n      \"Args\": {\n        \"Name\": \"args\",\n        \"Description\": \"command line arguments\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Value\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"User\": {\n        \"UID\": 1000,\n        \"GID\": 1000\n      },\n      \"rootfs\": {\n        \"type\": \"layers\",\n        \"diff_ids\": [\n          \"sha256:675532206fbf3030b8458f88d6e26d4eb1577688a25efec97154c94e8b6b4887\",\n          \"sha256:e216a057b1cb1efc11f8a268f37ef62083e70b1b38323ba252e25ac88904a7e8\"\n        ]\n      }\n    },\n    \"Name\": \"tiborvass/sample-volume-plugin\",\n    \"Id\": \"5724e2c8652da337ab2eedd19fc6fc0ec908e4bd907c7421bf6a8dfc70c4c078\",\n    \"PluginReference\": \"localhost:5000/tiborvass/sample-volume-plugin:latest\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a44865e8-f2f8-4f97-ab77-cfc69c769593",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aab4e324-1b98-4bde-9f8f-87a3b7db6a31",
+          "name": "Get plugin privileges",
+          "request": {
+            "name": "Get plugin privileges",
+            "description": {},
+            "url": {
+              "path": [
+                "plugins",
+                "privileges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "remote",
+                  "value": "<string>",
+                  "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6523967b-9494-4a2d-b527-9165766389a0",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    "privileges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "remote",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"Name\": \"network\",\n    \"Description\": \"\",\n    \"Value\": [\n      \"host\"\n    ]\n  },\n  {\n    \"Name\": \"mount\",\n    \"Description\": \"\",\n    \"Value\": [\n      \"/data\"\n    ]\n  },\n  {\n    \"Name\": \"device\",\n    \"Description\": \"\",\n    \"Value\": [\n      \"/dev/cpu_dma_latency\"\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ee0b8ef-30fa-4d66-aeed-bb2b1281c551",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    "privileges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "remote",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d46462bb-9edd-4e5c-8965-d076fb036b3d",
+          "name": "Install a plugin",
+          "request": {
+            "name": "Install a plugin",
+            "description": {
+              "content": "Pulls and installs a plugin. After the plugin is installed, it can be\nenabled using the [`POST /plugins/{name}/enable` endpoint](#operation/PostPluginsEnable).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "plugins",
+                "pull"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "remote",
+                  "value": "<string>",
+                  "description": "(Required) Remote reference for plugin to install.\n\nThe `:latest` tag is optional, and is used as the default if omitted.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "Local name for the pulled plugin.\n\nThe `:latest` tag is optional, and is used as the default if omitted.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "A base64url-encoded auth configuration to use when pulling a plugin\nfrom a registry.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                "key": "X-Registry-Auth",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"Name\": \"<string>\",\n    \"Description\": \"<string>\",\n    \"Value\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  {\n    \"Name\": \"<string>\",\n    \"Description\": \"<string>\",\n    \"Value\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ead69398-7d3e-4d73-8bbf-34c0f3b19d4c",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    "pull"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "remote",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration to use when pulling a plugin\nfrom a registry.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7a263af2-0b57-4dc0-a7fc-c40971911e71",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    "pull"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "remote",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration to use when pulling a plugin\nfrom a registry.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "75646aca-66f9-41d7-817d-e9ecdbf8b5e5",
+          "name": "Inspect a plugin",
+          "request": {
+            "name": "Inspect a plugin",
+            "description": {},
+            "url": {
+              "path": [
+                "plugins",
+                ":name",
+                "json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "81169654-59fb-4a2c-a416-e3ab77ba8957",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Settings\": {\n    \"Args\": [\n      \"string\",\n      \"string\"\n    ],\n    \"Devices\": [\n      {\n        \"Name\": \"string\",\n        \"Description\": \"string\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Path\": \"/dev/fuse\"\n      },\n      {\n        \"Name\": \"string\",\n        \"Description\": \"string\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Path\": \"/dev/fuse\"\n      }\n    ],\n    \"Env\": [\n      \"DEBUG=0\"\n    ],\n    \"Mounts\": [\n      {\n        \"Name\": \"some-mount\",\n        \"Description\": \"This is a mount that's used by the plugin.\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Source\": \"/var/lib/docker/plugins/\",\n        \"Destination\": \"/mnt/state\",\n        \"Type\": \"bind\",\n        \"Options\": [\n          \"rbind\",\n          \"rw\"\n        ]\n      },\n      {\n        \"Name\": \"some-mount\",\n        \"Description\": \"This is a mount that's used by the plugin.\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Source\": \"/var/lib/docker/plugins/\",\n        \"Destination\": \"/mnt/state\",\n        \"Type\": \"bind\",\n        \"Options\": [\n          \"rbind\",\n          \"rw\"\n        ]\n      }\n    ]\n  },\n  \"Enabled\": true,\n  \"Config\": {\n    \"Description\": \"A sample volume plugin for Docker\",\n    \"Documentation\": \"https://docs.docker.com/engine/extend/plugins/\",\n    \"Interface\": {\n      \"Types\": [\n        \"docker.volumedriver/1.0\"\n      ],\n      \"Socket\": \"plugins.sock\",\n      \"ProtocolScheme\": \"\"\n    },\n    \"Entrypoint\": [\n      \"/usr/bin/sample-volume-plugin\",\n      \"/data\"\n    ],\n    \"WorkDir\": \"/bin/\",\n    \"Network\": {\n      \"Type\": \"host\"\n    },\n    \"Linux\": {\n      \"Capabilities\": [\n        \"CAP_SYS_ADMIN\",\n        \"CAP_SYSLOG\"\n      ],\n      \"AllowAllDevices\": false,\n      \"Devices\": [\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Path\": \"/dev/fuse\"\n        },\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Path\": \"/dev/fuse\"\n        }\n      ]\n    },\n    \"PidHost\": false,\n    \"PropagatedMount\": \"/mnt/volumes\",\n    \"IpcHost\": false,\n    \"Mounts\": [\n      {\n        \"Name\": \"some-mount\",\n        \"Description\": \"This is a mount that's used by the plugin.\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Source\": \"/var/lib/docker/plugins/\",\n        \"Destination\": \"/mnt/state\",\n        \"Type\": \"bind\",\n        \"Options\": [\n          \"rbind\",\n          \"rw\"\n        ]\n      },\n      {\n        \"Name\": \"some-mount\",\n        \"Description\": \"This is a mount that's used by the plugin.\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Source\": \"/var/lib/docker/plugins/\",\n        \"Destination\": \"/mnt/state\",\n        \"Type\": \"bind\",\n        \"Options\": [\n          \"rbind\",\n          \"rw\"\n        ]\n      }\n    ],\n    \"Env\": [\n      {\n        \"Name\": \"string\",\n        \"Description\": \"string\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Value\": \"string\"\n      },\n      {\n        \"Name\": \"string\",\n        \"Description\": \"string\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Value\": \"string\"\n      }\n    ],\n    \"Args\": {\n      \"Name\": \"args\",\n      \"Description\": \"command line arguments\",\n      \"Settable\": [\n        \"string\",\n        \"string\"\n      ],\n      \"Value\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"User\": {\n      \"UID\": 1000,\n      \"GID\": 1000\n    },\n    \"rootfs\": {\n      \"type\": \"layers\",\n      \"diff_ids\": [\n        \"sha256:675532206fbf3030b8458f88d6e26d4eb1577688a25efec97154c94e8b6b4887\",\n        \"sha256:e216a057b1cb1efc11f8a268f37ef62083e70b1b38323ba252e25ac88904a7e8\"\n      ]\n    }\n  },\n  \"Name\": \"tiborvass/sample-volume-plugin\",\n  \"Id\": \"5724e2c8652da337ab2eedd19fc6fc0ec908e4bd907c7421bf6a8dfc70c4c078\",\n  \"PluginReference\": \"localhost:5000/tiborvass/sample-volume-plugin:latest\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56169b4a-6f32-4f56-8997-146562a238c4",
+              "name": "plugin is not installed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5ff65ad-f06d-4f58-8896-7435a4d85b84",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "38016375-83ff-44f7-a314-21bd585e66e6",
+          "name": "Remove a plugin",
+          "request": {
+            "name": "Remove a plugin",
+            "description": {},
+            "url": {
+              "path": [
+                "plugins",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "force",
+                  "value": "false",
+                  "description": "Disable the plugin before removing. This may result in issues if the\nplugin is in use by a container.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f31bbae8-7405-4c39-b2e4-1086b7a1c224",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Settings\": {\n    \"Args\": [\n      \"string\",\n      \"string\"\n    ],\n    \"Devices\": [\n      {\n        \"Name\": \"string\",\n        \"Description\": \"string\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Path\": \"/dev/fuse\"\n      },\n      {\n        \"Name\": \"string\",\n        \"Description\": \"string\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Path\": \"/dev/fuse\"\n      }\n    ],\n    \"Env\": [\n      \"DEBUG=0\"\n    ],\n    \"Mounts\": [\n      {\n        \"Name\": \"some-mount\",\n        \"Description\": \"This is a mount that's used by the plugin.\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Source\": \"/var/lib/docker/plugins/\",\n        \"Destination\": \"/mnt/state\",\n        \"Type\": \"bind\",\n        \"Options\": [\n          \"rbind\",\n          \"rw\"\n        ]\n      },\n      {\n        \"Name\": \"some-mount\",\n        \"Description\": \"This is a mount that's used by the plugin.\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Source\": \"/var/lib/docker/plugins/\",\n        \"Destination\": \"/mnt/state\",\n        \"Type\": \"bind\",\n        \"Options\": [\n          \"rbind\",\n          \"rw\"\n        ]\n      }\n    ]\n  },\n  \"Enabled\": true,\n  \"Config\": {\n    \"Description\": \"A sample volume plugin for Docker\",\n    \"Documentation\": \"https://docs.docker.com/engine/extend/plugins/\",\n    \"Interface\": {\n      \"Types\": [\n        \"docker.volumedriver/1.0\"\n      ],\n      \"Socket\": \"plugins.sock\",\n      \"ProtocolScheme\": \"\"\n    },\n    \"Entrypoint\": [\n      \"/usr/bin/sample-volume-plugin\",\n      \"/data\"\n    ],\n    \"WorkDir\": \"/bin/\",\n    \"Network\": {\n      \"Type\": \"host\"\n    },\n    \"Linux\": {\n      \"Capabilities\": [\n        \"CAP_SYS_ADMIN\",\n        \"CAP_SYSLOG\"\n      ],\n      \"AllowAllDevices\": false,\n      \"Devices\": [\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Path\": \"/dev/fuse\"\n        },\n        {\n          \"Name\": \"string\",\n          \"Description\": \"string\",\n          \"Settable\": [\n            \"string\",\n            \"string\"\n          ],\n          \"Path\": \"/dev/fuse\"\n        }\n      ]\n    },\n    \"PidHost\": false,\n    \"PropagatedMount\": \"/mnt/volumes\",\n    \"IpcHost\": false,\n    \"Mounts\": [\n      {\n        \"Name\": \"some-mount\",\n        \"Description\": \"This is a mount that's used by the plugin.\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Source\": \"/var/lib/docker/plugins/\",\n        \"Destination\": \"/mnt/state\",\n        \"Type\": \"bind\",\n        \"Options\": [\n          \"rbind\",\n          \"rw\"\n        ]\n      },\n      {\n        \"Name\": \"some-mount\",\n        \"Description\": \"This is a mount that's used by the plugin.\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Source\": \"/var/lib/docker/plugins/\",\n        \"Destination\": \"/mnt/state\",\n        \"Type\": \"bind\",\n        \"Options\": [\n          \"rbind\",\n          \"rw\"\n        ]\n      }\n    ],\n    \"Env\": [\n      {\n        \"Name\": \"string\",\n        \"Description\": \"string\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Value\": \"string\"\n      },\n      {\n        \"Name\": \"string\",\n        \"Description\": \"string\",\n        \"Settable\": [\n          \"string\",\n          \"string\"\n        ],\n        \"Value\": \"string\"\n      }\n    ],\n    \"Args\": {\n      \"Name\": \"args\",\n      \"Description\": \"command line arguments\",\n      \"Settable\": [\n        \"string\",\n        \"string\"\n      ],\n      \"Value\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"User\": {\n      \"UID\": 1000,\n      \"GID\": 1000\n    },\n    \"rootfs\": {\n      \"type\": \"layers\",\n      \"diff_ids\": [\n        \"sha256:675532206fbf3030b8458f88d6e26d4eb1577688a25efec97154c94e8b6b4887\",\n        \"sha256:e216a057b1cb1efc11f8a268f37ef62083e70b1b38323ba252e25ac88904a7e8\"\n      ]\n    }\n  },\n  \"Name\": \"tiborvass/sample-volume-plugin\",\n  \"Id\": \"5724e2c8652da337ab2eedd19fc6fc0ec908e4bd907c7421bf6a8dfc70c4c078\",\n  \"PluginReference\": \"localhost:5000/tiborvass/sample-volume-plugin:latest\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf485e28-e724-472b-9004-254b577d449d",
+              "name": "plugin is not installed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0105335-a461-4eb5-a357-8b76a21fbff0",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d33c7f40-9fd7-4699-9d88-4dcfb1d9f34c",
+          "name": "Enable a plugin",
+          "request": {
+            "name": "Enable a plugin",
+            "description": {},
+            "url": {
+              "path": [
+                "plugins",
+                ":name",
+                "enable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "timeout",
+                  "value": "0",
+                  "description": "Set the HTTP client timeout (in seconds)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "967d48f3-f1f1-4d56-9a28-0e9f06a8dbcb",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "timeout",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0bb9a909-7b0c-4b3a-8314-3f9de4d20d08",
+              "name": "plugin is not installed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "timeout",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2f076cd-8caa-4dea-ba13-25b4a121f81c",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "enable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "timeout",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a3be89b6-bea4-4ae2-be8f-86b3ad142e89",
+          "name": "Disable a plugin",
+          "request": {
+            "name": "Disable a plugin",
+            "description": {},
+            "url": {
+              "path": [
+                "plugins",
+                ":name",
+                "disable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "force",
+                  "value": "<boolean>",
+                  "description": "Force disable a plugin even if still in use.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a87fb022-3b69-4f65-bc65-d47748c6ba96",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ab47ff75-ac25-45fb-8738-d689b8508433",
+              "name": "plugin is not installed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b4172203-6e93-4954-bfc0-d3fb7438daf8",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "disable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "force",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5d382dfc-0c8c-4e24-bd79-39abf10a01d3",
+          "name": "Upgrade a plugin",
+          "request": {
+            "name": "Upgrade a plugin",
+            "description": {},
+            "url": {
+              "path": [
+                "plugins",
+                ":name",
+                "upgrade"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "remote",
+                  "value": "<string>",
+                  "description": "(Required) Remote reference to upgrade to.\n\nThe `:latest` tag is optional, and is used as the default if omitted.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "A base64url-encoded auth configuration to use when pulling a plugin\nfrom a registry.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                "key": "X-Registry-Auth",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"Name\": \"<string>\",\n    \"Description\": \"<string>\",\n    \"Value\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  {\n    \"Name\": \"<string>\",\n    \"Description\": \"<string>\",\n    \"Value\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b5fb59a6-782d-4a47-9538-c7964155bc74",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "upgrade"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "remote",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration to use when pulling a plugin\nfrom a registry.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fa1780af-13fe-4ce0-a43d-c08e784a80ac",
+              "name": "plugin not installed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "upgrade"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "remote",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration to use when pulling a plugin\nfrom a registry.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ca3b510-a516-4bc0-a676-1eb0e4f80bf4",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "upgrade"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "remote",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "A base64url-encoded auth configuration to use when pulling a plugin\nfrom a registry.\n\nRefer to the [authentication section](#section/Authentication) for\ndetails.\n",
+                    "key": "X-Registry-Auth",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c718844-2055-470e-964c-06e4fc55b603",
+          "name": "Create a plugin",
+          "request": {
+            "name": "Create a plugin",
+            "description": {},
+            "url": {
+              "path": [
+                "plugins",
+                "create"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-tar"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "file"
+            }
+          },
+          "response": [
+            {
+              "id": "f61379af-1d42-46a9-aad4-df5f067b3842",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "file"
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c79bc42a-731f-4eb5-9071-30aacd4818ac",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "file"
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ac2713a0-6ab9-4c2d-8d00-620ff8caf4da",
+          "name": "Push a plugin",
+          "request": {
+            "name": "Push a plugin",
+            "description": {
+              "content": "Push a plugin to the registry.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "plugins",
+                ":name",
+                "push"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "23339930-f1a3-4bf9-b8e2-7ebea60087e7",
+              "name": "no error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "push"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "82478457-2d81-4e30-bb58-13b5602143ea",
+              "name": "plugin not installed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "push"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7f3e618-9b39-4efa-99a6-67b6017f0a7f",
+              "name": "server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "push"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1929d4fc-3a7e-463b-8578-d7f7e5461f4d",
+          "name": "Configure a plugin",
+          "request": {
+            "name": "Configure a plugin",
+            "description": {},
+            "url": {
+              "path": [
+                "plugins",
+                ":name",
+                "set"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"<string>\",\n  \"<string>\"\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e11e7e58-70d8-4ed6-9195-0dacefce3acb",
+              "name": "No error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "set"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"DEBUG=1\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "382f7736-ff93-4924-8905-6b793df2ac8e",
+              "name": "Plugin not installed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "set"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"DEBUG=1\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d2db619-dbd6-43ca-bb54-518dd7d29c45",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "plugins",
+                    ":name",
+                    "set"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) The name of the plugin. The `:latest` tag is optional, and is the\ndefault if omitted.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  \"DEBUG=1\"\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/v1.54",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "b1f71fb0-6f09-4e89-beee-9b540e487423",
+    "name": "Docker Engine Config Plugin API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Engine API is an HTTP API served by Docker Engine. It is the API the\nDocker client uses to communicate with the Engine, so everything the Docker\nclient can do can be done with the API.\n\nMost of the client's commands map directly to API endpoints (e.g. `docker ps`\nis `GET /containers/json`). The notable exception is running containers,\nwhich consists of several API calls.\n\n# Errors\n\nThe API uses standard HTTP status codes to indicate the success or failure\nof the API call. The body of the response will be JSON in the following\nformat:\n\n```\n{\n  \"message\": \"page not found\"\n}\n```\n\n# Versioning\n\nThe API is usually changed in each release, so API calls are versioned to\nensure that clients don't break. To lock to a specific version of the API,\nyou prefix the URL with its version, for example, call `/v1.30/info` to use\nthe v1.30 version of the `/info` endpoint. If the API version specified in\nthe URL is not supported by the daemon, a HTTP `400 Bad Request` error message\nis returned.\n\nIf you omit the version-prefix, the current version of the API (v1.50) is used.\nFor example, calling `/info` is the same as calling `/v1.52/info`. Using the\nAPI without a version-prefix is deprecated and will be removed in a future release.\n\nEngine releases in the near future should support this version of the API,\nso your client will continue to work even if it is talking to a newer Engine.\n\nThe API uses an open schema model, which means the server may add extra properties\nto responses. Likewise, the server will ignore any extra query parameters and\nrequest body properties. When you write clients, you need to ignore additional\nproperties in responses to ensure they do not break when talking to newer\ndaemons.\n\n\n# Authentication\n\nAuthentication for registries is handled client side. The client has to send\nauthentication details to various endpoints that need to communicate with\nregistries, such as `POST /images/(name)/push`. These are sent as\n`X-Registry-Auth` header as a [base64url encoded](https://tools.ietf.org/html/rfc4648#section-5)\n(JSON) string with the following structure:\n\n```\n{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"serveraddress\": \"string\"\n}\n```\n\nThe `serveraddress` is a domain/IP without a protocol. Throughout this\nstructure, double quotes are required.\n\nIf you have already got an identity token from the [`/auth` endpoint](#operation/SystemAuth),\nyou can just pass this instead of credentials:\n\n```\n{\n  \"identitytoken\": \"9cbaf023786cd7...\"\n}\n```\n",
+      "type": "text/plain"
+    }
+  }
+}

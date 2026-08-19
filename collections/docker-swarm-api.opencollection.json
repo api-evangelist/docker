@@ -1,0 +1,129 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Docker Engine Config Swarm API",
+    "version": "1.54"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Swarm",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Inspect swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/swarm"
+          },
+          "docs": "Inspect swarm"
+        },
+        {
+          "info": {
+            "name": "Initialize a new swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/init"
+          },
+          "docs": "Initialize a new swarm"
+        },
+        {
+          "info": {
+            "name": "Join an existing swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/join"
+          },
+          "docs": "Join an existing swarm"
+        },
+        {
+          "info": {
+            "name": "Leave a swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/leave",
+            "params": [
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Force leave swarm, even if this is the last manager or that it will\nbreak the cluster.\n"
+              }
+            ]
+          },
+          "docs": "Leave a swarm"
+        },
+        {
+          "info": {
+            "name": "Update a swarm",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/update",
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The version number of the swarm object being updated. This is\nrequired to avoid conflicting writes.\n"
+              },
+              {
+                "name": "rotateWorkerToken",
+                "value": "",
+                "type": "query",
+                "description": "Rotate the worker join token."
+              },
+              {
+                "name": "rotateManagerToken",
+                "value": "",
+                "type": "query",
+                "description": "Rotate the manager join token."
+              },
+              {
+                "name": "rotateManagerUnlockKey",
+                "value": "",
+                "type": "query",
+                "description": "Rotate the manager unlock key."
+              }
+            ]
+          },
+          "docs": "Update a swarm"
+        },
+        {
+          "info": {
+            "name": "Get the unlock key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/swarm/unlockkey"
+          },
+          "docs": "Get the unlock key"
+        },
+        {
+          "info": {
+            "name": "Unlock a locked manager",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/swarm/unlock"
+          },
+          "docs": "Unlock a locked manager"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
