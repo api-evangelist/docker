@@ -13,8 +13,11 @@ info:
     description.
   version: 1.0.0
 sourceDescriptions:
-- name: dockerEngineApi
-  url: ../openapi/docker-openapi.yml
+- name: containerApi
+  url: ../openapi/docker-container-api-openapi.yml
+  type: openapi
+- name: execApi
+  url: ../openapi/docker-exec-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: exec-command-in-container

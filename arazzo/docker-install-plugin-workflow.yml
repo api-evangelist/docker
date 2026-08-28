@@ -13,8 +13,8 @@ info:
     without opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: dockerEngineApi
-  url: ../openapi/docker-openapi.yml
+- name: pluginApi
+  url: ../openapi/docker-plugin-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: install-plugin

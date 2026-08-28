@@ -12,8 +12,11 @@ info:
     be read and executed without opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: dockerEngineApi
-  url: ../openapi/docker-openapi.yml
+- name: serviceApi
+  url: ../openapi/docker-service-api-openapi.yml
+  type: openapi
+- name: taskApi
+  url: ../openapi/docker-task-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: rolling-update-service
