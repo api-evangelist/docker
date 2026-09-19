@@ -65,6 +65,8 @@ apis:
   description: Create and manage containers.
   humanURL: https://www.docker.com/
   tags:
+  - Containers
+  tags_raw:
   - Container
   properties:
   - type: OpenAPI
@@ -134,6 +136,8 @@ apis:
     for more information.
   humanURL: https://www.docker.com/
   tags:
+  - Networks
+  tags_raw:
   - Network
   properties:
   - type: OpenAPI
@@ -163,6 +167,8 @@ apis:
   description: The Plugin API from Docker — 11 operation(s) for plugin.
   humanURL: https://www.docker.com/
   tags:
+  - Plugins
+  tags_raw:
   - Plugin
   properties:
   - type: OpenAPI
@@ -195,6 +201,8 @@ apis:
     be enabled for these endpoints to work.
   humanURL: https://www.docker.com/
   tags:
+  - Services
+  tags_raw:
   - Service
   properties:
   - type: OpenAPI
@@ -208,6 +216,8 @@ apis:
   description: The Session API from Docker — 1 operation(s) for session.
   humanURL: https://www.docker.com/
   tags:
+  - Sessions
+  tags_raw:
   - Session
   properties:
   - type: OpenAPI
