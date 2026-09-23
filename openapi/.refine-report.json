@@ -1,21 +1,7 @@
 {
   "provider": "docker",
   "sources": [
-    "docker-config-api-openapi.yml",
-    "docker-container-api-openapi.yml",
-    "docker-distribution-api-openapi.yml",
-    "docker-exec-api-openapi.yml",
-    "docker-image-api-openapi.yml",
-    "docker-network-api-openapi.yml",
-    "docker-node-api-openapi.yml",
-    "docker-plugin-api-openapi.yml",
-    "docker-secret-api-openapi.yml",
-    "docker-service-api-openapi.yml",
-    "docker-session-api-openapi.yml",
-    "docker-swarm-api-openapi.yml",
-    "docker-system-api-openapi.yml",
-    "docker-task-api-openapi.yml",
-    "docker-volume-api-openapi.yml"
+    "_original/docker-openapi.yml"
   ],
   "outputs": [
     "docker-config-api-openapi.yml",
@@ -37,6 +23,28 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "docker-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "docker-openapi.yml: declared missing tag: Distribution",
+    "docker-openapi.yml: declared missing tag: Session",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "docker-config-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-container-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-distribution-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-exec-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-image-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-network-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-node-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-plugin-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-secret-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-service-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-session-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-swarm-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-system-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-task-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "docker-volume-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

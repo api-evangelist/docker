@@ -1,0 +1,31 @@
+# Front Door AI Index — docker — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: docker
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.docker.com
+  final_host: www.docker.com
+  ownership: own
+  owner: docker
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 21
+  host_score: 21
+  density: 20.35
+  words: 1032
+  tiers:
+    agentic: 7
+    core: 9
+    model: 5
+  ambiguous: 23
+  top_terms:
+    agent: 23
+    AI: 8
+    Claude: 5
+    MCP: 5
+    AI agent: 1
+    LLMs: 1
+    inference: 1
