@@ -47,17 +47,56 @@ paths:
       - Distribution
 components:
   schemas:
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
+    OCIPlatform:
+      type:
+      - object
+      - 'null'
+      x-go-name: Platform
+      description: 'Describes the platform which the image in the manifest runs on, as defined
+
+        in the [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/image-index.md).
+
+        '
       properties:
-        message:
-          description: The error message.
+        architecture:
+          description: 'The CPU architecture, for example `amd64` or `ppc64`.
+
+            '
           type: string
-      example:
-        message: Something went wrong.
+          example: arm
+        os:
+          description: 'The operating system, for example `linux` or `windows`.
+
+            '
+          type: string
+          example: windows
+        os.version:
+          description: 'Optional field specifying the operating system version, for example on
+
+            Windows `10.0.19041.1165`.
+
+            '
+          type: string
+          example: 10.0.19041.1165
+        os.features:
+          description: 'Optional field specifying an array of strings, each listing a required
+
+            OS feature (for example on Windows `win32k`).
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - win32k
+        variant:
+          description: 'Optional field specifying a variant of the CPU, for example `v7` to
+
+            specify ARMv7 when architecture is `arm`.
+
+            '
+          type: string
+          example: v7
     OCIDescriptor:
       type: object
       x-go-name: Descriptor
@@ -150,53 +189,14 @@ components:
             '
           items:
             $ref: '#/components/schemas/OCIPlatform'
-    OCIPlatform:
-      type:
-      - object
-      - 'null'
-      x-go-name: Platform
-      description: 'Describes the platform which the image in the manifest runs on, as defined
-
-        in the [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/image-index.md).
-
-        '
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
       properties:
-        architecture:
-          description: 'The CPU architecture, for example `amd64` or `ppc64`.
-
-            '
+        message:
+          description: The error message.
           type: string
-          example: arm
-        os:
-          description: 'The operating system, for example `linux` or `windows`.
-
-            '
-          type: string
-          example: windows
-        os.version:
-          description: 'Optional field specifying the operating system version, for example on
-
-            Windows `10.0.19041.1165`.
-
-            '
-          type: string
-          example: 10.0.19041.1165
-        os.features:
-          description: 'Optional field specifying an array of strings, each listing a required
-
-            OS feature (for example on Windows `win32k`).
-
-            '
-          type: array
-          items:
-            type: string
-          example:
-          - win32k
-        variant:
-          description: 'Optional field specifying a variant of the CPU, for example `v7` to
-
-            specify ARMv7 when architecture is `arm`.
-
-            '
-          type: string
-          example: v7
+      example:
+        message: Something went wrong.

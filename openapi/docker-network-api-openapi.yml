@@ -481,390 +481,6 @@ paths:
       - Network
 components:
   schemas:
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
-    NetworkCreateResponse:
-      description: OK response to NetworkCreate operation
-      type: object
-      title: NetworkCreateResponse
-      x-go-name: CreateResponse
-      required:
-      - Id
-      - Warning
-      properties:
-        Id:
-          description: The ID of the created network.
-          type: string
-          example: b5c4fc71e8022147cd25de22b22173de4e3b170134117172eb595cb91b4e7e5d
-        Warning:
-          description: Warnings encountered when creating the container
-          type: string
-          example: ''
-    SubnetStatus:
-      type: object
-      x-omitempty: false
-      properties:
-        IPsInUse:
-          description: 'Number of IP addresses in the subnet that are in use or reserved and are therefore unavailable for allocation, saturating at 2<sup>64</sup> - 1.
-
-            '
-          type: integer
-          format: uint64
-          x-omitempty: false
-        DynamicIPsAvailable:
-          description: 'Number of IP addresses within the network''s IPRange for the subnet that are available for allocation, saturating at 2<sup>64</sup> - 1.
-
-            '
-          type: integer
-          format: uint64
-          x-omitempty: false
-    EndpointResource:
-      type: object
-      description: 'contains network resources allocated and used for a container in a network.
-
-        '
-      properties:
-        Name:
-          type: string
-          x-omitempty: false
-          example: container_1
-        EndpointID:
-          type: string
-          x-omitempty: false
-          example: 628cadb8bcb92de107b2a1e516cbffe463e321f548feb37697cce00ad694f21a
-        MacAddress:
-          type: string
-          x-omitempty: false
-          example: 02:42:ac:13:00:02
-          x-go-type:
-            type: HardwareAddr
-        IPv4Address:
-          type: string
-          x-omitempty: false
-          example: 172.19.0.2/16
-          x-go-type:
-            type: Prefix
-            import:
-              package: net/netip
-        IPv6Address:
-          type: string
-          x-omitempty: false
-          example: ''
-          x-go-type:
-            type: Prefix
-            import:
-              package: net/netip
-    NetworkDisconnectRequest:
-      description: 'NetworkDisconnectRequest represents the data to be used to disconnect a container from a network.
-
-        '
-      type: object
-      x-go-name: DisconnectRequest
-      required:
-      - Container
-      properties:
-        Container:
-          type: string
-          description: The ID or name of the container to disconnect from the network.
-          example: 3613f73ba0e4
-        Force:
-          type: boolean
-          description: Force the container to disconnect from the network.
-          default: false
-          x-omitempty: false
-          example: false
-    IPAMConfig:
-      type: object
-      properties:
-        Subnet:
-          type: string
-          example: 172.20.0.0/16
-        IPRange:
-          type: string
-          example: 172.20.10.0/24
-        Gateway:
-          type: string
-          example: 172.20.10.11
-        AuxiliaryAddresses:
-          type: object
-          additionalProperties:
-            type: string
-    NetworkStatus:
-      description: 'provides runtime information about the network such as the number of allocated IPs.
-
-        '
-      type: object
-      x-go-name: Status
-      properties:
-        IPAM:
-          $ref: '#/components/schemas/IPAMStatus'
-    NetworkConnectRequest:
-      description: 'NetworkConnectRequest represents the data to be used to connect a container to a network.
-
-        '
-      type: object
-      x-go-name: ConnectRequest
-      required:
-      - Container
-      properties:
-        Container:
-          type: string
-          description: The ID or name of the container to connect to the network.
-          example: 3613f73ba0e4
-        EndpointConfig:
-          $ref: '#/components/schemas/EndpointSettings'
-    EndpointSettings:
-      description: Configuration for a network endpoint.
-      type: object
-      properties:
-        IPAMConfig:
-          $ref: '#/components/schemas/EndpointIPAMConfig'
-        Links:
-          type: array
-          items:
-            type: string
-          example:
-          - container_1
-          - container_2
-        MacAddress:
-          description: 'MAC address for the endpoint on this network. The network driver might ignore this parameter.
-
-            '
-          type: string
-          example: 02:42:ac:11:00:04
-          x-go-type:
-            type: HardwareAddr
-        Aliases:
-          type: array
-          items:
-            type: string
-          example:
-          - server_x
-          - server_y
-        DriverOpts:
-          description: 'DriverOpts is a mapping of driver options and values. These options
-
-            are passed directly to the driver and are driver specific.
-
-            '
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: string
-          example:
-            com.example.some-label: some-value
-            com.example.some-other-label: some-other-value
-        GwPriority:
-          description: 'This property determines which endpoint will provide the default
-
-            gateway for a container. The endpoint with the highest priority will
-
-            be used. If multiple endpoints have the same priority, endpoints are
-
-            lexicographically sorted based on their network name, and the one
-
-            that sorts first is picked.
-
-            '
-          type: integer
-          format: int64
-          example:
-          - 10
-        NetworkID:
-          description: 'Unique ID of the network.
-
-            '
-          type: string
-          example: 08754567f1f40222263eab4102e1c733ae697e8e354aa9cd6e18d7402835292a
-        EndpointID:
-          description: 'Unique ID for the service endpoint in a Sandbox.
-
-            '
-          type: string
-          example: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
-        Gateway:
-          description: 'Gateway address for this network.
-
-            '
-          type: string
-          example: 172.17.0.1
-        IPAddress:
-          description: 'IPv4 address.
-
-            '
-          type: string
-          example: 172.17.0.4
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        IPPrefixLen:
-          description: 'Mask length of the IPv4 address.
-
-            '
-          type: integer
-          example: 16
-        IPv6Gateway:
-          description: 'IPv6 gateway address.
-
-            '
-          type: string
-          example: 2001:db8:2::100
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        GlobalIPv6Address:
-          description: 'Global IPv6 address.
-
-            '
-          type: string
-          example: 2001:db8::5689
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        GlobalIPv6PrefixLen:
-          description: 'Mask length of the global IPv6 address.
-
-            '
-          type: integer
-          format: int64
-          example: 64
-        DNSNames:
-          description: 'List of all DNS names an endpoint has on a specific network. This
-
-            list is based on the container name, network aliases, container short
-
-            ID, and hostname.
-
-
-            These DNS names are non-fully qualified but can contain several dots.
-
-            You can get fully qualified DNS names by appending `.<network-name>`.
-
-            For instance, if container name is `my.ctr` and the network is named
-
-            `testnet`, `DNSNames` will contain `my.ctr` and the FQDN will be
-
-            `my.ctr.testnet`.
-
-            '
-          type: array
-          items:
-            type: string
-          example:
-          - foobar
-          - server_x
-          - server_y
-          - my.ctr
-    EndpointIPAMConfig:
-      description: 'EndpointIPAMConfig represents an endpoint''s IPAM configuration.
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        IPv4Address:
-          type: string
-          example: 172.20.30.33
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        IPv6Address:
-          type: string
-          example: 2001:db8:abcd::3033
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        LinkLocalIPs:
-          type: array
-          items:
-            type: string
-            x-go-type:
-              type: Addr
-              import:
-                package: net/netip
-          example:
-          - 169.254.34.68
-          - fe80::3468
-    ConfigReference:
-      x-omitempty: false
-      description: 'The config-only network source to provide the configuration for
-
-        this network.
-
-        '
-      type: object
-      properties:
-        Network:
-          description: 'The name of the config-only network that provides the network''s
-
-            configuration. The specified network must be an existing config-only
-
-            network. Only network names are allowed, not network IDs.
-
-            '
-          type: string
-          x-omitempty: false
-          example: config_only_network_01
-    NetworkSummary:
-      description: Network list response item
-      x-go-name: Summary
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Network'
-    IPAMStatus:
-      type: object
-      x-omitempty: false
-      properties:
-        Subnets:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/SubnetStatus'
-          example:
-            172.16.0.0/16:
-              IPsInUse: 3
-              DynamicIPsAvailable: 65533
-            2001:db8:abcd:0012::0/96:
-              IPsInUse: 5
-              DynamicIPsAvailable: 4294967291
-          x-go-type:
-            type: SubnetStatuses
-            kind: map
-    PeerInfo:
-      description: 'represents one peer of an overlay network.
-
-        '
-      type: object
-      properties:
-        Name:
-          description: ID of the peer-node in the Swarm cluster.
-          type: string
-          x-omitempty: false
-          example: 6869d7c1732b
-        IP:
-          description: IP-address of the peer-node in the Swarm cluster.
-          type: string
-          x-omitempty: false
-          example: 10.133.77.91
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
     Network:
       type: object
       properties:
@@ -1016,6 +632,290 @@ components:
           x-omitempty: true
           items:
             $ref: '#/components/schemas/PeerInfo'
+    EndpointIPAMConfig:
+      description: 'EndpointIPAMConfig represents an endpoint''s IPAM configuration.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        IPv4Address:
+          type: string
+          example: 172.20.30.33
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        IPv6Address:
+          type: string
+          example: 2001:db8:abcd::3033
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        LinkLocalIPs:
+          type: array
+          items:
+            type: string
+            x-go-type:
+              type: Addr
+              import:
+                package: net/netip
+          example:
+          - 169.254.34.68
+          - fe80::3468
+    EndpointSettings:
+      description: Configuration for a network endpoint.
+      type: object
+      properties:
+        IPAMConfig:
+          $ref: '#/components/schemas/EndpointIPAMConfig'
+        Links:
+          type: array
+          items:
+            type: string
+          example:
+          - container_1
+          - container_2
+        MacAddress:
+          description: 'MAC address for the endpoint on this network. The network driver might ignore this parameter.
+
+            '
+          type: string
+          example: 02:42:ac:11:00:04
+          x-go-type:
+            type: HardwareAddr
+        Aliases:
+          type: array
+          items:
+            type: string
+          example:
+          - server_x
+          - server_y
+        DriverOpts:
+          description: 'DriverOpts is a mapping of driver options and values. These options
+
+            are passed directly to the driver and are driver specific.
+
+            '
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+          example:
+            com.example.some-label: some-value
+            com.example.some-other-label: some-other-value
+        GwPriority:
+          description: 'This property determines which endpoint will provide the default
+
+            gateway for a container. The endpoint with the highest priority will
+
+            be used. If multiple endpoints have the same priority, endpoints are
+
+            lexicographically sorted based on their network name, and the one
+
+            that sorts first is picked.
+
+            '
+          type: integer
+          format: int64
+          example:
+          - 10
+        NetworkID:
+          description: 'Unique ID of the network.
+
+            '
+          type: string
+          example: 08754567f1f40222263eab4102e1c733ae697e8e354aa9cd6e18d7402835292a
+        EndpointID:
+          description: 'Unique ID for the service endpoint in a Sandbox.
+
+            '
+          type: string
+          example: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
+        Gateway:
+          description: 'Gateway address for this network.
+
+            '
+          type: string
+          example: 172.17.0.1
+        IPAddress:
+          description: 'IPv4 address.
+
+            '
+          type: string
+          example: 172.17.0.4
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        IPPrefixLen:
+          description: 'Mask length of the IPv4 address.
+
+            '
+          type: integer
+          example: 16
+        IPv6Gateway:
+          description: 'IPv6 gateway address.
+
+            '
+          type: string
+          example: 2001:db8:2::100
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        GlobalIPv6Address:
+          description: 'Global IPv6 address.
+
+            '
+          type: string
+          example: 2001:db8::5689
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        GlobalIPv6PrefixLen:
+          description: 'Mask length of the global IPv6 address.
+
+            '
+          type: integer
+          format: int64
+          example: 64
+        DNSNames:
+          description: 'List of all DNS names an endpoint has on a specific network. This
+
+            list is based on the container name, network aliases, container short
+
+            ID, and hostname.
+
+
+            These DNS names are non-fully qualified but can contain several dots.
+
+            You can get fully qualified DNS names by appending `.<network-name>`.
+
+            For instance, if container name is `my.ctr` and the network is named
+
+            `testnet`, `DNSNames` will contain `my.ctr` and the FQDN will be
+
+            `my.ctr.testnet`.
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - foobar
+          - server_x
+          - server_y
+          - my.ctr
+    NetworkSummary:
+      description: Network list response item
+      x-go-name: Summary
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Network'
+    IPAMConfig:
+      type: object
+      properties:
+        Subnet:
+          type: string
+          example: 172.20.0.0/16
+        IPRange:
+          type: string
+          example: 172.20.10.0/24
+        Gateway:
+          type: string
+          example: 172.20.10.11
+        AuxiliaryAddresses:
+          type: object
+          additionalProperties:
+            type: string
+    NetworkStatus:
+      description: 'provides runtime information about the network such as the number of allocated IPs.
+
+        '
+      type: object
+      x-go-name: Status
+      properties:
+        IPAM:
+          $ref: '#/components/schemas/IPAMStatus'
+    IPAMStatus:
+      type: object
+      x-omitempty: false
+      properties:
+        Subnets:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SubnetStatus'
+          example:
+            172.16.0.0/16:
+              IPsInUse: 3
+              DynamicIPsAvailable: 65533
+            2001:db8:abcd:0012::0/96:
+              IPsInUse: 5
+              DynamicIPsAvailable: 4294967291
+          x-go-type:
+            type: SubnetStatuses
+            kind: map
+    PeerInfo:
+      description: 'represents one peer of an overlay network.
+
+        '
+      type: object
+      properties:
+        Name:
+          description: ID of the peer-node in the Swarm cluster.
+          type: string
+          x-omitempty: false
+          example: 6869d7c1732b
+        IP:
+          description: IP-address of the peer-node in the Swarm cluster.
+          type: string
+          x-omitempty: false
+          example: 10.133.77.91
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+    EndpointResource:
+      type: object
+      description: 'contains network resources allocated and used for a container in a network.
+
+        '
+      properties:
+        Name:
+          type: string
+          x-omitempty: false
+          example: container_1
+        EndpointID:
+          type: string
+          x-omitempty: false
+          example: 628cadb8bcb92de107b2a1e516cbffe463e321f548feb37697cce00ad694f21a
+        MacAddress:
+          type: string
+          x-omitempty: false
+          example: 02:42:ac:13:00:02
+          x-go-type:
+            type: HardwareAddr
+        IPv4Address:
+          type: string
+          x-omitempty: false
+          example: 172.19.0.2/16
+          x-go-type:
+            type: Prefix
+            import:
+              package: net/netip
+        IPv6Address:
+          type: string
+          x-omitempty: false
+          example: ''
+          x-go-type:
+            type: Prefix
+            import:
+              package: net/netip
     IPAM:
       type: object
       x-omitempty: false
@@ -1046,6 +946,87 @@ components:
             type: string
           example:
             foo: bar
+    SubnetStatus:
+      type: object
+      x-omitempty: false
+      properties:
+        IPsInUse:
+          description: 'Number of IP addresses in the subnet that are in use or reserved and are therefore unavailable for allocation, saturating at 2<sup>64</sup> - 1.
+
+            '
+          type: integer
+          format: uint64
+          x-omitempty: false
+        DynamicIPsAvailable:
+          description: 'Number of IP addresses within the network''s IPRange for the subnet that are available for allocation, saturating at 2<sup>64</sup> - 1.
+
+            '
+          type: integer
+          format: uint64
+          x-omitempty: false
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
+    NetworkCreateResponse:
+      description: OK response to NetworkCreate operation
+      type: object
+      title: NetworkCreateResponse
+      x-go-name: CreateResponse
+      required:
+      - Id
+      - Warning
+      properties:
+        Id:
+          description: The ID of the created network.
+          type: string
+          example: b5c4fc71e8022147cd25de22b22173de4e3b170134117172eb595cb91b4e7e5d
+        Warning:
+          description: Warnings encountered when creating the container
+          type: string
+          example: ''
+    ConfigReference:
+      x-omitempty: false
+      description: 'The config-only network source to provide the configuration for
+
+        this network.
+
+        '
+      type: object
+      properties:
+        Network:
+          description: 'The name of the config-only network that provides the network''s
+
+            configuration. The specified network must be an existing config-only
+
+            network. Only network names are allowed, not network IDs.
+
+            '
+          type: string
+          x-omitempty: false
+          example: config_only_network_01
+    NetworkConnectRequest:
+      description: 'NetworkConnectRequest represents the data to be used to connect a container to a network.
+
+        '
+      type: object
+      x-go-name: ConnectRequest
+      required:
+      - Container
+      properties:
+        Container:
+          type: string
+          description: The ID or name of the container to connect to the network.
+          example: 3613f73ba0e4
+        EndpointConfig:
+          $ref: '#/components/schemas/EndpointSettings'
     NetworkInspect:
       description: The body of the "get network" http response message.
       x-go-name: Inspect
@@ -1085,3 +1066,22 @@ components:
 
             '
           $ref: '#/components/schemas/NetworkStatus'
+    NetworkDisconnectRequest:
+      description: 'NetworkDisconnectRequest represents the data to be used to disconnect a container from a network.
+
+        '
+      type: object
+      x-go-name: DisconnectRequest
+      required:
+      - Container
+      properties:
+        Container:
+          type: string
+          description: The ID or name of the container to disconnect from the network.
+          example: 3613f73ba0e4
+        Force:
+          type: boolean
+          description: Force the container to disconnect from the network.
+          default: false
+          x-omitempty: false
+          example: false

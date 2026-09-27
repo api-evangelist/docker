@@ -273,27 +273,6 @@ paths:
           '
 components:
   schemas:
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
-    IDResponse:
-      description: Response to an API call that returns just an Id
-      type: object
-      x-go-name: IDResponse
-      required:
-      - Id
-      properties:
-        Id:
-          description: The id of the newly created object.
-          type: string
     ObjectVersion:
       description: 'The version number of the object such as node, service, etc. This is needed
 
@@ -336,6 +315,16 @@ components:
           format: dateTime
         Spec:
           $ref: '#/components/schemas/ConfigSpec'
+    IDResponse:
+      description: Response to an API call that returns just an Id
+      type: object
+      x-go-name: IDResponse
+      required:
+      - Id
+      properties:
+        Id:
+          description: The id of the newly created object.
+          type: string
     Driver:
       description: Driver represents a driver (network, logging, secrets).
       type: object
@@ -354,6 +343,17 @@ components:
           example:
             OptionA: value for driver-specific option A
             OptionB: value for driver-specific option B
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
     ConfigSpec:
       type: object
       properties:

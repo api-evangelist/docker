@@ -258,17 +258,175 @@ paths:
       - Volume
 components:
   schemas:
-    ErrorResponse:
-      description: Represents an error.
+    ObjectVersion:
+      description: 'The version number of the object such as node, service, etc. This is needed
+
+        to avoid conflicting writes. The client must send the version number along
+
+        with the modified specification when updating these objects.
+
+
+        This approach ensures safe concurrency and determinism in that the change
+
+        on the object may not be applied if the version number has changed from the
+
+        last read. In other words, if two update requests specify the same base
+
+        version, only one of the requests can succeed. As a result, two separate
+
+        update requests that happen at the same time will not unintentionally
+
+        overwrite each other.
+
+        '
       type: object
-      required:
-      - message
       properties:
-        message:
-          description: The error message.
+        Index:
+          type: integer
+          format: uint64
+          example: 373531
+    Topology:
+      description: 'A map of topological domains to topological segments. For in depth
+
+        details, see documentation for the Topology object in the CSI
+
+        specification.
+
+        '
+      type: object
+      additionalProperties:
+        type: string
+    ClusterVolume:
+      type: object
+      description: 'Options and information specific to, and only present on, Swarm CSI
+
+        cluster volumes.
+
+        '
+      properties:
+        ID:
           type: string
-      example:
-        message: Something went wrong.
+          description: 'The Swarm ID of this volume. Because cluster volumes are Swarm
+
+            objects, they have an ID, unlike non-cluster volumes. This ID can
+
+            be used to refer to the Volume instead of the name.
+
+            '
+        Version:
+          $ref: '#/components/schemas/ObjectVersion'
+        CreatedAt:
+          type: string
+          format: dateTime
+        UpdatedAt:
+          type: string
+          format: dateTime
+        Spec:
+          $ref: '#/components/schemas/ClusterVolumeSpec'
+        Info:
+          type: object
+          description: 'Information about the global status of the volume.
+
+            '
+          properties:
+            CapacityBytes:
+              type: integer
+              format: int64
+              description: 'The capacity of the volume in bytes. A value of 0 indicates that
+
+                the capacity is unknown.
+
+                '
+            VolumeContext:
+              type: object
+              description: 'A map of strings to strings returned from the storage plugin when
+
+                the volume is created.
+
+                '
+              additionalProperties:
+                type: string
+            VolumeID:
+              type: string
+              description: 'The ID of the volume as returned by the CSI storage plugin. This
+
+                is distinct from the volume''s ID as provided by Docker. This ID
+
+                is never used by the user when communicating with Docker to refer
+
+                to this volume. If the ID is blank, then the Volume has not been
+
+                successfully created in the plugin yet.
+
+                '
+            AccessibleTopology:
+              type: array
+              description: 'The topology this volume is actually accessible from.
+
+                '
+              items:
+                $ref: '#/components/schemas/Topology'
+        PublishStatus:
+          type: array
+          description: 'The status of the volume as it pertains to its publishing and use on
+
+            specific nodes
+
+            '
+          items:
+            type: object
+            properties:
+              NodeID:
+                type: string
+                description: 'The ID of the Swarm node the volume is published on.
+
+                  '
+              State:
+                type: string
+                description: 'The published state of the volume.
+
+                  * `pending-publish` The volume should be published to this node, but the call to the controller plugin to do so has not yet been successfully completed.
+
+                  * `published` The volume is published successfully to the node.
+
+                  * `pending-node-unpublish` The volume should be unpublished from the node, and the manager is awaiting confirmation from the worker that it has done so.
+
+                  * `pending-controller-unpublish` The volume is successfully unpublished from the node, but has not yet been successfully unpublished on the controller.
+
+                  '
+                enum:
+                - pending-publish
+                - published
+                - pending-node-unpublish
+                - pending-controller-unpublish
+              PublishContext:
+                type: object
+                description: 'A map of strings to strings returned by the CSI controller
+
+                  plugin when a volume is published.
+
+                  '
+                additionalProperties:
+                  type: string
+    VolumeListResponse:
+      type: object
+      title: VolumeListResponse
+      x-go-name: ListResponse
+      description: Volume list response
+      properties:
+        Volumes:
+          type: array
+          description: List of volumes
+          items:
+            $ref: '#/components/schemas/Volume'
+        Warnings:
+          type: array
+          description: 'Warnings that occurred when fetching the list of volumes.
+
+            '
+          items:
+            type: string
+          example: []
     ClusterVolumeSpec:
       type: object
       description: 'Cluster-specific options used to create the volume.
@@ -434,6 +592,57 @@ components:
               - active
               - pause
               - drain
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
+    VolumeCreateRequest:
+      description: Volume configuration
+      type: object
+      title: VolumeConfig
+      x-go-name: CreateRequest
+      properties:
+        Name:
+          description: 'The new volume''s name. If not specified, Docker generates a name.
+
+            '
+          type: string
+          example: tardis
+        Driver:
+          description: Name of the volume driver to use.
+          type: string
+          default: local
+          example: custom
+        DriverOpts:
+          description: 'A mapping of driver options and values. These options are
+
+            passed directly to the driver and are driver specific.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            device: tmpfs
+            o: size=100m,uid=1000
+            type: tmpfs
+        Labels:
+          description: User-defined key/value metadata.
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            com.example.some-label: some-value
+            com.example.some-other-label: some-other-value
+        ClusterVolumeSpec:
+          $ref: '#/components/schemas/ClusterVolumeSpec'
     Volume:
       type: object
       required:
@@ -548,212 +757,3 @@ components:
                 is set to `-1` if the reference-count is not available.
 
                 '
-    ObjectVersion:
-      description: 'The version number of the object such as node, service, etc. This is needed
-
-        to avoid conflicting writes. The client must send the version number along
-
-        with the modified specification when updating these objects.
-
-
-        This approach ensures safe concurrency and determinism in that the change
-
-        on the object may not be applied if the version number has changed from the
-
-        last read. In other words, if two update requests specify the same base
-
-        version, only one of the requests can succeed. As a result, two separate
-
-        update requests that happen at the same time will not unintentionally
-
-        overwrite each other.
-
-        '
-      type: object
-      properties:
-        Index:
-          type: integer
-          format: uint64
-          example: 373531
-    Topology:
-      description: 'A map of topological domains to topological segments. For in depth
-
-        details, see documentation for the Topology object in the CSI
-
-        specification.
-
-        '
-      type: object
-      additionalProperties:
-        type: string
-    VolumeListResponse:
-      type: object
-      title: VolumeListResponse
-      x-go-name: ListResponse
-      description: Volume list response
-      properties:
-        Volumes:
-          type: array
-          description: List of volumes
-          items:
-            $ref: '#/components/schemas/Volume'
-        Warnings:
-          type: array
-          description: 'Warnings that occurred when fetching the list of volumes.
-
-            '
-          items:
-            type: string
-          example: []
-    ClusterVolume:
-      type: object
-      description: 'Options and information specific to, and only present on, Swarm CSI
-
-        cluster volumes.
-
-        '
-      properties:
-        ID:
-          type: string
-          description: 'The Swarm ID of this volume. Because cluster volumes are Swarm
-
-            objects, they have an ID, unlike non-cluster volumes. This ID can
-
-            be used to refer to the Volume instead of the name.
-
-            '
-        Version:
-          $ref: '#/components/schemas/ObjectVersion'
-        CreatedAt:
-          type: string
-          format: dateTime
-        UpdatedAt:
-          type: string
-          format: dateTime
-        Spec:
-          $ref: '#/components/schemas/ClusterVolumeSpec'
-        Info:
-          type: object
-          description: 'Information about the global status of the volume.
-
-            '
-          properties:
-            CapacityBytes:
-              type: integer
-              format: int64
-              description: 'The capacity of the volume in bytes. A value of 0 indicates that
-
-                the capacity is unknown.
-
-                '
-            VolumeContext:
-              type: object
-              description: 'A map of strings to strings returned from the storage plugin when
-
-                the volume is created.
-
-                '
-              additionalProperties:
-                type: string
-            VolumeID:
-              type: string
-              description: 'The ID of the volume as returned by the CSI storage plugin. This
-
-                is distinct from the volume''s ID as provided by Docker. This ID
-
-                is never used by the user when communicating with Docker to refer
-
-                to this volume. If the ID is blank, then the Volume has not been
-
-                successfully created in the plugin yet.
-
-                '
-            AccessibleTopology:
-              type: array
-              description: 'The topology this volume is actually accessible from.
-
-                '
-              items:
-                $ref: '#/components/schemas/Topology'
-        PublishStatus:
-          type: array
-          description: 'The status of the volume as it pertains to its publishing and use on
-
-            specific nodes
-
-            '
-          items:
-            type: object
-            properties:
-              NodeID:
-                type: string
-                description: 'The ID of the Swarm node the volume is published on.
-
-                  '
-              State:
-                type: string
-                description: 'The published state of the volume.
-
-                  * `pending-publish` The volume should be published to this node, but the call to the controller plugin to do so has not yet been successfully completed.
-
-                  * `published` The volume is published successfully to the node.
-
-                  * `pending-node-unpublish` The volume should be unpublished from the node, and the manager is awaiting confirmation from the worker that it has done so.
-
-                  * `pending-controller-unpublish` The volume is successfully unpublished from the node, but has not yet been successfully unpublished on the controller.
-
-                  '
-                enum:
-                - pending-publish
-                - published
-                - pending-node-unpublish
-                - pending-controller-unpublish
-              PublishContext:
-                type: object
-                description: 'A map of strings to strings returned by the CSI controller
-
-                  plugin when a volume is published.
-
-                  '
-                additionalProperties:
-                  type: string
-    VolumeCreateRequest:
-      description: Volume configuration
-      type: object
-      title: VolumeConfig
-      x-go-name: CreateRequest
-      properties:
-        Name:
-          description: 'The new volume''s name. If not specified, Docker generates a name.
-
-            '
-          type: string
-          example: tardis
-        Driver:
-          description: Name of the volume driver to use.
-          type: string
-          default: local
-          example: custom
-        DriverOpts:
-          description: 'A mapping of driver options and values. These options are
-
-            passed directly to the driver and are driver specific.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            device: tmpfs
-            o: size=100m,uid=1000
-            type: tmpfs
-        Labels:
-          description: User-defined key/value metadata.
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            com.example.some-label: some-value
-            com.example.some-other-label: some-other-value
-        ClusterVolumeSpec:
-          $ref: '#/components/schemas/ClusterVolumeSpec'

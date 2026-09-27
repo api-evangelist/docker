@@ -352,6 +352,21 @@ paths:
       - Exec
 components:
   schemas:
+    ProcessConfig:
+      type: object
+      properties:
+        privileged:
+          type: boolean
+        user:
+          type: string
+        tty:
+          type: boolean
+        entrypoint:
+          type: string
+        arguments:
+          type: array
+          items:
+            type: string
     ErrorResponse:
       description: Represents an error.
       type: object
@@ -373,18 +388,3 @@ components:
         Id:
           description: The id of the newly created object.
           type: string
-    ProcessConfig:
-      type: object
-      properties:
-        privileged:
-          type: boolean
-        user:
-          type: string
-        tty:
-          type: boolean
-        entrypoint:
-          type: string
-        arguments:
-          type: array
-          items:
-            type: string

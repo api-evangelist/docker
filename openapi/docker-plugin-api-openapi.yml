@@ -625,75 +625,6 @@ paths:
               - DEBUG=1
 components:
   schemas:
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
-    PluginDevice:
-      type: object
-      x-go-name: Device
-      required:
-      - Name
-      - Description
-      - Settable
-      - Path
-      properties:
-        Name:
-          type: string
-        Description:
-          type: string
-        Settable:
-          type: array
-          items:
-            type: string
-        Path:
-          type: string
-          example: /dev/fuse
-    PluginMount:
-      type: object
-      x-go-name: Mount
-      required:
-      - Name
-      - Description
-      - Settable
-      - Source
-      - Destination
-      - Type
-      - Options
-      properties:
-        Name:
-          type: string
-          example: some-mount
-        Description:
-          type: string
-          example: This is a mount that's used by the plugin.
-        Settable:
-          type: array
-          items:
-            type: string
-        Source:
-          type: string
-          example: /var/lib/docker/plugins/
-        Destination:
-          type: string
-          example: /mnt/state
-        Type:
-          type: string
-          example: bind
-        Options:
-          type: array
-          items:
-            type: string
-          example:
-          - rbind
-          - rw
     PluginPrivilege:
       description: 'Describes a permission the user has to accept upon installing
 
@@ -714,6 +645,26 @@ components:
             type: string
           example:
           - host
+    PluginDevice:
+      type: object
+      x-go-name: Device
+      required:
+      - Name
+      - Description
+      - Settable
+      - Path
+      properties:
+        Name:
+          type: string
+        Description:
+          type: string
+        Settable:
+          type: array
+          items:
+            type: string
+        Path:
+          type: string
+          example: /dev/fuse
     Plugin:
       description: A plugin for the Engine API
       type: object
@@ -930,6 +881,17 @@ components:
                   example:
                   - sha256:675532206fbf3030b8458f88d6e26d4eb1577688a25efec97154c94e8b6b4887
                   - sha256:e216a057b1cb1efc11f8a268f37ef62083e70b1b38323ba252e25ac88904a7e8
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
     PluginEnv:
       type: object
       x-go-name: Env
@@ -949,3 +911,41 @@ components:
             type: string
         Value:
           type: string
+    PluginMount:
+      type: object
+      x-go-name: Mount
+      required:
+      - Name
+      - Description
+      - Settable
+      - Source
+      - Destination
+      - Type
+      - Options
+      properties:
+        Name:
+          type: string
+          example: some-mount
+        Description:
+          type: string
+          example: This is a mount that's used by the plugin.
+        Settable:
+          type: array
+          items:
+            type: string
+        Source:
+          type: string
+          example: /var/lib/docker/plugins/
+        Destination:
+          type: string
+          example: /mnt/state
+        Type:
+          type: string
+          example: bind
+        Options:
+          type: array
+          items:
+            type: string
+          example:
+          - rbind
+          - rw
