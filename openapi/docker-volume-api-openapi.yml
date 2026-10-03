@@ -258,44 +258,46 @@ paths:
       - Volume
 components:
   schemas:
-    ObjectVersion:
-      description: 'The version number of the object such as node, service, etc. This is needed
-
-        to avoid conflicting writes. The client must send the version number along
-
-        with the modified specification when updating these objects.
-
-
-        This approach ensures safe concurrency and determinism in that the change
-
-        on the object may not be applied if the version number has changed from the
-
-        last read. In other words, if two update requests specify the same base
-
-        version, only one of the requests can succeed. As a result, two separate
-
-        update requests that happen at the same time will not unintentionally
-
-        overwrite each other.
-
-        '
+    VolumeCreateRequest:
+      description: Volume configuration
       type: object
+      title: VolumeConfig
+      x-go-name: CreateRequest
       properties:
-        Index:
-          type: integer
-          format: uint64
-          example: 373531
-    Topology:
-      description: 'A map of topological domains to topological segments. For in depth
+        Name:
+          description: 'The new volume''s name. If not specified, Docker generates a name.
 
-        details, see documentation for the Topology object in the CSI
+            '
+          type: string
+          example: tardis
+        Driver:
+          description: Name of the volume driver to use.
+          type: string
+          default: local
+          example: custom
+        DriverOpts:
+          description: 'A mapping of driver options and values. These options are
 
-        specification.
+            passed directly to the driver and are driver specific.
 
-        '
-      type: object
-      additionalProperties:
-        type: string
+            '
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            device: tmpfs
+            o: size=100m,uid=1000
+            type: tmpfs
+        Labels:
+          description: User-defined key/value metadata.
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            com.example.some-label: some-value
+            com.example.some-other-label: some-other-value
+        ClusterVolumeSpec:
+          $ref: '#/components/schemas/ClusterVolumeSpec'
     ClusterVolume:
       type: object
       description: 'Options and information specific to, and only present on, Swarm CSI
@@ -408,25 +410,158 @@ components:
                   '
                 additionalProperties:
                   type: string
-    VolumeListResponse:
+    ErrorResponse:
+      description: Represents an error.
       type: object
-      title: VolumeListResponse
-      x-go-name: ListResponse
-      description: Volume list response
+      required:
+      - message
       properties:
-        Volumes:
-          type: array
-          description: List of volumes
-          items:
-            $ref: '#/components/schemas/Volume'
-        Warnings:
-          type: array
-          description: 'Warnings that occurred when fetching the list of volumes.
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
+    Volume:
+      type: object
+      required:
+      - Name
+      - Driver
+      - Mountpoint
+      - Labels
+      - Scope
+      - Options
+      properties:
+        Name:
+          type: string
+          description: Name of the volume.
+          example: tardis
+        Driver:
+          type: string
+          description: Name of the volume driver used by the volume.
+          example: custom
+        Mountpoint:
+          type: string
+          description: Mount path of the volume on the host.
+          example: /var/lib/docker/volumes/tardis
+        CreatedAt:
+          type: string
+          format: dateTime
+          description: Date/Time the volume was created.
+          example: '2016-06-07T20:31:11.853781916Z'
+        Status:
+          type: object
+          description: 'Low-level details about the volume, provided by the volume driver.
+
+            Details are returned as a map with key/value pairs:
+
+            `{"key":"value","key2":"value2"}`.
+
+
+            The `Status` field is optional, and is omitted if the volume driver
+
+            does not support this feature.
 
             '
-          items:
+          additionalProperties:
+            type: object
+          example:
+            hello: world
+        Labels:
+          type: object
+          description: User-defined key/value metadata.
+          additionalProperties:
             type: string
-          example: []
+          example:
+            com.example.some-label: some-value
+            com.example.some-other-label: some-other-value
+        Scope:
+          type: string
+          description: 'The level at which the volume exists. Either `global` for cluster-wide,
+
+            or `local` for machine level.
+
+            '
+          default: local
+          enum:
+          - local
+          - global
+          example: local
+        ClusterVolume:
+          $ref: '#/components/schemas/ClusterVolume'
+        Options:
+          type: object
+          description: 'The driver specific options used when creating the volume.
+
+            '
+          additionalProperties:
+            type: string
+          example:
+            device: tmpfs
+            o: size=100m,uid=1000
+            type: tmpfs
+        UsageData:
+          type:
+          - object
+          - 'null'
+          x-go-name: UsageData
+          required:
+          - Size
+          - RefCount
+          description: 'Usage details about the volume. This information is used by the
+
+            `GET /system/df` endpoint, and omitted in other endpoints.
+
+            '
+          properties:
+            Size:
+              type: integer
+              format: int64
+              default: -1
+              description: 'Amount of disk space used by the volume (in bytes). This information
+
+                is only available for volumes created with the `"local"` volume
+
+                driver. For volumes created with other volume drivers, this field
+
+                is set to `-1` ("not available")
+
+                '
+            RefCount:
+              type: integer
+              format: int64
+              default: -1
+              description: 'The number of containers referencing this volume. This field
+
+                is set to `-1` if the reference-count is not available.
+
+                '
+    ObjectVersion:
+      description: 'The version number of the object such as node, service, etc. This is needed
+
+        to avoid conflicting writes. The client must send the version number along
+
+        with the modified specification when updating these objects.
+
+
+        This approach ensures safe concurrency and determinism in that the change
+
+        on the object may not be applied if the version number has changed from the
+
+        last read. In other words, if two update requests specify the same base
+
+        version, only one of the requests can succeed. As a result, two separate
+
+        update requests that happen at the same time will not unintentionally
+
+        overwrite each other.
+
+        '
+      type: object
+      properties:
+        Index:
+          type: integer
+          format: uint64
+          example: 373531
     ClusterVolumeSpec:
       type: object
       description: 'Cluster-specific options used to create the volume.
@@ -592,168 +727,33 @@ components:
               - active
               - pause
               - drain
-    ErrorResponse:
-      description: Represents an error.
+    VolumeListResponse:
       type: object
-      required:
-      - message
+      title: VolumeListResponse
+      x-go-name: ListResponse
+      description: Volume list response
       properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
-    VolumeCreateRequest:
-      description: Volume configuration
+        Volumes:
+          type: array
+          description: List of volumes
+          items:
+            $ref: '#/components/schemas/Volume'
+        Warnings:
+          type: array
+          description: 'Warnings that occurred when fetching the list of volumes.
+
+            '
+          items:
+            type: string
+          example: []
+    Topology:
+      description: 'A map of topological domains to topological segments. For in depth
+
+        details, see documentation for the Topology object in the CSI
+
+        specification.
+
+        '
       type: object
-      title: VolumeConfig
-      x-go-name: CreateRequest
-      properties:
-        Name:
-          description: 'The new volume''s name. If not specified, Docker generates a name.
-
-            '
-          type: string
-          example: tardis
-        Driver:
-          description: Name of the volume driver to use.
-          type: string
-          default: local
-          example: custom
-        DriverOpts:
-          description: 'A mapping of driver options and values. These options are
-
-            passed directly to the driver and are driver specific.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            device: tmpfs
-            o: size=100m,uid=1000
-            type: tmpfs
-        Labels:
-          description: User-defined key/value metadata.
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            com.example.some-label: some-value
-            com.example.some-other-label: some-other-value
-        ClusterVolumeSpec:
-          $ref: '#/components/schemas/ClusterVolumeSpec'
-    Volume:
-      type: object
-      required:
-      - Name
-      - Driver
-      - Mountpoint
-      - Labels
-      - Scope
-      - Options
-      properties:
-        Name:
-          type: string
-          description: Name of the volume.
-          example: tardis
-        Driver:
-          type: string
-          description: Name of the volume driver used by the volume.
-          example: custom
-        Mountpoint:
-          type: string
-          description: Mount path of the volume on the host.
-          example: /var/lib/docker/volumes/tardis
-        CreatedAt:
-          type: string
-          format: dateTime
-          description: Date/Time the volume was created.
-          example: '2016-06-07T20:31:11.853781916Z'
-        Status:
-          type: object
-          description: 'Low-level details about the volume, provided by the volume driver.
-
-            Details are returned as a map with key/value pairs:
-
-            `{"key":"value","key2":"value2"}`.
-
-
-            The `Status` field is optional, and is omitted if the volume driver
-
-            does not support this feature.
-
-            '
-          additionalProperties:
-            type: object
-          example:
-            hello: world
-        Labels:
-          type: object
-          description: User-defined key/value metadata.
-          additionalProperties:
-            type: string
-          example:
-            com.example.some-label: some-value
-            com.example.some-other-label: some-other-value
-        Scope:
-          type: string
-          description: 'The level at which the volume exists. Either `global` for cluster-wide,
-
-            or `local` for machine level.
-
-            '
-          default: local
-          enum:
-          - local
-          - global
-          example: local
-        ClusterVolume:
-          $ref: '#/components/schemas/ClusterVolume'
-        Options:
-          type: object
-          description: 'The driver specific options used when creating the volume.
-
-            '
-          additionalProperties:
-            type: string
-          example:
-            device: tmpfs
-            o: size=100m,uid=1000
-            type: tmpfs
-        UsageData:
-          type:
-          - object
-          - 'null'
-          x-go-name: UsageData
-          required:
-          - Size
-          - RefCount
-          description: 'Usage details about the volume. This information is used by the
-
-            `GET /system/df` endpoint, and omitted in other endpoints.
-
-            '
-          properties:
-            Size:
-              type: integer
-              format: int64
-              default: -1
-              description: 'Amount of disk space used by the volume (in bytes). This information
-
-                is only available for volumes created with the `"local"` volume
-
-                driver. For volumes created with other volume drivers, this field
-
-                is set to `-1` ("not available")
-
-                '
-            RefCount:
-              type: integer
-              format: int64
-              default: -1
-              description: 'The number of containers referencing this volume. This field
-
-                is set to `-1` if the reference-count is not available.
-
-                '
+      additionalProperties:
+        type: string

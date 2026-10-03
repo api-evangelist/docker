@@ -625,26 +625,6 @@ paths:
               - DEBUG=1
 components:
   schemas:
-    PluginPrivilege:
-      description: 'Describes a permission the user has to accept upon installing
-
-        the plugin.
-
-        '
-      type: object
-      x-go-name: Privilege
-      properties:
-        Name:
-          type: string
-          example: network
-        Description:
-          type: string
-        Value:
-          type: array
-          items:
-            type: string
-          example:
-          - host
     PluginDevice:
       type: object
       x-go-name: Device
@@ -665,6 +645,26 @@ components:
         Path:
           type: string
           example: /dev/fuse
+    PluginPrivilege:
+      description: 'Describes a permission the user has to accept upon installing
+
+        the plugin.
+
+        '
+      type: object
+      x-go-name: Privilege
+      properties:
+        Name:
+          type: string
+          example: network
+        Description:
+          type: string
+        Value:
+          type: array
+          items:
+            type: string
+          example:
+          - host
     Plugin:
       description: A plugin for the Engine API
       type: object
@@ -881,36 +881,6 @@ components:
                   example:
                   - sha256:675532206fbf3030b8458f88d6e26d4eb1577688a25efec97154c94e8b6b4887
                   - sha256:e216a057b1cb1efc11f8a268f37ef62083e70b1b38323ba252e25ac88904a7e8
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
-    PluginEnv:
-      type: object
-      x-go-name: Env
-      required:
-      - Name
-      - Description
-      - Settable
-      - Value
-      properties:
-        Name:
-          type: string
-        Description:
-          type: string
-        Settable:
-          type: array
-          items:
-            type: string
-        Value:
-          type: string
     PluginMount:
       type: object
       x-go-name: Mount
@@ -949,3 +919,33 @@ components:
           example:
           - rbind
           - rw
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
+    PluginEnv:
+      type: object
+      x-go-name: Env
+      required:
+      - Name
+      - Description
+      - Settable
+      - Value
+      properties:
+        Name:
+          type: string
+        Description:
+          type: string
+        Settable:
+          type: array
+          items:
+            type: string
+        Value:
+          type: string

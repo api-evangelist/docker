@@ -562,33 +562,564 @@ paths:
       - Service
 components:
   schemas:
-    ObjectVersion:
-      description: 'The version number of the object such as node, service, etc. This is needed
+    EndpointSpec:
+      description: Properties that can be configured to access and load balance a service.
+      type: object
+      properties:
+        Mode:
+          description: 'The mode of resolution to use for internal load balancing between tasks.
 
-        to avoid conflicting writes. The client must send the version number along
+            '
+          type: string
+          enum:
+          - vip
+          - dnsrr
+          default: vip
+        Ports:
+          description: 'List of exposed ports that this service is accessible on from the
 
-        with the modified specification when updating these objects.
+            outside. Ports can only be provided if `vip` resolution mode is used.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/EndpointPortConfig'
+    EndpointPortConfig:
+      type: object
+      properties:
+        Name:
+          type: string
+        Protocol:
+          type: string
+          enum:
+          - tcp
+          - udp
+          - sctp
+        TargetPort:
+          description: The port inside the container.
+          type: integer
+        PublishedPort:
+          description: The port on the swarm hosts.
+          type: integer
+        PublishMode:
+          description: "The mode in which port is published.\n\n<p><br /></p>\n\n- \"ingress\" makes the target port accessible on every node,\n  regardless of whether there is a task for the service running on\n  that node or not.\n- \"host\" bypasses the routing mesh and publish the port directly on\n  the swarm node where that service is running.\n"
+          type: string
+          enum:
+          - ingress
+          - host
+          default: ingress
+          example: ingress
+    Mount:
+      type: object
+      properties:
+        Target:
+          description: Container path.
+          type: string
+        Source:
+          description: 'Mount source (e.g. a volume name, a host path). The source cannot be
+
+            specified when using `Type=tmpfs`. For `Type=bind`, the source path
+
+            must either exist, or the `CreateMountpoint` must be set to `true` to
+
+            create the source path on the host if missing.
 
 
-        This approach ensures safe concurrency and determinism in that the change
+            For `Type=npipe`, the pipe must exist prior to creating the container.'
+          type: string
+        Type:
+          description: 'The mount type. Available types:
 
-        on the object may not be applied if the version number has changed from the
 
-        last read. In other words, if two update requests specify the same base
+            - `bind` Mounts a file or directory from the host into the container. The `Source` must exist prior to creating the container.
 
-        version, only one of the requests can succeed. As a result, two separate
+            - `cluster` a Swarm cluster volume
 
-        update requests that happen at the same time will not unintentionally
+            - `image` Mounts an image.
 
-        overwrite each other.
+            - `npipe` Mounts a named pipe from the host into the container. The `Source` must exist prior to creating the container.
+
+            - `tmpfs` Create a tmpfs with the given options. The mount `Source` cannot be specified for tmpfs.
+
+            - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed.
+
+            '
+          allOf:
+          - $ref: '#/components/schemas/MountType'
+        ReadOnly:
+          description: Whether the mount should be read-only.
+          type: boolean
+        Consistency:
+          description: 'The consistency requirement for the mount: `default`, `consistent`, `cached`, or `delegated`.'
+          type: string
+        BindOptions:
+          description: Optional configuration for the `bind` type.
+          type: object
+          properties:
+            Propagation:
+              description: A propagation mode with the value `[r]private`, `[r]shared`, or `[r]slave`.
+              type: string
+              enum:
+              - private
+              - rprivate
+              - shared
+              - rshared
+              - slave
+              - rslave
+            NonRecursive:
+              description: Disable recursive bind mount.
+              type: boolean
+              default: false
+            CreateMountpoint:
+              description: Create mount point on host if missing
+              type: boolean
+              default: false
+            ReadOnlyNonRecursive:
+              description: 'Make the mount non-recursively read-only, but still leave the mount recursive
+
+                (unless NonRecursive is set to `true` in conjunction).
+
+
+                Added in v1.44, before that version all read-only mounts were
+
+                non-recursive by default. To match the previous behaviour this
+
+                will default to `true` for clients on versions prior to v1.44.
+
+                '
+              type: boolean
+              default: false
+            ReadOnlyForceRecursive:
+              description: Raise an error if the mount cannot be made recursively read-only.
+              type: boolean
+              default: false
+        VolumeOptions:
+          description: Optional configuration for the `volume` type.
+          type: object
+          properties:
+            NoCopy:
+              description: Populate volume with data from the target.
+              type: boolean
+              default: false
+            Labels:
+              description: User-defined key/value metadata.
+              type: object
+              additionalProperties:
+                type: string
+            DriverConfig:
+              description: Map of driver specific options
+              type: object
+              properties:
+                Name:
+                  description: Name of the driver to use to create the volume.
+                  type: string
+                Options:
+                  description: key/value map of driver specific options.
+                  type: object
+                  additionalProperties:
+                    type: string
+            Subpath:
+              description: Source path inside the volume. Must be relative without any back traversals.
+              type: string
+              example: dir-inside-volume/subdirectory
+        ImageOptions:
+          description: Optional configuration for the `image` type.
+          type: object
+          properties:
+            Subpath:
+              description: Source path inside the image. Must be relative without any back traversals.
+              type: string
+              example: dir-inside-image/subdirectory
+        TmpfsOptions:
+          description: Optional configuration for the `tmpfs` type.
+          type: object
+          properties:
+            SizeBytes:
+              description: The size for the tmpfs mount in bytes.
+              type: integer
+              format: int64
+            Mode:
+              description: 'The permission mode for the tmpfs mount in an integer.
+
+                The value must not be in octal format (e.g. 755) but rather
+
+                the decimal representation of the octal value (e.g. 493).
+
+                '
+              type: integer
+            Options:
+              description: 'The options to be passed to the tmpfs mount. An array of arrays.
+
+                Flag options should be provided as 1-length arrays. Other types
+
+                should be provided as as 2-length arrays, where the first item is
+
+                the key and the second the value.
+
+                '
+              type: array
+              items:
+                type: array
+                minItems: 1
+                maxItems: 2
+                items:
+                  type: string
+              example:
+              - - noexec
+    PluginPrivilege:
+      description: 'Describes a permission the user has to accept upon installing
+
+        the plugin.
+
+        '
+      type: object
+      x-go-name: Privilege
+      properties:
+        Name:
+          type: string
+          example: network
+        Description:
+          type: string
+        Value:
+          type: array
+          items:
+            type: string
+          example:
+          - host
+    MountType:
+      description: 'The mount type. Available types:
+
+
+        - `bind` a mount of a file or directory from the host into the container.
+
+        - `cluster` a Swarm cluster volume.
+
+        - `image` an OCI image.
+
+        - `npipe` a named pipe from the host into the container.
+
+        - `tmpfs` a `tmpfs`.
+
+        - `volume` a docker volume with the given `Name`.'
+      type: string
+      enum:
+      - bind
+      - cluster
+      - image
+      - npipe
+      - tmpfs
+      - volume
+      example: volume
+    Limit:
+      description: 'An object describing a limit on resources which can be requested by a task.
 
         '
       type: object
       properties:
-        Index:
+        NanoCPUs:
           type: integer
-          format: uint64
-          example: 373531
+          format: int64
+          example: 4000000000
+        MemoryBytes:
+          type: integer
+          format: int64
+          example: 8272408576
+        Pids:
+          description: 'Limits the maximum number of PIDs in the container. Set `0` for unlimited.
+
+            '
+          type: integer
+          format: int64
+          default: 0
+          example: 100
+    Service:
+      type: object
+      properties:
+        ID:
+          type: string
+        Version:
+          $ref: '#/components/schemas/ObjectVersion'
+        CreatedAt:
+          type: string
+          format: dateTime
+        UpdatedAt:
+          type: string
+          format: dateTime
+        Spec:
+          $ref: '#/components/schemas/ServiceSpec'
+        Endpoint:
+          type: object
+          properties:
+            Spec:
+              $ref: '#/components/schemas/EndpointSpec'
+            Ports:
+              type: array
+              items:
+                $ref: '#/components/schemas/EndpointPortConfig'
+            VirtualIPs:
+              type: array
+              items:
+                type: object
+                properties:
+                  NetworkID:
+                    type: string
+                  Addr:
+                    type: string
+        UpdateStatus:
+          description: The status of a service update.
+          type: object
+          properties:
+            State:
+              type: string
+              enum:
+              - updating
+              - paused
+              - completed
+            StartedAt:
+              type: string
+              format: dateTime
+            CompletedAt:
+              type: string
+              format: dateTime
+            Message:
+              type: string
+        ServiceStatus:
+          description: 'The status of the service''s tasks. Provided only when requested as
+
+            part of a ServiceList operation.
+
+            '
+          type: object
+          properties:
+            RunningTasks:
+              description: 'The number of tasks for the service currently in the Running state.
+
+                '
+              type: integer
+              format: uint64
+              example: 7
+            DesiredTasks:
+              description: 'The number of tasks for the service desired to be running.
+
+                For replicated services, this is the replica count from the
+
+                service spec. For global services, this is computed by taking
+
+                count of all tasks for the service with a Desired State other
+
+                than Shutdown.
+
+                '
+              type: integer
+              format: uint64
+              example: 10
+            CompletedTasks:
+              description: 'The number of tasks for a job that are in the Completed state.
+
+                This field must be cross-referenced with the service type, as the
+
+                value of 0 may mean the service is not in a job mode, or it may
+
+                mean the job-mode service has no tasks yet Completed.
+
+                '
+              type: integer
+              format: uint64
+        JobStatus:
+          description: 'The status of the service when it is in one of ReplicatedJob or
+
+            GlobalJob modes. Absent on Replicated and Global mode services. The
+
+            JobIteration is an ObjectVersion, but unlike the Service''s version,
+
+            does not need to be sent with an update request.
+
+            '
+          type: object
+          properties:
+            JobIteration:
+              description: 'JobIteration is a value increased each time a Job is executed,
+
+                successfully or otherwise. "Executed", in this case, means the
+
+                job as a whole has been started, not that an individual Task has
+
+                been launched. A job is "Executed" when its ServiceSpec is
+
+                updated. JobIteration can be used to disambiguate Tasks belonging
+
+                to different executions of a job.  Though JobIteration will
+
+                increase with each subsequent execution, it may not necessarily
+
+                increase by 1, and so JobIteration should not be used to
+
+                '
+              $ref: '#/components/schemas/ObjectVersion'
+            LastExecution:
+              description: 'The last time, as observed by the server, that this job was
+
+                started.
+
+                '
+              type: string
+              format: dateTime
+      example:
+        ID: 9mnpnzenvg8p8tdbtq4wvbkcz
+        Version:
+          Index: 19
+        CreatedAt: '2016-06-07T21:05:51.880065305Z'
+        UpdatedAt: '2016-06-07T21:07:29.962229872Z'
+        Spec:
+          Name: hopeful_cori
+          TaskTemplate:
+            ContainerSpec:
+              Image: redis
+            Resources:
+              Limits: {}
+              Reservations: {}
+            RestartPolicy:
+              Condition: any
+              MaxAttempts: 0
+            Placement: {}
+            ForceUpdate: 0
+          Mode:
+            Replicated:
+              Replicas: 1
+          UpdateConfig:
+            Parallelism: 1
+            Delay: 1000000000
+            FailureAction: pause
+            Monitor: 15000000000
+            MaxFailureRatio: 0.15
+          RollbackConfig:
+            Parallelism: 1
+            Delay: 1000000000
+            FailureAction: pause
+            Monitor: 15000000000
+            MaxFailureRatio: 0.15
+          EndpointSpec:
+            Mode: vip
+            Ports:
+            - Protocol: tcp
+              TargetPort: 6379
+              PublishedPort: 30001
+        Endpoint:
+          Spec:
+            Mode: vip
+            Ports:
+            - Protocol: tcp
+              TargetPort: 6379
+              PublishedPort: 30001
+          Ports:
+          - Protocol: tcp
+            TargetPort: 6379
+            PublishedPort: 30001
+          VirtualIPs:
+          - NetworkID: 4qvuz4ko70xaltuqbt8956gd1
+            Addr: 10.255.0.2/16
+          - NetworkID: 4qvuz4ko70xaltuqbt8956gd1
+            Addr: 10.255.0.3/16
+    GenericResources:
+      description: 'User-defined resources can be either Integer resources (e.g, `SSD=3`) or
+
+        String resources (e.g, `GPU=UUID1`).
+
+        '
+      type: array
+      items:
+        type: object
+        properties:
+          NamedResourceSpec:
+            type: object
+            properties:
+              Kind:
+                type: string
+              Value:
+                type: string
+          DiscreteResourceSpec:
+            type: object
+            properties:
+              Kind:
+                type: string
+              Value:
+                type: integer
+                format: int64
+      example:
+      - DiscreteResourceSpec:
+          Kind: SSD
+          Value: 3
+      - NamedResourceSpec:
+          Kind: GPU
+          Value: UUID1
+      - NamedResourceSpec:
+          Kind: GPU
+          Value: UUID2
+    NetworkAttachmentConfig:
+      description: 'Specifies how a service should be attached to a particular network.
+
+        '
+      type: object
+      properties:
+        Target:
+          description: 'The target network for attachment. Must be a network name or ID.
+
+            '
+          type: string
+        Aliases:
+          description: 'Discoverable alternate names for the service on this network.
+
+            '
+          type: array
+          items:
+            type: string
+        DriverOpts:
+          description: 'Driver attachment options for the network target.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+    ServiceUpdateResponse:
+      type: object
+      properties:
+        Warnings:
+          description: Optional warning messages
+          type: array
+          items:
+            type: string
+      example:
+        Warnings:
+        - 'unable to pin image doesnotexist:latest to digest: image library/doesnotexist:latest not found'
+    ResourceObject:
+      description: 'An object describing the resources which can be advertised by a node and
+
+        requested by a task.
+
+        '
+      type: object
+      properties:
+        NanoCPUs:
+          type: integer
+          format: int64
+          example: 4000000000
+        MemoryBytes:
+          type: integer
+          format: int64
+          example: 8272408576
+        GenericResources:
+          $ref: '#/components/schemas/GenericResources'
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
     ServiceSpec:
       description: User modifiable configuration for a service.
       type: object
@@ -772,26 +1303,79 @@ components:
             $ref: '#/components/schemas/NetworkAttachmentConfig'
         EndpointSpec:
           $ref: '#/components/schemas/EndpointSpec'
-    PluginPrivilege:
-      description: 'Describes a permission the user has to accept upon installing
+    ObjectVersion:
+      description: 'The version number of the object such as node, service, etc. This is needed
 
-        the plugin.
+        to avoid conflicting writes. The client must send the version number along
+
+        with the modified specification when updating these objects.
+
+
+        This approach ensures safe concurrency and determinism in that the change
+
+        on the object may not be applied if the version number has changed from the
+
+        last read. In other words, if two update requests specify the same base
+
+        version, only one of the requests can succeed. As a result, two separate
+
+        update requests that happen at the same time will not unintentionally
+
+        overwrite each other.
 
         '
       type: object
-      x-go-name: Privilege
       properties:
-        Name:
+        Index:
+          type: integer
+          format: uint64
+          example: 373531
+    ServiceCreateResponse:
+      type: object
+      description: 'contains the information returned to a client on the
+
+        creation of a new service.
+
+        '
+      properties:
+        ID:
+          description: The ID of the created service.
           type: string
-          example: network
-        Description:
-          type: string
-        Value:
-          type: array
+          example: ak7w3gjqoa3kuz8xcpnyy0pvl
+        Warnings:
+          description: 'Optional warning message.
+
+
+            FIXME(thaJeztah): this should have "omitempty" in the generated type.
+
+            '
+          type:
+          - array
+          - 'null'
           items:
             type: string
           example:
-          - host
+          - 'unable to pin image doesnotexist:latest to digest: image library/doesnotexist:latest not found'
+    Platform:
+      description: 'Platform represents the platform (Arch/OS).
+
+        '
+      type: object
+      properties:
+        Architecture:
+          description: 'Architecture represents the hardware architecture (for example,
+
+            `x86_64`).
+
+            '
+          type: string
+          example: x86_64
+        OS:
+          description: 'OS represents the Operating System (for example, `linux` or `windows`).
+
+            '
+          type: string
+          example: linux
     HealthConfig:
       description: 'A test to perform to check that the container is healthy.
 
@@ -875,287 +1459,6 @@ components:
             '
           type: integer
           format: int64
-    GenericResources:
-      description: 'User-defined resources can be either Integer resources (e.g, `SSD=3`) or
-
-        String resources (e.g, `GPU=UUID1`).
-
-        '
-      type: array
-      items:
-        type: object
-        properties:
-          NamedResourceSpec:
-            type: object
-            properties:
-              Kind:
-                type: string
-              Value:
-                type: string
-          DiscreteResourceSpec:
-            type: object
-            properties:
-              Kind:
-                type: string
-              Value:
-                type: integer
-                format: int64
-      example:
-      - DiscreteResourceSpec:
-          Kind: SSD
-          Value: 3
-      - NamedResourceSpec:
-          Kind: GPU
-          Value: UUID1
-      - NamedResourceSpec:
-          Kind: GPU
-          Value: UUID2
-    Mount:
-      type: object
-      properties:
-        Target:
-          description: Container path.
-          type: string
-        Source:
-          description: 'Mount source (e.g. a volume name, a host path). The source cannot be
-
-            specified when using `Type=tmpfs`. For `Type=bind`, the source path
-
-            must either exist, or the `CreateMountpoint` must be set to `true` to
-
-            create the source path on the host if missing.
-
-
-            For `Type=npipe`, the pipe must exist prior to creating the container.'
-          type: string
-        Type:
-          description: 'The mount type. Available types:
-
-
-            - `bind` Mounts a file or directory from the host into the container. The `Source` must exist prior to creating the container.
-
-            - `cluster` a Swarm cluster volume
-
-            - `image` Mounts an image.
-
-            - `npipe` Mounts a named pipe from the host into the container. The `Source` must exist prior to creating the container.
-
-            - `tmpfs` Create a tmpfs with the given options. The mount `Source` cannot be specified for tmpfs.
-
-            - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed.
-
-            '
-          allOf:
-          - $ref: '#/components/schemas/MountType'
-        ReadOnly:
-          description: Whether the mount should be read-only.
-          type: boolean
-        Consistency:
-          description: 'The consistency requirement for the mount: `default`, `consistent`, `cached`, or `delegated`.'
-          type: string
-        BindOptions:
-          description: Optional configuration for the `bind` type.
-          type: object
-          properties:
-            Propagation:
-              description: A propagation mode with the value `[r]private`, `[r]shared`, or `[r]slave`.
-              type: string
-              enum:
-              - private
-              - rprivate
-              - shared
-              - rshared
-              - slave
-              - rslave
-            NonRecursive:
-              description: Disable recursive bind mount.
-              type: boolean
-              default: false
-            CreateMountpoint:
-              description: Create mount point on host if missing
-              type: boolean
-              default: false
-            ReadOnlyNonRecursive:
-              description: 'Make the mount non-recursively read-only, but still leave the mount recursive
-
-                (unless NonRecursive is set to `true` in conjunction).
-
-
-                Added in v1.44, before that version all read-only mounts were
-
-                non-recursive by default. To match the previous behaviour this
-
-                will default to `true` for clients on versions prior to v1.44.
-
-                '
-              type: boolean
-              default: false
-            ReadOnlyForceRecursive:
-              description: Raise an error if the mount cannot be made recursively read-only.
-              type: boolean
-              default: false
-        VolumeOptions:
-          description: Optional configuration for the `volume` type.
-          type: object
-          properties:
-            NoCopy:
-              description: Populate volume with data from the target.
-              type: boolean
-              default: false
-            Labels:
-              description: User-defined key/value metadata.
-              type: object
-              additionalProperties:
-                type: string
-            DriverConfig:
-              description: Map of driver specific options
-              type: object
-              properties:
-                Name:
-                  description: Name of the driver to use to create the volume.
-                  type: string
-                Options:
-                  description: key/value map of driver specific options.
-                  type: object
-                  additionalProperties:
-                    type: string
-            Subpath:
-              description: Source path inside the volume. Must be relative without any back traversals.
-              type: string
-              example: dir-inside-volume/subdirectory
-        ImageOptions:
-          description: Optional configuration for the `image` type.
-          type: object
-          properties:
-            Subpath:
-              description: Source path inside the image. Must be relative without any back traversals.
-              type: string
-              example: dir-inside-image/subdirectory
-        TmpfsOptions:
-          description: Optional configuration for the `tmpfs` type.
-          type: object
-          properties:
-            SizeBytes:
-              description: The size for the tmpfs mount in bytes.
-              type: integer
-              format: int64
-            Mode:
-              description: 'The permission mode for the tmpfs mount in an integer.
-
-                The value must not be in octal format (e.g. 755) but rather
-
-                the decimal representation of the octal value (e.g. 493).
-
-                '
-              type: integer
-            Options:
-              description: 'The options to be passed to the tmpfs mount. An array of arrays.
-
-                Flag options should be provided as 1-length arrays. Other types
-
-                should be provided as as 2-length arrays, where the first item is
-
-                the key and the second the value.
-
-                '
-              type: array
-              items:
-                type: array
-                minItems: 1
-                maxItems: 2
-                items:
-                  type: string
-              example:
-              - - noexec
-    Platform:
-      description: 'Platform represents the platform (Arch/OS).
-
-        '
-      type: object
-      properties:
-        Architecture:
-          description: 'Architecture represents the hardware architecture (for example,
-
-            `x86_64`).
-
-            '
-          type: string
-          example: x86_64
-        OS:
-          description: 'OS represents the Operating System (for example, `linux` or `windows`).
-
-            '
-          type: string
-          example: linux
-    ServiceCreateResponse:
-      type: object
-      description: 'contains the information returned to a client on the
-
-        creation of a new service.
-
-        '
-      properties:
-        ID:
-          description: The ID of the created service.
-          type: string
-          example: ak7w3gjqoa3kuz8xcpnyy0pvl
-        Warnings:
-          description: 'Optional warning message.
-
-
-            FIXME(thaJeztah): this should have "omitempty" in the generated type.
-
-            '
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          example:
-          - 'unable to pin image doesnotexist:latest to digest: image library/doesnotexist:latest not found'
-    ResourceObject:
-      description: 'An object describing the resources which can be advertised by a node and
-
-        requested by a task.
-
-        '
-      type: object
-      properties:
-        NanoCPUs:
-          type: integer
-          format: int64
-          example: 4000000000
-        MemoryBytes:
-          type: integer
-          format: int64
-          example: 8272408576
-        GenericResources:
-          $ref: '#/components/schemas/GenericResources'
-    EndpointPortConfig:
-      type: object
-      properties:
-        Name:
-          type: string
-        Protocol:
-          type: string
-          enum:
-          - tcp
-          - udp
-          - sctp
-        TargetPort:
-          description: The port inside the container.
-          type: integer
-        PublishedPort:
-          description: The port on the swarm hosts.
-          type: integer
-        PublishMode:
-          description: "The mode in which port is published.\n\n<p><br /></p>\n\n- \"ingress\" makes the target port accessible on every node,\n  regardless of whether there is a task for the service running on\n  that node or not.\n- \"host\" bypasses the routing mesh and publish the port directly on\n  the swarm node where that service is running.\n"
-          type: string
-          enum:
-          - ingress
-          - host
-          default: ingress
-          example: ingress
     TaskSpec:
       description: User modifiable task configuration.
       type: object
@@ -1878,306 +2181,3 @@ components:
               type: object
               additionalProperties:
                 type: string
-    MountType:
-      description: 'The mount type. Available types:
-
-
-        - `bind` a mount of a file or directory from the host into the container.
-
-        - `cluster` a Swarm cluster volume.
-
-        - `image` an OCI image.
-
-        - `npipe` a named pipe from the host into the container.
-
-        - `tmpfs` a `tmpfs`.
-
-        - `volume` a docker volume with the given `Name`.'
-      type: string
-      enum:
-      - bind
-      - cluster
-      - image
-      - npipe
-      - tmpfs
-      - volume
-      example: volume
-    NetworkAttachmentConfig:
-      description: 'Specifies how a service should be attached to a particular network.
-
-        '
-      type: object
-      properties:
-        Target:
-          description: 'The target network for attachment. Must be a network name or ID.
-
-            '
-          type: string
-        Aliases:
-          description: 'Discoverable alternate names for the service on this network.
-
-            '
-          type: array
-          items:
-            type: string
-        DriverOpts:
-          description: 'Driver attachment options for the network target.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-    ServiceUpdateResponse:
-      type: object
-      properties:
-        Warnings:
-          description: Optional warning messages
-          type: array
-          items:
-            type: string
-      example:
-        Warnings:
-        - 'unable to pin image doesnotexist:latest to digest: image library/doesnotexist:latest not found'
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
-    Service:
-      type: object
-      properties:
-        ID:
-          type: string
-        Version:
-          $ref: '#/components/schemas/ObjectVersion'
-        CreatedAt:
-          type: string
-          format: dateTime
-        UpdatedAt:
-          type: string
-          format: dateTime
-        Spec:
-          $ref: '#/components/schemas/ServiceSpec'
-        Endpoint:
-          type: object
-          properties:
-            Spec:
-              $ref: '#/components/schemas/EndpointSpec'
-            Ports:
-              type: array
-              items:
-                $ref: '#/components/schemas/EndpointPortConfig'
-            VirtualIPs:
-              type: array
-              items:
-                type: object
-                properties:
-                  NetworkID:
-                    type: string
-                  Addr:
-                    type: string
-        UpdateStatus:
-          description: The status of a service update.
-          type: object
-          properties:
-            State:
-              type: string
-              enum:
-              - updating
-              - paused
-              - completed
-            StartedAt:
-              type: string
-              format: dateTime
-            CompletedAt:
-              type: string
-              format: dateTime
-            Message:
-              type: string
-        ServiceStatus:
-          description: 'The status of the service''s tasks. Provided only when requested as
-
-            part of a ServiceList operation.
-
-            '
-          type: object
-          properties:
-            RunningTasks:
-              description: 'The number of tasks for the service currently in the Running state.
-
-                '
-              type: integer
-              format: uint64
-              example: 7
-            DesiredTasks:
-              description: 'The number of tasks for the service desired to be running.
-
-                For replicated services, this is the replica count from the
-
-                service spec. For global services, this is computed by taking
-
-                count of all tasks for the service with a Desired State other
-
-                than Shutdown.
-
-                '
-              type: integer
-              format: uint64
-              example: 10
-            CompletedTasks:
-              description: 'The number of tasks for a job that are in the Completed state.
-
-                This field must be cross-referenced with the service type, as the
-
-                value of 0 may mean the service is not in a job mode, or it may
-
-                mean the job-mode service has no tasks yet Completed.
-
-                '
-              type: integer
-              format: uint64
-        JobStatus:
-          description: 'The status of the service when it is in one of ReplicatedJob or
-
-            GlobalJob modes. Absent on Replicated and Global mode services. The
-
-            JobIteration is an ObjectVersion, but unlike the Service''s version,
-
-            does not need to be sent with an update request.
-
-            '
-          type: object
-          properties:
-            JobIteration:
-              description: 'JobIteration is a value increased each time a Job is executed,
-
-                successfully or otherwise. "Executed", in this case, means the
-
-                job as a whole has been started, not that an individual Task has
-
-                been launched. A job is "Executed" when its ServiceSpec is
-
-                updated. JobIteration can be used to disambiguate Tasks belonging
-
-                to different executions of a job.  Though JobIteration will
-
-                increase with each subsequent execution, it may not necessarily
-
-                increase by 1, and so JobIteration should not be used to
-
-                '
-              $ref: '#/components/schemas/ObjectVersion'
-            LastExecution:
-              description: 'The last time, as observed by the server, that this job was
-
-                started.
-
-                '
-              type: string
-              format: dateTime
-      example:
-        ID: 9mnpnzenvg8p8tdbtq4wvbkcz
-        Version:
-          Index: 19
-        CreatedAt: '2016-06-07T21:05:51.880065305Z'
-        UpdatedAt: '2016-06-07T21:07:29.962229872Z'
-        Spec:
-          Name: hopeful_cori
-          TaskTemplate:
-            ContainerSpec:
-              Image: redis
-            Resources:
-              Limits: {}
-              Reservations: {}
-            RestartPolicy:
-              Condition: any
-              MaxAttempts: 0
-            Placement: {}
-            ForceUpdate: 0
-          Mode:
-            Replicated:
-              Replicas: 1
-          UpdateConfig:
-            Parallelism: 1
-            Delay: 1000000000
-            FailureAction: pause
-            Monitor: 15000000000
-            MaxFailureRatio: 0.15
-          RollbackConfig:
-            Parallelism: 1
-            Delay: 1000000000
-            FailureAction: pause
-            Monitor: 15000000000
-            MaxFailureRatio: 0.15
-          EndpointSpec:
-            Mode: vip
-            Ports:
-            - Protocol: tcp
-              TargetPort: 6379
-              PublishedPort: 30001
-        Endpoint:
-          Spec:
-            Mode: vip
-            Ports:
-            - Protocol: tcp
-              TargetPort: 6379
-              PublishedPort: 30001
-          Ports:
-          - Protocol: tcp
-            TargetPort: 6379
-            PublishedPort: 30001
-          VirtualIPs:
-          - NetworkID: 4qvuz4ko70xaltuqbt8956gd1
-            Addr: 10.255.0.2/16
-          - NetworkID: 4qvuz4ko70xaltuqbt8956gd1
-            Addr: 10.255.0.3/16
-    EndpointSpec:
-      description: Properties that can be configured to access and load balance a service.
-      type: object
-      properties:
-        Mode:
-          description: 'The mode of resolution to use for internal load balancing between tasks.
-
-            '
-          type: string
-          enum:
-          - vip
-          - dnsrr
-          default: vip
-        Ports:
-          description: 'List of exposed ports that this service is accessible on from the
-
-            outside. Ports can only be provided if `vip` resolution mode is used.
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/EndpointPortConfig'
-    Limit:
-      description: 'An object describing a limit on resources which can be requested by a task.
-
-        '
-      type: object
-      properties:
-        NanoCPUs:
-          type: integer
-          format: int64
-          example: 4000000000
-        MemoryBytes:
-          type: integer
-          format: int64
-          example: 8272408576
-        Pids:
-          description: 'Limits the maximum number of PIDs in the container. Set `0` for unlimited.
-
-            '
-          type: integer
-          format: int64
-          default: 0
-          example: 100

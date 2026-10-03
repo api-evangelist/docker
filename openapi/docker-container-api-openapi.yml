@@ -2026,185 +2026,379 @@ paths:
       - Container
 components:
   schemas:
-    EndpointIPAMConfig:
-      description: 'EndpointIPAMConfig represents an endpoint''s IPAM configuration.
+    ContainerThrottlingData:
+      description: 'CPU throttling stats of the container.
+
+
+        This type is Linux-specific and omitted for Windows containers.
+
+        '
+      type:
+      - object
+      - 'null'
+      x-go-name: ThrottlingData
+      properties:
+        periods:
+          description: 'Number of periods with throttling active.
+
+            '
+          type: integer
+          format: uint64
+          example: 0
+        throttled_periods:
+          description: 'Number of periods when the container hit its throttling limit.
+
+            '
+          type: integer
+          format: uint64
+          example: 0
+        throttled_time:
+          description: 'Aggregated time (in nanoseconds) the container was throttled for.
+
+            '
+          type: integer
+          format: uint64
+          example: 0
+    HealthcheckResult:
+      description: 'HealthcheckResult stores information about a single run of a healthcheck probe
 
         '
       type:
       - object
       - 'null'
       properties:
-        IPv4Address:
-          type: string
-          example: 172.20.30.33
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        IPv6Address:
-          type: string
-          example: 2001:db8:abcd::3033
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        LinkLocalIPs:
-          type: array
-          items:
-            type: string
-            x-go-type:
-              type: Addr
-              import:
-                package: net/netip
-          example:
-          - 169.254.34.68
-          - fe80::3468
-    EndpointSettings:
-      description: Configuration for a network endpoint.
-      type: object
-      properties:
-        IPAMConfig:
-          $ref: '#/components/schemas/EndpointIPAMConfig'
-        Links:
-          type: array
-          items:
-            type: string
-          example:
-          - container_1
-          - container_2
-        MacAddress:
-          description: 'MAC address for the endpoint on this network. The network driver might ignore this parameter.
+        Start:
+          description: 'Date and time at which this check started in
+
+            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
 
             '
           type: string
-          example: 02:42:ac:11:00:04
-          x-go-type:
-            type: HardwareAddr
-        Aliases:
+          format: date-time
+          example: '2020-01-04T10:44:24.496525531Z'
+        End:
+          description: 'Date and time at which this check ended in
+
+            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+
+            '
+          type: string
+          format: dateTime
+          example: '2020-01-04T10:45:21.364524523Z'
+        ExitCode:
+          description: 'ExitCode meanings:
+
+
+            - `0` healthy
+
+            - `1` unhealthy
+
+            - `2` reserved (considered unhealthy)
+
+            - other values: error running probe
+
+            '
+          type: integer
+          example: 0
+        Output:
+          description: Output from last check
+          type: string
+    DeviceRequest:
+      type: object
+      description: A request for devices to be sent to device drivers
+      properties:
+        Driver:
+          description: 'The name of the device driver to use for this request.
+
+
+            Note that if this is specified the capabilities are ignored when
+
+            selecting a device driver.
+
+            '
+          type: string
+          example: nvidia
+        Count:
+          type: integer
+          example: -1
+        DeviceIDs:
           type: array
           items:
             type: string
           example:
-          - server_x
-          - server_y
-        DriverOpts:
-          description: 'DriverOpts is a mapping of driver options and values. These options
+          - '0'
+          - '1'
+          - GPU-fef8089b-4820-abfc-e83e-94318197576e
+        Capabilities:
+          description: 'A list of capabilities; an OR list of AND lists of capabilities.
 
-            are passed directly to the driver and are driver specific.
+
+            Note that if a driver is specified the capabilities have no effect on
+
+            selecting a driver as the driver name is used directly.
+
+
+            Note that if no driver is specified the capabilities are used to
+
+            select a driver with the required capabilities.
+
+            '
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          example:
+          - - gpu
+            - nvidia
+            - compute
+        Options:
+          description: 'Driver-specific options, specified as a key/value pairs. These options
+
+            are passed directly to the driver.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+    ContainerStatsResponse:
+      description: 'Statistics sample for a container.
+
+        '
+      type: object
+      x-go-name: StatsResponse
+      title: ContainerStatsResponse
+      properties:
+        id:
+          description: 'ID of the container for which the stats were collected.
 
             '
           type:
-          - object
+          - string
           - 'null'
+          example: ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743
+        name:
+          description: 'Name of the container for which the stats were collected.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: boring_wozniak
+        os_type:
+          description: 'OSType is the OS of the container ("linux" or "windows") to allow
+
+            platform-specific handling of stats.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: linux
+        read:
+          description: 'Date and time at which this sample was collected.
+
+            The value is formatted as [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt)
+
+            with nano-seconds.
+
+            '
+          type: string
+          format: date-time
+          example: '2025-01-16T13:55:22.165243637Z'
+        cpu_stats:
+          $ref: '#/components/schemas/ContainerCPUStats'
+        memory_stats:
+          $ref: '#/components/schemas/ContainerMemoryStats'
+        networks:
+          description: 'Network statistics for the container per interface.
+
+
+            This field is omitted if the container has no networking enabled.
+
+            '
           additionalProperties:
-            type: string
+            $ref: '#/components/schemas/ContainerNetworkStats'
           example:
-            com.example.some-label: some-value
-            com.example.some-other-label: some-other-value
-        GwPriority:
-          description: 'This property determines which endpoint will provide the default
+            eth0:
+              rx_bytes: 5338
+              rx_dropped: 0
+              rx_errors: 0
+              rx_packets: 36
+              tx_bytes: 648
+              tx_dropped: 0
+              tx_errors: 0
+              tx_packets: 8
+            eth5:
+              rx_bytes: 4641
+              rx_dropped: 0
+              rx_errors: 0
+              rx_packets: 26
+              tx_bytes: 690
+              tx_dropped: 0
+              tx_errors: 0
+              tx_packets: 9
+        pids_stats:
+          $ref: '#/components/schemas/ContainerPidsStats'
+        blkio_stats:
+          $ref: '#/components/schemas/ContainerBlkioStats'
+        num_procs:
+          description: 'The number of processors on the system.
 
-            gateway for a container. The endpoint with the highest priority will
 
-            be used. If multiple endpoints have the same priority, endpoints are
-
-            lexicographically sorted based on their network name, and the one
-
-            that sorts first is picked.
+            This field is Windows-specific and always zero for Linux containers.
 
             '
           type: integer
-          format: int64
-          example:
-          - 10
-        NetworkID:
-          description: 'Unique ID of the network.
-
-            '
-          type: string
-          example: 08754567f1f40222263eab4102e1c733ae697e8e354aa9cd6e18d7402835292a
-        EndpointID:
-          description: 'Unique ID for the service endpoint in a Sandbox.
-
-            '
-          type: string
-          example: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
-        Gateway:
-          description: 'Gateway address for this network.
-
-            '
-          type: string
-          example: 172.17.0.1
-        IPAddress:
-          description: 'IPv4 address.
-
-            '
-          type: string
-          example: 172.17.0.4
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        IPPrefixLen:
-          description: 'Mask length of the IPv4 address.
-
-            '
-          type: integer
+          format: uint32
           example: 16
-        IPv6Gateway:
-          description: 'IPv6 gateway address.
+        storage_stats:
+          $ref: '#/components/schemas/ContainerStorageStats'
+        preread:
+          description: 'Date and time at which this first sample was collected. This field
+
+            is not propagated if the "one-shot" option is set. If the "one-shot"
+
+            option is set, this field may be omitted, empty, or set to a default
+
+            date (`0001-01-01T00:00:00Z`).
+
+
+            The value is formatted as [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt)
+
+            with nano-seconds.
 
             '
           type: string
-          example: 2001:db8:2::100
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        GlobalIPv6Address:
-          description: 'Global IPv6 address.
-
-            '
-          type: string
-          example: 2001:db8::5689
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        GlobalIPv6PrefixLen:
-          description: 'Mask length of the global IPv6 address.
-
-            '
-          type: integer
-          format: int64
-          example: 64
-        DNSNames:
-          description: 'List of all DNS names an endpoint has on a specific network. This
-
-            list is based on the container name, network aliases, container short
-
-            ID, and hostname.
-
-
-            These DNS names are non-fully qualified but can contain several dots.
-
-            You can get fully qualified DNS names by appending `.<network-name>`.
-
-            For instance, if container name is `my.ctr` and the network is named
-
-            `testnet`, `DNSNames` will contain `my.ctr` and the FQDN will be
-
-            `my.ctr.testnet`.
-
-            '
+          format: date-time
+          example: '2025-01-16T13:55:21.160452595Z'
+        precpu_stats:
+          $ref: '#/components/schemas/ContainerCPUStats'
+    ContainerTopResponse:
+      type: object
+      x-go-name: TopResponse
+      title: ContainerTopResponse
+      description: Container "top" response.
+      properties:
+        Titles:
+          description: The ps column titles
           type: array
           items:
             type: string
           example:
-          - foobar
-          - server_x
-          - server_y
-          - my.ctr
+            Titles:
+            - UID
+            - PID
+            - PPID
+            - C
+            - STIME
+            - TTY
+            - TIME
+            - CMD
+        Processes:
+          description: 'Each process running in the container, where each process
+
+            is an array of values corresponding to the titles.'
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          example:
+            Processes:
+            - - root
+              - '13642'
+              - '882'
+              - '0'
+              - '17:03'
+              - pts/0
+              - 00:00:00
+              - /bin/bash
+            - - root
+              - '13735'
+              - '13642'
+              - '0'
+              - '17:06'
+              - pts/0
+              - 00:00:00
+              - sleep 10
+    NetworkSettings:
+      description: NetworkSettings exposes the network settings in the API
+      type: object
+      properties:
+        SandboxID:
+          description: SandboxID uniquely represents a container's network stack.
+          type: string
+          example: 9d12daf2c33f5959c8bf90aa513e4f65b561738661003029ec84830cd503a0c3
+        SandboxKey:
+          description: SandboxKey is the full path of the netns handle
+          type: string
+          example: /var/run/docker/netns/8ab54b426c38
+        Ports:
+          $ref: '#/components/schemas/PortMap'
+        Networks:
+          description: 'Information about all networks that the container is connected to.
+
+            '
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EndpointSettings'
+    ContainerUpdateResponse:
+      type: object
+      title: ContainerUpdateResponse
+      x-go-name: UpdateResponse
+      description: Response for a successful container-update.
+      properties:
+        Warnings:
+          type: array
+          description: Warnings encountered when updating the container.
+          items:
+            type: string
+          example:
+          - Published ports are discarded when using host network mode
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
+    ContainerPidsStats:
+      description: 'PidsStats contains Linux-specific stats of a container''s process-IDs (PIDs).
+
+
+        This type is Linux-specific and omitted for Windows containers.
+
+        '
+      type:
+      - object
+      - 'null'
+      x-go-name: PidsStats
+      properties:
+        current:
+          description: 'Current is the number of PIDs in the cgroup.
+
+            '
+          type:
+          - integer
+          - 'null'
+          format: uint64
+          example: 5
+        limit:
+          description: 'Limit is the hard limit on the number of pids in the cgroup.
+
+            A "Limit" of 0 means that there is no limit.
+
+            '
+          type:
+          - integer
+          - 'null'
+          format: uint64
+          example: '18446744073709551615'
     ContainerBlkioStats:
       description: 'BlkioStats stores all IO service stats for data read and write.
 
@@ -2322,38 +2516,221 @@ components:
         io_merged_recursive: null
         io_time_recursive: null
         sectors_recursive: null
-    ContainerPidsStats:
-      description: 'PidsStats contains Linux-specific stats of a container''s process-IDs (PIDs).
+    MountPoint:
+      type: object
+      description: 'MountPoint represents a mount point configuration inside the container.
 
-
-        This type is Linux-specific and omitted for Windows containers.
+        This is used for reporting the mountpoints in use by a container.
 
         '
-      type:
-      - object
-      - 'null'
-      x-go-name: PidsStats
       properties:
-        current:
-          description: 'Current is the number of PIDs in the cgroup.
+        Type:
+          description: 'The mount type:
+
+
+            - `bind` a mount of a file or directory from the host into the container.
+
+            - `cluster` a Swarm cluster volume.
+
+            - `image` an OCI image.
+
+            - `npipe` a named pipe from the host into the container.
+
+            - `tmpfs` a `tmpfs`.
+
+            - `volume` a docker volume with the given `Name`.
 
             '
-          type:
-          - integer
-          - 'null'
-          format: uint64
-          example: 5
-        limit:
-          description: 'Limit is the hard limit on the number of pids in the cgroup.
+          allOf:
+          - $ref: '#/components/schemas/MountType'
+          example: volume
+        Name:
+          description: 'Name is the name reference to the underlying data defined by `Source`
 
-            A "Limit" of 0 means that there is no limit.
+            e.g., the volume name.
 
             '
-          type:
-          - integer
-          - 'null'
-          format: uint64
-          example: '18446744073709551615'
+          type: string
+          example: myvolume
+        Source:
+          description: 'Source location of the mount.
+
+
+            For volumes, this contains the storage location of the volume (within
+
+            `/var/lib/docker/volumes/`). For bind-mounts, and `npipe`, this contains
+
+            the source (host) part of the bind-mount. For `tmpfs` mount points, this
+
+            field is empty.
+
+            '
+          type: string
+          example: /var/lib/docker/volumes/myvolume/_data
+        Destination:
+          description: 'Destination is the path relative to the container root (`/`) where
+
+            the `Source` is mounted inside the container.
+
+            '
+          type: string
+          example: /usr/share/nginx/html/
+        Driver:
+          description: 'Driver is the volume driver used to create the volume (if it is a volume).
+
+            '
+          type: string
+          example: local
+        Mode:
+          description: 'Mode is a comma separated list of options supplied by the user when
+
+            creating the bind/volume mount.
+
+
+            The default is platform-specific (`"z"` on Linux, empty on Windows).
+
+            '
+          type: string
+          example: z
+        RW:
+          description: 'Whether the mount is mounted writable (read-write).
+
+            '
+          type: boolean
+          example: true
+        Propagation:
+          description: 'Propagation describes how mounts are propagated from the host into the
+
+            mount point, and vice-versa. Refer to the [Linux kernel documentation](https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt)
+
+            for details. This field is not used on Windows.
+
+            '
+          type: string
+          example: ''
+    ChangeType:
+      description: 'Kind of change
+
+
+        Can be one of:
+
+
+        - `0`: Modified ("C")
+
+        - `1`: Added ("A")
+
+        - `2`: Deleted ("D")
+
+        '
+      type: integer
+      format: uint8
+      enum:
+      - 0
+      - 1
+      - 2
+    HealthConfig:
+      description: 'A test to perform to check that the container is healthy.
+
+        Healthcheck commands should be side-effect free.
+
+        '
+      type: object
+      properties:
+        Test:
+          description: 'The test to perform. Possible values are:
+
+
+            - `[]` inherit healthcheck from image or parent image
+
+            - `["NONE"]` disable healthcheck
+
+            - `["CMD", args...]` exec arguments directly
+
+            - `["CMD-SHELL", command]` run command with system''s default shell
+
+
+            A non-zero exit code indicates a failed healthcheck:
+
+            - `0` healthy
+
+            - `1` unhealthy
+
+            - `2` reserved (treated as unhealthy)
+
+            - other values: error running probe
+
+            '
+          type: array
+          items:
+            type: string
+        Interval:
+          description: 'The time to wait between checks in nanoseconds. It should be 0 or at
+
+            least 1000000 (1 ms). 0 means inherit.
+
+            '
+          type: integer
+          format: int64
+        Timeout:
+          description: 'The time to wait before considering the check to have hung. It should
+
+            be 0 or at least 1000000 (1 ms). 0 means inherit.
+
+
+            If the health check command does not complete within this timeout,
+
+            the check is considered failed and the health check process is
+
+            forcibly terminated without a graceful shutdown.
+
+            '
+          type: integer
+          format: int64
+        Retries:
+          description: 'The number of consecutive failures needed to consider a container as
+
+            unhealthy. 0 means inherit.
+
+            '
+          type: integer
+        StartPeriod:
+          description: 'Start period for the container to initialize before starting
+
+            health-retries countdown in nanoseconds. It should be 0 or at least
+
+            1000000 (1 ms). 0 means inherit.
+
+            '
+          type: integer
+          format: int64
+        StartInterval:
+          description: 'The time to wait between checks in nanoseconds during the start period.
+
+            It should be 0 or at least 1000000 (1 ms). 0 means inherit.
+
+            '
+          type: integer
+          format: int64
+    PortBinding:
+      description: 'PortBinding represents a binding between a host IP address and a host
+
+        port.
+
+        '
+      type: object
+      properties:
+        HostIp:
+          description: Host IP address that the container's port is mapped to.
+          type: string
+          example: 127.0.0.1
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        HostPort:
+          description: Host port number that the container's port is mapped to.
+          type: string
+          example: '4443'
     ContainerConfig:
       description: 'Configuration for a container that is portable between hosts.
 
@@ -2545,6 +2922,761 @@ components:
           example:
           - /bin/sh
           - -c
+    Mount:
+      type: object
+      properties:
+        Target:
+          description: Container path.
+          type: string
+        Source:
+          description: 'Mount source (e.g. a volume name, a host path). The source cannot be
+
+            specified when using `Type=tmpfs`. For `Type=bind`, the source path
+
+            must either exist, or the `CreateMountpoint` must be set to `true` to
+
+            create the source path on the host if missing.
+
+
+            For `Type=npipe`, the pipe must exist prior to creating the container.'
+          type: string
+        Type:
+          description: 'The mount type. Available types:
+
+
+            - `bind` Mounts a file or directory from the host into the container. The `Source` must exist prior to creating the container.
+
+            - `cluster` a Swarm cluster volume
+
+            - `image` Mounts an image.
+
+            - `npipe` Mounts a named pipe from the host into the container. The `Source` must exist prior to creating the container.
+
+            - `tmpfs` Create a tmpfs with the given options. The mount `Source` cannot be specified for tmpfs.
+
+            - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed.
+
+            '
+          allOf:
+          - $ref: '#/components/schemas/MountType'
+        ReadOnly:
+          description: Whether the mount should be read-only.
+          type: boolean
+        Consistency:
+          description: 'The consistency requirement for the mount: `default`, `consistent`, `cached`, or `delegated`.'
+          type: string
+        BindOptions:
+          description: Optional configuration for the `bind` type.
+          type: object
+          properties:
+            Propagation:
+              description: A propagation mode with the value `[r]private`, `[r]shared`, or `[r]slave`.
+              type: string
+              enum:
+              - private
+              - rprivate
+              - shared
+              - rshared
+              - slave
+              - rslave
+            NonRecursive:
+              description: Disable recursive bind mount.
+              type: boolean
+              default: false
+            CreateMountpoint:
+              description: Create mount point on host if missing
+              type: boolean
+              default: false
+            ReadOnlyNonRecursive:
+              description: 'Make the mount non-recursively read-only, but still leave the mount recursive
+
+                (unless NonRecursive is set to `true` in conjunction).
+
+
+                Added in v1.44, before that version all read-only mounts were
+
+                non-recursive by default. To match the previous behaviour this
+
+                will default to `true` for clients on versions prior to v1.44.
+
+                '
+              type: boolean
+              default: false
+            ReadOnlyForceRecursive:
+              description: Raise an error if the mount cannot be made recursively read-only.
+              type: boolean
+              default: false
+        VolumeOptions:
+          description: Optional configuration for the `volume` type.
+          type: object
+          properties:
+            NoCopy:
+              description: Populate volume with data from the target.
+              type: boolean
+              default: false
+            Labels:
+              description: User-defined key/value metadata.
+              type: object
+              additionalProperties:
+                type: string
+            DriverConfig:
+              description: Map of driver specific options
+              type: object
+              properties:
+                Name:
+                  description: Name of the driver to use to create the volume.
+                  type: string
+                Options:
+                  description: key/value map of driver specific options.
+                  type: object
+                  additionalProperties:
+                    type: string
+            Subpath:
+              description: Source path inside the volume. Must be relative without any back traversals.
+              type: string
+              example: dir-inside-volume/subdirectory
+        ImageOptions:
+          description: Optional configuration for the `image` type.
+          type: object
+          properties:
+            Subpath:
+              description: Source path inside the image. Must be relative without any back traversals.
+              type: string
+              example: dir-inside-image/subdirectory
+        TmpfsOptions:
+          description: Optional configuration for the `tmpfs` type.
+          type: object
+          properties:
+            SizeBytes:
+              description: The size for the tmpfs mount in bytes.
+              type: integer
+              format: int64
+            Mode:
+              description: 'The permission mode for the tmpfs mount in an integer.
+
+                The value must not be in octal format (e.g. 755) but rather
+
+                the decimal representation of the octal value (e.g. 493).
+
+                '
+              type: integer
+            Options:
+              description: 'The options to be passed to the tmpfs mount. An array of arrays.
+
+                Flag options should be provided as 1-length arrays. Other types
+
+                should be provided as as 2-length arrays, where the first item is
+
+                the key and the second the value.
+
+                '
+              type: array
+              items:
+                type: array
+                minItems: 1
+                maxItems: 2
+                items:
+                  type: string
+              example:
+              - - noexec
+    ThrottleDevice:
+      type: object
+      properties:
+        Path:
+          description: Device path
+          type: string
+        Rate:
+          description: Rate
+          type: integer
+          format: int64
+          minimum: 0
+    MountType:
+      description: 'The mount type. Available types:
+
+
+        - `bind` a mount of a file or directory from the host into the container.
+
+        - `cluster` a Swarm cluster volume.
+
+        - `image` an OCI image.
+
+        - `npipe` a named pipe from the host into the container.
+
+        - `tmpfs` a `tmpfs`.
+
+        - `volume` a docker volume with the given `Name`.'
+      type: string
+      enum:
+      - bind
+      - cluster
+      - image
+      - npipe
+      - tmpfs
+      - volume
+      example: volume
+    ContainerWaitResponse:
+      description: OK response to ContainerWait operation
+      type: object
+      x-go-name: WaitResponse
+      title: ContainerWaitResponse
+      required:
+      - StatusCode
+      properties:
+        StatusCode:
+          description: Exit code of the container
+          type: integer
+          format: int64
+        Error:
+          $ref: '#/components/schemas/ContainerWaitExitError'
+    FilesystemChange:
+      description: 'Change in the container''s filesystem.
+
+        '
+      type: object
+      required:
+      - Path
+      - Kind
+      properties:
+        Path:
+          description: 'Path to file or directory that has changed.
+
+            '
+          type: string
+        Kind:
+          $ref: '#/components/schemas/ChangeType'
+    EndpointSettings:
+      description: Configuration for a network endpoint.
+      type: object
+      properties:
+        IPAMConfig:
+          $ref: '#/components/schemas/EndpointIPAMConfig'
+        Links:
+          type: array
+          items:
+            type: string
+          example:
+          - container_1
+          - container_2
+        MacAddress:
+          description: 'MAC address for the endpoint on this network. The network driver might ignore this parameter.
+
+            '
+          type: string
+          example: 02:42:ac:11:00:04
+          x-go-type:
+            type: HardwareAddr
+        Aliases:
+          type: array
+          items:
+            type: string
+          example:
+          - server_x
+          - server_y
+        DriverOpts:
+          description: 'DriverOpts is a mapping of driver options and values. These options
+
+            are passed directly to the driver and are driver specific.
+
+            '
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+          example:
+            com.example.some-label: some-value
+            com.example.some-other-label: some-other-value
+        GwPriority:
+          description: 'This property determines which endpoint will provide the default
+
+            gateway for a container. The endpoint with the highest priority will
+
+            be used. If multiple endpoints have the same priority, endpoints are
+
+            lexicographically sorted based on their network name, and the one
+
+            that sorts first is picked.
+
+            '
+          type: integer
+          format: int64
+          example:
+          - 10
+        NetworkID:
+          description: 'Unique ID of the network.
+
+            '
+          type: string
+          example: 08754567f1f40222263eab4102e1c733ae697e8e354aa9cd6e18d7402835292a
+        EndpointID:
+          description: 'Unique ID for the service endpoint in a Sandbox.
+
+            '
+          type: string
+          example: b88f5b905aabf2893f3cbc4ee42d1ea7980bbc0a92e2c8922b1e1795298afb0b
+        Gateway:
+          description: 'Gateway address for this network.
+
+            '
+          type: string
+          example: 172.17.0.1
+        IPAddress:
+          description: 'IPv4 address.
+
+            '
+          type: string
+          example: 172.17.0.4
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        IPPrefixLen:
+          description: 'Mask length of the IPv4 address.
+
+            '
+          type: integer
+          example: 16
+        IPv6Gateway:
+          description: 'IPv6 gateway address.
+
+            '
+          type: string
+          example: 2001:db8:2::100
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        GlobalIPv6Address:
+          description: 'Global IPv6 address.
+
+            '
+          type: string
+          example: 2001:db8::5689
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        GlobalIPv6PrefixLen:
+          description: 'Mask length of the global IPv6 address.
+
+            '
+          type: integer
+          format: int64
+          example: 64
+        DNSNames:
+          description: 'List of all DNS names an endpoint has on a specific network. This
+
+            list is based on the container name, network aliases, container short
+
+            ID, and hostname.
+
+
+            These DNS names are non-fully qualified but can contain several dots.
+
+            You can get fully qualified DNS names by appending `.<network-name>`.
+
+            For instance, if container name is `my.ctr` and the network is named
+
+            `testnet`, `DNSNames` will contain `my.ctr` and the FQDN will be
+
+            `my.ctr.testnet`.
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - foobar
+          - server_x
+          - server_y
+          - my.ctr
+    PortMap:
+      description: 'PortMap describes the mapping of container ports to host ports, using the
+
+        container''s port-number and protocol as key in the format `<port>/<protocol>`,
+
+        for example, `80/udp`.
+
+
+        If a container''s port is mapped for multiple protocols, separate entries
+
+        are added to the mapping table.
+
+        '
+      type: object
+      additionalProperties:
+        type:
+        - array
+        - 'null'
+        items:
+          $ref: '#/components/schemas/PortBinding'
+      example:
+        443/tcp:
+        - HostIp: 127.0.0.1
+          HostPort: '4443'
+        80/tcp:
+        - HostIp: 0.0.0.0
+          HostPort: '80'
+        - HostIp: 0.0.0.0
+          HostPort: '8080'
+        80/udp:
+        - HostIp: 0.0.0.0
+          HostPort: '80'
+        53/udp:
+        - HostIp: 0.0.0.0
+          HostPort: '53'
+        2377/tcp: null
+    EndpointIPAMConfig:
+      description: 'EndpointIPAMConfig represents an endpoint''s IPAM configuration.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        IPv4Address:
+          type: string
+          example: 172.20.30.33
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        IPv6Address:
+          type: string
+          example: 2001:db8:abcd::3033
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        LinkLocalIPs:
+          type: array
+          items:
+            type: string
+            x-go-type:
+              type: Addr
+              import:
+                package: net/netip
+          example:
+          - 169.254.34.68
+          - fe80::3468
+    Storage:
+      description: 'Information about the storage used by the container.
+
+        '
+      type: object
+      properties:
+        RootFS:
+          description: 'Information about the storage used for the container''s root filesystem.
+
+            '
+          type:
+          - object
+          - 'null'
+          $ref: '#/components/schemas/RootFSStorage'
+    ContainerBlkioStatEntry:
+      description: 'Blkio stats entry.
+
+
+        This type is Linux-specific and omitted for Windows containers.
+
+        '
+      type:
+      - object
+      - 'null'
+      x-go-name: BlkioStatEntry
+      properties:
+        major:
+          type: integer
+          format: uint64
+          example: 254
+        minor:
+          type: integer
+          format: uint64
+          example: 0
+        op:
+          type: string
+          example: read
+        value:
+          type: integer
+          format: uint64
+          example: 7593984
+    Resources:
+      description: A container's resources (cgroups config, ulimits, etc)
+      type: object
+      properties:
+        CpuShares:
+          description: 'An integer value representing this container''s relative CPU weight
+
+            versus other containers.
+
+            '
+          type: integer
+        Memory:
+          description: Memory limit in bytes.
+          type: integer
+          format: int64
+          default: 0
+        CgroupParent:
+          description: 'Path to `cgroups` under which the container''s `cgroup` is created. If
+
+            the path is not absolute, the path is considered to be relative to the
+
+            `cgroups` path of the init process. Cgroups are created if they do not
+
+            already exist.
+
+            '
+          type: string
+        BlkioWeight:
+          description: Block IO weight (relative weight).
+          type: integer
+          minimum: 0
+          maximum: 1000
+        BlkioWeightDevice:
+          description: 'Block IO weight (relative device weight) in the form:
+
+
+            ```
+
+            [{"Path": "device_path", "Weight": weight}]
+
+            ```
+
+            '
+          type: array
+          items:
+            type: object
+            properties:
+              Path:
+                type: string
+              Weight:
+                type: integer
+                minimum: 0
+        BlkioDeviceReadBps:
+          description: 'Limit read rate (bytes per second) from a device, in the form:
+
+
+            ```
+
+            [{"Path": "device_path", "Rate": rate}]
+
+            ```
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/ThrottleDevice'
+        BlkioDeviceWriteBps:
+          description: 'Limit write rate (bytes per second) to a device, in the form:
+
+
+            ```
+
+            [{"Path": "device_path", "Rate": rate}]
+
+            ```
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/ThrottleDevice'
+        BlkioDeviceReadIOps:
+          description: 'Limit read rate (IO per second) from a device, in the form:
+
+
+            ```
+
+            [{"Path": "device_path", "Rate": rate}]
+
+            ```
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/ThrottleDevice'
+        BlkioDeviceWriteIOps:
+          description: 'Limit write rate (IO per second) to a device, in the form:
+
+
+            ```
+
+            [{"Path": "device_path", "Rate": rate}]
+
+            ```
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/ThrottleDevice'
+        CpuPeriod:
+          description: The length of a CPU period in microseconds.
+          type: integer
+          format: int64
+        CpuQuota:
+          description: 'Microseconds of CPU time that the container can get in a CPU period.
+
+            '
+          type: integer
+          format: int64
+        CpuRealtimePeriod:
+          description: 'The length of a CPU real-time period in microseconds. Set to 0 to
+
+            allocate no time allocated to real-time tasks.
+
+            '
+          type: integer
+          format: int64
+        CpuRealtimeRuntime:
+          description: 'The length of a CPU real-time runtime in microseconds. Set to 0 to
+
+            allocate no time allocated to real-time tasks.
+
+            '
+          type: integer
+          format: int64
+        CpusetCpus:
+          description: 'CPUs in which to allow execution (e.g., `0-3`, `0,1`).
+
+            '
+          type: string
+          example: 0-3
+        CpusetMems:
+          description: 'Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only
+
+            effective on NUMA systems.
+
+            '
+          type: string
+        Devices:
+          description: A list of devices to add to the container.
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceMapping'
+        DeviceCgroupRules:
+          description: a list of cgroup rules to apply to the container
+          type: array
+          items:
+            type: string
+            example: c 13:* rwm
+        DeviceRequests:
+          description: 'A list of requests for devices to be sent to device drivers.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceRequest'
+        MemoryReservation:
+          description: Memory soft limit in bytes.
+          type: integer
+          format: int64
+        MemorySwap:
+          description: 'Total memory limit (memory + swap). Set as `-1` to enable unlimited
+
+            swap.
+
+            '
+          type: integer
+          format: int64
+        MemorySwappiness:
+          description: 'Tune a container''s memory swappiness behavior. Accepts an integer
+
+            between 0 and 100.
+
+            '
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 100
+        NanoCpus:
+          description: CPU quota in units of 10<sup>-9</sup> CPUs.
+          type: integer
+          format: int64
+        OomKillDisable:
+          description: Disable OOM Killer for the container.
+          type: boolean
+        Init:
+          description: 'Run an init inside the container that forwards signals and reaps
+
+            processes. This field is omitted if empty, and the default (as
+
+            configured on the daemon) is used.
+
+            '
+          type:
+          - boolean
+          - 'null'
+        PidsLimit:
+          description: 'Tune a container''s PIDs limit. Set `0` or `-1` for unlimited, or `null`
+
+            to not change.
+
+            '
+          type:
+          - integer
+          - 'null'
+          format: int64
+        Ulimits:
+          description: 'A list of resource limits to set in the container. For example:
+
+
+            ```
+
+            {"Name": "nofile", "Soft": 1024, "Hard": 2048}
+
+            ```
+
+            '
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                description: Name of ulimit
+                type: string
+              Soft:
+                description: Soft limit
+                type: integer
+              Hard:
+                description: Hard limit
+                type: integer
+        CpuCount:
+          description: 'The number of usable CPUs (Windows only).
+
+
+            On Windows Server containers, the processor resource controls are
+
+            mutually exclusive. The order of precedence is `CPUCount` first, then
+
+            `CPUShares`, and `CPUPercent` last.
+
+            '
+          type: integer
+          format: int64
+        CpuPercent:
+          description: 'The usable percentage of the available CPUs (Windows only).
+
+
+            On Windows Server containers, the processor resource controls are
+
+            mutually exclusive. The order of precedence is `CPUCount` first, then
+
+            `CPUShares`, and `CPUPercent` last.
+
+            '
+          type: integer
+          format: int64
+        IOMaximumIOps:
+          description: Maximum IOps for the container system drive (Windows only)
+          type: integer
+          format: int64
+        IOMaximumBandwidth:
+          description: 'Maximum IO in bytes per second for the container system drive
+
+            (Windows only).
+
+            '
+          type: integer
+          format: int64
     ContainerInspectResponse:
       type: object
       title: ContainerInspectResponse
@@ -2734,181 +3866,6 @@ components:
           $ref: '#/components/schemas/ContainerConfig'
         NetworkSettings:
           $ref: '#/components/schemas/NetworkSettings'
-    ContainerTopResponse:
-      type: object
-      x-go-name: TopResponse
-      title: ContainerTopResponse
-      description: Container "top" response.
-      properties:
-        Titles:
-          description: The ps column titles
-          type: array
-          items:
-            type: string
-          example:
-            Titles:
-            - UID
-            - PID
-            - PPID
-            - C
-            - STIME
-            - TTY
-            - TIME
-            - CMD
-        Processes:
-          description: 'Each process running in the container, where each process
-
-            is an array of values corresponding to the titles.'
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-          example:
-            Processes:
-            - - root
-              - '13642'
-              - '882'
-              - '0'
-              - '17:03'
-              - pts/0
-              - 00:00:00
-              - /bin/bash
-            - - root
-              - '13735'
-              - '13642'
-              - '0'
-              - '17:06'
-              - pts/0
-              - 00:00:00
-              - sleep 10
-    DriverData:
-      description: 'Information about the storage driver used to store the container''s and
-
-        image''s filesystem.
-
-        '
-      type: object
-      required:
-      - Name
-      - Data
-      properties:
-        Name:
-          description: Name of the storage driver.
-          type: string
-          example: overlay2
-        Data:
-          description: 'Low-level storage metadata, provided as key/value pairs.
-
-
-            This information is driver-specific, and depends on the storage-driver
-
-            in use, and should be used for informational purposes only.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            MergedDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/merged
-            UpperDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/diff
-            WorkDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/work
-    PortSummary:
-      type: object
-      description: 'Describes a port-mapping between the container and the host.
-
-        '
-      required:
-      - PrivatePort
-      - Type
-      properties:
-        IP:
-          type: string
-          format: ip-address
-          description: Host IP address that the container's port is mapped to
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        PrivatePort:
-          type: integer
-          format: uint16
-          description: Port on the container
-        PublicPort:
-          type: integer
-          format: uint16
-          description: Port exposed on the host
-        Type:
-          type: string
-          enum:
-          - tcp
-          - udp
-          - sctp
-      example:
-        PrivatePort: 8080
-        PublicPort: 80
-        Type: tcp
-    FilesystemChange:
-      description: 'Change in the container''s filesystem.
-
-        '
-      type: object
-      required:
-      - Path
-      - Kind
-      properties:
-        Path:
-          description: 'Path to file or directory that has changed.
-
-            '
-          type: string
-        Kind:
-          $ref: '#/components/schemas/ChangeType'
-    NetworkSettings:
-      description: NetworkSettings exposes the network settings in the API
-      type: object
-      properties:
-        SandboxID:
-          description: SandboxID uniquely represents a container's network stack.
-          type: string
-          example: 9d12daf2c33f5959c8bf90aa513e4f65b561738661003029ec84830cd503a0c3
-        SandboxKey:
-          description: SandboxKey is the full path of the netns handle
-          type: string
-          example: /var/run/docker/netns/8ab54b426c38
-        Ports:
-          $ref: '#/components/schemas/PortMap'
-        Networks:
-          description: 'Information about all networks that the container is connected to.
-
-            '
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/EndpointSettings'
-    Storage:
-      description: 'Information about the storage used by the container.
-
-        '
-      type: object
-      properties:
-        RootFS:
-          description: 'Information about the storage used for the container''s root filesystem.
-
-            '
-          type:
-          - object
-          - 'null'
-          $ref: '#/components/schemas/RootFSStorage'
-    RootFSStorageSnapshot:
-      description: 'Information about a snapshot backend of the container''s root filesystem.
-
-        '
-      type: object
-      x-go-name: RootFSStorageSnapshot
-      properties:
-        Name:
-          description: Name of the snapshotter.
-          type: string
     ContainerStorageStats:
       description: 'StorageStats is the disk I/O stats for read/write on Windows.
 
@@ -2945,6 +3902,462 @@ components:
           - 'null'
           format: uint64
           example: 7593984
+    ContainerNetworkStats:
+      description: 'Aggregates the network stats of one container
+
+        '
+      type:
+      - object
+      - 'null'
+      x-go-name: NetworkStats
+      properties:
+        rx_bytes:
+          description: 'Bytes received. Windows and Linux.
+
+            '
+          type: integer
+          format: uint64
+          example: 5338
+        rx_packets:
+          description: 'Packets received. Windows and Linux.
+
+            '
+          type: integer
+          format: uint64
+          example: 36
+        rx_errors:
+          description: 'Received errors. Not used on Windows.
+
+
+            This field is Linux-specific and always zero for Windows containers.
+
+            '
+          type: integer
+          format: uint64
+          example: 0
+        rx_dropped:
+          description: 'Incoming packets dropped. Windows and Linux.
+
+            '
+          type: integer
+          format: uint64
+          example: 0
+        tx_bytes:
+          description: 'Bytes sent. Windows and Linux.
+
+            '
+          type: integer
+          format: uint64
+          example: 1200
+        tx_packets:
+          description: 'Packets sent. Windows and Linux.
+
+            '
+          type: integer
+          format: uint64
+          example: 12
+        tx_errors:
+          description: 'Sent errors. Not used on Windows.
+
+
+            This field is Linux-specific and always zero for Windows containers.
+
+            '
+          type: integer
+          format: uint64
+          example: 0
+        tx_dropped:
+          description: 'Outgoing packets dropped. Windows and Linux.
+
+            '
+          type: integer
+          format: uint64
+          example: 0
+        endpoint_id:
+          description: 'Endpoint ID. Not used on Linux.
+
+
+            This field is Windows-specific and omitted for Linux containers.
+
+            '
+          type:
+          - string
+          - 'null'
+        instance_id:
+          description: 'Instance ID. Not used on Linux.
+
+
+            This field is Windows-specific and omitted for Linux containers.
+
+            '
+          type:
+          - string
+          - 'null'
+    ContainerState:
+      description: 'ContainerState stores container''s running state. It''s part of ContainerJSONBase
+
+        and will be returned by the "inspect" command.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        Status:
+          description: 'String representation of the container state. Can be one of "created",
+
+            "running", "paused", "restarting", "removing", "exited", or "dead".
+
+            '
+          type: string
+          enum:
+          - created
+          - running
+          - paused
+          - restarting
+          - removing
+          - exited
+          - dead
+          example: running
+        Running:
+          description: 'Whether this container is running.
+
+
+            Note that a running container can be _paused_. The `Running` and `Paused`
+
+            booleans are not mutually exclusive:
+
+
+            When pausing a container (on Linux), the freezer cgroup is used to suspend
+
+            all processes in the container. Freezing the process requires the process to
+
+            be running. As a result, paused containers are both `Running` _and_ `Paused`.
+
+
+            Use the `Status` field instead to determine if a container''s state is "running".
+
+            '
+          type: boolean
+          example: true
+        Paused:
+          description: Whether this container is paused.
+          type: boolean
+          example: false
+        Restarting:
+          description: Whether this container is restarting.
+          type: boolean
+          example: false
+        OOMKilled:
+          description: 'Whether a process within this container has been killed because it ran
+
+            out of memory since the container was last started.
+
+            '
+          type: boolean
+          example: false
+        Dead:
+          type: boolean
+          example: false
+        Pid:
+          description: The process ID of this container
+          type: integer
+          example: 1234
+        ExitCode:
+          description: The last exit code of this container
+          type: integer
+          example: 0
+        Error:
+          type: string
+        StartedAt:
+          description: The time when this container was last started.
+          type: string
+          example: '2020-01-06T09:06:59.461876391Z'
+        FinishedAt:
+          description: The time when this container last exited.
+          type: string
+          example: '2020-01-06T09:07:59.461876391Z'
+        Health:
+          $ref: '#/components/schemas/Health'
+    DriverData:
+      description: 'Information about the storage driver used to store the container''s and
+
+        image''s filesystem.
+
+        '
+      type: object
+      required:
+      - Name
+      - Data
+      properties:
+        Name:
+          description: Name of the storage driver.
+          type: string
+          example: overlay2
+        Data:
+          description: 'Low-level storage metadata, provided as key/value pairs.
+
+
+            This information is driver-specific, and depends on the storage-driver
+
+            in use, and should be used for informational purposes only.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            MergedDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/merged
+            UpperDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/diff
+            WorkDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/work
+    ContainerWaitExitError:
+      description: container waiting error, if any
+      type: object
+      x-go-name: WaitExitError
+      properties:
+        Message:
+          description: Details of an error
+          type: string
+    RestartPolicy:
+      description: 'The behavior to apply when the container exits. The default is not to
+
+        restart.
+
+
+        An ever increasing delay (double the previous delay, starting at 100ms) is
+
+        added before each restart to prevent flooding the server.
+
+        '
+      type: object
+      properties:
+        Name:
+          type: string
+          description: '- Empty string means not to restart
+
+            - `no` Do not automatically restart
+
+            - `always` Always restart
+
+            - `unless-stopped` Restart always except when the user has manually stopped the container
+
+            - `on-failure` Restart only when the container exit code is non-zero
+
+            '
+          enum:
+          - ''
+          - 'no'
+          - always
+          - unless-stopped
+          - on-failure
+        MaximumRetryCount:
+          type: integer
+          description: 'If `on-failure` is used, the number of times to retry before giving up.
+
+            '
+    PortSummary:
+      type: object
+      description: 'Describes a port-mapping between the container and the host.
+
+        '
+      required:
+      - PrivatePort
+      - Type
+      properties:
+        IP:
+          type: string
+          format: ip-address
+          description: Host IP address that the container's port is mapped to
+          x-go-type:
+            type: Addr
+            import:
+              package: net/netip
+        PrivatePort:
+          type: integer
+          format: uint16
+          description: Port on the container
+        PublicPort:
+          type: integer
+          format: uint16
+          description: Port exposed on the host
+        Type:
+          type: string
+          enum:
+          - tcp
+          - udp
+          - sctp
+      example:
+        PrivatePort: 8080
+        PublicPort: 80
+        Type: tcp
+    Health:
+      description: 'Health stores information about the container''s healthcheck results.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        Status:
+          description: 'Status is one of `none`, `starting`, `healthy` or `unhealthy`
+
+
+            - "none"      Indicates there is no healthcheck
+
+            - "starting"  Starting indicates that the container is not yet ready
+
+            - "healthy"   Healthy indicates that the container is running correctly
+
+            - "unhealthy" Unhealthy indicates that the container has a problem
+
+            '
+          type: string
+          enum:
+          - none
+          - starting
+          - healthy
+          - unhealthy
+          example: healthy
+        FailingStreak:
+          description: FailingStreak is the number of consecutive failures
+          type: integer
+          example: 0
+        Log:
+          type: array
+          description: 'Log contains the last few results (oldest first)
+
+            '
+          items:
+            $ref: '#/components/schemas/HealthcheckResult'
+    RootFSStorageSnapshot:
+      description: 'Information about a snapshot backend of the container''s root filesystem.
+
+        '
+      type: object
+      x-go-name: RootFSStorageSnapshot
+      properties:
+        Name:
+          description: Name of the snapshotter.
+          type: string
+    DeviceMapping:
+      type: object
+      description: A device mapping between the host and container
+      properties:
+        PathOnHost:
+          type: string
+        PathInContainer:
+          type: string
+        CgroupPermissions:
+          type: string
+      example:
+        PathOnHost: /dev/deviceName
+        PathInContainer: /dev/deviceName
+        CgroupPermissions: mrw
+    RootFSStorage:
+      description: 'Information about the storage used for the container''s root filesystem.
+
+        '
+      type: object
+      x-go-name: RootFSStorage
+      properties:
+        Snapshot:
+          description: 'Information about the snapshot used for the container''s root filesystem.
+
+            '
+          type:
+          - object
+          - 'null'
+          $ref: '#/components/schemas/RootFSStorageSnapshot'
+    OCIPlatform:
+      type:
+      - object
+      - 'null'
+      x-go-name: Platform
+      description: 'Describes the platform which the image in the manifest runs on, as defined
+
+        in the [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/image-index.md).
+
+        '
+      properties:
+        architecture:
+          description: 'The CPU architecture, for example `amd64` or `ppc64`.
+
+            '
+          type: string
+          example: arm
+        os:
+          description: 'The operating system, for example `linux` or `windows`.
+
+            '
+          type: string
+          example: windows
+        os.version:
+          description: 'Optional field specifying the operating system version, for example on
+
+            Windows `10.0.19041.1165`.
+
+            '
+          type: string
+          example: 10.0.19041.1165
+        os.features:
+          description: 'Optional field specifying an array of strings, each listing a required
+
+            OS feature (for example on Windows `win32k`).
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - win32k
+        variant:
+          description: 'Optional field specifying a variant of the CPU, for example `v7` to
+
+            specify ARMv7 when architecture is `arm`.
+
+            '
+          type: string
+          example: v7
+    NetworkingConfig:
+      description: 'NetworkingConfig represents the container''s networking configuration for
+
+        each of its interfaces.
+
+        It is used for the networking configs specified in the `docker create`
+
+        and `docker network connect` commands.
+
+        '
+      type: object
+      properties:
+        EndpointsConfig:
+          description: 'A mapping of network name to endpoint configuration for that network.
+
+            The endpoint configuration can be left empty to connect to that
+
+            network with no particular endpoint configuration.
+
+            '
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EndpointSettings'
+      example:
+        EndpointsConfig:
+          isolated_nw:
+            IPAMConfig:
+              IPv4Address: 172.20.30.33
+              IPv6Address: 2001:db8:abcd::3033
+              LinkLocalIPs:
+              - 169.254.34.68
+              - fe80::3468
+            MacAddress: 02:42:ac:12:05:02
+            Links:
+            - container_1
+            - container_2
+            Aliases:
+            - server_x
+            - server_y
+          database_nw: {}
     ContainerCreateResponse:
       description: OK response to ContainerCreate operation
       type: object
@@ -3334,344 +4747,6 @@ components:
             - /proc/irq
             - /proc/sys
             - /proc/sysrq-trigger
-    ContainerThrottlingData:
-      description: 'CPU throttling stats of the container.
-
-
-        This type is Linux-specific and omitted for Windows containers.
-
-        '
-      type:
-      - object
-      - 'null'
-      x-go-name: ThrottlingData
-      properties:
-        periods:
-          description: 'Number of periods with throttling active.
-
-            '
-          type: integer
-          format: uint64
-          example: 0
-        throttled_periods:
-          description: 'Number of periods when the container hit its throttling limit.
-
-            '
-          type: integer
-          format: uint64
-          example: 0
-        throttled_time:
-          description: 'Aggregated time (in nanoseconds) the container was throttled for.
-
-            '
-          type: integer
-          format: uint64
-          example: 0
-    ContainerCPUStats:
-      description: 'CPU related info of the container
-
-        '
-      type:
-      - object
-      - 'null'
-      x-go-name: CPUStats
-      properties:
-        cpu_usage:
-          $ref: '#/components/schemas/ContainerCPUUsage'
-        system_cpu_usage:
-          description: 'System Usage.
-
-
-            This field is Linux-specific and omitted for Windows containers.
-
-            '
-          type:
-          - integer
-          - 'null'
-          format: uint64
-          example: 5
-        online_cpus:
-          description: 'Number of online CPUs.
-
-
-            This field is Linux-specific and omitted for Windows containers.
-
-            '
-          type:
-          - integer
-          - 'null'
-          format: uint32
-          example: 5
-        throttling_data:
-          $ref: '#/components/schemas/ContainerThrottlingData'
-    PortBinding:
-      description: 'PortBinding represents a binding between a host IP address and a host
-
-        port.
-
-        '
-      type: object
-      properties:
-        HostIp:
-          description: Host IP address that the container's port is mapped to.
-          type: string
-          example: 127.0.0.1
-          x-go-type:
-            type: Addr
-            import:
-              package: net/netip
-        HostPort:
-          description: Host port number that the container's port is mapped to.
-          type: string
-          example: '4443'
-    ContainerNetworkStats:
-      description: 'Aggregates the network stats of one container
-
-        '
-      type:
-      - object
-      - 'null'
-      x-go-name: NetworkStats
-      properties:
-        rx_bytes:
-          description: 'Bytes received. Windows and Linux.
-
-            '
-          type: integer
-          format: uint64
-          example: 5338
-        rx_packets:
-          description: 'Packets received. Windows and Linux.
-
-            '
-          type: integer
-          format: uint64
-          example: 36
-        rx_errors:
-          description: 'Received errors. Not used on Windows.
-
-
-            This field is Linux-specific and always zero for Windows containers.
-
-            '
-          type: integer
-          format: uint64
-          example: 0
-        rx_dropped:
-          description: 'Incoming packets dropped. Windows and Linux.
-
-            '
-          type: integer
-          format: uint64
-          example: 0
-        tx_bytes:
-          description: 'Bytes sent. Windows and Linux.
-
-            '
-          type: integer
-          format: uint64
-          example: 1200
-        tx_packets:
-          description: 'Packets sent. Windows and Linux.
-
-            '
-          type: integer
-          format: uint64
-          example: 12
-        tx_errors:
-          description: 'Sent errors. Not used on Windows.
-
-
-            This field is Linux-specific and always zero for Windows containers.
-
-            '
-          type: integer
-          format: uint64
-          example: 0
-        tx_dropped:
-          description: 'Outgoing packets dropped. Windows and Linux.
-
-            '
-          type: integer
-          format: uint64
-          example: 0
-        endpoint_id:
-          description: 'Endpoint ID. Not used on Linux.
-
-
-            This field is Windows-specific and omitted for Linux containers.
-
-            '
-          type:
-          - string
-          - 'null'
-        instance_id:
-          description: 'Instance ID. Not used on Linux.
-
-
-            This field is Windows-specific and omitted for Linux containers.
-
-            '
-          type:
-          - string
-          - 'null'
-    Mount:
-      type: object
-      properties:
-        Target:
-          description: Container path.
-          type: string
-        Source:
-          description: 'Mount source (e.g. a volume name, a host path). The source cannot be
-
-            specified when using `Type=tmpfs`. For `Type=bind`, the source path
-
-            must either exist, or the `CreateMountpoint` must be set to `true` to
-
-            create the source path on the host if missing.
-
-
-            For `Type=npipe`, the pipe must exist prior to creating the container.'
-          type: string
-        Type:
-          description: 'The mount type. Available types:
-
-
-            - `bind` Mounts a file or directory from the host into the container. The `Source` must exist prior to creating the container.
-
-            - `cluster` a Swarm cluster volume
-
-            - `image` Mounts an image.
-
-            - `npipe` Mounts a named pipe from the host into the container. The `Source` must exist prior to creating the container.
-
-            - `tmpfs` Create a tmpfs with the given options. The mount `Source` cannot be specified for tmpfs.
-
-            - `volume` Creates a volume with the given name and options (or uses a pre-existing volume with the same name and options). These are **not** removed when the container is removed.
-
-            '
-          allOf:
-          - $ref: '#/components/schemas/MountType'
-        ReadOnly:
-          description: Whether the mount should be read-only.
-          type: boolean
-        Consistency:
-          description: 'The consistency requirement for the mount: `default`, `consistent`, `cached`, or `delegated`.'
-          type: string
-        BindOptions:
-          description: Optional configuration for the `bind` type.
-          type: object
-          properties:
-            Propagation:
-              description: A propagation mode with the value `[r]private`, `[r]shared`, or `[r]slave`.
-              type: string
-              enum:
-              - private
-              - rprivate
-              - shared
-              - rshared
-              - slave
-              - rslave
-            NonRecursive:
-              description: Disable recursive bind mount.
-              type: boolean
-              default: false
-            CreateMountpoint:
-              description: Create mount point on host if missing
-              type: boolean
-              default: false
-            ReadOnlyNonRecursive:
-              description: 'Make the mount non-recursively read-only, but still leave the mount recursive
-
-                (unless NonRecursive is set to `true` in conjunction).
-
-
-                Added in v1.44, before that version all read-only mounts were
-
-                non-recursive by default. To match the previous behaviour this
-
-                will default to `true` for clients on versions prior to v1.44.
-
-                '
-              type: boolean
-              default: false
-            ReadOnlyForceRecursive:
-              description: Raise an error if the mount cannot be made recursively read-only.
-              type: boolean
-              default: false
-        VolumeOptions:
-          description: Optional configuration for the `volume` type.
-          type: object
-          properties:
-            NoCopy:
-              description: Populate volume with data from the target.
-              type: boolean
-              default: false
-            Labels:
-              description: User-defined key/value metadata.
-              type: object
-              additionalProperties:
-                type: string
-            DriverConfig:
-              description: Map of driver specific options
-              type: object
-              properties:
-                Name:
-                  description: Name of the driver to use to create the volume.
-                  type: string
-                Options:
-                  description: key/value map of driver specific options.
-                  type: object
-                  additionalProperties:
-                    type: string
-            Subpath:
-              description: Source path inside the volume. Must be relative without any back traversals.
-              type: string
-              example: dir-inside-volume/subdirectory
-        ImageOptions:
-          description: Optional configuration for the `image` type.
-          type: object
-          properties:
-            Subpath:
-              description: Source path inside the image. Must be relative without any back traversals.
-              type: string
-              example: dir-inside-image/subdirectory
-        TmpfsOptions:
-          description: Optional configuration for the `tmpfs` type.
-          type: object
-          properties:
-            SizeBytes:
-              description: The size for the tmpfs mount in bytes.
-              type: integer
-              format: int64
-            Mode:
-              description: 'The permission mode for the tmpfs mount in an integer.
-
-                The value must not be in octal format (e.g. 755) but rather
-
-                the decimal representation of the octal value (e.g. 493).
-
-                '
-              type: integer
-            Options:
-              description: 'The options to be passed to the tmpfs mount. An array of arrays.
-
-                Flag options should be provided as 1-length arrays. Other types
-
-                should be provided as as 2-length arrays, where the first item is
-
-                the key and the second the value.
-
-                '
-              type: array
-              items:
-                type: array
-                minItems: 1
-                maxItems: 2
-                items:
-                  type: string
-              example:
-              - - noexec
     ContainerMemoryStats:
       description: 'Aggregates all memory stats since container inception on Linux.
 
@@ -3818,623 +4893,6 @@ components:
           - 'null'
           format: uint64
           example: 0
-    PortMap:
-      description: 'PortMap describes the mapping of container ports to host ports, using the
-
-        container''s port-number and protocol as key in the format `<port>/<protocol>`,
-
-        for example, `80/udp`.
-
-
-        If a container''s port is mapped for multiple protocols, separate entries
-
-        are added to the mapping table.
-
-        '
-      type: object
-      additionalProperties:
-        type:
-        - array
-        - 'null'
-        items:
-          $ref: '#/components/schemas/PortBinding'
-      example:
-        443/tcp:
-        - HostIp: 127.0.0.1
-          HostPort: '4443'
-        80/tcp:
-        - HostIp: 0.0.0.0
-          HostPort: '80'
-        - HostIp: 0.0.0.0
-          HostPort: '8080'
-        80/udp:
-        - HostIp: 0.0.0.0
-          HostPort: '80'
-        53/udp:
-        - HostIp: 0.0.0.0
-          HostPort: '53'
-        2377/tcp: null
-    MountPoint:
-      type: object
-      description: 'MountPoint represents a mount point configuration inside the container.
-
-        This is used for reporting the mountpoints in use by a container.
-
-        '
-      properties:
-        Type:
-          description: 'The mount type:
-
-
-            - `bind` a mount of a file or directory from the host into the container.
-
-            - `cluster` a Swarm cluster volume.
-
-            - `image` an OCI image.
-
-            - `npipe` a named pipe from the host into the container.
-
-            - `tmpfs` a `tmpfs`.
-
-            - `volume` a docker volume with the given `Name`.
-
-            '
-          allOf:
-          - $ref: '#/components/schemas/MountType'
-          example: volume
-        Name:
-          description: 'Name is the name reference to the underlying data defined by `Source`
-
-            e.g., the volume name.
-
-            '
-          type: string
-          example: myvolume
-        Source:
-          description: 'Source location of the mount.
-
-
-            For volumes, this contains the storage location of the volume (within
-
-            `/var/lib/docker/volumes/`). For bind-mounts, and `npipe`, this contains
-
-            the source (host) part of the bind-mount. For `tmpfs` mount points, this
-
-            field is empty.
-
-            '
-          type: string
-          example: /var/lib/docker/volumes/myvolume/_data
-        Destination:
-          description: 'Destination is the path relative to the container root (`/`) where
-
-            the `Source` is mounted inside the container.
-
-            '
-          type: string
-          example: /usr/share/nginx/html/
-        Driver:
-          description: 'Driver is the volume driver used to create the volume (if it is a volume).
-
-            '
-          type: string
-          example: local
-        Mode:
-          description: 'Mode is a comma separated list of options supplied by the user when
-
-            creating the bind/volume mount.
-
-
-            The default is platform-specific (`"z"` on Linux, empty on Windows).
-
-            '
-          type: string
-          example: z
-        RW:
-          description: 'Whether the mount is mounted writable (read-write).
-
-            '
-          type: boolean
-          example: true
-        Propagation:
-          description: 'Propagation describes how mounts are propagated from the host into the
-
-            mount point, and vice-versa. Refer to the [Linux kernel documentation](https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt)
-
-            for details. This field is not used on Windows.
-
-            '
-          type: string
-          example: ''
-    Health:
-      description: 'Health stores information about the container''s healthcheck results.
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        Status:
-          description: 'Status is one of `none`, `starting`, `healthy` or `unhealthy`
-
-
-            - "none"      Indicates there is no healthcheck
-
-            - "starting"  Starting indicates that the container is not yet ready
-
-            - "healthy"   Healthy indicates that the container is running correctly
-
-            - "unhealthy" Unhealthy indicates that the container has a problem
-
-            '
-          type: string
-          enum:
-          - none
-          - starting
-          - healthy
-          - unhealthy
-          example: healthy
-        FailingStreak:
-          description: FailingStreak is the number of consecutive failures
-          type: integer
-          example: 0
-        Log:
-          type: array
-          description: 'Log contains the last few results (oldest first)
-
-            '
-          items:
-            $ref: '#/components/schemas/HealthcheckResult'
-    Resources:
-      description: A container's resources (cgroups config, ulimits, etc)
-      type: object
-      properties:
-        CpuShares:
-          description: 'An integer value representing this container''s relative CPU weight
-
-            versus other containers.
-
-            '
-          type: integer
-        Memory:
-          description: Memory limit in bytes.
-          type: integer
-          format: int64
-          default: 0
-        CgroupParent:
-          description: 'Path to `cgroups` under which the container''s `cgroup` is created. If
-
-            the path is not absolute, the path is considered to be relative to the
-
-            `cgroups` path of the init process. Cgroups are created if they do not
-
-            already exist.
-
-            '
-          type: string
-        BlkioWeight:
-          description: Block IO weight (relative weight).
-          type: integer
-          minimum: 0
-          maximum: 1000
-        BlkioWeightDevice:
-          description: 'Block IO weight (relative device weight) in the form:
-
-
-            ```
-
-            [{"Path": "device_path", "Weight": weight}]
-
-            ```
-
-            '
-          type: array
-          items:
-            type: object
-            properties:
-              Path:
-                type: string
-              Weight:
-                type: integer
-                minimum: 0
-        BlkioDeviceReadBps:
-          description: 'Limit read rate (bytes per second) from a device, in the form:
-
-
-            ```
-
-            [{"Path": "device_path", "Rate": rate}]
-
-            ```
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/ThrottleDevice'
-        BlkioDeviceWriteBps:
-          description: 'Limit write rate (bytes per second) to a device, in the form:
-
-
-            ```
-
-            [{"Path": "device_path", "Rate": rate}]
-
-            ```
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/ThrottleDevice'
-        BlkioDeviceReadIOps:
-          description: 'Limit read rate (IO per second) from a device, in the form:
-
-
-            ```
-
-            [{"Path": "device_path", "Rate": rate}]
-
-            ```
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/ThrottleDevice'
-        BlkioDeviceWriteIOps:
-          description: 'Limit write rate (IO per second) to a device, in the form:
-
-
-            ```
-
-            [{"Path": "device_path", "Rate": rate}]
-
-            ```
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/ThrottleDevice'
-        CpuPeriod:
-          description: The length of a CPU period in microseconds.
-          type: integer
-          format: int64
-        CpuQuota:
-          description: 'Microseconds of CPU time that the container can get in a CPU period.
-
-            '
-          type: integer
-          format: int64
-        CpuRealtimePeriod:
-          description: 'The length of a CPU real-time period in microseconds. Set to 0 to
-
-            allocate no time allocated to real-time tasks.
-
-            '
-          type: integer
-          format: int64
-        CpuRealtimeRuntime:
-          description: 'The length of a CPU real-time runtime in microseconds. Set to 0 to
-
-            allocate no time allocated to real-time tasks.
-
-            '
-          type: integer
-          format: int64
-        CpusetCpus:
-          description: 'CPUs in which to allow execution (e.g., `0-3`, `0,1`).
-
-            '
-          type: string
-          example: 0-3
-        CpusetMems:
-          description: 'Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only
-
-            effective on NUMA systems.
-
-            '
-          type: string
-        Devices:
-          description: A list of devices to add to the container.
-          type: array
-          items:
-            $ref: '#/components/schemas/DeviceMapping'
-        DeviceCgroupRules:
-          description: a list of cgroup rules to apply to the container
-          type: array
-          items:
-            type: string
-            example: c 13:* rwm
-        DeviceRequests:
-          description: 'A list of requests for devices to be sent to device drivers.
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/DeviceRequest'
-        MemoryReservation:
-          description: Memory soft limit in bytes.
-          type: integer
-          format: int64
-        MemorySwap:
-          description: 'Total memory limit (memory + swap). Set as `-1` to enable unlimited
-
-            swap.
-
-            '
-          type: integer
-          format: int64
-        MemorySwappiness:
-          description: 'Tune a container''s memory swappiness behavior. Accepts an integer
-
-            between 0 and 100.
-
-            '
-          type: integer
-          format: int64
-          minimum: 0
-          maximum: 100
-        NanoCpus:
-          description: CPU quota in units of 10<sup>-9</sup> CPUs.
-          type: integer
-          format: int64
-        OomKillDisable:
-          description: Disable OOM Killer for the container.
-          type: boolean
-        Init:
-          description: 'Run an init inside the container that forwards signals and reaps
-
-            processes. This field is omitted if empty, and the default (as
-
-            configured on the daemon) is used.
-
-            '
-          type:
-          - boolean
-          - 'null'
-        PidsLimit:
-          description: 'Tune a container''s PIDs limit. Set `0` or `-1` for unlimited, or `null`
-
-            to not change.
-
-            '
-          type:
-          - integer
-          - 'null'
-          format: int64
-        Ulimits:
-          description: 'A list of resource limits to set in the container. For example:
-
-
-            ```
-
-            {"Name": "nofile", "Soft": 1024, "Hard": 2048}
-
-            ```
-
-            '
-          type: array
-          items:
-            type: object
-            properties:
-              Name:
-                description: Name of ulimit
-                type: string
-              Soft:
-                description: Soft limit
-                type: integer
-              Hard:
-                description: Hard limit
-                type: integer
-        CpuCount:
-          description: 'The number of usable CPUs (Windows only).
-
-
-            On Windows Server containers, the processor resource controls are
-
-            mutually exclusive. The order of precedence is `CPUCount` first, then
-
-            `CPUShares`, and `CPUPercent` last.
-
-            '
-          type: integer
-          format: int64
-        CpuPercent:
-          description: 'The usable percentage of the available CPUs (Windows only).
-
-
-            On Windows Server containers, the processor resource controls are
-
-            mutually exclusive. The order of precedence is `CPUCount` first, then
-
-            `CPUShares`, and `CPUPercent` last.
-
-            '
-          type: integer
-          format: int64
-        IOMaximumIOps:
-          description: Maximum IOps for the container system drive (Windows only)
-          type: integer
-          format: int64
-        IOMaximumBandwidth:
-          description: 'Maximum IO in bytes per second for the container system drive
-
-            (Windows only).
-
-            '
-          type: integer
-          format: int64
-    ContainerStatsResponse:
-      description: 'Statistics sample for a container.
-
-        '
-      type: object
-      x-go-name: StatsResponse
-      title: ContainerStatsResponse
-      properties:
-        id:
-          description: 'ID of the container for which the stats were collected.
-
-            '
-          type:
-          - string
-          - 'null'
-          example: ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743
-        name:
-          description: 'Name of the container for which the stats were collected.
-
-            '
-          type:
-          - string
-          - 'null'
-          example: boring_wozniak
-        os_type:
-          description: 'OSType is the OS of the container ("linux" or "windows") to allow
-
-            platform-specific handling of stats.
-
-            '
-          type:
-          - string
-          - 'null'
-          example: linux
-        read:
-          description: 'Date and time at which this sample was collected.
-
-            The value is formatted as [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt)
-
-            with nano-seconds.
-
-            '
-          type: string
-          format: date-time
-          example: '2025-01-16T13:55:22.165243637Z'
-        cpu_stats:
-          $ref: '#/components/schemas/ContainerCPUStats'
-        memory_stats:
-          $ref: '#/components/schemas/ContainerMemoryStats'
-        networks:
-          description: 'Network statistics for the container per interface.
-
-
-            This field is omitted if the container has no networking enabled.
-
-            '
-          additionalProperties:
-            $ref: '#/components/schemas/ContainerNetworkStats'
-          example:
-            eth0:
-              rx_bytes: 5338
-              rx_dropped: 0
-              rx_errors: 0
-              rx_packets: 36
-              tx_bytes: 648
-              tx_dropped: 0
-              tx_errors: 0
-              tx_packets: 8
-            eth5:
-              rx_bytes: 4641
-              rx_dropped: 0
-              rx_errors: 0
-              rx_packets: 26
-              tx_bytes: 690
-              tx_dropped: 0
-              tx_errors: 0
-              tx_packets: 9
-        pids_stats:
-          $ref: '#/components/schemas/ContainerPidsStats'
-        blkio_stats:
-          $ref: '#/components/schemas/ContainerBlkioStats'
-        num_procs:
-          description: 'The number of processors on the system.
-
-
-            This field is Windows-specific and always zero for Linux containers.
-
-            '
-          type: integer
-          format: uint32
-          example: 16
-        storage_stats:
-          $ref: '#/components/schemas/ContainerStorageStats'
-        preread:
-          description: 'Date and time at which this first sample was collected. This field
-
-            is not propagated if the "one-shot" option is set. If the "one-shot"
-
-            option is set, this field may be omitted, empty, or set to a default
-
-            date (`0001-01-01T00:00:00Z`).
-
-
-            The value is formatted as [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt)
-
-            with nano-seconds.
-
-            '
-          type: string
-          format: date-time
-          example: '2025-01-16T13:55:21.160452595Z'
-        precpu_stats:
-          $ref: '#/components/schemas/ContainerCPUStats'
-    ContainerCPUUsage:
-      description: 'All CPU stats aggregated since container inception.
-
-        '
-      type:
-      - object
-      - 'null'
-      x-go-name: CPUUsage
-      properties:
-        total_usage:
-          description: 'Total CPU time consumed in nanoseconds (Linux) or 100''s of nanoseconds (Windows).
-
-            '
-          type: integer
-          format: uint64
-          example: 29912000
-        percpu_usage:
-          description: 'Total CPU time (in nanoseconds) consumed per core (Linux).
-
-
-            This field is Linux-specific when using cgroups v1. It is omitted
-
-            when using cgroups v2 and Windows containers.
-
-            '
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: uint64
-            example: 29912000
-        usage_in_kernelmode:
-          description: 'Time (in nanoseconds) spent by tasks of the cgroup in kernel mode (Linux),
-
-            or time spent (in 100''s of nanoseconds) by all container processes in
-
-            kernel mode (Windows).
-
-
-            Not populated for Windows containers using Hyper-V isolation.
-
-            '
-          type: integer
-          format: uint64
-          example: 21994000
-        usage_in_usermode:
-          description: 'Time (in nanoseconds) spent by tasks of the cgroup in user mode (Linux),
-
-            or time spent (in 100''s of nanoseconds) by all container processes in
-
-            kernel mode (Windows).
-
-
-            Not populated for Windows containers using Hyper-V isolation.
-
-            '
-          type: integer
-          format: uint64
-          example: 7918000
     ContainerSummary:
       type: object
       properties:
@@ -4643,364 +5101,6 @@ components:
               description: FailingStreak is the number of consecutive failures
               type: integer
               example: 0
-    HealthConfig:
-      description: 'A test to perform to check that the container is healthy.
-
-        Healthcheck commands should be side-effect free.
-
-        '
-      type: object
-      properties:
-        Test:
-          description: 'The test to perform. Possible values are:
-
-
-            - `[]` inherit healthcheck from image or parent image
-
-            - `["NONE"]` disable healthcheck
-
-            - `["CMD", args...]` exec arguments directly
-
-            - `["CMD-SHELL", command]` run command with system''s default shell
-
-
-            A non-zero exit code indicates a failed healthcheck:
-
-            - `0` healthy
-
-            - `1` unhealthy
-
-            - `2` reserved (treated as unhealthy)
-
-            - other values: error running probe
-
-            '
-          type: array
-          items:
-            type: string
-        Interval:
-          description: 'The time to wait between checks in nanoseconds. It should be 0 or at
-
-            least 1000000 (1 ms). 0 means inherit.
-
-            '
-          type: integer
-          format: int64
-        Timeout:
-          description: 'The time to wait before considering the check to have hung. It should
-
-            be 0 or at least 1000000 (1 ms). 0 means inherit.
-
-
-            If the health check command does not complete within this timeout,
-
-            the check is considered failed and the health check process is
-
-            forcibly terminated without a graceful shutdown.
-
-            '
-          type: integer
-          format: int64
-        Retries:
-          description: 'The number of consecutive failures needed to consider a container as
-
-            unhealthy. 0 means inherit.
-
-            '
-          type: integer
-        StartPeriod:
-          description: 'Start period for the container to initialize before starting
-
-            health-retries countdown in nanoseconds. It should be 0 or at least
-
-            1000000 (1 ms). 0 means inherit.
-
-            '
-          type: integer
-          format: int64
-        StartInterval:
-          description: 'The time to wait between checks in nanoseconds during the start period.
-
-            It should be 0 or at least 1000000 (1 ms). 0 means inherit.
-
-            '
-          type: integer
-          format: int64
-    OCIPlatform:
-      type:
-      - object
-      - 'null'
-      x-go-name: Platform
-      description: 'Describes the platform which the image in the manifest runs on, as defined
-
-        in the [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/image-index.md).
-
-        '
-      properties:
-        architecture:
-          description: 'The CPU architecture, for example `amd64` or `ppc64`.
-
-            '
-          type: string
-          example: arm
-        os:
-          description: 'The operating system, for example `linux` or `windows`.
-
-            '
-          type: string
-          example: windows
-        os.version:
-          description: 'Optional field specifying the operating system version, for example on
-
-            Windows `10.0.19041.1165`.
-
-            '
-          type: string
-          example: 10.0.19041.1165
-        os.features:
-          description: 'Optional field specifying an array of strings, each listing a required
-
-            OS feature (for example on Windows `win32k`).
-
-            '
-          type: array
-          items:
-            type: string
-          example:
-          - win32k
-        variant:
-          description: 'Optional field specifying a variant of the CPU, for example `v7` to
-
-            specify ARMv7 when architecture is `arm`.
-
-            '
-          type: string
-          example: v7
-    ContainerWaitResponse:
-      description: OK response to ContainerWait operation
-      type: object
-      x-go-name: WaitResponse
-      title: ContainerWaitResponse
-      required:
-      - StatusCode
-      properties:
-        StatusCode:
-          description: Exit code of the container
-          type: integer
-          format: int64
-        Error:
-          $ref: '#/components/schemas/ContainerWaitExitError'
-    ChangeType:
-      description: 'Kind of change
-
-
-        Can be one of:
-
-
-        - `0`: Modified ("C")
-
-        - `1`: Added ("A")
-
-        - `2`: Deleted ("D")
-
-        '
-      type: integer
-      format: uint8
-      enum:
-      - 0
-      - 1
-      - 2
-    HealthcheckResult:
-      description: 'HealthcheckResult stores information about a single run of a healthcheck probe
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        Start:
-          description: 'Date and time at which this check started in
-
-            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-
-            '
-          type: string
-          format: date-time
-          example: '2020-01-04T10:44:24.496525531Z'
-        End:
-          description: 'Date and time at which this check ended in
-
-            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-
-            '
-          type: string
-          format: dateTime
-          example: '2020-01-04T10:45:21.364524523Z'
-        ExitCode:
-          description: 'ExitCode meanings:
-
-
-            - `0` healthy
-
-            - `1` unhealthy
-
-            - `2` reserved (considered unhealthy)
-
-            - other values: error running probe
-
-            '
-          type: integer
-          example: 0
-        Output:
-          description: Output from last check
-          type: string
-    ContainerBlkioStatEntry:
-      description: 'Blkio stats entry.
-
-
-        This type is Linux-specific and omitted for Windows containers.
-
-        '
-      type:
-      - object
-      - 'null'
-      x-go-name: BlkioStatEntry
-      properties:
-        major:
-          type: integer
-          format: uint64
-          example: 254
-        minor:
-          type: integer
-          format: uint64
-          example: 0
-        op:
-          type: string
-          example: read
-        value:
-          type: integer
-          format: uint64
-          example: 7593984
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
-    MountType:
-      description: 'The mount type. Available types:
-
-
-        - `bind` a mount of a file or directory from the host into the container.
-
-        - `cluster` a Swarm cluster volume.
-
-        - `image` an OCI image.
-
-        - `npipe` a named pipe from the host into the container.
-
-        - `tmpfs` a `tmpfs`.
-
-        - `volume` a docker volume with the given `Name`.'
-      type: string
-      enum:
-      - bind
-      - cluster
-      - image
-      - npipe
-      - tmpfs
-      - volume
-      example: volume
-    ContainerUpdateResponse:
-      type: object
-      title: ContainerUpdateResponse
-      x-go-name: UpdateResponse
-      description: Response for a successful container-update.
-      properties:
-        Warnings:
-          type: array
-          description: Warnings encountered when updating the container.
-          items:
-            type: string
-          example:
-          - Published ports are discarded when using host network mode
-    DeviceMapping:
-      type: object
-      description: A device mapping between the host and container
-      properties:
-        PathOnHost:
-          type: string
-        PathInContainer:
-          type: string
-        CgroupPermissions:
-          type: string
-      example:
-        PathOnHost: /dev/deviceName
-        PathInContainer: /dev/deviceName
-        CgroupPermissions: mrw
-    DeviceRequest:
-      type: object
-      description: A request for devices to be sent to device drivers
-      properties:
-        Driver:
-          description: 'The name of the device driver to use for this request.
-
-
-            Note that if this is specified the capabilities are ignored when
-
-            selecting a device driver.
-
-            '
-          type: string
-          example: nvidia
-        Count:
-          type: integer
-          example: -1
-        DeviceIDs:
-          type: array
-          items:
-            type: string
-          example:
-          - '0'
-          - '1'
-          - GPU-fef8089b-4820-abfc-e83e-94318197576e
-        Capabilities:
-          description: 'A list of capabilities; an OR list of AND lists of capabilities.
-
-
-            Note that if a driver is specified the capabilities have no effect on
-
-            selecting a driver as the driver name is used directly.
-
-
-            Note that if no driver is specified the capabilities are used to
-
-            select a driver with the required capabilities.
-
-            '
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-          example:
-          - - gpu
-            - nvidia
-            - compute
-        Options:
-          description: 'Driver-specific options, specified as a key/value pairs. These options
-
-            are passed directly to the driver.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
     OCIDescriptor:
       type: object
       x-go-name: Descriptor
@@ -5071,200 +5171,100 @@ components:
           - string
           - 'null'
           example: null
-    RestartPolicy:
-      description: 'The behavior to apply when the container exits. The default is not to
-
-        restart.
-
-
-        An ever increasing delay (double the previous delay, starting at 100ms) is
-
-        added before each restart to prevent flooding the server.
-
-        '
-      type: object
-      properties:
-        Name:
-          type: string
-          description: '- Empty string means not to restart
-
-            - `no` Do not automatically restart
-
-            - `always` Always restart
-
-            - `unless-stopped` Restart always except when the user has manually stopped the container
-
-            - `on-failure` Restart only when the container exit code is non-zero
-
-            '
-          enum:
-          - ''
-          - 'no'
-          - always
-          - unless-stopped
-          - on-failure
-        MaximumRetryCount:
-          type: integer
-          description: 'If `on-failure` is used, the number of times to retry before giving up.
-
-            '
-    ThrottleDevice:
-      type: object
-      properties:
-        Path:
-          description: Device path
-          type: string
-        Rate:
-          description: Rate
-          type: integer
-          format: int64
-          minimum: 0
-    NetworkingConfig:
-      description: 'NetworkingConfig represents the container''s networking configuration for
-
-        each of its interfaces.
-
-        It is used for the networking configs specified in the `docker create`
-
-        and `docker network connect` commands.
-
-        '
-      type: object
-      properties:
-        EndpointsConfig:
-          description: 'A mapping of network name to endpoint configuration for that network.
-
-            The endpoint configuration can be left empty to connect to that
-
-            network with no particular endpoint configuration.
-
-            '
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/EndpointSettings'
-      example:
-        EndpointsConfig:
-          isolated_nw:
-            IPAMConfig:
-              IPv4Address: 172.20.30.33
-              IPv6Address: 2001:db8:abcd::3033
-              LinkLocalIPs:
-              - 169.254.34.68
-              - fe80::3468
-            MacAddress: 02:42:ac:12:05:02
-            Links:
-            - container_1
-            - container_2
-            Aliases:
-            - server_x
-            - server_y
-          database_nw: {}
-    RootFSStorage:
-      description: 'Information about the storage used for the container''s root filesystem.
-
-        '
-      type: object
-      x-go-name: RootFSStorage
-      properties:
-        Snapshot:
-          description: 'Information about the snapshot used for the container''s root filesystem.
-
-            '
-          type:
-          - object
-          - 'null'
-          $ref: '#/components/schemas/RootFSStorageSnapshot'
-    ContainerWaitExitError:
-      description: container waiting error, if any
-      type: object
-      x-go-name: WaitExitError
-      properties:
-        Message:
-          description: Details of an error
-          type: string
-    ContainerState:
-      description: 'ContainerState stores container''s running state. It''s part of ContainerJSONBase
-
-        and will be returned by the "inspect" command.
+    ContainerCPUStats:
+      description: 'CPU related info of the container
 
         '
       type:
       - object
       - 'null'
+      x-go-name: CPUStats
       properties:
-        Status:
-          description: 'String representation of the container state. Can be one of "created",
-
-            "running", "paused", "restarting", "removing", "exited", or "dead".
-
-            '
-          type: string
-          enum:
-          - created
-          - running
-          - paused
-          - restarting
-          - removing
-          - exited
-          - dead
-          example: running
-        Running:
-          description: 'Whether this container is running.
+        cpu_usage:
+          $ref: '#/components/schemas/ContainerCPUUsage'
+        system_cpu_usage:
+          description: 'System Usage.
 
 
-            Note that a running container can be _paused_. The `Running` and `Paused`
-
-            booleans are not mutually exclusive:
-
-
-            When pausing a container (on Linux), the freezer cgroup is used to suspend
-
-            all processes in the container. Freezing the process requires the process to
-
-            be running. As a result, paused containers are both `Running` _and_ `Paused`.
-
-
-            Use the `Status` field instead to determine if a container''s state is "running".
+            This field is Linux-specific and omitted for Windows containers.
 
             '
-          type: boolean
-          example: true
-        Paused:
-          description: Whether this container is paused.
-          type: boolean
-          example: false
-        Restarting:
-          description: Whether this container is restarting.
-          type: boolean
-          example: false
-        OOMKilled:
-          description: 'Whether a process within this container has been killed because it ran
+          type:
+          - integer
+          - 'null'
+          format: uint64
+          example: 5
+        online_cpus:
+          description: 'Number of online CPUs.
 
-            out of memory since the container was last started.
+
+            This field is Linux-specific and omitted for Windows containers.
 
             '
-          type: boolean
-          example: false
-        Dead:
-          type: boolean
-          example: false
-        Pid:
-          description: The process ID of this container
+          type:
+          - integer
+          - 'null'
+          format: uint32
+          example: 5
+        throttling_data:
+          $ref: '#/components/schemas/ContainerThrottlingData'
+    ContainerCPUUsage:
+      description: 'All CPU stats aggregated since container inception.
+
+        '
+      type:
+      - object
+      - 'null'
+      x-go-name: CPUUsage
+      properties:
+        total_usage:
+          description: 'Total CPU time consumed in nanoseconds (Linux) or 100''s of nanoseconds (Windows).
+
+            '
           type: integer
-          example: 1234
-        ExitCode:
-          description: The last exit code of this container
+          format: uint64
+          example: 29912000
+        percpu_usage:
+          description: 'Total CPU time (in nanoseconds) consumed per core (Linux).
+
+
+            This field is Linux-specific when using cgroups v1. It is omitted
+
+            when using cgroups v2 and Windows containers.
+
+            '
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: uint64
+            example: 29912000
+        usage_in_kernelmode:
+          description: 'Time (in nanoseconds) spent by tasks of the cgroup in kernel mode (Linux),
+
+            or time spent (in 100''s of nanoseconds) by all container processes in
+
+            kernel mode (Windows).
+
+
+            Not populated for Windows containers using Hyper-V isolation.
+
+            '
           type: integer
-          example: 0
-        Error:
-          type: string
-        StartedAt:
-          description: The time when this container was last started.
-          type: string
-          example: '2020-01-06T09:06:59.461876391Z'
-        FinishedAt:
-          description: The time when this container last exited.
-          type: string
-          example: '2020-01-06T09:07:59.461876391Z'
-        Health:
-          $ref: '#/components/schemas/Health'
+          format: uint64
+          example: 21994000
+        usage_in_usermode:
+          description: 'Time (in nanoseconds) spent by tasks of the cgroup in user mode (Linux),
+
+            or time spent (in 100''s of nanoseconds) by all container processes in
+
+            kernel mode (Windows).
+
+
+            Not populated for Windows containers using Hyper-V isolation.
+
+            '
+          type: integer
+          format: uint64
+          example: 7918000

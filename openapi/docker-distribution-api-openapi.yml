@@ -47,6 +47,17 @@ paths:
       - Distribution
 components:
   schemas:
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
     OCIPlatform:
       type:
       - object
@@ -97,6 +108,28 @@ components:
             '
           type: string
           example: v7
+    DistributionInspect:
+      type: object
+      x-go-name: DistributionInspect
+      title: DistributionInspectResponse
+      required:
+      - Descriptor
+      - Platforms
+      description: 'Describes the result obtained from contacting the registry to retrieve
+
+        image metadata.
+
+        '
+      properties:
+        Descriptor:
+          $ref: '#/components/schemas/OCIDescriptor'
+        Platforms:
+          type: array
+          description: 'An array containing all platforms supported by the image.
+
+            '
+          items:
+            $ref: '#/components/schemas/OCIPlatform'
     OCIDescriptor:
       type: object
       x-go-name: Descriptor
@@ -167,36 +200,3 @@ components:
           - string
           - 'null'
           example: null
-    DistributionInspect:
-      type: object
-      x-go-name: DistributionInspect
-      title: DistributionInspectResponse
-      required:
-      - Descriptor
-      - Platforms
-      description: 'Describes the result obtained from contacting the registry to retrieve
-
-        image metadata.
-
-        '
-      properties:
-        Descriptor:
-          $ref: '#/components/schemas/OCIDescriptor'
-        Platforms:
-          type: array
-          description: 'An array containing all platforms supported by the image.
-
-            '
-          items:
-            $ref: '#/components/schemas/OCIPlatform'
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.

@@ -324,301 +324,28 @@ paths:
       - Task
 components:
   schemas:
-    ObjectVersion:
-      description: 'The version number of the object such as node, service, etc. This is needed
-
-        to avoid conflicting writes. The client must send the version number along
-
-        with the modified specification when updating these objects.
-
-
-        This approach ensures safe concurrency and determinism in that the change
-
-        on the object may not be applied if the version number has changed from the
-
-        last read. In other words, if two update requests specify the same base
-
-        version, only one of the requests can succeed. As a result, two separate
-
-        update requests that happen at the same time will not unintentionally
-
-        overwrite each other.
+    Limit:
+      description: 'An object describing a limit on resources which can be requested by a task.
 
         '
       type: object
       properties:
-        Index:
+        NanoCPUs:
           type: integer
-          format: uint64
-          example: 373531
-    PluginPrivilege:
-      description: 'Describes a permission the user has to accept upon installing
-
-        the plugin.
-
-        '
-      type: object
-      x-go-name: Privilege
-      properties:
-        Name:
-          type: string
-          example: network
-        Description:
-          type: string
-        Value:
-          type: array
-          items:
-            type: string
-          example:
-          - host
-    TaskStatus:
-      type: object
-      description: represents the status of a task.
-      properties:
-        Timestamp:
-          type: string
-          format: dateTime
-        State:
-          $ref: '#/components/schemas/TaskState'
-        Message:
-          type: string
-        Err:
-          type: string
-        ContainerStatus:
-          $ref: '#/components/schemas/ContainerStatus'
-        PortStatus:
-          $ref: '#/components/schemas/PortStatus'
-    HealthConfig:
-      description: 'A test to perform to check that the container is healthy.
-
-        Healthcheck commands should be side-effect free.
-
-        '
-      type: object
-      properties:
-        Test:
-          description: 'The test to perform. Possible values are:
-
-
-            - `[]` inherit healthcheck from image or parent image
-
-            - `["NONE"]` disable healthcheck
-
-            - `["CMD", args...]` exec arguments directly
-
-            - `["CMD-SHELL", command]` run command with system''s default shell
-
-
-            A non-zero exit code indicates a failed healthcheck:
-
-            - `0` healthy
-
-            - `1` unhealthy
-
-            - `2` reserved (treated as unhealthy)
-
-            - other values: error running probe
-
-            '
-          type: array
-          items:
-            type: string
-        Interval:
-          description: 'The time to wait between checks in nanoseconds. It should be 0 or at
-
-            least 1000000 (1 ms). 0 means inherit.
+          format: int64
+          example: 4000000000
+        MemoryBytes:
+          type: integer
+          format: int64
+          example: 8272408576
+        Pids:
+          description: 'Limits the maximum number of PIDs in the container. Set `0` for unlimited.
 
             '
           type: integer
           format: int64
-        Timeout:
-          description: 'The time to wait before considering the check to have hung. It should
-
-            be 0 or at least 1000000 (1 ms). 0 means inherit.
-
-
-            If the health check command does not complete within this timeout,
-
-            the check is considered failed and the health check process is
-
-            forcibly terminated without a graceful shutdown.
-
-            '
-          type: integer
-          format: int64
-        Retries:
-          description: 'The number of consecutive failures needed to consider a container as
-
-            unhealthy. 0 means inherit.
-
-            '
-          type: integer
-        StartPeriod:
-          description: 'Start period for the container to initialize before starting
-
-            health-retries countdown in nanoseconds. It should be 0 or at least
-
-            1000000 (1 ms). 0 means inherit.
-
-            '
-          type: integer
-          format: int64
-        StartInterval:
-          description: 'The time to wait between checks in nanoseconds during the start period.
-
-            It should be 0 or at least 1000000 (1 ms). 0 means inherit.
-
-            '
-          type: integer
-          format: int64
-    Task:
-      type: object
-      properties:
-        ID:
-          description: The ID of the task.
-          type: string
-        Version:
-          $ref: '#/components/schemas/ObjectVersion'
-        CreatedAt:
-          type: string
-          format: dateTime
-        UpdatedAt:
-          type: string
-          format: dateTime
-        Name:
-          description: Name of the task.
-          type: string
-        Labels:
-          description: User-defined key/value metadata.
-          type: object
-          additionalProperties:
-            type: string
-        Spec:
-          $ref: '#/components/schemas/TaskSpec'
-        ServiceID:
-          description: The ID of the service this task is part of.
-          type: string
-        Slot:
-          type: integer
-        NodeID:
-          description: The ID of the node that this task is on.
-          type: string
-        AssignedGenericResources:
-          $ref: '#/components/schemas/GenericResources'
-        Status:
-          $ref: '#/components/schemas/TaskStatus'
-        DesiredState:
-          $ref: '#/components/schemas/TaskState'
-        JobIteration:
-          description: 'If the Service this Task belongs to is a job-mode service, contains
-
-            the JobIteration of the Service this Task was created for. Absent if
-
-            the Task was created for a Replicated or Global Service.
-
-            '
-          $ref: '#/components/schemas/ObjectVersion'
-      example:
-        ID: 0kzzo1i0y4jz6027t0k7aezc7
-        Version:
-          Index: 71
-        CreatedAt: '2016-06-07T21:07:31.171892745Z'
-        UpdatedAt: '2016-06-07T21:07:31.376370513Z'
-        Spec:
-          ContainerSpec:
-            Image: redis
-          Resources:
-            Limits: {}
-            Reservations: {}
-          RestartPolicy:
-            Condition: any
-            MaxAttempts: 0
-          Placement: {}
-        ServiceID: 9mnpnzenvg8p8tdbtq4wvbkcz
-        Slot: 1
-        NodeID: 60gvrl6tm78dmak4yl7srz94v
-        Status:
-          Timestamp: '2016-06-07T21:07:31.290032978Z'
-          State: running
-          Message: started
-          ContainerStatus:
-            ContainerID: e5d62702a1b48d01c3e02ca1e0212a250801fa8d67caca0b6f35919ebc12f035
-            PID: 677
-        DesiredState: running
-        NetworksAttachments:
-        - Network:
-            ID: 4qvuz4ko70xaltuqbt8956gd1
-            Version:
-              Index: 18
-            CreatedAt: '2016-06-07T20:31:11.912919752Z'
-            UpdatedAt: '2016-06-07T21:07:29.955277358Z'
-            Spec:
-              Name: ingress
-              Labels:
-                com.docker.swarm.internal: 'true'
-              DriverConfiguration: {}
-              IPAMOptions:
-                Driver: {}
-                Configs:
-                - Subnet: 10.255.0.0/16
-                  Gateway: 10.255.0.1
-            DriverState:
-              Name: overlay
-              Options:
-                com.docker.network.driver.overlay.vxlanid_list: '256'
-            IPAMOptions:
-              Driver:
-                Name: default
-              Configs:
-              - Subnet: 10.255.0.0/16
-                Gateway: 10.255.0.1
-          Addresses:
-          - 10.255.0.10/16
-        AssignedGenericResources:
-        - DiscreteResourceSpec:
-            Kind: SSD
-            Value: 3
-        - NamedResourceSpec:
-            Kind: GPU
-            Value: UUID1
-        - NamedResourceSpec:
-            Kind: GPU
-            Value: UUID2
-    GenericResources:
-      description: 'User-defined resources can be either Integer resources (e.g, `SSD=3`) or
-
-        String resources (e.g, `GPU=UUID1`).
-
-        '
-      type: array
-      items:
-        type: object
-        properties:
-          NamedResourceSpec:
-            type: object
-            properties:
-              Kind:
-                type: string
-              Value:
-                type: string
-          DiscreteResourceSpec:
-            type: object
-            properties:
-              Kind:
-                type: string
-              Value:
-                type: integer
-                format: int64
-      example:
-      - DiscreteResourceSpec:
-          Kind: SSD
-          Value: 3
-      - NamedResourceSpec:
-          Kind: GPU
-          Value: UUID1
-      - NamedResourceSpec:
-          Kind: GPU
-          Value: UUID2
+          default: 0
+          example: 100
     Mount:
       type: object
       properties:
@@ -776,97 +503,6 @@ components:
                   type: string
               example:
               - - noexec
-    Platform:
-      description: 'Platform represents the platform (Arch/OS).
-
-        '
-      type: object
-      properties:
-        Architecture:
-          description: 'Architecture represents the hardware architecture (for example,
-
-            `x86_64`).
-
-            '
-          type: string
-          example: x86_64
-        OS:
-          description: 'OS represents the Operating System (for example, `linux` or `windows`).
-
-            '
-          type: string
-          example: linux
-    ResourceObject:
-      description: 'An object describing the resources which can be advertised by a node and
-
-        requested by a task.
-
-        '
-      type: object
-      properties:
-        NanoCPUs:
-          type: integer
-          format: int64
-          example: 4000000000
-        MemoryBytes:
-          type: integer
-          format: int64
-          example: 8272408576
-        GenericResources:
-          $ref: '#/components/schemas/GenericResources'
-    TaskState:
-      type: string
-      enum:
-      - new
-      - allocated
-      - pending
-      - assigned
-      - accepted
-      - preparing
-      - ready
-      - starting
-      - running
-      - complete
-      - shutdown
-      - failed
-      - rejected
-      - remove
-      - orphaned
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
-    MountType:
-      description: 'The mount type. Available types:
-
-
-        - `bind` a mount of a file or directory from the host into the container.
-
-        - `cluster` a Swarm cluster volume.
-
-        - `image` an OCI image.
-
-        - `npipe` a named pipe from the host into the container.
-
-        - `tmpfs` a `tmpfs`.
-
-        - `volume` a docker volume with the given `Name`.'
-      type: string
-      enum:
-      - bind
-      - cluster
-      - image
-      - npipe
-      - tmpfs
-      - volume
-      example: volume
     EndpointPortConfig:
       type: object
       properties:
@@ -892,6 +528,112 @@ components:
           - host
           default: ingress
           example: ingress
+    PluginPrivilege:
+      description: 'Describes a permission the user has to accept upon installing
+
+        the plugin.
+
+        '
+      type: object
+      x-go-name: Privilege
+      properties:
+        Name:
+          type: string
+          example: network
+        Description:
+          type: string
+        Value:
+          type: array
+          items:
+            type: string
+          example:
+          - host
+    MountType:
+      description: 'The mount type. Available types:
+
+
+        - `bind` a mount of a file or directory from the host into the container.
+
+        - `cluster` a Swarm cluster volume.
+
+        - `image` an OCI image.
+
+        - `npipe` a named pipe from the host into the container.
+
+        - `tmpfs` a `tmpfs`.
+
+        - `volume` a docker volume with the given `Name`.'
+      type: string
+      enum:
+      - bind
+      - cluster
+      - image
+      - npipe
+      - tmpfs
+      - volume
+      example: volume
+    TaskStatus:
+      type: object
+      description: represents the status of a task.
+      properties:
+        Timestamp:
+          type: string
+          format: dateTime
+        State:
+          $ref: '#/components/schemas/TaskState'
+        Message:
+          type: string
+        Err:
+          type: string
+        ContainerStatus:
+          $ref: '#/components/schemas/ContainerStatus'
+        PortStatus:
+          $ref: '#/components/schemas/PortStatus'
+    ContainerStatus:
+      type: object
+      description: represents the status of a container.
+      properties:
+        ContainerID:
+          type: string
+        PID:
+          type: integer
+        ExitCode:
+          type: integer
+    GenericResources:
+      description: 'User-defined resources can be either Integer resources (e.g, `SSD=3`) or
+
+        String resources (e.g, `GPU=UUID1`).
+
+        '
+      type: array
+      items:
+        type: object
+        properties:
+          NamedResourceSpec:
+            type: object
+            properties:
+              Kind:
+                type: string
+              Value:
+                type: string
+          DiscreteResourceSpec:
+            type: object
+            properties:
+              Kind:
+                type: string
+              Value:
+                type: integer
+                format: int64
+      example:
+      - DiscreteResourceSpec:
+          Kind: SSD
+          Value: 3
+      - NamedResourceSpec:
+          Kind: GPU
+          Value: UUID1
+      - NamedResourceSpec:
+          Kind: GPU
+          Value: UUID2
     NetworkAttachmentConfig:
       description: 'Specifies how a service should be attached to a particular network.
 
@@ -917,16 +659,6 @@ components:
           type: object
           additionalProperties:
             type: string
-    ContainerStatus:
-      type: object
-      description: represents the status of a container.
-      properties:
-        ContainerID:
-          type: string
-        PID:
-          type: integer
-        ExitCode:
-          type: integer
     PortStatus:
       type: object
       description: represents the port status of a task's host ports whose service has published host ports
@@ -935,6 +667,296 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EndpointPortConfig'
+    ResourceObject:
+      description: 'An object describing the resources which can be advertised by a node and
+
+        requested by a task.
+
+        '
+      type: object
+      properties:
+        NanoCPUs:
+          type: integer
+          format: int64
+          example: 4000000000
+        MemoryBytes:
+          type: integer
+          format: int64
+          example: 8272408576
+        GenericResources:
+          $ref: '#/components/schemas/GenericResources'
+    Task:
+      type: object
+      properties:
+        ID:
+          description: The ID of the task.
+          type: string
+        Version:
+          $ref: '#/components/schemas/ObjectVersion'
+        CreatedAt:
+          type: string
+          format: dateTime
+        UpdatedAt:
+          type: string
+          format: dateTime
+        Name:
+          description: Name of the task.
+          type: string
+        Labels:
+          description: User-defined key/value metadata.
+          type: object
+          additionalProperties:
+            type: string
+        Spec:
+          $ref: '#/components/schemas/TaskSpec'
+        ServiceID:
+          description: The ID of the service this task is part of.
+          type: string
+        Slot:
+          type: integer
+        NodeID:
+          description: The ID of the node that this task is on.
+          type: string
+        AssignedGenericResources:
+          $ref: '#/components/schemas/GenericResources'
+        Status:
+          $ref: '#/components/schemas/TaskStatus'
+        DesiredState:
+          $ref: '#/components/schemas/TaskState'
+        JobIteration:
+          description: 'If the Service this Task belongs to is a job-mode service, contains
+
+            the JobIteration of the Service this Task was created for. Absent if
+
+            the Task was created for a Replicated or Global Service.
+
+            '
+          $ref: '#/components/schemas/ObjectVersion'
+      example:
+        ID: 0kzzo1i0y4jz6027t0k7aezc7
+        Version:
+          Index: 71
+        CreatedAt: '2016-06-07T21:07:31.171892745Z'
+        UpdatedAt: '2016-06-07T21:07:31.376370513Z'
+        Spec:
+          ContainerSpec:
+            Image: redis
+          Resources:
+            Limits: {}
+            Reservations: {}
+          RestartPolicy:
+            Condition: any
+            MaxAttempts: 0
+          Placement: {}
+        ServiceID: 9mnpnzenvg8p8tdbtq4wvbkcz
+        Slot: 1
+        NodeID: 60gvrl6tm78dmak4yl7srz94v
+        Status:
+          Timestamp: '2016-06-07T21:07:31.290032978Z'
+          State: running
+          Message: started
+          ContainerStatus:
+            ContainerID: e5d62702a1b48d01c3e02ca1e0212a250801fa8d67caca0b6f35919ebc12f035
+            PID: 677
+        DesiredState: running
+        NetworksAttachments:
+        - Network:
+            ID: 4qvuz4ko70xaltuqbt8956gd1
+            Version:
+              Index: 18
+            CreatedAt: '2016-06-07T20:31:11.912919752Z'
+            UpdatedAt: '2016-06-07T21:07:29.955277358Z'
+            Spec:
+              Name: ingress
+              Labels:
+                com.docker.swarm.internal: 'true'
+              DriverConfiguration: {}
+              IPAMOptions:
+                Driver: {}
+                Configs:
+                - Subnet: 10.255.0.0/16
+                  Gateway: 10.255.0.1
+            DriverState:
+              Name: overlay
+              Options:
+                com.docker.network.driver.overlay.vxlanid_list: '256'
+            IPAMOptions:
+              Driver:
+                Name: default
+              Configs:
+              - Subnet: 10.255.0.0/16
+                Gateway: 10.255.0.1
+          Addresses:
+          - 10.255.0.10/16
+        AssignedGenericResources:
+        - DiscreteResourceSpec:
+            Kind: SSD
+            Value: 3
+        - NamedResourceSpec:
+            Kind: GPU
+            Value: UUID1
+        - NamedResourceSpec:
+            Kind: GPU
+            Value: UUID2
+    TaskState:
+      type: string
+      enum:
+      - new
+      - allocated
+      - pending
+      - assigned
+      - accepted
+      - preparing
+      - ready
+      - starting
+      - running
+      - complete
+      - shutdown
+      - failed
+      - rejected
+      - remove
+      - orphaned
+    ObjectVersion:
+      description: 'The version number of the object such as node, service, etc. This is needed
+
+        to avoid conflicting writes. The client must send the version number along
+
+        with the modified specification when updating these objects.
+
+
+        This approach ensures safe concurrency and determinism in that the change
+
+        on the object may not be applied if the version number has changed from the
+
+        last read. In other words, if two update requests specify the same base
+
+        version, only one of the requests can succeed. As a result, two separate
+
+        update requests that happen at the same time will not unintentionally
+
+        overwrite each other.
+
+        '
+      type: object
+      properties:
+        Index:
+          type: integer
+          format: uint64
+          example: 373531
+    Platform:
+      description: 'Platform represents the platform (Arch/OS).
+
+        '
+      type: object
+      properties:
+        Architecture:
+          description: 'Architecture represents the hardware architecture (for example,
+
+            `x86_64`).
+
+            '
+          type: string
+          example: x86_64
+        OS:
+          description: 'OS represents the Operating System (for example, `linux` or `windows`).
+
+            '
+          type: string
+          example: linux
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
+    HealthConfig:
+      description: 'A test to perform to check that the container is healthy.
+
+        Healthcheck commands should be side-effect free.
+
+        '
+      type: object
+      properties:
+        Test:
+          description: 'The test to perform. Possible values are:
+
+
+            - `[]` inherit healthcheck from image or parent image
+
+            - `["NONE"]` disable healthcheck
+
+            - `["CMD", args...]` exec arguments directly
+
+            - `["CMD-SHELL", command]` run command with system''s default shell
+
+
+            A non-zero exit code indicates a failed healthcheck:
+
+            - `0` healthy
+
+            - `1` unhealthy
+
+            - `2` reserved (treated as unhealthy)
+
+            - other values: error running probe
+
+            '
+          type: array
+          items:
+            type: string
+        Interval:
+          description: 'The time to wait between checks in nanoseconds. It should be 0 or at
+
+            least 1000000 (1 ms). 0 means inherit.
+
+            '
+          type: integer
+          format: int64
+        Timeout:
+          description: 'The time to wait before considering the check to have hung. It should
+
+            be 0 or at least 1000000 (1 ms). 0 means inherit.
+
+
+            If the health check command does not complete within this timeout,
+
+            the check is considered failed and the health check process is
+
+            forcibly terminated without a graceful shutdown.
+
+            '
+          type: integer
+          format: int64
+        Retries:
+          description: 'The number of consecutive failures needed to consider a container as
+
+            unhealthy. 0 means inherit.
+
+            '
+          type: integer
+        StartPeriod:
+          description: 'Start period for the container to initialize before starting
+
+            health-retries countdown in nanoseconds. It should be 0 or at least
+
+            1000000 (1 ms). 0 means inherit.
+
+            '
+          type: integer
+          format: int64
+        StartInterval:
+          description: 'The time to wait between checks in nanoseconds during the start period.
+
+            It should be 0 or at least 1000000 (1 ms). 0 means inherit.
+
+            '
+          type: integer
+          format: int64
     TaskSpec:
       description: User modifiable task configuration.
       type: object
@@ -1657,25 +1679,3 @@ components:
               type: object
               additionalProperties:
                 type: string
-    Limit:
-      description: 'An object describing a limit on resources which can be requested by a task.
-
-        '
-      type: object
-      properties:
-        NanoCPUs:
-          type: integer
-          format: int64
-          example: 4000000000
-        MemoryBytes:
-          type: integer
-          format: int64
-          example: 8272408576
-        Pids:
-          description: 'Limits the maximum number of PIDs in the container. Set `0` for unlimited.
-
-            '
-          type: integer
-          format: int64
-          default: 0
-          example: 100

@@ -273,87 +273,6 @@ paths:
           '
 components:
   schemas:
-    ObjectVersion:
-      description: 'The version number of the object such as node, service, etc. This is needed
-
-        to avoid conflicting writes. The client must send the version number along
-
-        with the modified specification when updating these objects.
-
-
-        This approach ensures safe concurrency and determinism in that the change
-
-        on the object may not be applied if the version number has changed from the
-
-        last read. In other words, if two update requests specify the same base
-
-        version, only one of the requests can succeed. As a result, two separate
-
-        update requests that happen at the same time will not unintentionally
-
-        overwrite each other.
-
-        '
-      type: object
-      properties:
-        Index:
-          type: integer
-          format: uint64
-          example: 373531
-    Config:
-      type: object
-      properties:
-        ID:
-          type: string
-        Version:
-          $ref: '#/components/schemas/ObjectVersion'
-        CreatedAt:
-          type: string
-          format: dateTime
-        UpdatedAt:
-          type: string
-          format: dateTime
-        Spec:
-          $ref: '#/components/schemas/ConfigSpec'
-    IDResponse:
-      description: Response to an API call that returns just an Id
-      type: object
-      x-go-name: IDResponse
-      required:
-      - Id
-      properties:
-        Id:
-          description: The id of the newly created object.
-          type: string
-    Driver:
-      description: Driver represents a driver (network, logging, secrets).
-      type: object
-      required:
-      - Name
-      properties:
-        Name:
-          description: Name of the driver.
-          type: string
-          example: some-driver
-        Options:
-          description: Key/value map of driver-specific options.
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            OptionA: value for driver-specific option A
-            OptionB: value for driver-specific option B
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
     ConfigSpec:
       type: object
       properties:
@@ -384,3 +303,84 @@ components:
 
             '
           $ref: '#/components/schemas/Driver'
+    IDResponse:
+      description: Response to an API call that returns just an Id
+      type: object
+      x-go-name: IDResponse
+      required:
+      - Id
+      properties:
+        Id:
+          description: The id of the newly created object.
+          type: string
+    Config:
+      type: object
+      properties:
+        ID:
+          type: string
+        Version:
+          $ref: '#/components/schemas/ObjectVersion'
+        CreatedAt:
+          type: string
+          format: dateTime
+        UpdatedAt:
+          type: string
+          format: dateTime
+        Spec:
+          $ref: '#/components/schemas/ConfigSpec'
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
+    ObjectVersion:
+      description: 'The version number of the object such as node, service, etc. This is needed
+
+        to avoid conflicting writes. The client must send the version number along
+
+        with the modified specification when updating these objects.
+
+
+        This approach ensures safe concurrency and determinism in that the change
+
+        on the object may not be applied if the version number has changed from the
+
+        last read. In other words, if two update requests specify the same base
+
+        version, only one of the requests can succeed. As a result, two separate
+
+        update requests that happen at the same time will not unintentionally
+
+        overwrite each other.
+
+        '
+      type: object
+      properties:
+        Index:
+          type: integer
+          format: uint64
+          example: 373531
+    Driver:
+      description: Driver represents a driver (network, logging, secrets).
+      type: object
+      required:
+      - Name
+      properties:
+        Name:
+          description: Name of the driver.
+          type: string
+          example: some-driver
+        Options:
+          description: Key/value map of driver-specific options.
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            OptionA: value for driver-specific option A
+            OptionB: value for driver-specific option B

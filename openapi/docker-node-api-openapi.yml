@@ -246,69 +246,6 @@ paths:
               $ref: '#/components/schemas/NodeSpec'
 components:
   schemas:
-    NodeState:
-      description: NodeState represents the state of a node.
-      type: string
-      enum:
-      - unknown
-      - down
-      - ready
-      - disconnected
-      example: ready
-    ObjectVersion:
-      description: 'The version number of the object such as node, service, etc. This is needed
-
-        to avoid conflicting writes. The client must send the version number along
-
-        with the modified specification when updating these objects.
-
-
-        This approach ensures safe concurrency and determinism in that the change
-
-        on the object may not be applied if the version number has changed from the
-
-        last read. In other words, if two update requests specify the same base
-
-        version, only one of the requests can succeed. As a result, two separate
-
-        update requests that happen at the same time will not unintentionally
-
-        overwrite each other.
-
-        '
-      type: object
-      properties:
-        Index:
-          type: integer
-          format: uint64
-          example: 373531
-    Reachability:
-      description: Reachability represents the reachability of a node.
-      type: string
-      enum:
-      - unknown
-      - unreachable
-      - reachable
-      example: reachable
-    NodeDescription:
-      description: 'NodeDescription encapsulates the properties of the Node as reported by the
-
-        agent.
-
-        '
-      type: object
-      properties:
-        Hostname:
-          type: string
-          example: bf3067039e47
-        Platform:
-          $ref: '#/components/schemas/Platform'
-        Resources:
-          $ref: '#/components/schemas/ResourceObject'
-        Engine:
-          $ref: '#/components/schemas/EngineDescription'
-        TLSInfo:
-          $ref: '#/components/schemas/TLSInfo'
     NodeStatus:
       description: 'NodeStatus represents the status of a node.
 
@@ -327,31 +264,6 @@ components:
           description: IP address of the node.
           type: string
           example: 172.17.0.2
-    ManagerStatus:
-      description: 'ManagerStatus represents the status of a manager.
-
-
-        It provides the current status of a node''s manager component, if the node
-
-        is a manager.
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        Leader:
-          type: boolean
-          default: false
-          example: true
-        Reachability:
-          $ref: '#/components/schemas/Reachability'
-        Addr:
-          description: 'The IP address and port at which the manager is reachable.
-
-            '
-          type: string
-          example: 10.0.0.46:2377
     NodeSpec:
       type: object
       properties:
@@ -385,60 +297,6 @@ components:
         Role: manager
         Labels:
           foo: bar
-    Platform:
-      description: 'Platform represents the platform (Arch/OS).
-
-        '
-      type: object
-      properties:
-        Architecture:
-          description: 'Architecture represents the hardware architecture (for example,
-
-            `x86_64`).
-
-            '
-          type: string
-          example: x86_64
-        OS:
-          description: 'OS represents the Operating System (for example, `linux` or `windows`).
-
-            '
-          type: string
-          example: linux
-    Node:
-      type: object
-      properties:
-        ID:
-          type: string
-          example: 24ifsmvkjbyhk
-        Version:
-          $ref: '#/components/schemas/ObjectVersion'
-        CreatedAt:
-          description: 'Date and time at which the node was added to the swarm in
-
-            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-
-            '
-          type: string
-          format: dateTime
-          example: '2016-08-18T10:44:24.496525531Z'
-        UpdatedAt:
-          description: 'Date and time at which the node was last updated in
-
-            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-
-            '
-          type: string
-          format: dateTime
-          example: '2017-08-09T07:09:37.632105588Z'
-        Spec:
-          $ref: '#/components/schemas/NodeSpec'
-        Description:
-          $ref: '#/components/schemas/NodeDescription'
-        Status:
-          $ref: '#/components/schemas/NodeStatus'
-        ManagerStatus:
-          $ref: '#/components/schemas/ManagerStatus'
     GenericResources:
       description: 'User-defined resources can be either Integer resources (e.g, `SSD=3`) or
 
@@ -474,6 +332,17 @@ components:
       - NamedResourceSpec:
           Kind: GPU
           Value: UUID2
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
     ResourceObject:
       description: 'An object describing the resources which can be advertised by a node and
 
@@ -492,17 +361,195 @@ components:
           example: 8272408576
         GenericResources:
           $ref: '#/components/schemas/GenericResources'
-    ErrorResponse:
-      description: Represents an error.
+    ObjectVersion:
+      description: 'The version number of the object such as node, service, etc. This is needed
+
+        to avoid conflicting writes. The client must send the version number along
+
+        with the modified specification when updating these objects.
+
+
+        This approach ensures safe concurrency and determinism in that the change
+
+        on the object may not be applied if the version number has changed from the
+
+        last read. In other words, if two update requests specify the same base
+
+        version, only one of the requests can succeed. As a result, two separate
+
+        update requests that happen at the same time will not unintentionally
+
+        overwrite each other.
+
+        '
       type: object
-      required:
-      - message
       properties:
-        message:
-          description: The error message.
+        Index:
+          type: integer
+          format: uint64
+          example: 373531
+    NodeDescription:
+      description: 'NodeDescription encapsulates the properties of the Node as reported by the
+
+        agent.
+
+        '
+      type: object
+      properties:
+        Hostname:
+          type: string
+          example: bf3067039e47
+        Platform:
+          $ref: '#/components/schemas/Platform'
+        Resources:
+          $ref: '#/components/schemas/ResourceObject'
+        Engine:
+          $ref: '#/components/schemas/EngineDescription'
+        TLSInfo:
+          $ref: '#/components/schemas/TLSInfo'
+    NodeState:
+      description: NodeState represents the state of a node.
+      type: string
+      enum:
+      - unknown
+      - down
+      - ready
+      - disconnected
+      example: ready
+    ManagerStatus:
+      description: 'ManagerStatus represents the status of a manager.
+
+
+        It provides the current status of a node''s manager component, if the node
+
+        is a manager.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        Leader:
+          type: boolean
+          default: false
+          example: true
+        Reachability:
+          $ref: '#/components/schemas/Reachability'
+        Addr:
+          description: 'The IP address and port at which the manager is reachable.
+
+            '
+          type: string
+          example: 10.0.0.46:2377
+    Platform:
+      description: 'Platform represents the platform (Arch/OS).
+
+        '
+      type: object
+      properties:
+        Architecture:
+          description: 'Architecture represents the hardware architecture (for example,
+
+            `x86_64`).
+
+            '
+          type: string
+          example: x86_64
+        OS:
+          description: 'OS represents the Operating System (for example, `linux` or `windows`).
+
+            '
+          type: string
+          example: linux
+    TLSInfo:
+      description: 'Information about the issuer of leaf TLS certificates and the trusted root
+
+        CA certificate.
+
+        '
+      type: object
+      properties:
+        TrustRoot:
+          description: 'The root CA certificate(s) that are used to validate leaf TLS
+
+            certificates.
+
+            '
+          type: string
+        CertIssuerSubject:
+          description: The base64-url-safe-encoded raw subject bytes of the issuer.
+          type: string
+        CertIssuerPublicKey:
+          description: 'The base64-url-safe-encoded raw public key bytes of the issuer.
+
+            '
           type: string
       example:
-        message: Something went wrong.
+        TrustRoot: '-----BEGIN CERTIFICATE-----
+
+          MIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw
+
+          EzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0
+
+          MzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH
+
+          A0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf
+
+          3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB
+
+          Af8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO
+
+          PQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz
+
+          pxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H
+
+          -----END CERTIFICATE-----
+
+          '
+        CertIssuerSubject: MBMxETAPBgNVBAMTCHN3YXJtLWNh
+        CertIssuerPublicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==
+    Reachability:
+      description: Reachability represents the reachability of a node.
+      type: string
+      enum:
+      - unknown
+      - unreachable
+      - reachable
+      example: reachable
+    Node:
+      type: object
+      properties:
+        ID:
+          type: string
+          example: 24ifsmvkjbyhk
+        Version:
+          $ref: '#/components/schemas/ObjectVersion'
+        CreatedAt:
+          description: 'Date and time at which the node was added to the swarm in
+
+            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+
+            '
+          type: string
+          format: dateTime
+          example: '2016-08-18T10:44:24.496525531Z'
+        UpdatedAt:
+          description: 'Date and time at which the node was last updated in
+
+            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+
+            '
+          type: string
+          format: dateTime
+          example: '2017-08-09T07:09:37.632105588Z'
+        Spec:
+          $ref: '#/components/schemas/NodeSpec'
+        Description:
+          $ref: '#/components/schemas/NodeDescription'
+        Status:
+          $ref: '#/components/schemas/NodeStatus'
+        ManagerStatus:
+          $ref: '#/components/schemas/ManagerStatus'
     EngineDescription:
       description: EngineDescription provides information about an engine.
       type: object
@@ -560,50 +607,3 @@ components:
             Name: localhost:5000/vieux/sshfs:latest
           - Type: Volume
             Name: vieux/sshfs:latest
-    TLSInfo:
-      description: 'Information about the issuer of leaf TLS certificates and the trusted root
-
-        CA certificate.
-
-        '
-      type: object
-      properties:
-        TrustRoot:
-          description: 'The root CA certificate(s) that are used to validate leaf TLS
-
-            certificates.
-
-            '
-          type: string
-        CertIssuerSubject:
-          description: The base64-url-safe-encoded raw subject bytes of the issuer.
-          type: string
-        CertIssuerPublicKey:
-          description: 'The base64-url-safe-encoded raw public key bytes of the issuer.
-
-            '
-          type: string
-      example:
-        TrustRoot: '-----BEGIN CERTIFICATE-----
-
-          MIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw
-
-          EzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0
-
-          MzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH
-
-          A0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf
-
-          3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB
-
-          Af8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO
-
-          PQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz
-
-          pxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H
-
-          -----END CERTIFICATE-----
-
-          '
-        CertIssuerSubject: MBMxETAPBgNVBAMTCHN3YXJtLWNh
-        CertIssuerPublicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==
