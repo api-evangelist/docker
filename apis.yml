@@ -287,6 +287,9 @@ apis:
   - type: GettingStarted
     url: https://docs.docker.com/get-started/
 common:
+  - type: CapabilityMap
+    url: capabilities/docker-capability-edges.yml
+    name: Docker Business Capability Map
   - type: AgenticAccess
     url: agentic-access/docker-agentic-access.yml
   - type: VulnerabilityDisclosure
