@@ -352,6 +352,17 @@ paths:
       - Exec
 components:
   schemas:
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
     ProcessConfig:
       type: object
       properties:
@@ -377,14 +388,3 @@ components:
         Id:
           description: The id of the newly created object.
           type: string
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.

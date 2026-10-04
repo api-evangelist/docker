@@ -258,158 +258,6 @@ paths:
       - Volume
 components:
   schemas:
-    VolumeCreateRequest:
-      description: Volume configuration
-      type: object
-      title: VolumeConfig
-      x-go-name: CreateRequest
-      properties:
-        Name:
-          description: 'The new volume''s name. If not specified, Docker generates a name.
-
-            '
-          type: string
-          example: tardis
-        Driver:
-          description: Name of the volume driver to use.
-          type: string
-          default: local
-          example: custom
-        DriverOpts:
-          description: 'A mapping of driver options and values. These options are
-
-            passed directly to the driver and are driver specific.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            device: tmpfs
-            o: size=100m,uid=1000
-            type: tmpfs
-        Labels:
-          description: User-defined key/value metadata.
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            com.example.some-label: some-value
-            com.example.some-other-label: some-other-value
-        ClusterVolumeSpec:
-          $ref: '#/components/schemas/ClusterVolumeSpec'
-    ClusterVolume:
-      type: object
-      description: 'Options and information specific to, and only present on, Swarm CSI
-
-        cluster volumes.
-
-        '
-      properties:
-        ID:
-          type: string
-          description: 'The Swarm ID of this volume. Because cluster volumes are Swarm
-
-            objects, they have an ID, unlike non-cluster volumes. This ID can
-
-            be used to refer to the Volume instead of the name.
-
-            '
-        Version:
-          $ref: '#/components/schemas/ObjectVersion'
-        CreatedAt:
-          type: string
-          format: dateTime
-        UpdatedAt:
-          type: string
-          format: dateTime
-        Spec:
-          $ref: '#/components/schemas/ClusterVolumeSpec'
-        Info:
-          type: object
-          description: 'Information about the global status of the volume.
-
-            '
-          properties:
-            CapacityBytes:
-              type: integer
-              format: int64
-              description: 'The capacity of the volume in bytes. A value of 0 indicates that
-
-                the capacity is unknown.
-
-                '
-            VolumeContext:
-              type: object
-              description: 'A map of strings to strings returned from the storage plugin when
-
-                the volume is created.
-
-                '
-              additionalProperties:
-                type: string
-            VolumeID:
-              type: string
-              description: 'The ID of the volume as returned by the CSI storage plugin. This
-
-                is distinct from the volume''s ID as provided by Docker. This ID
-
-                is never used by the user when communicating with Docker to refer
-
-                to this volume. If the ID is blank, then the Volume has not been
-
-                successfully created in the plugin yet.
-
-                '
-            AccessibleTopology:
-              type: array
-              description: 'The topology this volume is actually accessible from.
-
-                '
-              items:
-                $ref: '#/components/schemas/Topology'
-        PublishStatus:
-          type: array
-          description: 'The status of the volume as it pertains to its publishing and use on
-
-            specific nodes
-
-            '
-          items:
-            type: object
-            properties:
-              NodeID:
-                type: string
-                description: 'The ID of the Swarm node the volume is published on.
-
-                  '
-              State:
-                type: string
-                description: 'The published state of the volume.
-
-                  * `pending-publish` The volume should be published to this node, but the call to the controller plugin to do so has not yet been successfully completed.
-
-                  * `published` The volume is published successfully to the node.
-
-                  * `pending-node-unpublish` The volume should be unpublished from the node, and the manager is awaiting confirmation from the worker that it has done so.
-
-                  * `pending-controller-unpublish` The volume is successfully unpublished from the node, but has not yet been successfully unpublished on the controller.
-
-                  '
-                enum:
-                - pending-publish
-                - published
-                - pending-node-unpublish
-                - pending-controller-unpublish
-              PublishContext:
-                type: object
-                description: 'A map of strings to strings returned by the CSI controller
-
-                  plugin when a volume is published.
-
-                  '
-                additionalProperties:
-                  type: string
     ErrorResponse:
       description: Represents an error.
       type: object
@@ -421,147 +269,17 @@ components:
           type: string
       example:
         message: Something went wrong.
-    Volume:
-      type: object
-      required:
-      - Name
-      - Driver
-      - Mountpoint
-      - Labels
-      - Scope
-      - Options
-      properties:
-        Name:
-          type: string
-          description: Name of the volume.
-          example: tardis
-        Driver:
-          type: string
-          description: Name of the volume driver used by the volume.
-          example: custom
-        Mountpoint:
-          type: string
-          description: Mount path of the volume on the host.
-          example: /var/lib/docker/volumes/tardis
-        CreatedAt:
-          type: string
-          format: dateTime
-          description: Date/Time the volume was created.
-          example: '2016-06-07T20:31:11.853781916Z'
-        Status:
-          type: object
-          description: 'Low-level details about the volume, provided by the volume driver.
+    Topology:
+      description: 'A map of topological domains to topological segments. For in depth
 
-            Details are returned as a map with key/value pairs:
+        details, see documentation for the Topology object in the CSI
 
-            `{"key":"value","key2":"value2"}`.
-
-
-            The `Status` field is optional, and is omitted if the volume driver
-
-            does not support this feature.
-
-            '
-          additionalProperties:
-            type: object
-          example:
-            hello: world
-        Labels:
-          type: object
-          description: User-defined key/value metadata.
-          additionalProperties:
-            type: string
-          example:
-            com.example.some-label: some-value
-            com.example.some-other-label: some-other-value
-        Scope:
-          type: string
-          description: 'The level at which the volume exists. Either `global` for cluster-wide,
-
-            or `local` for machine level.
-
-            '
-          default: local
-          enum:
-          - local
-          - global
-          example: local
-        ClusterVolume:
-          $ref: '#/components/schemas/ClusterVolume'
-        Options:
-          type: object
-          description: 'The driver specific options used when creating the volume.
-
-            '
-          additionalProperties:
-            type: string
-          example:
-            device: tmpfs
-            o: size=100m,uid=1000
-            type: tmpfs
-        UsageData:
-          type:
-          - object
-          - 'null'
-          x-go-name: UsageData
-          required:
-          - Size
-          - RefCount
-          description: 'Usage details about the volume. This information is used by the
-
-            `GET /system/df` endpoint, and omitted in other endpoints.
-
-            '
-          properties:
-            Size:
-              type: integer
-              format: int64
-              default: -1
-              description: 'Amount of disk space used by the volume (in bytes). This information
-
-                is only available for volumes created with the `"local"` volume
-
-                driver. For volumes created with other volume drivers, this field
-
-                is set to `-1` ("not available")
-
-                '
-            RefCount:
-              type: integer
-              format: int64
-              default: -1
-              description: 'The number of containers referencing this volume. This field
-
-                is set to `-1` if the reference-count is not available.
-
-                '
-    ObjectVersion:
-      description: 'The version number of the object such as node, service, etc. This is needed
-
-        to avoid conflicting writes. The client must send the version number along
-
-        with the modified specification when updating these objects.
-
-
-        This approach ensures safe concurrency and determinism in that the change
-
-        on the object may not be applied if the version number has changed from the
-
-        last read. In other words, if two update requests specify the same base
-
-        version, only one of the requests can succeed. As a result, two separate
-
-        update requests that happen at the same time will not unintentionally
-
-        overwrite each other.
+        specification.
 
         '
       type: object
-      properties:
-        Index:
-          type: integer
-          format: uint64
-          example: 373531
+      additionalProperties:
+        type: string
     ClusterVolumeSpec:
       type: object
       description: 'Cluster-specific options used to create the volume.
@@ -727,6 +445,187 @@ components:
               - active
               - pause
               - drain
+    ObjectVersion:
+      description: 'The version number of the object such as node, service, etc. This is needed
+
+        to avoid conflicting writes. The client must send the version number along
+
+        with the modified specification when updating these objects.
+
+
+        This approach ensures safe concurrency and determinism in that the change
+
+        on the object may not be applied if the version number has changed from the
+
+        last read. In other words, if two update requests specify the same base
+
+        version, only one of the requests can succeed. As a result, two separate
+
+        update requests that happen at the same time will not unintentionally
+
+        overwrite each other.
+
+        '
+      type: object
+      properties:
+        Index:
+          type: integer
+          format: uint64
+          example: 373531
+    VolumeCreateRequest:
+      description: Volume configuration
+      type: object
+      title: VolumeConfig
+      x-go-name: CreateRequest
+      properties:
+        Name:
+          description: 'The new volume''s name. If not specified, Docker generates a name.
+
+            '
+          type: string
+          example: tardis
+        Driver:
+          description: Name of the volume driver to use.
+          type: string
+          default: local
+          example: custom
+        DriverOpts:
+          description: 'A mapping of driver options and values. These options are
+
+            passed directly to the driver and are driver specific.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            device: tmpfs
+            o: size=100m,uid=1000
+            type: tmpfs
+        Labels:
+          description: User-defined key/value metadata.
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            com.example.some-label: some-value
+            com.example.some-other-label: some-other-value
+        ClusterVolumeSpec:
+          $ref: '#/components/schemas/ClusterVolumeSpec'
+    Volume:
+      type: object
+      required:
+      - Name
+      - Driver
+      - Mountpoint
+      - Labels
+      - Scope
+      - Options
+      properties:
+        Name:
+          type: string
+          description: Name of the volume.
+          example: tardis
+        Driver:
+          type: string
+          description: Name of the volume driver used by the volume.
+          example: custom
+        Mountpoint:
+          type: string
+          description: Mount path of the volume on the host.
+          example: /var/lib/docker/volumes/tardis
+        CreatedAt:
+          type: string
+          format: dateTime
+          description: Date/Time the volume was created.
+          example: '2016-06-07T20:31:11.853781916Z'
+        Status:
+          type: object
+          description: 'Low-level details about the volume, provided by the volume driver.
+
+            Details are returned as a map with key/value pairs:
+
+            `{"key":"value","key2":"value2"}`.
+
+
+            The `Status` field is optional, and is omitted if the volume driver
+
+            does not support this feature.
+
+            '
+          additionalProperties:
+            type: object
+          example:
+            hello: world
+        Labels:
+          type: object
+          description: User-defined key/value metadata.
+          additionalProperties:
+            type: string
+          example:
+            com.example.some-label: some-value
+            com.example.some-other-label: some-other-value
+        Scope:
+          type: string
+          description: 'The level at which the volume exists. Either `global` for cluster-wide,
+
+            or `local` for machine level.
+
+            '
+          default: local
+          enum:
+          - local
+          - global
+          example: local
+        ClusterVolume:
+          $ref: '#/components/schemas/ClusterVolume'
+        Options:
+          type: object
+          description: 'The driver specific options used when creating the volume.
+
+            '
+          additionalProperties:
+            type: string
+          example:
+            device: tmpfs
+            o: size=100m,uid=1000
+            type: tmpfs
+        UsageData:
+          type:
+          - object
+          - 'null'
+          x-go-name: UsageData
+          required:
+          - Size
+          - RefCount
+          description: 'Usage details about the volume. This information is used by the
+
+            `GET /system/df` endpoint, and omitted in other endpoints.
+
+            '
+          properties:
+            Size:
+              type: integer
+              format: int64
+              default: -1
+              description: 'Amount of disk space used by the volume (in bytes). This information
+
+                is only available for volumes created with the `"local"` volume
+
+                driver. For volumes created with other volume drivers, this field
+
+                is set to `-1` ("not available")
+
+                '
+            RefCount:
+              type: integer
+              format: int64
+              default: -1
+              description: 'The number of containers referencing this volume. This field
+
+                is set to `-1` if the reference-count is not available.
+
+                '
     VolumeListResponse:
       type: object
       title: VolumeListResponse
@@ -746,14 +645,115 @@ components:
           items:
             type: string
           example: []
-    Topology:
-      description: 'A map of topological domains to topological segments. For in depth
+    ClusterVolume:
+      type: object
+      description: 'Options and information specific to, and only present on, Swarm CSI
 
-        details, see documentation for the Topology object in the CSI
-
-        specification.
+        cluster volumes.
 
         '
-      type: object
-      additionalProperties:
-        type: string
+      properties:
+        ID:
+          type: string
+          description: 'The Swarm ID of this volume. Because cluster volumes are Swarm
+
+            objects, they have an ID, unlike non-cluster volumes. This ID can
+
+            be used to refer to the Volume instead of the name.
+
+            '
+        Version:
+          $ref: '#/components/schemas/ObjectVersion'
+        CreatedAt:
+          type: string
+          format: dateTime
+        UpdatedAt:
+          type: string
+          format: dateTime
+        Spec:
+          $ref: '#/components/schemas/ClusterVolumeSpec'
+        Info:
+          type: object
+          description: 'Information about the global status of the volume.
+
+            '
+          properties:
+            CapacityBytes:
+              type: integer
+              format: int64
+              description: 'The capacity of the volume in bytes. A value of 0 indicates that
+
+                the capacity is unknown.
+
+                '
+            VolumeContext:
+              type: object
+              description: 'A map of strings to strings returned from the storage plugin when
+
+                the volume is created.
+
+                '
+              additionalProperties:
+                type: string
+            VolumeID:
+              type: string
+              description: 'The ID of the volume as returned by the CSI storage plugin. This
+
+                is distinct from the volume''s ID as provided by Docker. This ID
+
+                is never used by the user when communicating with Docker to refer
+
+                to this volume. If the ID is blank, then the Volume has not been
+
+                successfully created in the plugin yet.
+
+                '
+            AccessibleTopology:
+              type: array
+              description: 'The topology this volume is actually accessible from.
+
+                '
+              items:
+                $ref: '#/components/schemas/Topology'
+        PublishStatus:
+          type: array
+          description: 'The status of the volume as it pertains to its publishing and use on
+
+            specific nodes
+
+            '
+          items:
+            type: object
+            properties:
+              NodeID:
+                type: string
+                description: 'The ID of the Swarm node the volume is published on.
+
+                  '
+              State:
+                type: string
+                description: 'The published state of the volume.
+
+                  * `pending-publish` The volume should be published to this node, but the call to the controller plugin to do so has not yet been successfully completed.
+
+                  * `published` The volume is published successfully to the node.
+
+                  * `pending-node-unpublish` The volume should be unpublished from the node, and the manager is awaiting confirmation from the worker that it has done so.
+
+                  * `pending-controller-unpublish` The volume is successfully unpublished from the node, but has not yet been successfully unpublished on the controller.
+
+                  '
+                enum:
+                - pending-publish
+                - published
+                - pending-node-unpublish
+                - pending-controller-unpublish
+              PublishContext:
+                type: object
+                description: 'A map of strings to strings returned by the CSI controller
+
+                  plugin when a volume is published.
+
+                  '
+                additionalProperties:
+                  type: string

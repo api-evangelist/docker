@@ -58,6 +58,76 @@ components:
           type: string
       example:
         message: Something went wrong.
+    OCIDescriptor:
+      type: object
+      x-go-name: Descriptor
+      description: 'A descriptor struct containing digest, media type, and size, as defined in
+
+        the [OCI Content Descriptors Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/descriptor.md).
+
+        '
+      properties:
+        mediaType:
+          description: 'The media type of the object this schema refers to.
+
+            '
+          type: string
+          example: application/vnd.oci.image.manifest.v1+json
+        digest:
+          description: 'The digest of the targeted content.
+
+            '
+          type: string
+          example: sha256:c0537ff6a5218ef531ece93d4984efc99bbf3f7497c0a7726c88e2bb7584dc96
+        size:
+          description: 'The size in bytes of the blob.
+
+            '
+          type: integer
+          format: int64
+          example: 424
+        urls:
+          description: List of URLs from which this object MAY be downloaded.
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uri
+        annotations:
+          description: Arbitrary metadata relating to the targeted content.
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+          example:
+            com.docker.official-images.bashbrew.arch: amd64
+            org.opencontainers.image.base.digest: sha256:0d0ef5c914d3ea700147da1bd050c59edb8bb12ca312f3800b29d7c8087eabd8
+            org.opencontainers.image.base.name: scratch
+            org.opencontainers.image.created: '2025-01-27T00:00:00Z'
+            org.opencontainers.image.revision: 9fabb4bad5138435b01857e2fe9363e2dc5f6a79
+            org.opencontainers.image.source: https://git.launchpad.net/cloud-images/+oci/ubuntu-base
+            org.opencontainers.image.url: https://hub.docker.com/_/ubuntu
+            org.opencontainers.image.version: '24.04'
+        data:
+          type:
+          - string
+          - 'null'
+          description: 'Data is an embedding of the targeted content. This is encoded as a base64
+
+            string when marshalled to JSON (automatically, by encoding/json). If
+
+            present, Data can be used directly to avoid fetching the targeted content.'
+          example: null
+        platform:
+          $ref: '#/components/schemas/OCIPlatform'
+        artifactType:
+          description: ArtifactType is the IANA media type of this artifact.
+          type:
+          - string
+          - 'null'
+          example: null
     OCIPlatform:
       type:
       - object
@@ -130,73 +200,3 @@ components:
             '
           items:
             $ref: '#/components/schemas/OCIPlatform'
-    OCIDescriptor:
-      type: object
-      x-go-name: Descriptor
-      description: 'A descriptor struct containing digest, media type, and size, as defined in
-
-        the [OCI Content Descriptors Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/descriptor.md).
-
-        '
-      properties:
-        mediaType:
-          description: 'The media type of the object this schema refers to.
-
-            '
-          type: string
-          example: application/vnd.oci.image.manifest.v1+json
-        digest:
-          description: 'The digest of the targeted content.
-
-            '
-          type: string
-          example: sha256:c0537ff6a5218ef531ece93d4984efc99bbf3f7497c0a7726c88e2bb7584dc96
-        size:
-          description: 'The size in bytes of the blob.
-
-            '
-          type: integer
-          format: int64
-          example: 424
-        urls:
-          description: List of URLs from which this object MAY be downloaded.
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            format: uri
-        annotations:
-          description: Arbitrary metadata relating to the targeted content.
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: string
-          example:
-            com.docker.official-images.bashbrew.arch: amd64
-            org.opencontainers.image.base.digest: sha256:0d0ef5c914d3ea700147da1bd050c59edb8bb12ca312f3800b29d7c8087eabd8
-            org.opencontainers.image.base.name: scratch
-            org.opencontainers.image.created: '2025-01-27T00:00:00Z'
-            org.opencontainers.image.revision: 9fabb4bad5138435b01857e2fe9363e2dc5f6a79
-            org.opencontainers.image.source: https://git.launchpad.net/cloud-images/+oci/ubuntu-base
-            org.opencontainers.image.url: https://hub.docker.com/_/ubuntu
-            org.opencontainers.image.version: '24.04'
-        data:
-          type:
-          - string
-          - 'null'
-          description: 'Data is an embedding of the targeted content. This is encoded as a base64
-
-            string when marshalled to JSON (automatically, by encoding/json). If
-
-            present, Data can be used directly to avoid fetching the targeted content.'
-          example: null
-        platform:
-          $ref: '#/components/schemas/OCIPlatform'
-        artifactType:
-          description: ArtifactType is the IANA media type of this artifact.
-          type:
-          - string
-          - 'null'
-          example: null

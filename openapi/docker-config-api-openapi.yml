@@ -303,16 +303,17 @@ components:
 
             '
           $ref: '#/components/schemas/Driver'
-    IDResponse:
-      description: Response to an API call that returns just an Id
+    ErrorResponse:
+      description: Represents an error.
       type: object
-      x-go-name: IDResponse
       required:
-      - Id
+      - message
       properties:
-        Id:
-          description: The id of the newly created object.
+        message:
+          description: The error message.
           type: string
+      example:
+        message: Something went wrong.
     Config:
       type: object
       properties:
@@ -328,17 +329,34 @@ components:
           format: dateTime
         Spec:
           $ref: '#/components/schemas/ConfigSpec'
-    ErrorResponse:
-      description: Represents an error.
+    IDResponse:
+      description: Response to an API call that returns just an Id
+      type: object
+      x-go-name: IDResponse
+      required:
+      - Id
+      properties:
+        Id:
+          description: The id of the newly created object.
+          type: string
+    Driver:
+      description: Driver represents a driver (network, logging, secrets).
       type: object
       required:
-      - message
+      - Name
       properties:
-        message:
-          description: The error message.
+        Name:
+          description: Name of the driver.
           type: string
-      example:
-        message: Something went wrong.
+          example: some-driver
+        Options:
+          description: Key/value map of driver-specific options.
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            OptionA: value for driver-specific option A
+            OptionB: value for driver-specific option B
     ObjectVersion:
       description: 'The version number of the object such as node, service, etc. This is needed
 
@@ -366,21 +384,3 @@ components:
           type: integer
           format: uint64
           example: 373531
-    Driver:
-      description: Driver represents a driver (network, logging, secrets).
-      type: object
-      required:
-      - Name
-      properties:
-        Name:
-          description: Name of the driver.
-          type: string
-          example: some-driver
-        Options:
-          description: Key/value map of driver-specific options.
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            OptionA: value for driver-specific option A
-            OptionB: value for driver-specific option B
