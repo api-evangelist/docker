@@ -397,6 +397,8 @@ common:
   - type: Arazzo
     url: arazzo/docker-install-plugin-workflow.yml
     name: Docker Review Privileges and Install a Plugin
+  - type: SpectralRules
+    url: https://github.com/docker/docs/blob/63cc3634e3a27ecb0cfdecba216fa74bf1fdceec/hack/api-docs/validation/rules.yaml
 integrations:
   - name: Become a Docker Verified Publisher
 maintainers:
