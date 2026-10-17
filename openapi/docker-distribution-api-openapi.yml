@@ -47,6 +47,28 @@ paths:
       - Distribution
 components:
   schemas:
+    DistributionInspect:
+      type: object
+      x-go-name: DistributionInspect
+      title: DistributionInspectResponse
+      required:
+      - Descriptor
+      - Platforms
+      description: 'Describes the result obtained from contacting the registry to retrieve
+
+        image metadata.
+
+        '
+      properties:
+        Descriptor:
+          $ref: '#/components/schemas/OCIDescriptor'
+        Platforms:
+          type: array
+          description: 'An array containing all platforms supported by the image.
+
+            '
+          items:
+            $ref: '#/components/schemas/OCIPlatform'
     ErrorResponse:
       description: Represents an error.
       type: object
@@ -178,25 +200,3 @@ components:
             '
           type: string
           example: v7
-    DistributionInspect:
-      type: object
-      x-go-name: DistributionInspect
-      title: DistributionInspectResponse
-      required:
-      - Descriptor
-      - Platforms
-      description: 'Describes the result obtained from contacting the registry to retrieve
-
-        image metadata.
-
-        '
-      properties:
-        Descriptor:
-          $ref: '#/components/schemas/OCIDescriptor'
-        Platforms:
-          type: array
-          description: 'An array containing all platforms supported by the image.
-
-            '
-          items:
-            $ref: '#/components/schemas/OCIPlatform'

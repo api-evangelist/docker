@@ -1328,244 +1328,11 @@ paths:
         description: Tar archive containing images
 components:
   schemas:
-    ErrorResponse:
-      description: Represents an error.
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          description: The error message.
-          type: string
-      example:
-        message: Something went wrong.
-    ImageConfig:
-      description: 'Configuration of the image. These fields are used as defaults
-
-        when starting a container from the image.
-
-        '
-      type: object
-      properties:
-        User:
-          description: The user that commands are run as inside the container.
-          type: string
-          example: web:web
-        ExposedPorts:
-          description: 'An object mapping ports to an empty object in the form:
-
-
-            `{"<port>/<tcp|udp|sctp>": {}}`
-
-            '
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: object
-            enum:
-            - {}
-            default: {}
-          example:
-            80/tcp: {}
-            443/tcp: {}
-        Env:
-          description: 'A list of environment variables to set inside the container in the
-
-            form `["VAR=value", ...]`. A variable without `=` is removed from the
-
-            environment, rather than to have an empty value.
-
-            '
-          type: array
-          items:
-            type: string
-          example:
-          - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-        Cmd:
-          description: 'Command to run specified as a string or an array of strings.
-
-            '
-          type: array
-          items:
-            type: string
-          example:
-          - /bin/sh
-        Healthcheck:
-          $ref: '#/components/schemas/HealthConfig'
-        ArgsEscaped:
-          description: Command is already escaped (Windows only)
-          type:
-          - boolean
-          - 'null'
-          default: false
-          example: false
-        Volumes:
-          description: 'An object mapping mount point paths inside the container to empty
-
-            objects.
-
-            '
-          type: object
-          additionalProperties:
-            type: object
-            enum:
-            - {}
-            default: {}
-          example:
-            /app/data: {}
-            /app/config: {}
-        WorkingDir:
-          description: The working directory for commands to run in.
-          type: string
-          example: /public/
-        Entrypoint:
-          description: 'The entry point for the container as a string or an array of strings.
-
-
-            If the array consists of exactly one empty string (`[""]`) then the
-
-            entry point is reset to system default (i.e., the entry point used by
-
-            docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
-
-            '
-          type: array
-          items:
-            type: string
-          example: []
-        OnBuild:
-          description: '`ONBUILD` metadata that were defined in the image''s `Dockerfile`.
-
-            '
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          example: []
-        Labels:
-          description: User-defined key/value metadata.
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            com.example.some-label: some-value
-            com.example.some-other-label: some-other-value
-        StopSignal:
-          description: 'Signal to stop a container as a string or unsigned integer.
-
-            '
-          type:
-          - string
-          - 'null'
-          example: SIGTERM
-        Shell:
-          description: 'Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
-
-            '
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          example:
-          - /bin/sh
-          - -c
-    IDResponse:
-      description: Response to an API call that returns just an Id
-      type: object
-      x-go-name: IDResponse
-      required:
-      - Id
-      properties:
-        Id:
-          description: The id of the newly created object.
-          type: string
-    SignerIdentity:
-      description: SignerIdentity contains information about the signer certificate used to sign the image.
-      type: object
-      properties:
-        CertificateIssuer:
-          type: string
-          description: CertificateIssuer is the certificate issuer.
-        SubjectAlternativeName:
-          type: string
-          description: SubjectAlternativeName is the certificate subject alternative name.
-        Issuer:
-          type: string
-          description: 'The OIDC issuer. Should match `iss` claim of ID token or, in the case of
-
-            a federated login like Dex it should match the issuer URL of the
-
-            upstream issuer. The issuer is not set the extensions are invalid and
-
-            will fail to render.'
-        BuildSignerURI:
-          type: string
-          description: Reference to specific build instructions that are responsible for signing.
-        BuildSignerDigest:
-          type: string
-          description: Immutable reference to the specific version of the build instructions that is responsible for signing.
-        RunnerEnvironment:
-          type: string
-          description: Specifies whether the build took place in platform-hosted cloud infrastructure or customer/self-hosted infrastructure.
-        SourceRepositoryURI:
-          type: string
-          description: Source repository URL that the build was based on.
-        SourceRepositoryDigest:
-          type: string
-          description: Immutable reference to a specific version of the source code that the build was based upon.
-        SourceRepositoryRef:
-          type: string
-          description: Source Repository Ref that the build run was based upon.
-        SourceRepositoryIdentifier:
-          type: string
-          description: Immutable identifier for the source repository the workflow was based upon.
-        SourceRepositoryOwnerURI:
-          type: string
-          description: Source repository owner URL of the owner of the source repository that the build was based on.
-        SourceRepositoryOwnerIdentifier:
-          type: string
-          description: Immutable identifier for the owner of the source repository that the workflow was based upon.
-        BuildConfigURI:
-          type: string
-          description: Build Config URL to the top-level/initiating build instructions.
-        BuildConfigDigest:
-          type: string
-          description: Immutable reference to the specific version of the top-level/initiating build instructions.
-        BuildTrigger:
-          type: string
-          description: Event or action that initiated the build.
-        RunInvocationURI:
-          type: string
-          description: Run Invocation URL to uniquely identify the build execution.
-        SourceRepositoryVisibilityAtSigning:
-          type: string
-          description: Source repository visibility at the time of signing the certificate.
-    SignatureTimestampType:
-      description: SignatureTimestampType is the type of timestamp used in the signature.
+    KnownSignerIdentity:
+      description: KnownSignerIdentity is an identifier for a special signer identity that is known to the implementation.
       type: string
       enum:
-      - Tlog
-      - TimestampAuthority
-    SignatureTimestamp:
-      description: SignatureTimestamp contains information about a verified signed timestamp for an image signature.
-      type: object
-      properties:
-        Type:
-          $ref: '#/components/schemas/SignatureTimestampType'
-        URI:
-          type: string
-        Timestamp:
-          type: string
-          format: date-time
-    SignatureType:
-      description: SignatureType is the type of signature format.
-      type: string
-      enum:
-      - bundle-v0.3
-      - simplesigning-v1
+      - DHI
     SignatureIdentity:
       description: SignatureIdentity contains the properties of verified signatures for the image.
       type: object
@@ -1606,6 +1373,16 @@ components:
           type: array
           items:
             type: string
+    IDResponse:
+      description: Response to an API call that returns just an Id
+      type: object
+      x-go-name: IDResponse
+      required:
+      - Id
+      properties:
+        Id:
+          description: The id of the newly created object.
+          type: string
     ImageInspect:
       description: 'Information about an image in the local image cache.
 
@@ -1836,70 +1613,6 @@ components:
               - 'null'
               format: dateTime
               example: '2022-02-28T14:40:02.623929178Z'
-    PullIdentity:
-      description: 'PullIdentity contains remote location information if image was created via pull.
-
-        If image was pulled via mirror, this contains the original repository location.'
-      type: object
-      properties:
-        Repository:
-          description: Repository is the remote repository location the image was pulled from.
-          type: string
-    KnownSignerIdentity:
-      description: KnownSignerIdentity is an identifier for a special signer identity that is known to the implementation.
-      type: string
-      enum:
-      - DHI
-    OCIPlatform:
-      type:
-      - object
-      - 'null'
-      x-go-name: Platform
-      description: 'Describes the platform which the image in the manifest runs on, as defined
-
-        in the [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/image-index.md).
-
-        '
-      properties:
-        architecture:
-          description: 'The CPU architecture, for example `amd64` or `ppc64`.
-
-            '
-          type: string
-          example: arm
-        os:
-          description: 'The operating system, for example `linux` or `windows`.
-
-            '
-          type: string
-          example: windows
-        os.version:
-          description: 'Optional field specifying the operating system version, for example on
-
-            Windows `10.0.19041.1165`.
-
-            '
-          type: string
-          example: 10.0.19041.1165
-        os.features:
-          description: 'Optional field specifying an array of strings, each listing a required
-
-            OS feature (for example on Windows `win32k`).
-
-            '
-          type: array
-          items:
-            type: string
-          example:
-          - win32k
-        variant:
-          description: 'Optional field specifying a variant of the CPU, for example `v7` to
-
-            specify ARMv7 when architecture is `arm`.
-
-            '
-          type: string
-          example: v7
     ImageHistoryResponseItem:
       type: object
       x-go-name: HistoryResponseItem
@@ -1929,6 +1642,86 @@ components:
           format: int64
         Comment:
           type: string
+    BuildIdentity:
+      description: BuildIdentity contains build reference information if image was created via build.
+      type: object
+      properties:
+        Ref:
+          description: 'Ref is the identifier for the build request. This reference can be used to
+
+            look up the build details in BuildKit history API.'
+          type: string
+        CreatedAt:
+          description: CreatedAt is the time when the build ran.
+          type: string
+          format: date-time
+    DriverData:
+      description: 'Information about the storage driver used to store the container''s and
+
+        image''s filesystem.
+
+        '
+      type: object
+      required:
+      - Name
+      - Data
+      properties:
+        Name:
+          description: Name of the storage driver.
+          type: string
+          example: overlay2
+        Data:
+          description: 'Low-level storage metadata, provided as key/value pairs.
+
+
+            This information is driver-specific, and depends on the storage-driver
+
+            in use, and should be used for informational purposes only.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            MergedDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/merged
+            UpperDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/diff
+            WorkDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/work
+    PullIdentity:
+      description: 'PullIdentity contains remote location information if image was created via pull.
+
+        If image was pulled via mirror, this contains the original repository location.'
+      type: object
+      properties:
+        Repository:
+          description: Repository is the remote repository location the image was pulled from.
+          type: string
+    Identity:
+      description: 'Identity holds information about the identity and origin of the image.
+
+        This is trusted information verified by the daemon and cannot be modified
+
+        by tagging an image to a different name.'
+      type: object
+      properties:
+        Signature:
+          description: Signature contains the properties of verified signatures for the image.
+          type: array
+          items:
+            $ref: '#/components/schemas/SignatureIdentity'
+        Pull:
+          description: 'Pull contains remote location information if image was created via pull.
+
+            If image was pulled via mirror, this contains the original repository location.
+
+            After successful push this images also contains the pushed repository location.'
+          type: array
+          items:
+            $ref: '#/components/schemas/PullIdentity'
+        Build:
+          description: Build contains build reference information if image was created via build.
+          type: array
+          items:
+            $ref: '#/components/schemas/BuildIdentity'
     ImageSummary:
       type: object
       x-go-name: Summary
@@ -2098,6 +1891,62 @@ components:
 
             '
           $ref: '#/components/schemas/OCIDescriptor'
+    SignatureType:
+      description: SignatureType is the type of signature format.
+      type: string
+      enum:
+      - bundle-v0.3
+      - simplesigning-v1
+    OCIPlatform:
+      type:
+      - object
+      - 'null'
+      x-go-name: Platform
+      description: 'Describes the platform which the image in the manifest runs on, as defined
+
+        in the [OCI Image Index Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/image-index.md).
+
+        '
+      properties:
+        architecture:
+          description: 'The CPU architecture, for example `amd64` or `ppc64`.
+
+            '
+          type: string
+          example: arm
+        os:
+          description: 'The operating system, for example `linux` or `windows`.
+
+            '
+          type: string
+          example: windows
+        os.version:
+          description: 'Optional field specifying the operating system version, for example on
+
+            Windows `10.0.19041.1165`.
+
+            '
+          type: string
+          example: 10.0.19041.1165
+        os.features:
+          description: 'Optional field specifying an array of strings, each listing a required
+
+            OS feature (for example on Windows `win32k`).
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - win32k
+        variant:
+          description: 'Optional field specifying a variant of the CPU, for example `v7` to
+
+            specify ARMv7 when architecture is `arm`.
+
+            '
+          type: string
+          example: v7
     ImageDeleteResponseItem:
       type: object
       x-go-name: DeleteResponse
@@ -2108,19 +1957,6 @@ components:
         Deleted:
           description: The image ID of an image that was deleted
           type: string
-    BuildIdentity:
-      description: BuildIdentity contains build reference information if image was created via build.
-      type: object
-      properties:
-        Ref:
-          description: 'Ref is the identifier for the build request. This reference can be used to
-
-            look up the build details in BuildKit history API.'
-          type: string
-        CreatedAt:
-          description: CreatedAt is the time when the build ran.
-          type: string
-          format: date-time
     ContainerConfig:
       description: 'Configuration for a container that is portable between hosts.
 
@@ -2312,103 +2148,300 @@ components:
           example:
           - /bin/sh
           - -c
-    Identity:
-      description: 'Identity holds information about the identity and origin of the image.
-
-        This is trusted information verified by the daemon and cannot be modified
-
-        by tagging an image to a different name.'
+    ErrorResponse:
+      description: Represents an error.
       type: object
+      required:
+      - message
       properties:
-        Signature:
-          description: Signature contains the properties of verified signatures for the image.
-          type: array
-          items:
-            $ref: '#/components/schemas/SignatureIdentity'
-        Pull:
-          description: 'Pull contains remote location information if image was created via pull.
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
+    HealthConfig:
+      description: 'A test to perform to check that the container is healthy.
 
-            If image was pulled via mirror, this contains the original repository location.
-
-            After successful push this images also contains the pushed repository location.'
-          type: array
-          items:
-            $ref: '#/components/schemas/PullIdentity'
-        Build:
-          description: Build contains build reference information if image was created via build.
-          type: array
-          items:
-            $ref: '#/components/schemas/BuildIdentity'
-    OCIDescriptor:
-      type: object
-      x-go-name: Descriptor
-      description: 'A descriptor struct containing digest, media type, and size, as defined in
-
-        the [OCI Content Descriptors Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/descriptor.md).
+        Healthcheck commands should be side-effect free.
 
         '
+      type: object
       properties:
-        mediaType:
-          description: 'The media type of the object this schema refers to.
+        Test:
+          description: 'The test to perform. Possible values are:
+
+
+            - `[]` inherit healthcheck from image or parent image
+
+            - `["NONE"]` disable healthcheck
+
+            - `["CMD", args...]` exec arguments directly
+
+            - `["CMD-SHELL", command]` run command with system''s default shell
+
+
+            A non-zero exit code indicates a failed healthcheck:
+
+            - `0` healthy
+
+            - `1` unhealthy
+
+            - `2` reserved (treated as unhealthy)
+
+            - other values: error running probe
 
             '
-          type: string
-          example: application/vnd.oci.image.manifest.v1+json
-        digest:
-          description: 'The digest of the targeted content.
+          type: array
+          items:
+            type: string
+        Interval:
+          description: 'The time to wait between checks in nanoseconds. It should be 0 or at
 
-            '
-          type: string
-          example: sha256:c0537ff6a5218ef531ece93d4984efc99bbf3f7497c0a7726c88e2bb7584dc96
-        size:
-          description: 'The size in bytes of the blob.
+            least 1000000 (1 ms). 0 means inherit.
 
             '
           type: integer
           format: int64
-          example: 424
-        urls:
-          description: List of URLs from which this object MAY be downloaded.
+        Timeout:
+          description: 'The time to wait before considering the check to have hung. It should
+
+            be 0 or at least 1000000 (1 ms). 0 means inherit.
+
+
+            If the health check command does not complete within this timeout,
+
+            the check is considered failed and the health check process is
+
+            forcibly terminated without a graceful shutdown.
+
+            '
+          type: integer
+          format: int64
+        Retries:
+          description: 'The number of consecutive failures needed to consider a container as
+
+            unhealthy. 0 means inherit.
+
+            '
+          type: integer
+        StartPeriod:
+          description: 'Start period for the container to initialize before starting
+
+            health-retries countdown in nanoseconds. It should be 0 or at least
+
+            1000000 (1 ms). 0 means inherit.
+
+            '
+          type: integer
+          format: int64
+        StartInterval:
+          description: 'The time to wait between checks in nanoseconds during the start period.
+
+            It should be 0 or at least 1000000 (1 ms). 0 means inherit.
+
+            '
+          type: integer
+          format: int64
+    ImageConfig:
+      description: 'Configuration of the image. These fields are used as defaults
+
+        when starting a container from the image.
+
+        '
+      type: object
+      properties:
+        User:
+          description: The user that commands are run as inside the container.
+          type: string
+          example: web:web
+        ExposedPorts:
+          description: 'An object mapping ports to an empty object in the form:
+
+
+            `{"<port>/<tcp|udp|sctp>": {}}`
+
+            '
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: object
+            enum:
+            - {}
+            default: {}
+          example:
+            80/tcp: {}
+            443/tcp: {}
+        Env:
+          description: 'A list of environment variables to set inside the container in the
+
+            form `["VAR=value", ...]`. A variable without `=` is removed from the
+
+            environment, rather than to have an empty value.
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        Cmd:
+          description: 'Command to run specified as a string or an array of strings.
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - /bin/sh
+        Healthcheck:
+          $ref: '#/components/schemas/HealthConfig'
+        ArgsEscaped:
+          description: Command is already escaped (Windows only)
+          type:
+          - boolean
+          - 'null'
+          default: false
+          example: false
+        Volumes:
+          description: 'An object mapping mount point paths inside the container to empty
+
+            objects.
+
+            '
+          type: object
+          additionalProperties:
+            type: object
+            enum:
+            - {}
+            default: {}
+          example:
+            /app/data: {}
+            /app/config: {}
+        WorkingDir:
+          description: The working directory for commands to run in.
+          type: string
+          example: /public/
+        Entrypoint:
+          description: 'The entry point for the container as a string or an array of strings.
+
+
+            If the array consists of exactly one empty string (`[""]`) then the
+
+            entry point is reset to system default (i.e., the entry point used by
+
+            docker when there is no `ENTRYPOINT` instruction in the `Dockerfile`).
+
+            '
+          type: array
+          items:
+            type: string
+          example: []
+        OnBuild:
+          description: '`ONBUILD` metadata that were defined in the image''s `Dockerfile`.
+
+            '
           type:
           - array
           - 'null'
           items:
             type: string
-            format: uri
-        annotations:
-          description: Arbitrary metadata relating to the targeted content.
-          type:
-          - object
-          - 'null'
+          example: []
+        Labels:
+          description: User-defined key/value metadata.
+          type: object
           additionalProperties:
             type: string
           example:
-            com.docker.official-images.bashbrew.arch: amd64
-            org.opencontainers.image.base.digest: sha256:0d0ef5c914d3ea700147da1bd050c59edb8bb12ca312f3800b29d7c8087eabd8
-            org.opencontainers.image.base.name: scratch
-            org.opencontainers.image.created: '2025-01-27T00:00:00Z'
-            org.opencontainers.image.revision: 9fabb4bad5138435b01857e2fe9363e2dc5f6a79
-            org.opencontainers.image.source: https://git.launchpad.net/cloud-images/+oci/ubuntu-base
-            org.opencontainers.image.url: https://hub.docker.com/_/ubuntu
-            org.opencontainers.image.version: '24.04'
-        data:
+            com.example.some-label: some-value
+            com.example.some-other-label: some-other-value
+        StopSignal:
+          description: 'Signal to stop a container as a string or unsigned integer.
+
+            '
           type:
           - string
           - 'null'
-          description: 'Data is an embedding of the targeted content. This is encoded as a base64
+          example: SIGTERM
+        Shell:
+          description: 'Shell for when `RUN`, `CMD`, and `ENTRYPOINT` uses a shell.
 
-            string when marshalled to JSON (automatically, by encoding/json). If
-
-            present, Data can be used directly to avoid fetching the targeted content.'
-          example: null
-        platform:
-          $ref: '#/components/schemas/OCIPlatform'
-        artifactType:
-          description: ArtifactType is the IANA media type of this artifact.
+            '
           type:
-          - string
+          - array
           - 'null'
-          example: null
+          items:
+            type: string
+          example:
+          - /bin/sh
+          - -c
+    SignerIdentity:
+      description: SignerIdentity contains information about the signer certificate used to sign the image.
+      type: object
+      properties:
+        CertificateIssuer:
+          type: string
+          description: CertificateIssuer is the certificate issuer.
+        SubjectAlternativeName:
+          type: string
+          description: SubjectAlternativeName is the certificate subject alternative name.
+        Issuer:
+          type: string
+          description: 'The OIDC issuer. Should match `iss` claim of ID token or, in the case of
+
+            a federated login like Dex it should match the issuer URL of the
+
+            upstream issuer. The issuer is not set the extensions are invalid and
+
+            will fail to render.'
+        BuildSignerURI:
+          type: string
+          description: Reference to specific build instructions that are responsible for signing.
+        BuildSignerDigest:
+          type: string
+          description: Immutable reference to the specific version of the build instructions that is responsible for signing.
+        RunnerEnvironment:
+          type: string
+          description: Specifies whether the build took place in platform-hosted cloud infrastructure or customer/self-hosted infrastructure.
+        SourceRepositoryURI:
+          type: string
+          description: Source repository URL that the build was based on.
+        SourceRepositoryDigest:
+          type: string
+          description: Immutable reference to a specific version of the source code that the build was based upon.
+        SourceRepositoryRef:
+          type: string
+          description: Source Repository Ref that the build run was based upon.
+        SourceRepositoryIdentifier:
+          type: string
+          description: Immutable identifier for the source repository the workflow was based upon.
+        SourceRepositoryOwnerURI:
+          type: string
+          description: Source repository owner URL of the owner of the source repository that the build was based on.
+        SourceRepositoryOwnerIdentifier:
+          type: string
+          description: Immutable identifier for the owner of the source repository that the workflow was based upon.
+        BuildConfigURI:
+          type: string
+          description: Build Config URL to the top-level/initiating build instructions.
+        BuildConfigDigest:
+          type: string
+          description: Immutable reference to the specific version of the top-level/initiating build instructions.
+        BuildTrigger:
+          type: string
+          description: Event or action that initiated the build.
+        RunInvocationURI:
+          type: string
+          description: Run Invocation URL to uniquely identify the build execution.
+        SourceRepositoryVisibilityAtSigning:
+          type: string
+          description: Source repository visibility at the time of signing the certificate.
+    SignatureTimestampType:
+      description: SignatureTimestampType is the type of timestamp used in the signature.
+      type: string
+      enum:
+      - Tlog
+      - TimestampAuthority
     ImageManifestSummary:
       x-go-name: ManifestSummary
       description: 'ImageManifestSummary represents a summary of an image manifest.
@@ -2582,117 +2615,84 @@ components:
                 '
               type: string
               example: sha256:95869fbcf224d947ace8d61d0e931d49e31bb7fc67fffbbe9c3198c33aa8e93f
-    DriverData:
-      description: 'Information about the storage driver used to store the container''s and
+    OCIDescriptor:
+      type: object
+      x-go-name: Descriptor
+      description: 'A descriptor struct containing digest, media type, and size, as defined in
 
-        image''s filesystem.
+        the [OCI Content Descriptors Specification](https://github.com/opencontainers/image-spec/blob/v1.0.1/descriptor.md).
 
         '
-      type: object
-      required:
-      - Name
-      - Data
       properties:
-        Name:
-          description: Name of the storage driver.
-          type: string
-          example: overlay2
-        Data:
-          description: 'Low-level storage metadata, provided as key/value pairs.
-
-
-            This information is driver-specific, and depends on the storage-driver
-
-            in use, and should be used for informational purposes only.
+        mediaType:
+          description: 'The media type of the object this schema refers to.
 
             '
-          type: object
+          type: string
+          example: application/vnd.oci.image.manifest.v1+json
+        digest:
+          description: 'The digest of the targeted content.
+
+            '
+          type: string
+          example: sha256:c0537ff6a5218ef531ece93d4984efc99bbf3f7497c0a7726c88e2bb7584dc96
+        size:
+          description: 'The size in bytes of the blob.
+
+            '
+          type: integer
+          format: int64
+          example: 424
+        urls:
+          description: List of URLs from which this object MAY be downloaded.
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uri
+        annotations:
+          description: Arbitrary metadata relating to the targeted content.
+          type:
+          - object
+          - 'null'
           additionalProperties:
             type: string
           example:
-            MergedDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/merged
-            UpperDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/diff
-            WorkDir: /var/lib/docker/overlay2/ef749362d13333e65fc95c572eb525abbe0052e16e086cb64bc3b98ae9aa6d74/work
-    HealthConfig:
-      description: 'A test to perform to check that the container is healthy.
+            com.docker.official-images.bashbrew.arch: amd64
+            org.opencontainers.image.base.digest: sha256:0d0ef5c914d3ea700147da1bd050c59edb8bb12ca312f3800b29d7c8087eabd8
+            org.opencontainers.image.base.name: scratch
+            org.opencontainers.image.created: '2025-01-27T00:00:00Z'
+            org.opencontainers.image.revision: 9fabb4bad5138435b01857e2fe9363e2dc5f6a79
+            org.opencontainers.image.source: https://git.launchpad.net/cloud-images/+oci/ubuntu-base
+            org.opencontainers.image.url: https://hub.docker.com/_/ubuntu
+            org.opencontainers.image.version: '24.04'
+        data:
+          type:
+          - string
+          - 'null'
+          description: 'Data is an embedding of the targeted content. This is encoded as a base64
 
-        Healthcheck commands should be side-effect free.
+            string when marshalled to JSON (automatically, by encoding/json). If
 
-        '
+            present, Data can be used directly to avoid fetching the targeted content.'
+          example: null
+        platform:
+          $ref: '#/components/schemas/OCIPlatform'
+        artifactType:
+          description: ArtifactType is the IANA media type of this artifact.
+          type:
+          - string
+          - 'null'
+          example: null
+    SignatureTimestamp:
+      description: SignatureTimestamp contains information about a verified signed timestamp for an image signature.
       type: object
       properties:
-        Test:
-          description: 'The test to perform. Possible values are:
-
-
-            - `[]` inherit healthcheck from image or parent image
-
-            - `["NONE"]` disable healthcheck
-
-            - `["CMD", args...]` exec arguments directly
-
-            - `["CMD-SHELL", command]` run command with system''s default shell
-
-
-            A non-zero exit code indicates a failed healthcheck:
-
-            - `0` healthy
-
-            - `1` unhealthy
-
-            - `2` reserved (treated as unhealthy)
-
-            - other values: error running probe
-
-            '
-          type: array
-          items:
-            type: string
-        Interval:
-          description: 'The time to wait between checks in nanoseconds. It should be 0 or at
-
-            least 1000000 (1 ms). 0 means inherit.
-
-            '
-          type: integer
-          format: int64
-        Timeout:
-          description: 'The time to wait before considering the check to have hung. It should
-
-            be 0 or at least 1000000 (1 ms). 0 means inherit.
-
-
-            If the health check command does not complete within this timeout,
-
-            the check is considered failed and the health check process is
-
-            forcibly terminated without a graceful shutdown.
-
-            '
-          type: integer
-          format: int64
-        Retries:
-          description: 'The number of consecutive failures needed to consider a container as
-
-            unhealthy. 0 means inherit.
-
-            '
-          type: integer
-        StartPeriod:
-          description: 'Start period for the container to initialize before starting
-
-            health-retries countdown in nanoseconds. It should be 0 or at least
-
-            1000000 (1 ms). 0 means inherit.
-
-            '
-          type: integer
-          format: int64
-        StartInterval:
-          description: 'The time to wait between checks in nanoseconds during the start period.
-
-            It should be 0 or at least 1000000 (1 ms). 0 means inherit.
-
-            '
-          type: integer
-          format: int64
+        Type:
+          $ref: '#/components/schemas/SignatureTimestampType'
+        URI:
+          type: string
+        Timestamp:
+          type: string
+          format: date-time

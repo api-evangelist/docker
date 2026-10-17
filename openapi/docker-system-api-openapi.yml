@@ -423,274 +423,53 @@ paths:
       - System
 components:
   schemas:
-    ErrorResponse:
-      description: Represents an error.
+    TLSInfo:
+      description: 'Information about the issuer of leaf TLS certificates and the trusted root
+
+        CA certificate.
+
+        '
       type: object
-      required:
-      - message
       properties:
-        message:
-          description: The error message.
+        TrustRoot:
+          description: 'The root CA certificate(s) that are used to validate leaf TLS
+
+            certificates.
+
+            '
+          type: string
+        CertIssuerSubject:
+          description: The base64-url-safe-encoded raw subject bytes of the issuer.
+          type: string
+        CertIssuerPublicKey:
+          description: 'The base64-url-safe-encoded raw public key bytes of the issuer.
+
+            '
           type: string
       example:
-        message: Something went wrong.
-    SwarmInfo:
-      description: 'Represents generic information about swarm.
+        TrustRoot: '-----BEGIN CERTIFICATE-----
 
-        '
-      type: object
-      properties:
-        NodeID:
-          description: Unique identifier of for this node in the swarm.
-          type: string
-          default: ''
-          example: k67qz4598weg5unwwffg6z1m1
-        NodeAddr:
-          description: 'IP address at which this node can be reached by other nodes in the
+          MIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw
 
-            swarm.
+          EzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0
 
-            '
-          type: string
-          default: ''
-          example: 10.0.0.46
-        LocalNodeState:
-          $ref: '#/components/schemas/LocalNodeState'
-        ControlAvailable:
-          type: boolean
-          default: false
-          example: true
-        Error:
-          type: string
-          default: ''
-        RemoteManagers:
-          description: 'List of ID''s and addresses of other managers in the swarm.
+          MzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH
 
-            '
-          type:
-          - array
-          - 'null'
-          default: null
-          items:
-            $ref: '#/components/schemas/PeerNode'
-          example:
-          - NodeID: 71izy0goik036k48jg985xnds
-            Addr: 10.0.0.158:2377
-          - NodeID: 79y6h1o4gv8n120drcprv5nmc
-            Addr: 10.0.0.159:2377
-          - NodeID: k67qz4598weg5unwwffg6z1m1
-            Addr: 10.0.0.46:2377
-        Nodes:
-          description: Total number of nodes in the swarm.
-          type:
-          - integer
-          - 'null'
-          example: 4
-        Managers:
-          description: Total number of managers in the swarm.
-          type:
-          - integer
-          - 'null'
-          example: 3
-        Cluster:
-          $ref: '#/components/schemas/ClusterInfo'
-    GenericResources:
-      description: 'User-defined resources can be either Integer resources (e.g, `SSD=3`) or
+          A0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf
 
-        String resources (e.g, `GPU=UUID1`).
+          3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB
 
-        '
-      type: array
-      items:
-        type: object
-        properties:
-          NamedResourceSpec:
-            type: object
-            properties:
-              Kind:
-                type: string
-              Value:
-                type: string
-          DiscreteResourceSpec:
-            type: object
-            properties:
-              Kind:
-                type: string
-              Value:
-                type: integer
-                format: int64
-      example:
-      - DiscreteResourceSpec:
-          Kind: SSD
-          Value: 3
-      - NamedResourceSpec:
-          Kind: GPU
-          Value: UUID1
-      - NamedResourceSpec:
-          Kind: GPU
-          Value: UUID2
-    ContainersDiskUsage:
-      type: object
-      x-go-name: DiskUsage
-      x-go-package: github.com/moby/moby/api/types/container
-      description: 'represents system data usage information for container resources.
+          Af8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO
 
-        '
-      properties:
-        ActiveCount:
-          description: 'Count of active containers.
+          PQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz
 
-            '
-          type: integer
-          format: int64
-          example: 1
-        TotalCount:
-          description: 'Count of all containers.
+          pxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H
 
-            '
-          type: integer
-          format: int64
-          example: 4
-        Reclaimable:
-          description: 'Disk space that can be reclaimed by removing inactive containers.
+          -----END CERTIFICATE-----
 
-            '
-          type: integer
-          format: int64
-          example: 12345678
-        TotalSize:
-          description: 'Disk space in use by containers.
-
-            '
-          type: integer
-          format: int64
-          example: 98765432
-        Items:
-          description: 'List of container summaries.
-
-            '
-          type: array
-          x-omitempty: true
-          items:
-            x-go-type:
-              type: Summary
-    NRIInfo:
-      description: 'Information about the Node Resource Interface (NRI).
-
-
-        This field is only present if NRI is enabled.
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        Info:
-          description: 'Information about NRI, provided as "label" / "value" pairs.
-
-
-            <p><br /></p>
-
-
-            > **Note**: The information returned in this field, including the
-
-            > formatting of values and labels, should not be considered stable,
-
-            > and may change without notice.
-
-            '
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-          example:
-          - - plugin-path
-            - /opt/docker/nri/plugins
-    PeerNode:
-      description: Represents a peer-node in the swarm
-      type: object
-      properties:
-        NodeID:
-          description: Unique identifier of for this node in the swarm.
-          type: string
-        Addr:
-          description: 'IP address and ports at which this node can be reached.
-
-            '
-          type: string
-    EventMessage:
-      description: 'EventMessage represents the information an event contains.
-
-        '
-      type: object
-      title: SystemEventsResponse
-      properties:
-        Type:
-          description: The type of object emitting the event
-          type: string
-          enum:
-          - builder
-          - config
-          - container
-          - daemon
-          - image
-          - network
-          - node
-          - plugin
-          - secret
-          - service
-          - volume
-          example: container
-        Action:
-          description: The type of event
-          type: string
-          example: create
-        Actor:
-          $ref: '#/components/schemas/EventActor'
-        scope:
-          description: 'Scope of the event. Engine events are `local` scope. Cluster (Swarm)
-
-            events are `swarm` scope.
-
-            '
-          type: string
-          enum:
-          - local
-          - swarm
-        time:
-          description: Timestamp of event
-          type: integer
-          format: int64
-          example: 1629574695
-        timeNano:
-          description: Timestamp of event, with nanosecond accuracy
-          type: integer
-          format: int64
-          example: 1629574695515050031
-    EventActor:
-      description: 'Actor describes something that generates events, like a container, network,
-
-        or a volume.
-
-        '
-      type: object
-      properties:
-        ID:
-          description: The ID of the object emitting the event
-          type: string
-          example: ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743
-        Attributes:
-          description: 'Various key/value attributes of the object, depending on its type.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            com.example.some-label: some-label-value
-            image: alpine:latest
-            name: my-container
+          '
+        CertIssuerSubject: MBMxETAPBgNVBAMTCHN3YXJtLWNh
+        CertIssuerPublicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==
     PluginsInfo:
       description: 'Available plugins per type.
 
@@ -748,304 +527,6 @@ components:
           - json-file
           - splunk
           - syslog
-    ContainerdInfo:
-      description: 'Information for connecting to the containerd instance that is used by the daemon.
-
-        This is included for debugging purposes only.
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        Address:
-          description: The address of the containerd socket.
-          type: string
-          example: /run/containerd/containerd.sock
-        Namespaces:
-          description: 'The namespaces that the daemon uses for running containers and
-
-            plugins in containerd. These namespaces can be configured in the
-
-            daemon configuration, and are considered to be used exclusively
-
-            by the daemon, Tampering with the containerd instance may cause
-
-            unexpected behavior.
-
-
-            As these namespaces are considered to be exclusively accessed
-
-            by the daemon, it is not recommended to change these values,
-
-            or to change them to a value that is used by other systems,
-
-            such as cri-containerd.
-
-            '
-          type: object
-          properties:
-            Containers:
-              description: 'The default containerd namespace used for containers managed
-
-                by the daemon.
-
-
-                The default namespace for containers is "moby", but will be
-
-                suffixed with the `<uid>.<gid>` of the remapped `root` if
-
-                user-namespaces are enabled and the containerd image-store
-
-                is used.
-
-                '
-              type: string
-              default: moby
-              example: moby
-            Plugins:
-              description: 'The default containerd namespace used for plugins managed by
-
-                the daemon.
-
-
-                The default namespace for plugins is "plugins.moby", but will be
-
-                suffixed with the `<uid>.<gid>` of the remapped `root` if
-
-                user-namespaces are enabled and the containerd image-store
-
-                is used.
-
-                '
-              type: string
-              default: plugins.moby
-              example: plugins.moby
-    ImagesDiskUsage:
-      type: object
-      x-go-name: DiskUsage
-      x-go-package: github.com/moby/moby/api/types/image
-      description: 'represents system data usage for image resources.
-
-        '
-      properties:
-        ActiveCount:
-          description: 'Count of active images.
-
-            '
-          type: integer
-          format: int64
-          example: 1
-        TotalCount:
-          description: 'Count of all images.
-
-            '
-          type: integer
-          format: int64
-          example: 4
-        Reclaimable:
-          description: 'Disk space that can be reclaimed by removing unused images.
-
-            '
-          type: integer
-          format: int64
-          example: 12345678
-        TotalSize:
-          description: 'Disk space in use by images.
-
-            '
-          type: integer
-          format: int64
-          example: 98765432
-        Items:
-          description: 'List of image summaries.
-
-            '
-          type: array
-          x-omitempty: true
-          items:
-            x-go-type:
-              type: Summary
-    AuthConfig:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-        serveraddress:
-          type: string
-      example:
-        username: hannibal
-        password: xxxx
-        serveraddress: https://index.docker.io/v1/
-    Runtime:
-      description: 'Runtime describes an [OCI compliant](https://github.com/opencontainers/runtime-spec)
-
-        runtime.
-
-
-        The runtime is invoked by the daemon via the `containerd` daemon. OCI
-
-        runtimes act as an interface to the Linux kernel namespaces, cgroups,
-
-        and SELinux.
-
-        '
-      type: object
-      properties:
-        path:
-          description: 'Name and, optional, path, of the OCI executable binary.
-
-
-            If the path is omitted, the daemon searches the host''s `$PATH` for the
-
-            binary and uses the first result.
-
-            '
-          type: string
-          example: /usr/local/bin/my-oci-runtime
-        runtimeArgs:
-          description: 'List of command-line arguments to pass to the runtime when invoked.
-
-            '
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          example:
-          - --debug
-          - --systemd-cgroup=false
-        status:
-          description: 'Information specific to the runtime.
-
-
-            While this API specification does not define data provided by runtimes,
-
-            the following well-known properties may be provided by runtimes:
-
-
-            `org.opencontainers.runtime-spec.features`: features structure as defined
-
-            in the [OCI Runtime Specification](https://github.com/opencontainers/runtime-spec/blob/main/features.md),
-
-            in a JSON string representation.
-
-
-            <p><br /></p>
-
-
-            > **Note**: The information returned in this field, including the
-
-            > formatting of values and labels, should not be considered stable,
-
-            > and may change without notice.
-
-            '
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: string
-          example:
-            org.opencontainers.runtime-spec.features: '{"ociVersionMin":"1.0.0","ociVersionMax":"1.1.0","...":"..."}'
-    RegistryServiceConfig:
-      description: 'RegistryServiceConfig stores daemon registry services configuration.
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        InsecureRegistryCIDRs:
-          description: 'List of IP ranges of insecure registries, using the CIDR syntax
-
-            ([RFC 4632](https://tools.ietf.org/html/4632)). Insecure registries
-
-            accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates
-
-            from unknown CAs) communication.
-
-
-            By default, local registries (`::1/128` and `127.0.0.0/8`) are configured as
-
-            insecure. All other registries are secure. Communicating with an
-
-            insecure registry is not possible if the daemon assumes that registry
-
-            is secure.
-
-
-            This configuration override this behavior, insecure communication with
-
-            registries whose resolved IP address is within the subnet described by
-
-            the CIDR syntax.
-
-
-            Registries can also be marked insecure by hostname. Those registries
-
-            are listed under `IndexConfigs` and have their `Secure` field set to
-
-            `false`.
-
-
-            > **Warning**: Using this option can be useful when running a local
-
-            > registry, but introduces security vulnerabilities. This option
-
-            > should therefore ONLY be used for testing purposes. For increased
-
-            > security, users should add their CA to their system''s list of trusted
-
-            > CAs instead of enabling this option.
-
-            '
-          type: array
-          items:
-            type: string
-          example:
-          - ::1/128
-          - 127.0.0.0/8
-        IndexConfigs:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/IndexInfo'
-          example:
-            127.0.0.1:5000:
-              Name: 127.0.0.1:5000
-              Mirrors: []
-              Secure: false
-              Official: false
-            '[2001:db8:a0b:12f0::1]:80':
-              Name: '[2001:db8:a0b:12f0::1]:80'
-              Mirrors: []
-              Secure: false
-              Official: false
-            docker.io:
-              Name: docker.io
-              Mirrors:
-              - https://hub-mirror.corp.example.com:5000/
-              Secure: true
-              Official: true
-            registry.internal.corp.example.com:3000:
-              Name: registry.internal.corp.example.com:3000
-              Mirrors: []
-              Secure: false
-              Official: false
-        Mirrors:
-          description: 'List of registry URLs that act as a mirror for the official
-
-            (`docker.io`) registry.
-
-            '
-          type: array
-          items:
-            type: string
-          example:
-          - https://hub-mirror.corp.example.com:5000/
-          - https://[2001:db8:a0b:12f0::1]/
     SwarmSpec:
       description: User modifiable swarm configuration.
       type: object
@@ -1267,296 +748,6 @@ components:
                   example:
                     max-file: '10'
                     max-size: 100m
-    ObjectVersion:
-      description: 'The version number of the object such as node, service, etc. This is needed
-
-        to avoid conflicting writes. The client must send the version number along
-
-        with the modified specification when updating these objects.
-
-
-        This approach ensures safe concurrency and determinism in that the change
-
-        on the object may not be applied if the version number has changed from the
-
-        last read. In other words, if two update requests specify the same base
-
-        version, only one of the requests can succeed. As a result, two separate
-
-        update requests that happen at the same time will not unintentionally
-
-        overwrite each other.
-
-        '
-      type: object
-      properties:
-        Index:
-          type: integer
-          format: uint64
-          example: 373531
-    VolumesDiskUsage:
-      type: object
-      x-go-name: DiskUsage
-      x-go-package: github.com/moby/moby/api/types/volume
-      description: 'represents system data usage for volume resources.
-
-        '
-      properties:
-        ActiveCount:
-          description: 'Count of active volumes.
-
-            '
-          type: integer
-          format: int64
-          example: 1
-        TotalCount:
-          description: 'Count of all volumes.
-
-            '
-          type: integer
-          format: int64
-          example: 4
-        Reclaimable:
-          description: 'Disk space that can be reclaimed by removing inactive volumes.
-
-            '
-          type: integer
-          format: int64
-          example: 12345678
-        TotalSize:
-          description: 'Disk space in use by volumes.
-
-            '
-          type: integer
-          format: int64
-          example: 98765432
-        Items:
-          description: 'List of volumes.
-
-            '
-          type: array
-          x-omitempty: true
-          items:
-            x-go-type:
-              type: Volume
-    TLSInfo:
-      description: 'Information about the issuer of leaf TLS certificates and the trusted root
-
-        CA certificate.
-
-        '
-      type: object
-      properties:
-        TrustRoot:
-          description: 'The root CA certificate(s) that are used to validate leaf TLS
-
-            certificates.
-
-            '
-          type: string
-        CertIssuerSubject:
-          description: The base64-url-safe-encoded raw subject bytes of the issuer.
-          type: string
-        CertIssuerPublicKey:
-          description: 'The base64-url-safe-encoded raw public key bytes of the issuer.
-
-            '
-          type: string
-      example:
-        TrustRoot: '-----BEGIN CERTIFICATE-----
-
-          MIIBajCCARCgAwIBAgIUbYqrLSOSQHoxD8CwG6Bi2PJi9c8wCgYIKoZIzj0EAwIw
-
-          EzERMA8GA1UEAxMIc3dhcm0tY2EwHhcNMTcwNDI0MjE0MzAwWhcNMzcwNDE5MjE0
-
-          MzAwWjATMREwDwYDVQQDEwhzd2FybS1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH
-
-          A0IABJk/VyMPYdaqDXJb/VXh5n/1Yuv7iNrxV3Qb3l06XD46seovcDWs3IZNV1lf
-
-          3Skyr0ofcchipoiHkXBODojJydSjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB
-
-          Af8EBTADAQH/MB0GA1UdDgQWBBRUXxuRcnFjDfR/RIAUQab8ZV/n4jAKBggqhkjO
-
-          PQQDAgNIADBFAiAy+JTe6Uc3KyLCMiqGl2GyWGQqQDEcO3/YG36x7om65AIhAJvz
-
-          pxv6zFeVEkAEEkqIYi0omA9+CjanB/6Bz4n1uw8H
-
-          -----END CERTIFICATE-----
-
-          '
-        CertIssuerSubject: MBMxETAPBgNVBAMTCHN3YXJtLWNh
-        CertIssuerPublicKey: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmT9XIw9h1qoNclv9VeHmf/Vi6/uI2vFXdBveXTpcPjqx6i9wNazchk1XWV/dKTKvSh9xyGKmiIeRcE4OiMnJ1A==
-    FirewallInfo:
-      description: 'Information about the daemon''s firewalling configuration.
-
-
-        This field is currently only used on Linux, and omitted on other platforms.
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        Driver:
-          description: 'The name of the firewall backend driver.
-
-            '
-          type: string
-          example: nftables
-        Info:
-          description: 'Information about the firewall backend, provided as
-
-            "label" / "value" pairs.
-
-
-            <p><br /></p>
-
-
-            > **Note**: The information returned in this field, including the
-
-            > formatting of values and labels, should not be considered stable,
-
-            > and may change without notice.
-
-            '
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-          example:
-          - - ReloadedAt
-            - '2025-01-01T00:00:00Z'
-    AuthResponse:
-      description: 'An identity token was generated successfully.
-
-        '
-      type: object
-      required:
-      - Status
-      properties:
-        Status:
-          description: The status of the authentication
-          type: string
-          example: Login Succeeded
-        IdentityToken:
-          description: An opaque token used to authenticate a user after a successful login
-          type: string
-          example: 9cbaf023786cd7...
-    DeviceInfo:
-      type: object
-      description: 'DeviceInfo represents a device that can be used by a container.
-
-        '
-      properties:
-        Source:
-          type: string
-          example: cdi
-          description: 'The origin device driver.
-
-            '
-        ID:
-          type: string
-          example: vendor.com/gpu=0
-          description: 'The unique identifier for the device within its source driver.
-
-            For CDI devices, this would be an FQDN like "vendor.com/gpu=0".
-
-            '
-    ClusterInfo:
-      description: 'ClusterInfo represents information about the swarm as is returned by the
-
-        "/info" endpoint. Join-tokens are not included.
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        ID:
-          description: The ID of the swarm.
-          type: string
-          example: abajmipo7b4xz5ip2nrla6b11
-        Version:
-          $ref: '#/components/schemas/ObjectVersion'
-        CreatedAt:
-          description: 'Date and time at which the swarm was initialised in
-
-            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-
-            '
-          type: string
-          format: dateTime
-          example: '2016-08-18T10:44:24.496525531Z'
-        UpdatedAt:
-          description: 'Date and time at which the swarm was last updated in
-
-            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
-
-            '
-          type: string
-          format: dateTime
-          example: '2017-08-09T07:09:37.632105588Z'
-        Spec:
-          $ref: '#/components/schemas/SwarmSpec'
-        TLSInfo:
-          $ref: '#/components/schemas/TLSInfo'
-        RootRotationInProgress:
-          description: 'Whether there is currently a root CA rotation in progress for the swarm
-
-            '
-          type: boolean
-          example: false
-        DataPathPort:
-          description: 'DataPathPort specifies the data path port number for data traffic.
-
-            Acceptable port range is 1024 to 49151.
-
-            If no port is set or is set to 0, the default port (4789) is used.
-
-            '
-          type: integer
-          format: uint32
-          default: 4789
-          example: 4789
-        DefaultAddrPool:
-          description: 'Default Address Pool specifies default subnet pools for global scope
-
-            networks.
-
-            '
-          type: array
-          items:
-            type: string
-            format: CIDR
-            example:
-            - 10.10.0.0/16
-            - 20.20.0.0/16
-        SubnetSize:
-          description: 'SubnetSize specifies the subnet size of the networks created from the
-
-            default subnet pool.
-
-            '
-          type: integer
-          format: uint32
-          maximum: 29
-          default: 24
-          example: 24
-    Commit:
-      description: 'Commit holds the Git-commit (SHA1) that a binary was built from, as
-
-        reported in the version-string of external tools, such as `containerd`,
-
-        or `runC`.
-
-        '
-      type: object
-      properties:
-        ID:
-          description: Actual commit ID of external tool.
-          type: string
-          example: cfb82a876ecc11b5ca0977d1733adbe58599088a
     IndexInfo:
       description: IndexInfo contains information about a registry.
       type:
@@ -1612,51 +803,179 @@ components:
             '
           type: boolean
           example: true
-    BuildCacheDiskUsage:
+    GenericResources:
+      description: 'User-defined resources can be either Integer resources (e.g, `SSD=3`) or
+
+        String resources (e.g, `GPU=UUID1`).
+
+        '
+      type: array
+      items:
+        type: object
+        properties:
+          NamedResourceSpec:
+            type: object
+            properties:
+              Kind:
+                type: string
+              Value:
+                type: string
+          DiscreteResourceSpec:
+            type: object
+            properties:
+              Kind:
+                type: string
+              Value:
+                type: integer
+                format: int64
+      example:
+      - DiscreteResourceSpec:
+          Kind: SSD
+          Value: 3
+      - NamedResourceSpec:
+          Kind: GPU
+          Value: UUID1
+      - NamedResourceSpec:
+          Kind: GPU
+          Value: UUID2
+    FirewallInfo:
+      description: 'Information about the daemon''s firewalling configuration.
+
+
+        This field is currently only used on Linux, and omitted on other platforms.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        Driver:
+          description: 'The name of the firewall backend driver.
+
+            '
+          type: string
+          example: nftables
+        Info:
+          description: 'Information about the firewall backend, provided as
+
+            "label" / "value" pairs.
+
+
+            <p><br /></p>
+
+
+            > **Note**: The information returned in this field, including the
+
+            > formatting of values and labels, should not be considered stable,
+
+            > and may change without notice.
+
+            '
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          example:
+          - - ReloadedAt
+            - '2025-01-01T00:00:00Z'
+    VolumesDiskUsage:
       type: object
       x-go-name: DiskUsage
-      x-go-package: github.com/moby/moby/api/types/build
-      description: 'represents system data usage for build cache resources.
+      x-go-package: github.com/moby/moby/api/types/volume
+      description: 'represents system data usage for volume resources.
 
         '
       properties:
         ActiveCount:
-          description: 'Count of active build cache records.
+          description: 'Count of active volumes.
 
             '
           type: integer
           format: int64
           example: 1
         TotalCount:
-          description: 'Count of all build cache records.
+          description: 'Count of all volumes.
 
             '
           type: integer
           format: int64
           example: 4
         Reclaimable:
-          description: 'Disk space that can be reclaimed by removing inactive build cache records.
+          description: 'Disk space that can be reclaimed by removing inactive volumes.
 
             '
           type: integer
           format: int64
           example: 12345678
         TotalSize:
-          description: 'Disk space in use by build cache records.
+          description: 'Disk space in use by volumes.
 
             '
           type: integer
           format: int64
           example: 98765432
         Items:
-          description: 'List of build cache records.
+          description: 'List of volumes.
 
             '
           type: array
           x-omitempty: true
           items:
             x-go-type:
-              type: CacheRecord
+              type: Volume
+    ObjectVersion:
+      description: 'The version number of the object such as node, service, etc. This is needed
+
+        to avoid conflicting writes. The client must send the version number along
+
+        with the modified specification when updating these objects.
+
+
+        This approach ensures safe concurrency and determinism in that the change
+
+        on the object may not be applied if the version number has changed from the
+
+        last read. In other words, if two update requests specify the same base
+
+        version, only one of the requests can succeed. As a result, two separate
+
+        update requests that happen at the same time will not unintentionally
+
+        overwrite each other.
+
+        '
+      type: object
+      properties:
+        Index:
+          type: integer
+          format: uint64
+          example: 373531
+    PeerNode:
+      description: Represents a peer-node in the swarm
+      type: object
+      properties:
+        NodeID:
+          description: Unique identifier of for this node in the swarm.
+          type: string
+        Addr:
+          description: 'IP address and ports at which this node can be reached.
+
+            '
+          type: string
+    AuthConfig:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        serveraddress:
+          type: string
+      example:
+        username: hannibal
+        password: xxxx
+        serveraddress: https://index.docker.io/v1/
     SystemVersion:
       type: object
       description: 'Response of Engine API: GET "/version"
@@ -1779,18 +1098,438 @@ components:
             '
           type: string
           example: '2020-06-22T15:49:27.000000000+00:00'
-    LocalNodeState:
-      description: Current local status of this node.
-      type: string
-      default: ''
-      enum:
-      - ''
-      - inactive
-      - pending
-      - active
-      - error
-      - locked
-      example: active
+    EventMessage:
+      description: 'EventMessage represents the information an event contains.
+
+        '
+      type: object
+      title: SystemEventsResponse
+      properties:
+        Type:
+          description: The type of object emitting the event
+          type: string
+          enum:
+          - builder
+          - config
+          - container
+          - daemon
+          - image
+          - network
+          - node
+          - plugin
+          - secret
+          - service
+          - volume
+          example: container
+        Action:
+          description: The type of event
+          type: string
+          example: create
+        Actor:
+          $ref: '#/components/schemas/EventActor'
+        scope:
+          description: 'Scope of the event. Engine events are `local` scope. Cluster (Swarm)
+
+            events are `swarm` scope.
+
+            '
+          type: string
+          enum:
+          - local
+          - swarm
+        time:
+          description: Timestamp of event
+          type: integer
+          format: int64
+          example: 1629574695
+        timeNano:
+          description: Timestamp of event, with nanosecond accuracy
+          type: integer
+          format: int64
+          example: 1629574695515050031
+    RegistryServiceConfig:
+      description: 'RegistryServiceConfig stores daemon registry services configuration.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        InsecureRegistryCIDRs:
+          description: 'List of IP ranges of insecure registries, using the CIDR syntax
+
+            ([RFC 4632](https://tools.ietf.org/html/4632)). Insecure registries
+
+            accept un-encrypted (HTTP) and/or untrusted (HTTPS with certificates
+
+            from unknown CAs) communication.
+
+
+            By default, local registries (`::1/128` and `127.0.0.0/8`) are configured as
+
+            insecure. All other registries are secure. Communicating with an
+
+            insecure registry is not possible if the daemon assumes that registry
+
+            is secure.
+
+
+            This configuration override this behavior, insecure communication with
+
+            registries whose resolved IP address is within the subnet described by
+
+            the CIDR syntax.
+
+
+            Registries can also be marked insecure by hostname. Those registries
+
+            are listed under `IndexConfigs` and have their `Secure` field set to
+
+            `false`.
+
+
+            > **Warning**: Using this option can be useful when running a local
+
+            > registry, but introduces security vulnerabilities. This option
+
+            > should therefore ONLY be used for testing purposes. For increased
+
+            > security, users should add their CA to their system''s list of trusted
+
+            > CAs instead of enabling this option.
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - ::1/128
+          - 127.0.0.0/8
+        IndexConfigs:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/IndexInfo'
+          example:
+            127.0.0.1:5000:
+              Name: 127.0.0.1:5000
+              Mirrors: []
+              Secure: false
+              Official: false
+            '[2001:db8:a0b:12f0::1]:80':
+              Name: '[2001:db8:a0b:12f0::1]:80'
+              Mirrors: []
+              Secure: false
+              Official: false
+            docker.io:
+              Name: docker.io
+              Mirrors:
+              - https://hub-mirror.corp.example.com:5000/
+              Secure: true
+              Official: true
+            registry.internal.corp.example.com:3000:
+              Name: registry.internal.corp.example.com:3000
+              Mirrors: []
+              Secure: false
+              Official: false
+        Mirrors:
+          description: 'List of registry URLs that act as a mirror for the official
+
+            (`docker.io`) registry.
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - https://hub-mirror.corp.example.com:5000/
+          - https://[2001:db8:a0b:12f0::1]/
+    DeviceInfo:
+      type: object
+      description: 'DeviceInfo represents a device that can be used by a container.
+
+        '
+      properties:
+        Source:
+          type: string
+          example: cdi
+          description: 'The origin device driver.
+
+            '
+        ID:
+          type: string
+          example: vendor.com/gpu=0
+          description: 'The unique identifier for the device within its source driver.
+
+            For CDI devices, this would be an FQDN like "vendor.com/gpu=0".
+
+            '
+    Runtime:
+      description: 'Runtime describes an [OCI compliant](https://github.com/opencontainers/runtime-spec)
+
+        runtime.
+
+
+        The runtime is invoked by the daemon via the `containerd` daemon. OCI
+
+        runtimes act as an interface to the Linux kernel namespaces, cgroups,
+
+        and SELinux.
+
+        '
+      type: object
+      properties:
+        path:
+          description: 'Name and, optional, path, of the OCI executable binary.
+
+
+            If the path is omitted, the daemon searches the host''s `$PATH` for the
+
+            binary and uses the first result.
+
+            '
+          type: string
+          example: /usr/local/bin/my-oci-runtime
+        runtimeArgs:
+          description: 'List of command-line arguments to pass to the runtime when invoked.
+
+            '
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          example:
+          - --debug
+          - --systemd-cgroup=false
+        status:
+          description: 'Information specific to the runtime.
+
+
+            While this API specification does not define data provided by runtimes,
+
+            the following well-known properties may be provided by runtimes:
+
+
+            `org.opencontainers.runtime-spec.features`: features structure as defined
+
+            in the [OCI Runtime Specification](https://github.com/opencontainers/runtime-spec/blob/main/features.md),
+
+            in a JSON string representation.
+
+
+            <p><br /></p>
+
+
+            > **Note**: The information returned in this field, including the
+
+            > formatting of values and labels, should not be considered stable,
+
+            > and may change without notice.
+
+            '
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+          example:
+            org.opencontainers.runtime-spec.features: '{"ociVersionMin":"1.0.0","ociVersionMax":"1.1.0","...":"..."}'
+    NRIInfo:
+      description: 'Information about the Node Resource Interface (NRI).
+
+
+        This field is only present if NRI is enabled.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        Info:
+          description: 'Information about NRI, provided as "label" / "value" pairs.
+
+
+            <p><br /></p>
+
+
+            > **Note**: The information returned in this field, including the
+
+            > formatting of values and labels, should not be considered stable,
+
+            > and may change without notice.
+
+            '
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          example:
+          - - plugin-path
+            - /opt/docker/nri/plugins
+    EventActor:
+      description: 'Actor describes something that generates events, like a container, network,
+
+        or a volume.
+
+        '
+      type: object
+      properties:
+        ID:
+          description: The ID of the object emitting the event
+          type: string
+          example: ede54ee1afda366ab42f824e8a5ffd195155d853ceaec74a927f249ea270c743
+        Attributes:
+          description: 'Various key/value attributes of the object, depending on its type.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            com.example.some-label: some-label-value
+            image: alpine:latest
+            name: my-container
+    SwarmInfo:
+      description: 'Represents generic information about swarm.
+
+        '
+      type: object
+      properties:
+        NodeID:
+          description: Unique identifier of for this node in the swarm.
+          type: string
+          default: ''
+          example: k67qz4598weg5unwwffg6z1m1
+        NodeAddr:
+          description: 'IP address at which this node can be reached by other nodes in the
+
+            swarm.
+
+            '
+          type: string
+          default: ''
+          example: 10.0.0.46
+        LocalNodeState:
+          $ref: '#/components/schemas/LocalNodeState'
+        ControlAvailable:
+          type: boolean
+          default: false
+          example: true
+        Error:
+          type: string
+          default: ''
+        RemoteManagers:
+          description: 'List of ID''s and addresses of other managers in the swarm.
+
+            '
+          type:
+          - array
+          - 'null'
+          default: null
+          items:
+            $ref: '#/components/schemas/PeerNode'
+          example:
+          - NodeID: 71izy0goik036k48jg985xnds
+            Addr: 10.0.0.158:2377
+          - NodeID: 79y6h1o4gv8n120drcprv5nmc
+            Addr: 10.0.0.159:2377
+          - NodeID: k67qz4598weg5unwwffg6z1m1
+            Addr: 10.0.0.46:2377
+        Nodes:
+          description: Total number of nodes in the swarm.
+          type:
+          - integer
+          - 'null'
+          example: 4
+        Managers:
+          description: Total number of managers in the swarm.
+          type:
+          - integer
+          - 'null'
+          example: 3
+        Cluster:
+          $ref: '#/components/schemas/ClusterInfo'
+    ClusterInfo:
+      description: 'ClusterInfo represents information about the swarm as is returned by the
+
+        "/info" endpoint. Join-tokens are not included.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        ID:
+          description: The ID of the swarm.
+          type: string
+          example: abajmipo7b4xz5ip2nrla6b11
+        Version:
+          $ref: '#/components/schemas/ObjectVersion'
+        CreatedAt:
+          description: 'Date and time at which the swarm was initialised in
+
+            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+
+            '
+          type: string
+          format: dateTime
+          example: '2016-08-18T10:44:24.496525531Z'
+        UpdatedAt:
+          description: 'Date and time at which the swarm was last updated in
+
+            [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format with nano-seconds.
+
+            '
+          type: string
+          format: dateTime
+          example: '2017-08-09T07:09:37.632105588Z'
+        Spec:
+          $ref: '#/components/schemas/SwarmSpec'
+        TLSInfo:
+          $ref: '#/components/schemas/TLSInfo'
+        RootRotationInProgress:
+          description: 'Whether there is currently a root CA rotation in progress for the swarm
+
+            '
+          type: boolean
+          example: false
+        DataPathPort:
+          description: 'DataPathPort specifies the data path port number for data traffic.
+
+            Acceptable port range is 1024 to 49151.
+
+            If no port is set or is set to 0, the default port (4789) is used.
+
+            '
+          type: integer
+          format: uint32
+          default: 4789
+          example: 4789
+        DefaultAddrPool:
+          description: 'Default Address Pool specifies default subnet pools for global scope
+
+            networks.
+
+            '
+          type: array
+          items:
+            type: string
+            format: CIDR
+            example:
+            - 10.10.0.0/16
+            - 20.20.0.0/16
+        SubnetSize:
+          description: 'SubnetSize specifies the subnet size of the networks created from the
+
+            default subnet pool.
+
+            '
+          type: integer
+          format: uint32
+          maximum: 29
+          default: 24
+          example: 24
     SystemInfo:
       type: object
       properties:
@@ -2403,3 +2142,264 @@ components:
           - /var/run/cdi
         Containerd:
           $ref: '#/components/schemas/ContainerdInfo'
+    ContainersDiskUsage:
+      type: object
+      x-go-name: DiskUsage
+      x-go-package: github.com/moby/moby/api/types/container
+      description: 'represents system data usage information for container resources.
+
+        '
+      properties:
+        ActiveCount:
+          description: 'Count of active containers.
+
+            '
+          type: integer
+          format: int64
+          example: 1
+        TotalCount:
+          description: 'Count of all containers.
+
+            '
+          type: integer
+          format: int64
+          example: 4
+        Reclaimable:
+          description: 'Disk space that can be reclaimed by removing inactive containers.
+
+            '
+          type: integer
+          format: int64
+          example: 12345678
+        TotalSize:
+          description: 'Disk space in use by containers.
+
+            '
+          type: integer
+          format: int64
+          example: 98765432
+        Items:
+          description: 'List of container summaries.
+
+            '
+          type: array
+          x-omitempty: true
+          items:
+            x-go-type:
+              type: Summary
+    ImagesDiskUsage:
+      type: object
+      x-go-name: DiskUsage
+      x-go-package: github.com/moby/moby/api/types/image
+      description: 'represents system data usage for image resources.
+
+        '
+      properties:
+        ActiveCount:
+          description: 'Count of active images.
+
+            '
+          type: integer
+          format: int64
+          example: 1
+        TotalCount:
+          description: 'Count of all images.
+
+            '
+          type: integer
+          format: int64
+          example: 4
+        Reclaimable:
+          description: 'Disk space that can be reclaimed by removing unused images.
+
+            '
+          type: integer
+          format: int64
+          example: 12345678
+        TotalSize:
+          description: 'Disk space in use by images.
+
+            '
+          type: integer
+          format: int64
+          example: 98765432
+        Items:
+          description: 'List of image summaries.
+
+            '
+          type: array
+          x-omitempty: true
+          items:
+            x-go-type:
+              type: Summary
+    Commit:
+      description: 'Commit holds the Git-commit (SHA1) that a binary was built from, as
+
+        reported in the version-string of external tools, such as `containerd`,
+
+        or `runC`.
+
+        '
+      type: object
+      properties:
+        ID:
+          description: Actual commit ID of external tool.
+          type: string
+          example: cfb82a876ecc11b5ca0977d1733adbe58599088a
+    AuthResponse:
+      description: 'An identity token was generated successfully.
+
+        '
+      type: object
+      required:
+      - Status
+      properties:
+        Status:
+          description: The status of the authentication
+          type: string
+          example: Login Succeeded
+        IdentityToken:
+          description: An opaque token used to authenticate a user after a successful login
+          type: string
+          example: 9cbaf023786cd7...
+    BuildCacheDiskUsage:
+      type: object
+      x-go-name: DiskUsage
+      x-go-package: github.com/moby/moby/api/types/build
+      description: 'represents system data usage for build cache resources.
+
+        '
+      properties:
+        ActiveCount:
+          description: 'Count of active build cache records.
+
+            '
+          type: integer
+          format: int64
+          example: 1
+        TotalCount:
+          description: 'Count of all build cache records.
+
+            '
+          type: integer
+          format: int64
+          example: 4
+        Reclaimable:
+          description: 'Disk space that can be reclaimed by removing inactive build cache records.
+
+            '
+          type: integer
+          format: int64
+          example: 12345678
+        TotalSize:
+          description: 'Disk space in use by build cache records.
+
+            '
+          type: integer
+          format: int64
+          example: 98765432
+        Items:
+          description: 'List of build cache records.
+
+            '
+          type: array
+          x-omitempty: true
+          items:
+            x-go-type:
+              type: CacheRecord
+    LocalNodeState:
+      description: Current local status of this node.
+      type: string
+      default: ''
+      enum:
+      - ''
+      - inactive
+      - pending
+      - active
+      - error
+      - locked
+      example: active
+    ErrorResponse:
+      description: Represents an error.
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          description: The error message.
+          type: string
+      example:
+        message: Something went wrong.
+    ContainerdInfo:
+      description: 'Information for connecting to the containerd instance that is used by the daemon.
+
+        This is included for debugging purposes only.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        Address:
+          description: The address of the containerd socket.
+          type: string
+          example: /run/containerd/containerd.sock
+        Namespaces:
+          description: 'The namespaces that the daemon uses for running containers and
+
+            plugins in containerd. These namespaces can be configured in the
+
+            daemon configuration, and are considered to be used exclusively
+
+            by the daemon, Tampering with the containerd instance may cause
+
+            unexpected behavior.
+
+
+            As these namespaces are considered to be exclusively accessed
+
+            by the daemon, it is not recommended to change these values,
+
+            or to change them to a value that is used by other systems,
+
+            such as cri-containerd.
+
+            '
+          type: object
+          properties:
+            Containers:
+              description: 'The default containerd namespace used for containers managed
+
+                by the daemon.
+
+
+                The default namespace for containers is "moby", but will be
+
+                suffixed with the `<uid>.<gid>` of the remapped `root` if
+
+                user-namespaces are enabled and the containerd image-store
+
+                is used.
+
+                '
+              type: string
+              default: moby
+              example: moby
+            Plugins:
+              description: 'The default containerd namespace used for plugins managed by
+
+                the daemon.
+
+
+                The default namespace for plugins is "plugins.moby", but will be
+
+                suffixed with the `<uid>.<gid>` of the remapped `root` if
+
+                user-namespaces are enabled and the containerd image-store
+
+                is used.
+
+                '
+              type: string
+              default: plugins.moby
+              example: plugins.moby
