@@ -2,8 +2,13 @@ generated: '2026-10-13'
 method: searched
 checked:
 - https://api.nuget.org/v3
+- https://cdn.winget.microsoft.com/cache
 - https://crates.io/api/v1
 - https://focus.finops.org/data-generators/
+- https://formulae.brew.sh/api/cask.json
+- https://formulae.brew.sh/api/formula.json
+- https://github.com/ScoopInstaller/Extras
+- https://github.com/ScoopInstaller/Main
 - https://github.com/cncf/k8s-conformance
 - https://github.com/cncf/landscape
 - https://github.com/marketplace?type=actions
@@ -147,6 +152,136 @@ edges:
     detected: '2026-10-19'
   detected_by: sweep-cloud-native.py
   first_seen: '2026-10-15'
+- partner_name: Homebrew
+  partner: homebrew
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official CLI (Homebrew)
+  evidence: https://formulae.brew.sh/formula/docker-buildx
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Homebrew (public package index)
+    spec_file: null
+    packages:
+    - name: docker-buildx
+      kind: formula
+      version: 0.38.0
+      released: null
+      lapsed: false
+      page: https://formulae.brew.sh/formula/docker-buildx
+      cli: 'formula desc: Docker CLI plugin for extended build capabilities with BuildKit'
+      repo_leg: domain:docker.com
+      publisher_leg: artifact-github-org:docker
+      matched_by: domain+name-among-holders
+    - name: hub-tool
+      kind: formula
+      version: '04.6'
+      released: null
+      lapsed: true
+      page: https://formulae.brew.sh/formula/hub-tool
+      cli: 'formula desc: Docker Hub experimental CLI tool'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    current: true
+    signal_note: 'the provider''s own command-line tool on a package manager: distribution, not an integration;
+      lapsed = no release in 24 months or deprecated / disabled by the manager'
+    detected_by: sweep-official-clis.py
+    detected: '2026-10-20'
+  detected_by: sweep-official-clis.py
+  first_seen: '2026-10-20'
+- partner_name: Scoop
+  partner: null
+  partner_match: null
+  type: register
+  direction: provider-built
+  category: official CLI (Scoop)
+  evidence: https://github.com/ScoopInstaller/Main/blob/master/bucket/docker.json
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Scoop (public package index)
+    spec_file: null
+    packages:
+    - name: docker
+      kind: main
+      version: 29.9.1
+      released: null
+      lapsed: false
+      page: https://github.com/ScoopInstaller/Main/blob/master/bucket/docker.json
+      cli: 'scoop description: Docker CLI & Docker Engine for Windows containers. Docker is an open platform fo'
+      repo_leg: domain:docker.com
+      publisher_leg: artifact-domain:docker.com
+      matched_by: domain+name-among-holders
+    - name: docker-buildx
+      kind: main
+      version: 0.38.0
+      released: null
+      lapsed: false
+      page: https://github.com/ScoopInstaller/Main/blob/master/bucket/docker-buildx.json
+      cli: 'scoop description: Docker CLI plugin for extended build capabilities with BuildKit'
+      repo_leg: domain:docker.com
+      publisher_leg: artifact-github-org:docker
+      matched_by: domain+name-among-holders
+    - name: hub-tool
+      kind: extras
+      version: 0.4.6
+      released: null
+      lapsed: false
+      page: https://github.com/ScoopInstaller/Extras/blob/master/bucket/hub-tool.json
+      cli: 'scoop description: The Docker Hub Tool is a CLI tool for interacting with the Docker Hub.'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    current: true
+    signal_note: 'the provider''s own command-line tool on a package manager: distribution, not an integration;
+      lapsed = no release in 24 months or deprecated / disabled by the manager'
+    detected_by: sweep-official-clis.py
+    detected: '2026-10-20'
+  detected_by: sweep-official-clis.py
+  first_seen: '2026-10-20'
+- partner_name: winget (Windows Package Manager)
+  partner: null
+  partner_match: null
+  type: register
+  direction: provider-built
+  category: official CLI (winget (Windows Package Manager))
+  evidence: https://github.com/microsoft/winget-pkgs/tree/master/manifests/d/Docker/Buildx
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: winget (Windows Package Manager) (public package index)
+    spec_file: null
+    packages:
+    - name: Docker.Buildx
+      kind: manifest
+      version: 0.38.0
+      released: '2026-10-07'
+      lapsed: false
+      page: https://github.com/microsoft/winget-pkgs/tree/master/manifests/d/Docker/Buildx
+      cli: 'winget: Docker CLI plugin for extended build capabilities with BuildKit'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: Docker.DockerCompose
+      kind: manifest
+      version: 5.6.0
+      released: '2026-10-02'
+      lapsed: false
+      page: https://github.com/microsoft/winget-pkgs/tree/master/manifests/d/Docker/DockerCompose
+      cli: 'winget: docker-compose plugin for docker cli'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    current: true
+    signal_note: 'the provider''s own command-line tool on a package manager: distribution, not an integration;
+      lapsed = no release in 24 months or deprecated / disabled by the manager'
+    detected_by: sweep-official-clis.py
+    detected: '2026-10-20'
+  detected_by: sweep-official-clis.py
+  first_seen: '2026-10-20'
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
