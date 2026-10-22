@@ -38,6 +38,8 @@ checked:
 - https://api.first.org/data/v1/teams
 - https://raw.githubusercontent.com/CVEProject/cve-website/dev/src/assets/data/CNAsList.json
 - https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
+- https://api.apis.guru/v2/list.json
+- https://api.apis.guru/v2/providers.json
 marketplace_apps: []
 edges:
 - partner_name: OpenTelemetry
@@ -541,6 +543,61 @@ edges:
     detected_by: sweep-vulnerability-disclosure-cna.py
     detected: '2026-10-22'
   detected_by: sweep-vulnerability-disclosure-cna.py
+  first_seen: '2026-10-22'
+- partner_name: APIs.guru OpenAPI Directory
+  partner: apis-guru
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: third-party
+  evidence: https://apis.guru/
+  category: API definition directory listing (OpenAPI)
+  contract_reference:
+    register: APIs.guru OpenAPI Directory
+    spec_file: null
+    standard: APIs.guru OpenAPI Directory
+    role: listed-in-directory
+    directory_provider: docker.com
+    matched_domain: docker.com
+    matched_by: domain+name-among-holders
+    apis_listed: 3
+    version_count: 3
+    first_added: '2018-03-02'
+    last_updated: '2023-03-06'
+    origin_publisher_hosted: false
+    origin_hosts:
+    - raw.githubusercontent.com
+    categories:
+    - developer_tools
+    own_openapi_files: 15
+    listings:
+    - key: docker.com:dvp
+      title: DVP Data API
+      preferred: 1.0.0
+      versions: 1
+      swagger_url: https://api.apis.guru/v2/specs/docker.com/dvp/1.0.0/openapi.json
+      origin_url: https://raw.githubusercontent.com/docker/docs/main/docker-hub/api/dvp.yaml
+      openapi_version: 3.0.0
+    - key: docker.com:engine
+      title: Docker Engine API
+      preferred: '1.33'
+      versions: 1
+      swagger_url: https://api.apis.guru/v2/specs/docker.com/engine/1.33/openapi.json
+      origin_url: https://raw.githubusercontent.com/docker/go-docker/master/api/swagger.yaml
+      openapi_version: 3.0.0
+    - key: docker.com:hub
+      title: Docker HUB API
+      preferred: beta
+      versions: 1
+      swagger_url: https://api.apis.guru/v2/specs/docker.com/hub/beta/openapi.json
+      origin_url: https://raw.githubusercontent.com/docker/docs/main/docker-hub/api/latest.yaml
+      openapi_version: 3.0.0
+    signal_note: 'participation only: a community directory listing (APIs.guru collects definitions; the provider
+      did not file them). Signals: version_count, apis_listed, origin_publisher_hosted.'
+    detected_by: sweep-openapi-directory-apis-guru.py
+    detected: '2026-10-22'
+  detected_by: sweep-openapi-directory-apis-guru.py
   first_seen: '2026-10-22'
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
