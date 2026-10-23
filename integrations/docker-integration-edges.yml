@@ -40,6 +40,9 @@ checked:
 - https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
 - https://api.apis.guru/v2/list.json
 - https://api.apis.guru/v2/providers.json
+- https://aur.archlinux.org/cgit/aur.git/tree/.SRCINFO
+- https://aur.archlinux.org/packages-meta-ext-v1.json.gz
+- https://aur.archlinux.org/rpc/v5/info
 marketplace_apps: []
 edges:
 - partner_name: OpenTelemetry
@@ -599,6 +602,183 @@ edges:
     detected: '2026-10-22'
   detected_by: sweep-openapi-directory-apis-guru.py
   first_seen: '2026-10-22'
+- partner_name: Arch User Repository (AUR)
+  partner: null
+  partner_match: null
+  type: register
+  direction: provider-built
+  category: official CLI (Arch User Repository (AUR))
+  evidence: https://aur.archlinux.org/packages/cagent-bin
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Arch User Repository (AUR) (public package index)
+    spec_file: null
+    packages:
+    - name: cagent-bin
+      kind: aur
+      version: 1.30.0-1
+      released: '2026-03-09'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/cagent-bin
+      upstream: https://github.com/docker/cagent
+      cli: 'AUR description: Docker cagent - Agent Builder and Runtime (prebuilt binary)'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: docker-buildx-git
+      kind: aur
+      version: 0.12.1.r76.g78adfc80-1
+      released: '2024-01-12'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: true
+      page: https://aur.archlinux.org/packages/docker-buildx-git
+      upstream: https://github.com/docker/buildx
+      cli: 'AUR description: Docker CLI plugin for extended build capabilities with BuildKit'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: docker-cli-bin
+      kind: aur
+      version: 29.9.1-1
+      released: '2026-10-20'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/docker-cli-bin
+      upstream: https://docs.docker.com/engine/install/binaries/#install-static-binarie
+      cli: 'AUR description: Docker - CLI utility only, installed from static binary on docker.com'
+      repo_leg: domain:docker.com
+      publisher_leg: artifact-domain:docker.com
+      matched_by: domain+name-among-holders
+    - name: docker-compose-cli
+      kind: aur
+      version: 1.0.35-1
+      released: '2025-01-01'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/docker-compose-cli
+      upstream: https://github.com/docker/compose-cli
+      cli: 'AUR description: Easily run your Compose application to the cloud with compose-cli'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: docker-mcp
+      kind: aur
+      version: 0.44.1-1
+      released: '2026-09-24'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/docker-mcp
+      upstream: https://github.com/docker/mcp-gateway
+      cli: 'AUR description: Docker CLI plugin for MCP Gateway - manage and run MCP servers in containers'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: docker-mcp-git
+      kind: aur
+      version: 0.43.3.r30.ga21c0ac-1
+      released: '2026-08-27'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/docker-mcp-git
+      upstream: https://github.com/docker/mcp-gateway
+      cli: 'AUR description: Docker CLI plugin for MCP Gateway - manage and run MCP servers in containers (gi'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: docker-model
+      kind: aur
+      version: 1.2.8-1
+      released: '2026-10-01'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/docker-model
+      upstream: https://github.com/docker/model-runner
+      cli: 'AUR description: Docker CLI plugin for running AI models (model-cli; upstream repo version 1.1.17'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: docker-model-plugin
+      kind: aur
+      version: 1.2.8-1
+      released: '2026-09-24'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/docker-model-plugin
+      upstream: https://github.com/docker/model-runner
+      cli: 'AUR description: Docker CLI plugin for Model Runner - manage and run AI models in containers'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: docker-model-plugin-bin
+      kind: aur
+      version: 1.2.6-1
+      released: '2026-07-29'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/docker-model-plugin-bin
+      upstream: https://github.com/docker/model-runner
+      cli: 'AUR description: Docker Model Runner CLI plugin (prebuilt binary)'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-domain:docker.com
+      matched_by: domain+name-among-holders
+    - name: docker-sbom
+      kind: aur
+      version: 0.6.1-1
+      released: '2022-05-27'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: true
+      page: https://aur.archlinux.org/packages/docker-sbom
+      upstream: https://github.com/docker/sbom-cli-plugin
+      cli: 'AUR description: Plugin for Docker CLI to support SBOM creation using Syft'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: docker-scout
+      kind: aur
+      version: 1.27.0-1
+      released: '2026-10-21'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/docker-scout
+      upstream: https://github.com/docker/scout-cli
+      cli: 'AUR description: Docker Scout is a set of software supply chain features integrated into Docker''s'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    - name: hub-tool
+      kind: aur
+      version: 0.4.6-1
+      released: '2025-02-04'
+      released_field: AUR LastModified
+      out_of_date: false
+      lapsed: false
+      page: https://aur.archlinux.org/packages/hub-tool
+      upstream: https://github.com/docker/hub-tool
+      cli: 'AUR description: Docker Hub experimental CLI tool'
+      repo_leg: github-org:docker
+      publisher_leg: artifact-github-org:docker
+      matched_by: github-org
+    current: true
+    signal_note: 'the provider''s own command-line tool packaged for Arch Linux (community-maintained PKGBUILD whose
+      upstream and source artifact are the provider''s): distribution, not an integration; lapsed = flagged out-of-date
+      or not updated in 24 months'
+    detected_by: sweep-aur-vendor-cli-packages.py
+    detected: '2026-10-23'
+  detected_by: sweep-aur-vendor-cli-packages.py
+  first_seen: '2026-10-23'
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
